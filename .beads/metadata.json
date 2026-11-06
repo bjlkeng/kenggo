@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "kenggo",
+  "project_id": "2bd132e8-8945-4da4-af05-a429ecd6b97d"
+}
