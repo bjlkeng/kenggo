@@ -50,7 +50,7 @@ Keep one writer for shared files and Git operations. A reviewer reads the same s
 
 ## Independent Codex review for every bead
 
-Every completed bead, including docs and tooling changes, needs a **fresh, separate Codex instance**. Self-review by the implementation session does not satisfy this requirement. Use GPT-6-Astra with maximum reasoning, adapted from the [SAT-playground review workflow](https://github.com/bjlkeng/SAT-playground/blob/main/CLAUDE.md).
+Every completed bead, including docs and tooling changes, needs a **fresh, separate Codex instance**. Self-review by the implementation session does not satisfy this requirement. Use GPT-6-Astra with maximum reasoning.
 
 Read [.agents/skills/pstack-interrogate/SKILL.md](.agents/skills/pstack-interrogate/SKILL.md). Run the reviewer from the repository root. For a bead contained in the current uncommitted patch:
 
