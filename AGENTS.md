@@ -2,7 +2,7 @@
 
 ## Project contract
 
-Read [plan/go_project_plan_v0.5.md](plan/go_project_plan_v0.5.md) and the relevant epic before implementation. This is a research project about the board game Go, not a choice of programming language. The application stack is not selected yet.
+Read [plan/go_project_plan_v0.5.md](plan/go_project_plan_v0.5.md) and the relevant epic before implementation. This is a research project about the board game Go. Follow the selected [technology stack](plan/go_project_plan_v0.5.md#technology-stack).
 
 - A learns human moves with rank conditioning. B starts from random weights and learns against frozen A profiles. Do not transfer A's trained weights to B.
 - Adjustable difficulty is a project goal. Use supported, evaluated opponent profiles; establish the available range from data and calibration.

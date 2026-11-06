@@ -15,6 +15,23 @@ KataGo already provides a rank-conditioned human Go model [1, 2]. The research q
 
 Unless linked to prior work, settings and thresholds below are **project choices**. An epic is complete when its evidence and decision are recorded. An extension can finish with a decision to keep, defer or drop it.
 
+## Technology stack
+
+Use the following stack for implementation:
+
+| Area | Selected technology |
+| --- | --- |
+| Learning and research | Python + PyTorch for A and B, training, evaluation and search orchestration |
+| Browser | TypeScript + React + Vite, with an SVG Go board |
+| API | FastAPI with a separate inference worker; the server owns legality and turn state |
+| Data | Preserve original SGFs; use Parquet for metadata and split manifests, and sharded arrays for training examples |
+| Experiments | Weights & Biases (W&B) for experiment tracking, alongside versioned configurations and checkpoint manifests |
+| Rules engine | A Python-compatible Go engine shared across replay, search, RL and serving; select and validate the library during E1 |
+
+The rules engine may use native internals behind its Python interface. It must pass E1's legality, full-history and endgame checks. Difficulty settings map to evaluated, versioned opponent profiles as specified in E5.
+
+Track experiment configurations, metrics and compute costs in W&B. Link each run to its code revision, data/split versions and checkpoint manifests, and include W&B run references in experiment reports. Keep the configurations and manifests needed to reproduce a run alongside its saved outputs. Configure W&B authentication and select the destination workspace/project when implementing experiment tracking; ask the owner for login help if needed.
+
 ## Epic map
 
 | Epic | Outcome | Depends on |
@@ -167,9 +184,9 @@ Run comparisons in small stages; E3/E4 extensions depend on data, pilot results 
 
 ### Handoff for task planning
 
-Each epic supplies a decision note, acceptance evidence and dependencies. Later tasks name one bounded output, its epic/reference, inputs and a completion check. Agents choose routine structure, libraries, tuning and batching.
+Each epic supplies a decision note, acceptance evidence and dependencies. Later tasks name one bounded output, its epic/reference, inputs and a completion check. Agents choose routine structure, libraries, tuning and batching within the selected technology stack.
 
-The final package contains code and environment setup, training/evaluation/play commands, pinned data/model/rules versions, split manifests, configs, checkpoints, metrics, match SGFs and a short report of retained, deferred and rejected ideas.
+The final package contains code and environment setup, training/evaluation/play commands, pinned data/model/rules versions, split manifests, configs, checkpoints, metrics, W&B run references, match SGFs and a short report of retained, deferred and rejected ideas.
 
 **Done when:** Both agents are reviewable, results reproduce, transfer is reported and claims state their limits. If a proposed difficulty range or learning goal is not reached, record the outcome and the next justified experiment.
 
