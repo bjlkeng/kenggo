@@ -5,6 +5,7 @@
 Read [plan/go_project_plan_v0.5.md](plan/go_project_plan_v0.5.md) and the relevant epic before implementation. This is a research project about the board game Go, not a choice of programming language. The application stack is not selected yet.
 
 - A learns human moves with rank conditioning. B starts from random weights and learns against frozen A profiles. Do not transfer A's trained weights to B.
+- Adjustable difficulty is a project goal. Use supported, evaluated opponent profiles; establish the available range from data and calibration.
 - Keep move prediction, strength, and human-like behavior separate. Do not claim a human rank without the plan's calibration evidence.
 - Preserve the plan's data splits, missing-data masks, full legality history, endgame contract, player/value perspectives, and termination versus truncation semantics.
 - Record experiment decisions, budgets, provenance, and acceptance evidence. A negative result or a decision to defer an extension can complete an experiment.
