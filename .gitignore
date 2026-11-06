@@ -1,7 +1,58 @@
+# Local credentials and environment
+.env
+.env.*
+!.env.example
+.aws/
 
-# Beads / Dolt files (added by bd init)
+# Python environments, caches, and builds
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+/build/
+/dist/
+
+# Browser tooling and generated output
+node_modules/
+coverage/
+.next/
+.vite/
+
+# Local corpora and experiment artifacts; keep small fixtures in tests/fixtures
+/data/
+/datasets/
+/checkpoints/
+/runs/
+/outputs/
+/artifacts/
+/wandb/
+/mlruns/
+/logs/
+/tmp/
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Beads / Dolt runtime and credentials
 .dolt/
 *.db
 .beads-credential-key
-.beads/proxieddb/
 *.gate.lock*
+
+# Additional Beads runtime exclusions live in .beads/.gitignore.
+# Track .agents/skills, .beads configuration, source, and dependency lockfiles.

@@ -1,81 +1,36 @@
-# Beads - AI-Native Issue Tracking
+# Beads in kenggo
 
-Welcome to Beads! This repository uses **Beads** for issue tracking - a modern, AI-native tool designed to live directly in your codebase alongside your code.
+Use [Beads](https://github.com/gastownhall/beads) for the shared task record. This setup was verified with `bd` 1.3.2, embedded Dolt, and issue prefix `kenggo`. No separate Dolt server is needed.
 
-## What is Beads?
+The database is local and ignored. Its Dolt remote is `git+ssh://git@github.com/bjlkeng/kenggo.git`; `bd sync` exchanges database history through a Git data ref on that repository. Source commits and issue history sync separately. Do not use `.beads/issues.jsonl` as the database or add legacy export/import hooks.
 
-Beads is issue tracking that lives in your repo, making it perfect for AI coding agents and developers who want their issues close to their code. No web UI required - everything works through the CLI and integrates seamlessly with git.
+## Set up a checkout
 
-**Learn more:** [github.com/steveyegge/beads](https://github.com/steveyegge/beads)
-
-## Quick Start
-
-### Essential Commands
+Install the verified Beads version using the [upstream installation instructions](https://github.com/gastownhall/beads#installation), then run from the repository root:
 
 ```bash
-# Create new issues
-bd create "Add user authentication"
-
-# View all issues
-bd list
-
-# View issue details
-bd show <issue-id>
-
-# Update issue status
-bd update <issue-id> --claim
-bd update <issue-id> --status done
-
-# Sync with Dolt remote
-bd dolt push
+bd init --prefix kenggo --skip-agents --skip-hooks --non-interactive
+bd hooks install --beads
+bd dolt pull
+bd prime
+bd ready
 ```
 
-### Working with Issues
+Run `bd init` only when the checkout does not already have a local database. Preserve the tracked config and metadata. `--skip-agents` keeps this repository's custom `AGENTS.md` and skill setup intact. Do not use `--force`, `--reinit-local`, or `--discard-remote` to get past an initialization error.
 
-Issues in Beads are:
-- **Git-native**: Stored in Dolt database with version control and branching
-- **AI-friendly**: CLI-first design works perfectly with AI coding agents
-- **Branch-aware**: Issues can follow your branch workflow
-- **Sync-ready**: Uses Dolt remotes for backup and team sharing
+The hooks are versioned under `.beads/hooks`; `bd hooks install --beads` sets the checkout-local `core.hooksPath`. They are the native hooks for this Beads version. They do not replace explicit tracker sync.
 
-## Why Beads?
-
-✨ **AI-Native Design**
-- Built specifically for AI-assisted development workflows
-- CLI-first interface works seamlessly with AI coding agents
-- No context switching to web UIs
-
-🚀 **Developer Focused**
-- Issues live in your repo, right next to your code
-- Works offline, syncs when you push
-- Fast, lightweight, and stays out of your way
-
-🔧 **Git Integration**
-- Dolt-native sync via bd dolt push / bd dolt pull
-- Branch-aware issue tracking
-- Dolt-native three-way merge resolution
-
-## Get Started with Beads
-
-Try Beads in your own projects:
+## Work and synchronize
 
 ```bash
-# Install Beads
-curl -sSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
-
-# Initialize in your repo
-bd init
-
-# Create your first issue
-bd create "Try out Beads"
+bd ready
+bd show <id>
+bd update <id> --claim
+bd update <id> --append-notes "Evidence and review verdict"
+bd close <id> --reason "Completed and independently reviewed"
+bd sync
 ```
 
-## Learn More
+Use the direct-to-`main` completion and review loop in [AGENTS.md](../AGENTS.md). `bd sync` detects conflicts and retries push races a bounded number of times. A transport error or unresolved conflict is a failed sync; do not claim delivery or discard database history.
 
-- **Documentation**: [github.com/steveyegge/beads/docs](https://github.com/steveyegge/beads/tree/main/docs)
-- **Quick Start Guide**: Run `bd quickstart`
-- **Examples**: [github.com/steveyegge/beads/examples](https://github.com/steveyegge/beads/tree/main/examples)
-
----
-
-*Beads: Issue tracking that moves at the speed of thought* ⚡
+`bd where`, `bd dolt status`, and `bd dolt remote list` inspect the local setup. In embedded mode, use supported checks such as `bd doctor --check=conventions`; the full `bd doctor` requires server mode in version 1.3.2.
