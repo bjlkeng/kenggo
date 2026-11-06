@@ -1,6 +1,6 @@
 # Human-like Go
 
-Project plan | v0.5 | Updated 6 November 2026 | Review draft
+Project plan | v0.5 | Updated 6 November 2026 | Task planning baseline
 
 ## Purpose and scope
 
@@ -13,7 +13,7 @@ The goal is playable Go with adjustable difficulty. A offers selectable rank-con
 
 KataGo already provides a rank-conditioned human Go model [1, 2]. The research questions here are which added features improve a smaller model, how search changes its behavior, and whether it provides a useful training opponent. Allie, regularized search and Maia4All supply precedents for these extensions [4, 5, 6, 7]. Chess results are motivation for Go experiments, not evidence that the same gains will occur.
 
-Unless linked to prior work, settings and thresholds below are **project choices**. An epic is complete when its evidence and decision are recorded. An extension can finish with a decision to keep, defer or drop it.
+Unless linked to prior work, settings and thresholds below are **project choices**. An epic is complete when its evidence and decision are recorded. An extension can finish with a decision to keep, defer or drop it. Report research completion and playable-release readiness separately under E7.
 
 ## Technology stack
 
@@ -36,16 +36,16 @@ Track experiment configurations, metrics and compute costs in W&B. Link each run
 
 | Epic | Outcome | Depends on |
 | --- | --- | --- |
-| E0: Scope and evaluation | Target population, success measures and pilot budgets | None |
+| E0: Scope and evaluation | Target population, evaluation protocol, success measures and pilot budgets | None |
 | E1: Data and rules | Usable corpus, fixed splits and one game contract | E0 |
-| E2: Human baselines | Rank-conditioned policy and external baseline report | E1 |
+| E2: Human baselines | Rank-conditioned policy, external baseline report and reusable match runner | E1 |
 | E3: History and personas | Evidence for useful history and individual variation | E2 |
 | E4: Timing and search | Fair comparison of direct play and search allocation | E2; valid timing from E1 for timing-based experiments |
-| E5: Qualify and freeze A | Stable opponent profiles and playable interface | E2; retained E3/E4 features for later profiles |
-| E6: Train B from scratch | Valid PPO learner and measured learning cost | E5 opponent qualification and freezing |
+| E5: Qualify and freeze A | E5a: frozen opponent pool; E5b: browser play | E2, including the match runner; retained E3/E4 features for later profiles |
+| E6: Train B from scratch | Valid PPO learner and measured learning cost | E5a and E2's match runner |
 | E7: Transfer and review | Independent results, bounded claims and handoff | E6; recorded decisions on A extensions |
 
-E3 and E4 are conditional experiments that can run in parallel. An E2 baseline qualified and frozen through E5 can support the E6 pilot while extensions proceed. Qualify and freeze each later profile after combining its retained features. Deferred extensions do not block RL or completion.
+E3 and E4 are conditional experiments that can run in parallel. E2 supplies the match runner before E5 qualification or E6 training. An E2 baseline qualified and frozen through E5a can support the E6 pilot while extensions proceed. E5b browser delivery is a separate milestone required for release; E7 adds B and runs the reserved final evaluation. Qualify and freeze each later profile after combining its retained features. Deferred extensions do not block RL or research completion.
 
 <!-- pagebreak -->
 
@@ -56,10 +56,13 @@ E3 and E4 are conditional experiments that can run in parallel. An E2 baseline q
 - Choose a candidate source, proposed difficulty range, corresponding rank coverage, era and time-control family. KGS exposes rank/game/clock fields [18]; confirm access and usable coverage in E1.
 - Start with even games and one source-compatible ruleset. Confirm komi, ko rules and the endgame protocol in E1. Any 9 x 9 pilot is a separate debugging experiment with separate strength claims.
 - Define three scorecards: move prediction, playing strength and complete-game behavior. Use move negative log-likelihood (NLL) as the main imitation measure; use independent match scores for strength. Confirm access to humans at the ranks proposed for the difficulty settings. Size the human match budget for E7's calibration criterion at each claimed rank, accounting for repeated opponents. If access or the required budget is unavailable, keep human-rank claims provisional and report engine-relative strength.
-- Before each comparison, record its primary metric, minimum useful gain, allowed regressions, compute budget and selection rule. Separate training, tuning and final-test opponents.
-- Start with a 1,000-game data audit, a short throughput benchmark, a 24 GPU-hour SL pilot and a 48 GPU-hour RL pilot. Extend budgets only after measuring cost and progress.
+- Define the NLL aggregation and weights: pooled moves, equal-weight games, accounts or rank groups. Keep rank/phase/time-control breakdowns and specify how unsupported groups are reported. Before each feature comparison, freeze a common eligible set of positions or games for paired evaluation; report its coverage and exclusions alongside gains.
+- Define the training, independent validation and reserved final-test opponent panels and the color-balanced match protocol. Specify score aggregation, uncertainty, repeated-opponent handling and the treatment of capped or unresolved games; finalize rules-dependent details in E1. E2 implements this protocol for qualification and training decisions. Keep final-test results unopened until E7 selection is complete.
+- Define measurable behavior criteria, including premature-pass and unresolved-game rates, game-length distributions and within-rank move diversity. Apply rank-conditioned diversity criteria to A and complete-game reliability criteria to both agents. Record measurement methods, populations and denominators in E0; fix acceptance thresholds after the E1 audit and before model qualification.
+- Before each comparison, record its primary metric, minimum useful gain, allowed regressions, compute budget and selection rule. Define B's full-board learning success by improvement over its initial checkpoint on the independent validation panel, subject to those gain and regression limits.
+- Start with a 1,000-game data audit, a short throughput benchmark, a 24 GPU-hour SL pilot and a 48 GPU-hour RL pilot. Each pilot cap covers training, tuning, reference inference, evaluation and failed runs across all its comparison arms. Record audit/benchmark costs separately. Set a separate three-training-seed confirmation budget from measured pilot costs before promoting a comparison; single-run findings remain exploratory. Extend budgets only after measuring cost and progress.
 
-**Done when:** Record the proposed difficulty range, support limits, evaluation populations, promotion criteria and budgets. Resolve data-dependent choices in E1.
+**Done when:** Record the proposed difficulty range, support limits, evaluation panels/protocol, metric weighting, behavior definitions, promotion criteria and budgets. Resolve data-dependent choices and acceptance thresholds in E1.
 
 ## E1. Establish the data and game contract
 
@@ -67,12 +70,13 @@ E3 and E4 are conditional experiments that can run in parallel. An E2 baseline q
 
 - **Audit before scaling.** Verify reuse terms, rank coverage, stable identities, timing and games per account. Record usable counts and exclusions. Initially exclude bots, reviews, teaching games, duplicates and corrupt records.
 - **Retain provenance.** Store source/date, accounts, historical ranks, rules/komi, moves, result/reason and clocks. Select played main lines; handle setup stones, handicap, missing rules and unfinished games. SGF syntax alone does not establish legal play [11].
+- **Audit passes and endings.** Count explicit pass actions and complete endings by rank and result type. Distinguish scored endings, resignation and incomplete records; reaching the end of an SGF supplies neither a pass action nor proof of termination. Never fabricate pass labels from file endings. Inconsistent pass recording can impair learned endings [1]. If coverage is insufficient, acquire suitable records or narrow/defer affected raw-policy profiles before scaling. Any completion heuristic is a separately versioned and evaluated profile and does not qualify as raw policy; E6 waits for a qualified raw pool through E5a.
 - **Prevent leakage.** Deduplicate before chronological whole-game splits. Reserve disjoint unseen-account validation/test cohorts. Exclude test-account games from shared-model training/tuning, validation-account games from shared-model training, and games bridging reserved cohorts. For held-out accounts, adapt only the embedding on earlier games; evaluate on untouched later games [7]. Freeze shared weights and the adaptation procedure before testing; choose settings using validation accounts. Fit normalizers on training data only. Target-move time, post-move clocks and results are labels only.
 - **Validate timing.** SGF BL/WL encode time left after a move [11]. Derive elapsed time using the actual increment/overtime rules. Keep validity masks; ambiguous or missing durations are not zero. Missing identities disable personalization for those accounts. Unusable timing defers duration modeling and adaptive search.
 - **Use one rules engine.** Pin rules and engine versions for replay, search, RL and the interface. Retain full legality history independently of the model's context window. Verify capture, suicide, ko/superko, pass, scoring and resignation behavior against a fixed reference [12].
-- **Resolve endgames.** Specify dead-stone handling and any cleanup/adjudication. Raw area scoring of an uncleared human end position is insufficient. Preserve recorded results and distinguish true termination from an administrative move cap [12, 15].
+- **Resolve endgames.** Specify dead-stone handling and any cleanup/adjudication. Raw area scoring of an uncleared human end position is insufficient. Preserve recorded results and distinguish true termination from an administrative move cap [12, 15]. Finalize the match protocol's handling of unresolved games and the behavior thresholds, including how premature passes are identified, before model qualification.
 
-**Done when:** Data supports each promised capability; splits are fixed; replay/scoring checks pass; endgame and missing-data policies are explicit. Revise E0 if coverage is insufficient.
+**Done when:** Data supports each promised capability; pass/end coverage and resulting profile limits are recorded; splits are fixed; replay/scoring checks pass; endgame, missing-data and behavior acceptance policies are explicit. Revise E0 if coverage is insufficient.
 
 <!-- pagebreak -->
 
@@ -80,13 +84,14 @@ E3 and E4 are conditional experiments that can run in parallel. An E2 baseline q
 
 **Goal:** Establish a reproducible rank-conditioned policy before adding complexity.
 
-- Start with a compact board CNN and metadata input. The existing 8-block, 128-channel design is a starting point, not a requirement. Compare the same model with and without rank conditioning. Alternative Maia-2/Chessformer-style architectures are follow-on experiments [8, 9].
+- Start with a compact board CNN and metadata input. An 8-block, 128-channel design is an initial candidate. Compare the same model with and without rank conditioning. Alternative Maia-2/Chessformer-style architectures are follow-on experiments [8, 9].
 - Use the mover's board view, legal actions, color, komi, ranks and pre-move clocks. Include rule-relevant state, such as prisoners and pass/cleanup status. Train missing-clock and unknown-opponent-rank fallbacks; searched play against unranked opponents also requires a trained unknown-mover-rank path. Output 361 board moves plus pass and a value in [-1, 1]. Learned resignation is deferred.
 - Train policy cross-entropy on human actions and a masked value loss on the recorded result from the mover's view. Initially exclude unknown, timeout and forfeit outcomes from the value loss. The value predicts eventual human-game outcomes, not human beliefs or optimal play [3]. No search-generated action labels enter SL.
 - Include pinned **KataGo Human SL** as an external reference. Use raw `humanPolicy` for imitation scores and sample it at temperature 1 for raw play. Record engine/checkpoint/profile and history availability. Report any pass-corrected version as a separate playing baseline, including its extra compute [1]. Its profiles include KGS, fixed-era/time-control defaults [2]. Report context mismatches and unknown training overlap; prefer post-release evaluation games.
 - Report NLL, move matching and value calibration by rank, game phase and time control. Compare raw sampling separately from argmax or search. Record training/inference cost and complete-game failures.
+- Build the reusable match runner from E0's protocol and E1's game contract. Record profiles/checkpoints, seeds, colors, results/reasons, caps/unresolved games, compute and match SGFs. Check terminal, truncated and unresolved-game reporting with fixtures. Use the validation panel for E5 qualification and E6 decisions; reserve the final-test panel for E7.
 
-**Done when:** The baseline runs reproducibly, finishes legal games and has a held-out comparison against the unconditioned model and KataGo. Investigate ineffective rank conditioning before adding extensions. Matching a larger external model is not a prerequisite.
+**Done when:** The baseline runs reproducibly, finishes legal games and has a held-out validation comparison against the unconditioned model and KataGo; the match runner passes its protocol fixtures. Investigate ineffective rank conditioning before adding extensions. Matching a larger external model is not a prerequisite.
 
 ## E3. Test history and individual players
 
@@ -94,6 +99,7 @@ E3 and E4 are conditional experiments that can run in parallel. An E2 baseline q
 
 - **History:** compare 0, 8, 32 and 64 prior individual moves by both players, including passes. Start with a simple recent-move representation; add a small history Transformer only if it justifies its cost. Rules retain full history regardless of this window.
 - **Personalization:** first train population behavior. Then train the identity-conditioning pathway jointly with varied training-account embeddings before freezing shared weights and adapting new embeddings. Maia4All motivates this preparation stage [7].
+- Evaluate feature comparisons on E0's common eligible positions and report coverage. For added shared-model training stages, continue a population-model control on the same training-account data with comparable additional compute; report resource differences. Held-out-account adaptation still changes only embeddings under E1's split rules.
 - Train a default identity. Initially personalize the policy; keep identity out of the value computation, including shared features. Hold each identity fixed per game and assign it consistently by color. Restrict personas to supported rank/context combinations.
 - Compare correct, default and same-rank shuffled identities on later games for known personas and newly adapted accounts. For held-out accounts, report default-identity and adapted results separately. Report benefit versus games available per account. History may explain behavior without an explicit identity. Do not label latent differences as tilt or psychological traits without separate evidence.
 
@@ -123,13 +129,19 @@ maximize_q: E_q[Q] - KL(q || p)/beta    (beta > 0)
 
 This is the project's explicit regularizer. The PUCT interpretation in Jacob/Grill uses the opposite KL direction, KL(p || q) [5, 6]. Changing visits at fixed PUCT settings also changes effective regularization; keep the search setup explicit and distinguish it from the final root rule.
 
+### Outcome-value validation
+
+Before promoting any searched profile, freeze a small validation set with rule-verified tactical/endgame fixtures and positions generated by raw A, weak/random opponents and candidate search. Include unknown-rank and masked-clock inputs used in deployment. For generated positions, record frozen continuation policies for both colors, ranks/contexts, rollout counts and outcome uncertainty. Their empirical returns measure outcomes under those policies; strong-engine evaluations are separate diagnostics and are not human-outcome labels.
+
+Before measuring the candidate, specify the target for each subset, metrics and numerical acceptance thresholds. Check legality and exact terminal-result signs on fixtures; measure value calibration/error against continuation returns on generated positions, with uncertainty accounted for. Held-out human-game calibration alone does not satisfy this gate. If the gate fails, defer fixed and adaptive searched profiles and retain only qualified raw play. Passing it permits controlled search comparisons; promotion still requires their imitation, strength and compute evidence.
+
 ### Controlled comparisons
 
 Compare direct sampling, fixed search, time-adaptive search, metadata-only allocation and shuffled allocation using one frozen network/root rule. On common positions, shuffle allocated budgets within rank/clock-context/phase groups, preserving the budget multiset.
 
 Start fixed search at 32 additional simulations. Initially allocate simulations in proportion to predicted seconds, following Allie [4]. Use the same rule for the full and metadata-only predictors; calibrate each predictor's scale on validation so its mean is 32 after rounding/clipping, with a cap of 128. Match PUCT settings and freeze validation-selected beta. Report realized network calls and latency. Claim an allocation benefit only at comparable measured compute; otherwise report the performance and cost tradeoff.
 
-**Done when:** Correctness checks pass; generated-position tests support useful outcome estimates; results separate imitation, strength and compute. Promote adaptive allocation only if it beats fixed, metadata-only and shuffled controls within E0 limits. Otherwise keep raw/fixed play. SE-MCTS remains a later alternative; its Go study excluded players below 5 kyu [10].
+**Done when:** Record the outcome-value gate results and the keep/defer decision. For searched profiles, correctness and outcome-value checks pass and results separate imitation, strength and compute. Promote adaptive allocation only if it beats fixed, metadata-only and shuffled controls within E0 limits; otherwise keep qualified raw or fixed play. SE-MCTS remains a later alternative; its Go study excluded players below 5 kyu [10].
 
 <!-- pagebreak -->
 
@@ -137,12 +149,19 @@ Start fixed search at 32 additional simulations. Initially allocate simulations 
 
 **Goal:** Produce a stable training opponent and a usable playing interface.
 
+### E5a. Qualify and freeze the opponent pool
+
 - Freeze the selected checkpoint, inference behavior, supported rank/persona, sampling, clock fallback, search and endgame settings as versioned profiles. For the initially unranked B, use a fixed, trained unknown-opponent-rank path in the project's A model.
-- Stress-test A on complete games and positions generated by weak/random opponents. Inspect premature passes, scoring disputes, repetition, game lengths and truncations. Held-out human move prediction alone does not qualify a simulator for RL [16].
+- Stress-test A on complete games and positions generated by weak/random opponents. Use E2's match runner and E0/E1's behavior criteria to assess premature passes, scoring disputes, repetition, game lengths, unresolved games and truncations. Held-out human move prediction alone does not qualify a simulator for RL [16].
 - Use raw policy sampling for the first RL opponent pool. Treat searched opponents as a separate, costed experiment. Hold the selected opponent profile fixed per episode.
+
+**Done when:** A meets the complete-game acceptance thresholds under the selected contract and the frozen pool is reproducible. Report each profile's measured strength or label it uncalibrated. E6 may start after this milestone; training readiness and a human-rank claim are separate gates.
+
+### E5b. Deliver browser play
+
 - Provide a browser board with server-owned turn state, pass/resign, a difficulty selector mapped to supported versioned opponent profiles, profile/checkpoint selection, replay and SGF export. Verify that the offered difficulty settings produce distinct playing strengths. Reject stale moves and save the settings needed to reproduce each game.
 
-**Done when:** A finishes reliable games under the selected contract, the interface's difficulty settings work and the frozen pool is reproducible. E6 may start after opponent qualification and freezing; the interface is required for final handoff. Report each profile's measured strength or label it uncalibrated. Training readiness and a human-rank claim are separate gates.
+**Done when:** Browser play against A, profile selection, stale-move rejection and replay/SGF export work, and displayed strength labels match the qualification evidence. This milestone is required for release; E7 adds B and assesses the full release gate.
 
 ## E6. Train B from random weights
 
@@ -153,6 +172,7 @@ Start fixed search at 32 additional simulations. Initially allocate simulations 
 - Use PPO with GAE [13, 14]. Start lambda at 0.95 and compare complete-game lambda = 1 returns in the pilot. Keep sampling/log-probability legal masks consistent, use fresh on-policy rollouts and track KL, entropy and update stability.
 - True termination uses zero bootstrap and stops advantage recursion. At rollout boundaries or administrative caps, bootstrap from the saved final observation; stop recursion across resets and never use the reset state. Apply caps at learner decision boundaries [15].
 - Compare a single opponent, a fixed pool and that pool with a curriculum at matched learner-transition budgets. Set advancement/retention rules before running. Keep a fixed validation panel and report GPU-hours. If almost always losing, check scoring before reducing difficulty. Any random-move mixture is an explicit unranked training aid.
+- Save and evaluate each seed's initial random checkpoint with E2's runner. Compare trained checkpoints against that baseline on the same independent validation panel and match protocol. Report score improvement and uncertainty, applying E0's minimum useful gain and behavior regression limits to the full-board learning decision.
 - Use the 48 GPU-hour pilot to measure complete games, terminal feedback, transitions, updates, memory and evaluation cost. Set the next budget from measured progress and projected sample cost.
 
 **Done when:** Return/sign and boundary checks pass, and stored and recomputed action probabilities agree before an update; a small task shows learning. Base the full-board keep/change/stop decision on terminal feedback, independent validation and projected cost. Training wins alone do not justify scaling [16].
@@ -164,10 +184,10 @@ Start fixed search at 32 additional simulations. Initially allocate simulations 
 **Goal:** Make claims that are supported by independent evidence.
 
 - Select models/settings on validation only. Freeze final deployment profiles before opening the final test set. Repeat promoted comparisons across three training seeds; single-run findings remain exploratory. Report uncertainty and all runs [17].
-- For imitation, report NLL and move matching by rank/phase/time control; assess uncertainty at the game/account level. For behavior, inspect whole-game mistakes, passing, consistency and time usage, plus a small blinded human pilot where feasible.
+- For imitation, use E0's fixed aggregation/weights and common evaluation sets; report NLL and move matching by rank/phase/time control, coverage and exclusions. Assess uncertainty at the game/account level. For behavior, report E0/E1's premature-pass and unresolved-game rates, game-length distributions and within-rank move diversity against their acceptance criteria. Add whole-game inspection of mistakes, consistency and time usage, plus a small blinded human pilot where feasible.
 - For strength, use color-balanced matches against independent engine/model families. Include held-out humans when access and the E0 match budget permit. Separate those results from new profiles of A's existing model family. Report score = (wins + 0.5*draws)/games, 95% intervals and repeated-opponent dependence. Fix how capped or unresolved evaluation games are resolved and reported. Report their count separately; do not silently exclude them or count administrative caps as draws.
 - For each difficulty setting labeled with a human rank, seek a 95% score interval inside 40-60% against the corresponding server cohort and check adjacent ranks under matching conditions. This is a project calibration criterion. Human-rank claims for B also need matching human evidence; report its achieved strength. Otherwise report engine-relative strength only.
-- Use a fixed independent **validation** panel for B's transfer curves, by learner transitions and GPU-hours. Keep an independent **final-test** panel untouched until selection is complete. Inspect winning strategies: exploiting one Go opponent can produce high wins without broad strength [16].
+- Use E2's match runner and the fixed independent **validation** panel for B's transfer curves, including its initial-checkpoint baseline, by learner transitions and GPU-hours. Run the reserved independent **final-test** panel only after selection is complete. Inspect winning strategies: exploiting one Go opponent can produce high wins without broad strength [16].
 
 ### Planned comparisons
 
@@ -186,9 +206,11 @@ Run comparisons in small stages; E3/E4 extensions depend on data, pilot results 
 
 Each epic supplies a decision note, acceptance evidence and dependencies. Later tasks name one bounded output, its epic/reference, inputs and a completion check. Agents choose routine structure, libraries, tuning and batching within the selected technology stack.
 
-The final package contains code and environment setup, training/evaluation/play commands, pinned data/model/rules versions, split manifests, configs, checkpoints, metrics, W&B run references, match SGFs and a short report of retained, deferred and rejected ideas.
+The final package contains code and environment setup, training/evaluation/play commands, pinned data/model/rules versions, split manifests, configs, checkpoints, metrics, W&B run references, match SGFs and a short report of retained, deferred and rejected ideas. Integrate the selected B checkpoint into the browser with its measured results and profile metadata; keep its controls consistent with E5b's legality and replay contract.
 
-**Done when:** Both agents are reviewable, results reproduce, transfer is reported and claims state their limits. If a proposed difficulty range or learning goal is not reached, record the outcome and the next justified experiment.
+**Research complete when:** Both agents and experiment decisions are reviewable, results reproduce, transfer is reported and claims state their limits. A negative full-board learning result can complete the research. Record unmet learning or difficulty goals and the next justified experiment.
+
+**Playable release ready when:** Browser play against both A and B works; both meet the complete-game acceptance thresholds; at least two supported A difficulty settings have measurably distinct strengths under E0's comparison rule; and B meets the declared full-board learning criterion relative to its initial checkpoint. Apply the human-rank calibration gate separately to any rank labels. If a release condition fails, deliver the research evidence and mark release readiness unmet.
 
 <!-- pagebreak -->
 
