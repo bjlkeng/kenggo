@@ -69,6 +69,8 @@ E3 and E4 are conditional experiments that can run in parallel. E2 supplies the 
 
 The [initial scope decision](e0_scope_decision.md) records the candidate population, source evidence, support limits and E1 audit fallbacks.
 
+The [evaluation protocol](e0_evaluation_protocol.md) defines scorecards, opponent panels, comparison rules, uncertainty and the human-calibration budget.
+
 ## E1. Establish the data and game contract
 
 **Goal:** Make recorded games, search, RL and the interface agree on legal play and outcomes.
