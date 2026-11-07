@@ -67,6 +67,8 @@ E3 and E4 are conditional experiments that can run in parallel. E2 supplies the 
 
 **Done when:** Record the proposed difficulty range, support limits, evaluation panels/protocol, metric weighting, behavior definitions, promotion criteria and budgets. Resolve data-dependent choices and acceptance thresholds in E1.
 
+The [initial scope decision](e0_scope_decision.md) records the candidate population, source evidence, support limits and E1 audit fallbacks.
+
 ## E1. Establish the data and game contract
 
 **Goal:** Make recorded games, search, RL and the interface agree on legal play and outcomes.
