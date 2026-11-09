@@ -5,6 +5,7 @@
 .aws/
 
 # Python environments, caches, and builds
+/.cache/
 .venv/
 venv/
 __pycache__/

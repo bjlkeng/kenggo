@@ -82,7 +82,19 @@ Record the review scope, reviewer/model, pass count, final verdict, and validati
 
 ## Validation and completion
 
-There is no application build or test suite yet. Do not report nonexistent tests as passing. For this bootstrap, check Markdown links, skill frontmatter/routing, ignore rules, Beads commands and sync, and the actual independent review. As code is added, document its real build/test commands here.
+Follow [the workspace setup](docs/workspace.md) for the pinned Linux CPU environment. From the repository root, the current checks are:
+
+```bash
+export UV_CACHE_DIR="$PWD/.cache/uv"
+export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
+uv lock --check
+uv sync --locked --check
+uv run --locked python -m kenggo.smoke
+uv build --no-sources
+git diff --check
+```
+
+The smoke command checks CPU tensor/autograd, NumPy and Parquet installation behavior; the build produces the Python package in ignored `dist/`. No Go rules, data-splitting, search or RL test suite exists yet. Do not report those as passing. Verify GPU readiness separately as documented; CPU success does not establish CUDA support. Also check changed Markdown links, skill frontmatter/routing when applicable, ignore rules, Beads commands/sync and the independent review. Add actual behavior-test commands as implementations arrive.
 
 Use small behavior tests for rules, data splitting, search, and RL contracts before expensive runs. Apply the pstack benchmark checklist before trusting performance or evaluation claims. Keep raw datasets, checkpoints, and run output out of Git; keep small fixtures and reproducibility manifests in Git.
 
