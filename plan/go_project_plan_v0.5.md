@@ -71,6 +71,8 @@ The [initial scope decision](e0_scope_decision.md) records the candidate populat
 
 The [evaluation protocol](e0_evaluation_protocol.md) defines scorecards, opponent panels, comparison rules, uncertainty and the human-calibration budget.
 
+The [budget and handoff decision](e0_budgets_and_handoff.md) fixes pilot caps and resource accounting, defers unfunded calibration and assigns unresolved contracts to E1.
+
 ## E1. Establish the data and game contract
 
 **Goal:** Make recorded games, search, RL and the interface agree on legal play and outcomes.
