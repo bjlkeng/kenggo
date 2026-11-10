@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "bead": "kenggo-6yr.4",
+  "rules": "kgs_japanese_certified_v1",
+  "starting_commit": "69e54c7f599abde4e402da1d8ff0ad86c923ff1a",
+  "engine": {
+    "capture_kernel": "sgfmill==1.1.1",
+    "contract_owner": "kenggo.go.Game",
+    "python": "3.12.13",
+    "board_size": 19,
+    "actions": 362,
+    "policy_pass": 361,
+    "coordinates": "top-left row-major",
+    "runtime_native_build_required": false
+  },
+  "reference": {
+    "project": "KataGo",
+    "tag": "v1.18.2",
+    "commit": "fd0723fdbc0e9d82cf269c9630af8c27c57c07c4",
+    "archive_url": "https://codeload.github.com/lightvector/KataGo/tar.gz/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4",
+    "archive_sha256": "5d663965f8c8886c1022b89565b9f1841045397bf7eb79c5cd57ea5881556a8a",
+    "archive_bytes": 66984108,
+    "expanded_source_bytes": 1387297,
+    "executable_sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7",
+    "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "compile_jobs": 1,
+    "source_game_files_match_contract_manifest": true,
+    "rules": {
+      "ko": "SIMPLE",
+      "scoring": "TERRITORY",
+      "tax": "SEKI",
+      "suicide": false,
+      "button": false,
+      "handicap_bonus": 0,
+      "friendly_pass_ok": false,
+      "komi": 6.5,
+      "always_compute_pass_alive_under_suicide_rules": false,
+      "exclude_territory_adjacent_to_atari": true
+    },
+    "purpose": "Independent ordinary-play oracle; native history cleanup is diagnostic only."
+  },
+  "validation": {
+    "behavior_tests_including_native": 57,
+    "native_test_methods": 5,
+    "ordinary_fixture_cases": 8,
+    "native_setup_probe_cases": 13,
+    "scope": [
+      "capture before suicide",
+      "single/multiple suicide",
+      "simple ko and legal longer cycles",
+      "all 362 action masks on ordinary fixtures",
+      "strict setup/source rejection",
+      "two-pass freeze versus native encore",
+      "exact territory/prisoner scores and seki",
+      "dead scoring view versus actual capture",
+      "resignation and both player perspectives",
+      "immutable complete history/clones/persistence",
+      "800/801 actual-action learner boundaries",
+      "fault/unresolved invalid collection batch",
+      "trusted-map authorization on reload",
+      "acceptable/premature/unjudgeable bounded pass proofs"
+    ],
+    "workspace_checks": [
+      "uv lock --check",
+      "uv sync --locked --check",
+      "uv run --locked python -m kenggo.smoke",
+      "uv build --no-sources",
+      "git diff --check"
+    ]
+  },
+  "cached_source_replay": {
+    "audit_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+    "selected_games": 241,
+    "excluded_not_replayed": 759,
+    "counts": {
+      "legally_replayed": 241,
+      "compared_actions": 52900,
+      "passes": 266,
+      "pending_adjudication": 108,
+      "adjudication_unresolved": 108,
+      "playing": 133,
+      "failed_games": 0
+    },
+    "selected_sgf_bytes": 1088481,
+    "reference_output_bytes": 37372291,
+    "reference_executable_sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7",
+    "costs": {
+      "wall_seconds": 15.9584522806108,
+      "cpu_seconds_including_children": 16.146632264,
+      "wall_limit_seconds": 600,
+      "cpu_limit_seconds": 300,
+      "workers": 1,
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "scope": "One validation run; excludes imports/startup/final write. Not a throughput benchmark."
+    },
+    "training_ready": false
+  },
+  "post_fix_replay": {
+    "selected_games": 241,
+    "excluded_not_replayed": 759,
+    "counts": {
+      "legally_replayed": 241,
+      "compared_actions": 52900,
+      "passes": 266,
+      "pending_adjudication": 108,
+      "adjudication_unresolved": 108,
+      "playing": 133,
+      "failed_games": 0
+    },
+    "costs": {
+      "wall_seconds": 16.046111669391394,
+      "cpu_seconds_including_children": 16.229674444999997,
+      "wall_limit_seconds": 600,
+      "cpu_limit_seconds": 300,
+      "workers": 1,
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "scope": "One validation run; excludes imports/startup/final write. Not a throughput benchmark."
+    }
+  },
+  "source_and_build_costs": {
+    "http_transfers": 1,
+    "source_attempts": 2,
+    "prior_attempt": "Sandbox DNS failure; zero transferred bytes.",
+    "source_fetch_wall_seconds": 7.656748119741678,
+    "builds": [
+      {
+        "record": "build.json",
+        "wall_seconds": 11.89580422732979,
+        "cpu_seconds": 0.317727,
+        "child_cpu_seconds": 11.41543,
+        "max_child_rss_kib": 319704,
+        "executable_sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+      },
+      {
+        "record": "offline-rebuild/build.json",
+        "wall_seconds": 11.747781787998974,
+        "cpu_seconds": 0.32025899999999996,
+        "child_cpu_seconds": 11.425692,
+        "max_child_rss_kib": 319656,
+        "executable_sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+      }
+    ],
+    "kgs_requests": 0,
+    "gpu_hours": 0,
+    "scope": "Two single-job builds and one source transfer; authoring/tool overhead and fetch CPU unmetered."
+  },
+  "code_sha256": {
+    "src/kenggo/go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+    "src/kenggo/adjudication.py": "5994547333b7cb333b99c661858098457f306a6653efb762953db994a02f7be3",
+    "src/kenggo/rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+    "tests/go_fixtures.py": "db2b43cd002c8ae87c1726587464e29db12345691323c1ff5fef436d3873618f",
+    "tests/test_go.py": "31e5e91e8916ec09a46bf41ab7d1756cf198f63a970c206a30c2238b43abc5b1",
+    "tests/test_rules_reference.py": "3638372ff94d08287985bdf4a07d294097036010dbbb8950e6027d03b21f5e1b",
+    "tools/katago_reference.cpp": "448a7586aff0c0881f72254958438ddcb6ef6edf7986cec611615006a91eddd6",
+    "tools/build_katago_reference.py": "3a23eea89b54661f461ccda9352804c550619af51d356b44aa8ec2bc05f952a3",
+    "tools/audit_rules_replay.py": "0164012ef6146d28cd6b438429635dc35243f3eb754b51a368d98f787000af27"
+  },
+  "local_evidence": {
+    "runs/e1-rules-reference-2026-11-10/native_reference_work_summary.json": "5f41eee4f1e1ef4d6916d52338c98367f8632124df7058d51c7d62c8b262a426",
+    "runs/e1-rules-reference-2026-11-10/build.json": "89d1bb7e20ad6ff214a0a79bbd5882fcbb343ffb342940f2c0a5444162c8e87a",
+    "runs/e1-rules-reference-2026-11-10/contract_source_checks.json": "5ccdcfbbd31a66430a84a1d4c95b3c609759d677936a28067246edff74147466",
+    "runs/e1-rules-reference-2026-11-10/helper_rejection_probes.json": "64fa0c219a2b4ec3e3a3c7acf3522564c93368d46f46d68210aef46ab8f90658",
+    "runs/e1-rules-reference-2026-11-10/source_replay.json": "dac485cbd739147cc11a7983038223c2600f87a1c22b8551a46a1f32c9364d90",
+    "runs/e1-rules-reference-2026-11-10/source_replay_after_review.json": "e32e18e3e495d43dda504070e5f6e785904490b117b2e993b8a74c5946b4dc6d"
+  },
+  "limits": [
+    "No production neutral referee or authorization catalog exists.",
+    "Automatic scoring resolved 0 of 108 observed two-pass endings; 6yr.10 blocks E1 readiness.",
+    "241 legal replays do not establish human eligibility, cohorts, training-ready data or exact exceptional KGS equivalence.",
+    "All unselected/excluded SGFs remain outside this replay validation.",
+    "No model, GPU, split/search/RL implementation or qualification result."
+  ]
+}

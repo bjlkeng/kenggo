@@ -1,6 +1,6 @@
 # Python research workspace
 
-This workspace targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy, PyArrow and SGFmill. It provides no Go rules implementation or learned model. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) still owns those later choices; the [source-audit workflow](e1_source_audit.md) describes the bounded data inspection tools.
+This workspace targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy, PyArrow and SGFmill. The [shared rules adapter](rules_engine.md) provides validated ordinary play and conservative adjudication, with ending coverage still blocked. No learned model exists. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) owns the stack; the [source-audit workflow](e1_source_audit.md) describes the bounded data inspection tools.
 
 ## Clean setup
 
@@ -13,6 +13,7 @@ export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
 uv python install --no-bin 3.12.13
 uv sync --locked
 uv run --locked python -m kenggo.smoke
+uv run --locked python -m unittest discover -s tests -v
 ```
 
 The exports keep downloads and the interpreter inside the ignored workspace cache; repeat them in a new shell. `uv sync` creates `.venv/` and installs the package. The smoke command must exit zero and print JSON with `"status": "ok"` and `"device": "cpu"`. It checks fixed tensor forward/backward values, NumPy interoperability and an on-disk Parquet round trip preserving nulls and schema. It removes its temporary file. This is an installation check, not evidence about Go behavior or training performance.
@@ -29,11 +30,12 @@ With the cache exports above, run:
 uv lock --check
 uv sync --locked --check
 uv run --locked python -m kenggo.smoke
+uv run --locked python -m unittest discover -s tests -v
 uv build --no-sources
 git diff --check
 ```
 
-The build creates a source distribution and wheel in ignored `dist/`. Building the wheel does not check its runtime dependencies; run the smoke check after installation too. There is no rules, splitting, search or RL test suite yet. Add behavior tests when those implementations arrive; do not report this smoke check as validating them.
+The build creates a source distribution and wheel in ignored `dist/`. Building the wheel does not check its runtime dependencies; run the smoke check after installation too. Behavior tests cover acquisition/auditing and the rules adapter. Run the separate [pinned native reference checks](rules_engine.md#reproduce-validation) for rules changes; a skipped reference test is not a passing comparison. Splitting, search and RL implementations/tests are still future work. The installation smoke does not validate Go behavior.
 
 ## GPU readiness is separate
 
