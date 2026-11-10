@@ -1,6 +1,6 @@
 # Python research workspace
 
-This bootstrap targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy and PyArrow. It provides no Go rules implementation, learned model or experiment result. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) still owns those later choices.
+This workspace targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy, PyArrow and SGFmill. It provides no Go rules implementation or learned model. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) still owns those later choices; the [source-audit workflow](e1_source_audit.md) describes the bounded data inspection tools.
 
 ## Clean setup
 

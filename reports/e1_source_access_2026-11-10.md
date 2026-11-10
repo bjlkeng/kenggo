@@ -2,6 +2,8 @@
 
 10 November 2026 | Audit `kenggo-6yr.2` | Access prerequisite `kenggo-6yr.8`
 
+**Later on 10 November:** the owner supplied access and authorized bounded acquisition. The [completed candidate audit](e1_kgs_audit_2026-11-10.md) supersedes this report's acquisition status and unmeasured counts. The observations below describe the earlier unauthenticated preflight; its terms/robots evidence is preserved. E1 readiness remains open.
+
 **The 1,000-game audit has not started.** No permitted, accessible candidate frame was established in this preflight. Both checked KGS archive landing pages returned login forms, and no local corpus was present. Keep `kenggo-6yr.2` open behind the access prerequisite and keep E1 readiness (`kenggo-6yr.7`) blocked. This report records a negative source-access finding, not a completed game audit or evidence that the target population does not exist.
 
 The [E0 scope](../plan/e0_scope_decision.md) remains 2025 KGS ranked human games, both historical ranks within 15k–1k or 1d, even 19 x 19 boards without setup stones, the selected byo-yomi family, and KGS Japanese rules with 6.5 komi. The [audit budget contract](../plan/e0_budgets_and_handoff.md#audit-and-throughput-probe) requires a permitted route and a frozen sampling frame before collecting 1,000 candidate IDs. This preflight neither changes that population nor substitutes another source.

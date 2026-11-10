@@ -1,0 +1,577 @@
+{
+  "schema_version": 1,
+  "bead": "kenggo-6yr.2",
+  "seed": "kenggo-6yr.2-20261110-v1",
+  "source_blob_url": "https://api.github.com/repos/odorizhou/kgs-sgfs-download/git/blobs/6db0c567d37bb78b515aca0d6cd5bbe44f76be3e",
+  "source_sha256": "fcebdd744240716ffba2e0353fb9bca29c4517555917e0cb535b34262beaae57",
+  "source_generated_utc": "2026-04-11 11:10 UTC",
+  "design": "Up to three accounts per exact survey rank by SHA256(seed + :account: + lowercase handle); each ordered account gets months 1/4/7/10, 2/5/8/11 or 3/6/9/12. Survey ranks are discovery hints only. Deduplicate source URL; retain archive exclusions. Sample 1000 eligible archive rows by round-robin (month 1..12, weaker rank 15k..1d), each stratum sorted by SHA256(seed + :game: + URL). Never replace retrieval or SGF exclusions.",
+  "bias": "Convenience frame from accounts found online by a third party in April 2026. Survivor, activity, room/language, rank and account-month selection bias; not representative of KGS 2025. Human/bot status and stable identity remain unverified.",
+  "http_budget": {
+    "concurrency": 1,
+    "minimum_start_interval_seconds": 5,
+    "max_requests_including_redirects": 500,
+    "automatic_retries": 0,
+    "login_attempts": 2,
+    "html_response_max_bytes": 2097152,
+    "zip_response_max_bytes": 8388608,
+    "total_response_max_bytes": 104857600,
+    "expanded_zip_max_bytes": 268435456,
+    "wall_seconds": 3600,
+    "cpu_seconds": 900,
+    "gpu_hours": 0,
+    "minimum_cooldown_after_first_timeout_seconds": 300,
+    "stop_after_further_error": true
+  },
+  "accounts": [
+    {
+      "user": "LibertyBot",
+      "survey_rank": "15k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "lokon",
+      "survey_rank": "15k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "dnjnvjnzv",
+      "survey_rank": "15k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "Chris001",
+      "survey_rank": "14k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "Yaizai",
+      "survey_rank": "14k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "mouthorgan",
+      "survey_rank": "14k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "ergodicgo",
+      "survey_rank": "13k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "doamna1",
+      "survey_rank": "13k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "Kakko038",
+      "survey_rank": "13k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "Gotowest",
+      "survey_rank": "12k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "andreyEAO",
+      "survey_rank": "12k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "kejia",
+      "survey_rank": "12k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "GnuGo2",
+      "survey_rank": "11k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "WizardSS",
+      "survey_rank": "11k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "lorbas72",
+      "survey_rank": "11k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "AGT73",
+      "survey_rank": "10k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "dopingg",
+      "survey_rank": "10k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "lbm6754",
+      "survey_rank": "10k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "CasualGO02",
+      "survey_rank": "9k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "takama",
+      "survey_rank": "9k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "arthur75",
+      "survey_rank": "9k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "kzj",
+      "survey_rank": "8k",
+      "survey_month": "2026-03",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "nexdor",
+      "survey_rank": "8k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "Olduck",
+      "survey_rank": "8k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "MalikK",
+      "survey_rank": "7k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "rare",
+      "survey_rank": "7k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "tang0",
+      "survey_rank": "7k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "Maike16",
+      "survey_rank": "6k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "cardo",
+      "survey_rank": "6k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "Roadt01dan",
+      "survey_rank": "6k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "aof",
+      "survey_rank": "5k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "BLo1700",
+      "survey_rank": "5k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "erioko0313",
+      "survey_rank": "5k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "yuumsuzuki",
+      "survey_rank": "4k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "skew2",
+      "survey_rank": "4k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "maitrepo",
+      "survey_rank": "4k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "minnmann",
+      "survey_rank": "3k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "threeone",
+      "survey_rank": "3k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "huyc1961",
+      "survey_rank": "3k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "chipstar",
+      "survey_rank": "2k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "siroyama5",
+      "survey_rank": "2k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "komedaka",
+      "survey_rank": "2k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "Pitolone",
+      "survey_rank": "1k",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "Neptunus",
+      "survey_rank": "1k",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "zousigaya",
+      "survey_rank": "1k",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    },
+    {
+      "user": "akasaka39",
+      "survey_rank": "1d",
+      "survey_month": "2026-04",
+      "months": [
+        1,
+        4,
+        7,
+        10
+      ]
+    },
+    {
+      "user": "Strauss",
+      "survey_rank": "1d",
+      "survey_month": "2026-04",
+      "months": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    {
+      "user": "math",
+      "survey_rank": "1d",
+      "survey_month": "2026-04",
+      "months": [
+        3,
+        6,
+        9,
+        12
+      ]
+    }
+  ],
+  "revision": 2,
+  "supersedes_config_sha256": "9d5ddea82d208e26be89e22524eabc856a67791cd3b87ac880575997a0ba302a",
+  "revision_reason": "First query (LibertyBot January 2025) timed out before headers after 30 seconds. Original owner statement identifies LibertyBot and GnuGo2 as bots. Conservatively exclude these historical bot handles from subsequent discovery without replacing accounts; this does not verify that remaining accounts are human or establish the timeout cause. No SGFs or successful frame pages preceded this revision.",
+  "excluded_discovery_accounts": {
+    "LibertyBot": {
+      "reason": "historical_bot_handle",
+      "evidence": "https://groups.google.com/g/computer-go-archive/c/PuNvbA19DdM"
+    },
+    "GnuGo2": {
+      "reason": "historical_bot_handle",
+      "evidence": "https://groups.google.com/g/computer-go-archive/c/PuNvbA19DdM"
+    }
+  },
+  "prior_attempt_costs": {
+    "requests": 3,
+    "response_bytes": 3007,
+    "wall_seconds": 55.21921554207802,
+    "cpu_seconds": 0.061635999999999996,
+    "gpu_hours": 0
+  },
+  "deadline_utc": "2026-11-10T19:58:13+00:00"
+}

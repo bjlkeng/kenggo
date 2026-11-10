@@ -87,7 +87,7 @@ The [budget and handoff decision](e0_budgets_and_handoff.md) fixes pilot caps an
 
 **Done when:** Data supports each promised capability; pass/end coverage and resulting profile limits are recorded; splits are fixed; replay/scoring checks pass; endgame, missing-data and behavior acceptance policies are explicit. Revise E0 if coverage is insufficient.
 
-The [10 November source-access preflight](../reports/e1_source_access_2026-11-10.md) records the current acquisition blocker. The 1,000-game audit and E1 readiness remain open.
+The [10 November candidate audit](../reports/e1_kgs_audit_2026-11-10.md) records 1,000 retrieved and parsed candidates, 241 metadata-compatible records and deferred capabilities. Historical human status, account grouping, timing and legal replay remain unverified; E1 readiness remains open. The earlier [source-access preflight](../reports/e1_source_access_2026-11-10.md) preserves the initial access and policy observations.
 
 <!-- pagebreak -->
 

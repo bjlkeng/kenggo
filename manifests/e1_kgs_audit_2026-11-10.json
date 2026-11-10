@@ -1,0 +1,3068 @@
+{
+  "schema_version": 1,
+  "beads": [
+    "kenggo-6yr.2",
+    "kenggo-6yr.8"
+  ],
+  "date": "2026-11-10",
+  "review_base": "978aa780eb1917a80a7b81282eadb1841a3b1a17",
+  "decision": "Bounded candidate capability audit complete; E1 readiness and all model profiles remain unqualified.",
+  "report": "reports/e1_kgs_audit_2026-11-10.md",
+  "configuration": "manifests/e1_kgs_discovery_2026-11-10_v2.json",
+  "local_capture_directory": "runs/e1-kgs-audit-2026-11-10-v4",
+  "local_audit_directory": "runs/e1-kgs-audit-results-2026-11-10-v2",
+  "per_game_artifact": "manifests/e1_kgs_audit_games_2026-11-10.parquet",
+  "artifact_contents": "Per-game metadata, source IDs, hashes, exclusions and audit counters; no move sequences, comments, credentials or cookies.",
+  "access": {
+    "route": "Authenticated official KGS archive pages and their monthly ZIP links.",
+    "authority": "Project owner explicitly supplied an account and authorized bounded acquisition with conservative server load.",
+    "concurrency": 1,
+    "minimum_start_interval_seconds": 5,
+    "automatic_retries": 0,
+    "conditions": "Inspected robots.txt disallows /gameArchives.jsp. Inspected service terms do not establish a blanket ML/research redistribution licence. User authorization and successful login are not asserted to be KGS-specific automation or reuse approval.",
+    "continued_use_gate": "kenggo-6yr.9: resolve source eligibility, account grouping and continued collection/reuse scope before data construction or scaling.",
+    "policy_sources": [
+      "https://www.gokgs.com/robots.txt",
+      "https://www.gokgs.com/tos.jsp"
+    ],
+    "prior_observations": "manifests/e1_source_preflight_2026-11-10.json"
+  },
+  "acquisition": {
+    "attempts": [
+      {
+        "directory": "runs/e1-kgs-audit-2026-11-10",
+        "outcome": "First archive query timed out before response headers; stopped without retry.",
+        "request_log_sha256": "a0be9df1127744a1af1b3ef411e7b3ded78ea2fcdac2361216b0d30b2c3f9255",
+        "requests_this_attempt": 3,
+        "first_request_utc": "2026-11-10T18:58:28.573297+00:00",
+        "last_request_utc": "2026-11-10T18:58:38.574123+00:00",
+        "minimum_start_interval_seconds": 5.000408237800002,
+        "cumulative_costs": {
+          "requests": 3,
+          "response_bytes": 3007,
+          "wall_seconds": 55.21921554207802,
+          "cpu_seconds": 0.061635999999999996,
+          "gpu_hours": 0
+        },
+        "capture_code_provenance": null
+      },
+      {
+        "directory": "runs/e1-kgs-audit-2026-11-10-v2",
+        "outcome": "Successful HTML response; local parser failed; response not yet cached.",
+        "request_log_sha256": "1b1df41e7cb6037275962d56a384bde0e33416b165da35604a6d80f99b53b262",
+        "requests_this_attempt": 3,
+        "first_request_utc": "2026-11-10T19:04:43.174637+00:00",
+        "last_request_utc": "2026-11-10T19:04:53.175525+00:00",
+        "minimum_start_interval_seconds": 5.000354565680027,
+        "cumulative_costs": {
+          "outcome": "failed",
+          "requests": 6,
+          "response_bytes": 71157,
+          "wall_seconds": 79.78660890646279,
+          "cpu_seconds": 0.114366,
+          "gpu_hours": 0
+        },
+        "capture_code_provenance": null
+      },
+      {
+        "directory": "runs/e1-kgs-audit-2026-11-10-v3",
+        "outcome": "Successful HTML response cached; Review colspan parser failed locally.",
+        "request_log_sha256": "d2c0fc1cc19cb55f7546f69036a4a1e2109284458ef69aad525eb8985a9267da",
+        "requests_this_attempt": 3,
+        "first_request_utc": "2026-11-10T19:08:01.780807+00:00",
+        "last_request_utc": "2026-11-10T19:08:11.781296+00:00",
+        "minimum_start_interval_seconds": 5.000134244561195,
+        "cumulative_costs": {
+          "outcome": "failed",
+          "requests": 9,
+          "response_bytes": 139307,
+          "wall_seconds": 105.17008541151881,
+          "cpu_seconds": 0.170107,
+          "gpu_hours": 0
+        },
+        "capture_code_provenance": null
+      },
+      {
+        "directory": "runs/e1-kgs-audit-2026-11-10-v4",
+        "outcome": "Cached page reused; remaining discovery and all selected ZIP bundles retrieved.",
+        "request_log_sha256": "b90ab9c0fe2ccaaab291176c3d9ba6c9b1e4ae0fc04ec085912c35b75f84b415",
+        "requests_this_attempt": 288,
+        "first_request_utc": "2026-11-10T19:11:05.958571+00:00",
+        "last_request_utc": "2026-11-10T19:41:10.772303+00:00",
+        "minimum_start_interval_seconds": 5.00008287653327,
+        "cumulative_costs": {
+          "outcome": "retrieved",
+          "requests": 297,
+          "response_bytes": 33730402,
+          "wall_seconds": 1930.7456495743245,
+          "cpu_seconds": 6.523634,
+          "gpu_hours": 0
+        },
+        "capture_code_provenance": {
+          "config_sha256": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8",
+          "prior_attempt": "runs/e1-kgs-audit-2026-11-10-v3",
+          "started_utc": "2026-11-10T19:10:49.871592+00:00",
+          "code_sha256": {
+            "kgs_acquire.py": "e0ffb3809424db8232d85ea89bfdcea479118e0bb4c32a71b7efd4ec4d60696e",
+            "kgs_source.py": "08c82c9feeb08916e8d42cb40d027a7a0a90b85195f2baf1bd628cc8b7b01f1a"
+          }
+        }
+      }
+    ],
+    "totals": {
+      "outcome": "retrieved",
+      "requests": 297,
+      "response_bytes": 33730402,
+      "wall_seconds": 1930.7456495743245,
+      "cpu_seconds": 6.523634,
+      "gpu_hours": 0
+    },
+    "status_counts": {
+      "200": 296,
+      "no_response_timeout": 1
+    },
+    "first_request_utc": "2026-11-10T18:58:28.573297+00:00",
+    "last_response_utc": "2026-11-10T19:41:15.446252+00:00",
+    "request_window_wall_seconds": 2566.872955,
+    "instrumented_wall_scope": "Sum of collector lifetimes after Client creation, including input/rate waits; excludes inter-process diagnosis/cooldown, startup/config parsing and final ledger write. The request window separately includes gaps between attempts.",
+    "instrumented_cpu_scope": "Process user+system CPU through shutdown, summed across attempts, including interpreter startup but excluding final ledger write. No editor, test, dependency-installation, review or human-effort cost is included.",
+    "deadline_utc": "2026-11-10T19:58:13+00:00",
+    "execution_adjustments": [
+      "First timeout stopped acquisition. Waited at least 300 seconds after timeout before the deliberate continuation; excluded two historically documented bot handles without replacement.",
+      "Two local parser failures required two additional fresh logins beyond revision 2 login_attempts=2, recorded in Beads before each continuation. One successful but uncached page was repeated once; its cached successor was reused thereafter.",
+      "All continuations consumed original cumulative 500-request, 100-MiB, 60-minute, 900-CPU-second budgets and unchanged UTC deadline. No further network error occurred."
+    ],
+    "selected_sgf_bytes": 4645655,
+    "expanded_bundle_bytes": 57683710,
+    "zip_bundles": 103,
+    "zip_sgf_members": 12288,
+    "extra_bundle_members_parsed": 0
+  },
+  "separate_authenticated_probe": {
+    "requests": 4,
+    "log_sha256": "cc67ed965b47561247008e8f26764c3e65f17bfc4e8ce6ca0421d142d395a2ce",
+    "response_bytes": 11474,
+    "first_request_utc": "2026-11-10T18:50:48.124927+00:00",
+    "last_response_utc": "2026-11-10T18:52:46.515436+00:00",
+    "request_wall_seconds": 1.432887,
+    "status_counts": {
+      "200": 4
+    },
+    "sgfs_retrieved": 0,
+    "cpu_seconds": null,
+    "note": "CPU and total setup/input wall time not recorded in this request ledger; body content and query values were not persisted."
+  },
+  "other_cost_scopes": {
+    "unauthenticated_preflight": "12 direct checks, 110965 response bytes, separately recorded in the prior preflight manifest.",
+    "github_discovery": "Three public GitHub API responses supplied repository/source/survey evidence; outside the KGS request and byte totals. CPU/wall/byte totals for web search and these checks were not instrumented.",
+    "human_effort": "Owner supplied access credentials and a load constraint. Participation, owner time and agent/review wall time were not measured; no recruited human matches or training."
+  },
+  "code_provenance": {
+    "final_source_sha256": {
+      "e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+      "kgs_acquire.py": "6a3ef4366d38b75e1d1cdd080a23d9e05ed46bf94084ba19c607c9c38b07e911",
+      "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+    },
+    "lockfile_sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079",
+    "note": "Capture-time source hashes are in each available run record. Later offline checks added inaccessible-row/date/cache validation without changing the selected frame/sample; the final code reproduces the audit from retained inputs. Old capture source bytes are not distributed separately."
+  },
+  "summary": {
+    "schema_version": 1,
+    "sample_sha256": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d",
+    "frame_sha256": "e69698029b799a3779bbe460d16daad8ed6c90ffbceac9d80fe3ccb0122cead6",
+    "config_sha256": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8",
+    "discovery": {
+      "pages": 184,
+      "linked_rows": 16365,
+      "distinct_linked_source_ids": 16327,
+      "unlinked_rows": 9,
+      "unlinked_types": {
+        "Free": 7,
+        "Review": 2
+      },
+      "scope_candidate_ids": 7848,
+      "row_exclusion_counts": {
+        "not_even_19x19": 6978,
+        "not_ranked": 2089,
+        "black_rank_unknown_or_out_of_scope": 2582,
+        "white_rank_unknown_or_out_of_scope": 2785
+      }
+    },
+    "sampled_candidates": 1000,
+    "retrieved_selected": 1000,
+    "parse_status_counts": {
+      "parsed": 1000
+    },
+    "exclusion_counts": {
+      "played_variation_unverified": 47,
+      "historical_bot_handle": 29,
+      "rules_or_komi_out_of_scope": 651,
+      "time_control_unknown_or_out_of_scope": 351,
+      "archive_sgf_result_mismatch": 5,
+      "missing_moves_or_turn_order": 5
+    },
+    "historical_human_status_counts": {
+      "unverified": 971,
+      "historical_bot_handle": 29
+    },
+    "metadata_scope_compatible": 241,
+    "fully_verified_training_games": 0,
+    "validated_elapsed_labels": 0,
+    "rules_replay_validated_games": 0,
+    "duplicate_sequence_candidate_excess": 3,
+    "all_parsed": {
+      "games": 1000,
+      "result_counts": {
+        "scored": 466,
+        "resignation": 444,
+        "timeout": 47,
+        "incomplete_or_unknown": 14,
+        "forfeit": 29
+      },
+      "action_clock_counts": {
+        "moves": 224274,
+        "explicit_passes": 1484,
+        "empty_passes": 1484,
+        "legacy_passes": 0,
+        "scoring_markup_nodes": 523,
+        "post_clock_present": 224274,
+        "post_clock_invalid": 0,
+        "post_clock_missing": 0,
+        "overtime_marker_moves": 10810,
+        "clock_increases": 258,
+        "main_time_difference_candidates": 195998,
+        "ambiguous_clock_moves": 28276,
+        "overtime_marker_invalid": 0
+      },
+      "games_with_final_two_passes": 523,
+      "by_player_rank": {
+        "15k": {
+          "player_game_appearances": 24,
+          "result_scored": 13,
+          "moves": 2284,
+          "explicit_passes": 20,
+          "games_with_final_two_passes": 14,
+          "result_resignation": 7,
+          "result_forfeit": 2,
+          "result_incomplete_or_unknown": 2,
+          "distinct_handle_strings": 7
+        },
+        "13k": {
+          "player_game_appearances": 30,
+          "result_scored": 22,
+          "moves": 3907,
+          "explicit_passes": 27,
+          "games_with_final_two_passes": 24,
+          "result_resignation": 8,
+          "distinct_handle_strings": 16
+        },
+        "12k": {
+          "player_game_appearances": 98,
+          "result_scored": 67,
+          "moves": 11086,
+          "explicit_passes": 100,
+          "games_with_final_two_passes": 67,
+          "result_resignation": 29,
+          "result_timeout": 1,
+          "result_forfeit": 1,
+          "distinct_handle_strings": 20
+        },
+        "7k": {
+          "player_game_appearances": 126,
+          "result_scored": 59,
+          "moves": 15067,
+          "explicit_passes": 108,
+          "games_with_final_two_passes": 78,
+          "result_resignation": 56,
+          "result_timeout": 3,
+          "result_forfeit": 5,
+          "result_incomplete_or_unknown": 3,
+          "distinct_handle_strings": 56
+        },
+        "4k": {
+          "player_game_appearances": 236,
+          "result_scored": 124,
+          "moves": 27281,
+          "explicit_passes": 202,
+          "games_with_final_two_passes": 129,
+          "result_resignation": 97,
+          "result_timeout": 9,
+          "result_forfeit": 6,
+          "distinct_handle_strings": 85
+        },
+        "6k": {
+          "player_game_appearances": 158,
+          "result_scored": 88,
+          "moves": 17738,
+          "explicit_passes": 201,
+          "games_with_final_two_passes": 101,
+          "result_resignation": 60,
+          "result_timeout": 3,
+          "result_incomplete_or_unknown": 3,
+          "result_forfeit": 4,
+          "distinct_handle_strings": 76
+        },
+        "5k": {
+          "player_game_appearances": 231,
+          "result_scored": 130,
+          "moves": 26373,
+          "explicit_passes": 187,
+          "games_with_final_two_passes": 138,
+          "result_resignation": 77,
+          "result_timeout": 14,
+          "result_forfeit": 6,
+          "result_incomplete_or_unknown": 4,
+          "distinct_handle_strings": 65
+        },
+        "3k": {
+          "player_game_appearances": 146,
+          "result_resignation": 81,
+          "moves": 14869,
+          "explicit_passes": 71,
+          "games_with_final_two_passes": 61,
+          "result_scored": 54,
+          "result_forfeit": 8,
+          "result_incomplete_or_unknown": 3,
+          "distinct_handle_strings": 65
+        },
+        "2k": {
+          "player_game_appearances": 142,
+          "result_resignation": 94,
+          "moves": 14583,
+          "explicit_passes": 47,
+          "games_with_final_two_passes": 43,
+          "result_scored": 41,
+          "result_forfeit": 3,
+          "result_timeout": 3,
+          "result_incomplete_or_unknown": 1,
+          "distinct_handle_strings": 70
+        },
+        "1k": {
+          "player_game_appearances": 166,
+          "result_resignation": 88,
+          "moves": 17640,
+          "explicit_passes": 69,
+          "games_with_final_two_passes": 58,
+          "result_scored": 54,
+          "result_incomplete_or_unknown": 3,
+          "result_timeout": 18,
+          "result_forfeit": 3,
+          "distinct_handle_strings": 64
+        },
+        "1d": {
+          "player_game_appearances": 143,
+          "result_resignation": 84,
+          "moves": 15203,
+          "explicit_passes": 40,
+          "games_with_final_two_passes": 37,
+          "result_timeout": 21,
+          "result_scored": 35,
+          "result_incomplete_or_unknown": 1,
+          "result_forfeit": 2,
+          "distinct_handle_strings": 42
+        },
+        "14k": {
+          "player_game_appearances": 13,
+          "result_resignation": 4,
+          "moves": 1313,
+          "explicit_passes": 8,
+          "games_with_final_two_passes": 8,
+          "result_forfeit": 1,
+          "result_scored": 8,
+          "distinct_handle_strings": 9
+        },
+        "10k": {
+          "player_game_appearances": 110,
+          "result_scored": 56,
+          "moves": 13662,
+          "explicit_passes": 86,
+          "games_with_final_two_passes": 69,
+          "result_resignation": 42,
+          "result_timeout": 8,
+          "result_forfeit": 3,
+          "result_incomplete_or_unknown": 1,
+          "distinct_handle_strings": 44
+        },
+        "11k": {
+          "player_game_appearances": 118,
+          "result_scored": 59,
+          "moves": 13706,
+          "explicit_passes": 118,
+          "games_with_final_two_passes": 71,
+          "result_resignation": 45,
+          "result_timeout": 3,
+          "result_forfeit": 7,
+          "result_incomplete_or_unknown": 4,
+          "distinct_handle_strings": 38
+        },
+        "9k": {
+          "player_game_appearances": 165,
+          "result_scored": 81,
+          "moves": 18844,
+          "explicit_passes": 127,
+          "games_with_final_two_passes": 93,
+          "result_resignation": 70,
+          "result_timeout": 8,
+          "result_forfeit": 5,
+          "result_incomplete_or_unknown": 1,
+          "distinct_handle_strings": 37
+        },
+        "8k": {
+          "player_game_appearances": 94,
+          "result_resignation": 46,
+          "moves": 10718,
+          "explicit_passes": 73,
+          "games_with_final_two_passes": 55,
+          "result_scored": 41,
+          "result_forfeit": 2,
+          "result_timeout": 3,
+          "result_incomplete_or_unknown": 2,
+          "distinct_handle_strings": 45
+        }
+      },
+      "black_white_rank_pairs": {
+        "15k / 15k": 5,
+        "13k / 12k": 16,
+        "12k / 12k": 23,
+        "7k / 4k": 5,
+        "6k / 5k": 83,
+        "5k / 4k": 67,
+        "4k / 4k": 57,
+        "3k / 2k": 44,
+        "2k / 2k": 23,
+        "1k / 1d": 57,
+        "1d / 1d": 43,
+        "15k / 14k": 8,
+        "13k / 10k": 2,
+        "12k / 11k": 25,
+        "11k / 6k": 4,
+        "10k / 9k": 51,
+        "9k / 8k": 33,
+        "8k / 6k": 2,
+        "7k / 6k": 41,
+        "6k / 6k": 12,
+        "2k / 1k": 48,
+        "11k / 11k": 15,
+        "9k / 9k": 33,
+        "8k / 7k": 29,
+        "4k / 3k": 42,
+        "3k / 3k": 29,
+        "14k / 13k": 1,
+        "5k / 5k": 34,
+        "12k / 9k": 1,
+        "10k / 10k": 12,
+        "14k / 12k": 1,
+        "11k / 7k": 3,
+        "8k / 8k": 10,
+        "7k / 7k": 17,
+        "4k / 8k": 1,
+        "7k / 5k": 9,
+        "11k / 10k": 25,
+        "1k / 1k": 30,
+        "13k / 11k": 9,
+        "7k / 2k": 2,
+        "4k / 2k": 2,
+        "11k / 15k": 1,
+        "12k / 14k": 1,
+        "14k / 11k": 2,
+        "10k / 8k": 3,
+        "15k / 12k": 2,
+        "11k / 9k": 10,
+        "8k / 4k": 2,
+        "12k / 15k": 2,
+        "13k / 8k": 2,
+        "8k / 5k": 1,
+        "15k / 10k": 1,
+        "11k / 12k": 3,
+        "10k / 11k": 1,
+        "9k / 7k": 1,
+        "5k / 7k": 1,
+        "12k / 10k": 1,
+        "9k / 11k": 3,
+        "10k / 7k": 1,
+        "6k / 4k": 3,
+        "3k / 1k": 1,
+        "11k / 5k": 2,
+        "10k / 6k": 1,
+        "8k / 3k": 1
+      },
+      "time_controls": {
+        "[1800.0, \"5x30 byo-yomi\"]": 202,
+        "[600.0, \"10x20 byo-yomi\"]": 29,
+        "[600.0, \"5x20 byo-yomi\"]": 51,
+        "[600.0, null]": 56,
+        "[1200.0, \"5x30 byo-yomi\"]": 64,
+        "[600.0, \"3x30 byo-yomi\"]": 55,
+        "[900.0, \"5x30 byo-yomi\"]": 87,
+        "[600.0, \"5x30 byo-yomi\"]": 25,
+        "[1800.0, \"5x1800 byo-yomi\"]": 1,
+        "[1500.0, \"1x30 byo-yomi\"]": 1,
+        "[1500.0, \"5x10 byo-yomi\"]": 18,
+        "[900.0, \"1x5 byo-yomi\"]": 1,
+        "[1800.0, \"3x30 byo-yomi\"]": 3,
+        "[600.0, \"1x10 byo-yomi\"]": 51,
+        "[1500.0, \"5x30 byo-yomi\"]": 116,
+        "[1200.0, \"3x60 byo-yomi\"]": 2,
+        "[1200.0, \"2x10 byo-yomi\"]": 39,
+        "[900.0, \"1x10 byo-yomi\"]": 67,
+        "[60.0, \"3x15 byo-yomi\"]": 1,
+        "[2700.0, \"2x30 byo-yomi\"]": 2,
+        "[900.0, \"5x20 byo-yomi\"]": 23,
+        "[900.0, \"3x20 byo-yomi\"]": 4,
+        "[300.0, \"1x10 byo-yomi\"]": 3,
+        "[1200.0, \"1x20 byo-yomi\"]": 1,
+        "[300.0, \"5x30 byo-yomi\"]": 9,
+        "[2100.0, \"5x30 byo-yomi\"]": 3,
+        "[60.0, \"5x10 byo-yomi\"]": 3,
+        "[1200.0, \"3x30 byo-yomi\"]": 5,
+        "[900.0, \"1x20 byo-yomi\"]": 2,
+        "[600.0, \"20/300 Canadian\"]": 1,
+        "[600.0, \"5x10 byo-yomi\"]": 8,
+        "[1200.0, \"5x20 byo-yomi\"]": 5,
+        "[720.0, \"20/600 Canadian\"]": 1,
+        "[1800.0, null]": 5,
+        "[1500.0, \"3x20 byo-yomi\"]": 1,
+        "[600.0, \"3x10 byo-yomi\"]": 4,
+        "[2160.0, \"5x30 byo-yomi\"]": 2,
+        "[1200.0, \"10x20 byo-yomi\"]": 1,
+        "[60.0, \"3x10 byo-yomi\"]": 6,
+        "[300.0, \"3x10 byo-yomi\"]": 3,
+        "[600.0, \"5x15 byo-yomi\"]": 1,
+        "[600.0, \"2x30 byo-yomi\"]": 2,
+        "[300.0, \"25/600 Canadian\"]": 1,
+        "[900.0, \"2x30 byo-yomi\"]": 2,
+        "[60.0, \"5x30 byo-yomi\"]": 2,
+        "[1800.0, \"25/600 Canadian\"]": 1,
+        "[900.0, \"3x30 byo-yomi\"]": 4,
+        "[600.0, \"1x30 byo-yomi\"]": 1,
+        "[1800.0, \"8x30 byo-yomi\"]": 1,
+        "[900.0, \"4x30 byo-yomi\"]": 1,
+        "[900.0, null]": 1,
+        "[1080.0, \"6x30 byo-yomi\"]": 1,
+        "[1200.0, \"1x30 byo-yomi\"]": 1,
+        "[900.0, \"3x10 byo-yomi\"]": 1,
+        "[60.0, \"2x10 byo-yomi\"]": 1,
+        "[1200.0, \"2x30 byo-yomi\"]": 1,
+        "[2400.0, \"5x30 byo-yomi\"]": 3,
+        "[120.0, \"2x20 byo-yomi\"]": 1,
+        "[1200.0, null]": 1,
+        "[2400.0, \"3x30 byo-yomi\"]": 1,
+        "[300.0, \"5x20 byo-yomi\"]": 1,
+        "[1800.0, \"25/60 Canadian\"]": 1,
+        "[60.0, \"1x10 byo-yomi\"]": 1,
+        "[900.0, \"1x30 byo-yomi\"]": 1,
+        "[600.0, \"3x15 byo-yomi\"]": 1,
+        "[1500.0, \"2x30 byo-yomi\"]": 1,
+        "[1500.0, \"5x50 byo-yomi\"]": 1,
+        "[1800.0, \"5x10 byo-yomi\"]": 1,
+        "[7200.0, \"5x30 byo-yomi\"]": 1,
+        "[120.0, \"10x30 byo-yomi\"]": 1,
+        "[2400.0, \"5x60 byo-yomi\"]": 1
+      },
+      "rules_komi": {
+        "[\"Japanese\", 6.5]": 349,
+        "[\"Chinese\", 0.5]": 17,
+        "[\"Japanese\", 0.5]": 612,
+        "[\"Chinese\", 7.5]": 21,
+        "[\"Japanese\", -0.5]": 1
+      },
+      "root_property_counts": {
+        "AP": 1000,
+        "BR": 1000,
+        "CA": 1000,
+        "DT": 1000,
+        "FF": 1000,
+        "GM": 1000,
+        "KM": 1000,
+        "OT": 937,
+        "PB": 1000,
+        "PC": 1000,
+        "PW": 1000,
+        "RE": 986,
+        "RU": 1000,
+        "ST": 1000,
+        "SZ": 1000,
+        "TM": 1000,
+        "WR": 1000,
+        "C": 492
+      },
+      "mainline_property_counts": {
+        "GM": 1000,
+        "FF": 1000,
+        "CA": 1000,
+        "AP": 1000,
+        "ST": 1000,
+        "RU": 1000,
+        "SZ": 1000,
+        "KM": 1000,
+        "TM": 1000,
+        "OT": 937,
+        "PW": 1000,
+        "PB": 1000,
+        "WR": 1000,
+        "BR": 1000,
+        "DT": 1000,
+        "PC": 1000,
+        "RE": 986,
+        "B": 112377,
+        "BL": 112377,
+        "C": 2372,
+        "W": 111897,
+        "WL": 111897,
+        "TW": 522,
+        "TB": 523,
+        "OB": 5199,
+        "OW": 5611
+      },
+      "distinct_handle_strings": 679,
+      "games_per_handle_histogram": {
+        "14": 1,
+        "1": 472,
+        "18": 1,
+        "26": 1,
+        "7": 4,
+        "63": 1,
+        "54": 1,
+        "2": 109,
+        "51": 1,
+        "61": 2,
+        "16": 1,
+        "37": 1,
+        "4": 22,
+        "55": 1,
+        "3": 38,
+        "40": 1,
+        "6": 3,
+        "57": 1,
+        "9": 1,
+        "44": 1,
+        "25": 1,
+        "48": 1,
+        "64": 1,
+        "5": 2,
+        "65": 1,
+        "39": 1,
+        "62": 1,
+        "10": 1,
+        "11": 1,
+        "21": 1,
+        "29": 1,
+        "17": 1,
+        "20": 1,
+        "22": 1,
+        "13": 1
+      }
+    },
+    "metadata_compatible": {
+      "games": 241,
+      "result_counts": {
+        "scored": 102,
+        "resignation": 114,
+        "timeout": 16,
+        "forfeit": 6,
+        "incomplete_or_unknown": 3
+      },
+      "action_clock_counts": {
+        "moves": 52900,
+        "explicit_passes": 266,
+        "empty_passes": 266,
+        "legacy_passes": 0,
+        "scoring_markup_nodes": 108,
+        "post_clock_present": 52900,
+        "post_clock_invalid": 0,
+        "post_clock_missing": 0,
+        "overtime_marker_moves": 2321,
+        "clock_increases": 67,
+        "main_time_difference_candidates": 50330,
+        "ambiguous_clock_moves": 2570,
+        "overtime_marker_invalid": 0
+      },
+      "games_with_final_two_passes": 108,
+      "by_player_rank": {
+        "12k": {
+          "player_game_appearances": 27,
+          "result_scored": 23,
+          "moves": 2841,
+          "explicit_passes": 29,
+          "games_with_final_two_passes": 23,
+          "result_forfeit": 1,
+          "result_resignation": 3,
+          "distinct_handle_strings": 10
+        },
+        "4k": {
+          "player_game_appearances": 57,
+          "result_scored": 27,
+          "moves": 6687,
+          "explicit_passes": 43,
+          "games_with_final_two_passes": 27,
+          "result_resignation": 30,
+          "distinct_handle_strings": 26
+        },
+        "2k": {
+          "player_game_appearances": 44,
+          "result_scored": 16,
+          "moves": 5067,
+          "explicit_passes": 18,
+          "games_with_final_two_passes": 16,
+          "result_resignation": 28,
+          "distinct_handle_strings": 23
+        },
+        "1d": {
+          "player_game_appearances": 80,
+          "result_resignation": 52,
+          "moves": 8031,
+          "explicit_passes": 13,
+          "games_with_final_two_passes": 12,
+          "result_timeout": 14,
+          "result_scored": 12,
+          "result_forfeit": 2,
+          "distinct_handle_strings": 30
+        },
+        "6k": {
+          "player_game_appearances": 12,
+          "result_resignation": 6,
+          "moves": 1282,
+          "explicit_passes": 7,
+          "games_with_final_two_passes": 6,
+          "result_scored": 6,
+          "distinct_handle_strings": 8
+        },
+        "11k": {
+          "player_game_appearances": 29,
+          "result_resignation": 10,
+          "moves": 2964,
+          "explicit_passes": 21,
+          "games_with_final_two_passes": 15,
+          "result_scored": 13,
+          "result_forfeit": 2,
+          "result_incomplete_or_unknown": 4,
+          "distinct_handle_strings": 14
+        },
+        "9k": {
+          "player_game_appearances": 55,
+          "result_timeout": 4,
+          "moves": 6141,
+          "explicit_passes": 34,
+          "games_with_final_two_passes": 30,
+          "result_resignation": 23,
+          "result_scored": 26,
+          "result_forfeit": 2,
+          "distinct_handle_strings": 22
+        },
+        "15k": {
+          "player_game_appearances": 10,
+          "result_resignation": 4,
+          "moves": 897,
+          "explicit_passes": 5,
+          "games_with_final_two_passes": 4,
+          "result_scored": 4,
+          "result_incomplete_or_unknown": 2,
+          "distinct_handle_strings": 5
+        },
+        "10k": {
+          "player_game_appearances": 22,
+          "result_resignation": 7,
+          "moves": 3091,
+          "explicit_passes": 14,
+          "games_with_final_two_passes": 13,
+          "result_timeout": 4,
+          "result_scored": 11,
+          "distinct_handle_strings": 8
+        },
+        "8k": {
+          "player_game_appearances": 11,
+          "result_scored": 7,
+          "moves": 1138,
+          "explicit_passes": 7,
+          "games_with_final_two_passes": 7,
+          "result_resignation": 4,
+          "distinct_handle_strings": 8
+        },
+        "7k": {
+          "player_game_appearances": 21,
+          "result_resignation": 8,
+          "moves": 2756,
+          "explicit_passes": 16,
+          "games_with_final_two_passes": 13,
+          "result_scored": 13,
+          "distinct_handle_strings": 13
+        },
+        "3k": {
+          "player_game_appearances": 48,
+          "result_scored": 20,
+          "moves": 4712,
+          "explicit_passes": 28,
+          "games_with_final_two_passes": 24,
+          "result_resignation": 26,
+          "result_forfeit": 2,
+          "distinct_handle_strings": 28
+        },
+        "5k": {
+          "player_game_appearances": 5,
+          "result_scored": 1,
+          "moves": 448,
+          "explicit_passes": 1,
+          "games_with_final_two_passes": 1,
+          "result_resignation": 2,
+          "result_forfeit": 2,
+          "distinct_handle_strings": 4
+        },
+        "1k": {
+          "player_game_appearances": 56,
+          "result_scored": 22,
+          "moves": 6350,
+          "explicit_passes": 27,
+          "games_with_final_two_passes": 22,
+          "result_timeout": 10,
+          "result_resignation": 24,
+          "distinct_handle_strings": 27
+        },
+        "14k": {
+          "player_game_appearances": 2,
+          "result_forfeit": 1,
+          "moves": 119,
+          "explicit_passes": 1,
+          "games_with_final_two_passes": 1,
+          "result_scored": 1,
+          "distinct_handle_strings": 2
+        },
+        "13k": {
+          "player_game_appearances": 3,
+          "result_scored": 2,
+          "moves": 376,
+          "explicit_passes": 2,
+          "games_with_final_two_passes": 2,
+          "result_resignation": 1,
+          "distinct_handle_strings": 3
+        }
+      },
+      "black_white_rank_pairs": {
+        "12k / 12k": 10,
+        "4k / 4k": 28,
+        "2k / 2k": 22,
+        "1d / 1d": 40,
+        "6k / 6k": 6,
+        "11k / 11k": 10,
+        "9k / 9k": 26,
+        "15k / 15k": 4,
+        "10k / 10k": 10,
+        "8k / 8k": 5,
+        "7k / 7k": 10,
+        "3k / 3k": 24,
+        "4k / 8k": 1,
+        "7k / 5k": 1,
+        "1k / 1k": 28,
+        "12k / 14k": 1,
+        "13k / 12k": 1,
+        "12k / 11k": 2,
+        "13k / 11k": 1,
+        "13k / 10k": 1,
+        "12k / 15k": 1,
+        "11k / 12k": 2,
+        "10k / 11k": 1,
+        "5k / 5k": 2,
+        "9k / 11k": 3,
+        "15k / 14k": 1
+      },
+      "time_controls": {
+        "[600.0, \"5x20 byo-yomi\"]": 21,
+        "[1800.0, \"5x30 byo-yomi\"]": 74,
+        "[600.0, \"3x30 byo-yomi\"]": 20,
+        "[1200.0, \"5x30 byo-yomi\"]": 24,
+        "[1800.0, \"3x30 byo-yomi\"]": 1,
+        "[1200.0, \"3x60 byo-yomi\"]": 2,
+        "[1500.0, \"5x30 byo-yomi\"]": 50,
+        "[900.0, \"5x30 byo-yomi\"]": 29,
+        "[600.0, \"5x30 byo-yomi\"]": 8,
+        "[1200.0, \"5x20 byo-yomi\"]": 2,
+        "[900.0, \"5x20 byo-yomi\"]": 7,
+        "[900.0, \"3x20 byo-yomi\"]": 1,
+        "[1200.0, \"3x30 byo-yomi\"]": 1,
+        "[900.0, \"3x30 byo-yomi\"]": 1
+      },
+      "rules_komi": {
+        "[\"Japanese\", 6.5]": 241
+      },
+      "root_property_counts": {
+        "AP": 241,
+        "BR": 241,
+        "C": 152,
+        "CA": 241,
+        "DT": 241,
+        "FF": 241,
+        "GM": 241,
+        "KM": 241,
+        "OT": 241,
+        "PB": 241,
+        "PC": 241,
+        "PW": 241,
+        "RE": 238,
+        "RU": 241,
+        "ST": 241,
+        "SZ": 241,
+        "TM": 241,
+        "WR": 241
+      },
+      "mainline_property_counts": {
+        "GM": 241,
+        "FF": 241,
+        "CA": 241,
+        "AP": 241,
+        "ST": 241,
+        "RU": 241,
+        "SZ": 241,
+        "KM": 241,
+        "TM": 241,
+        "OT": 241,
+        "PW": 241,
+        "PB": 241,
+        "WR": 241,
+        "BR": 241,
+        "DT": 241,
+        "PC": 241,
+        "C": 540,
+        "RE": 238,
+        "B": 26505,
+        "BL": 26505,
+        "W": 26395,
+        "WL": 26395,
+        "OB": 1155,
+        "TW": 108,
+        "TB": 108,
+        "OW": 1166
+      },
+      "distinct_handle_strings": 216,
+      "games_per_handle_histogram": {
+        "7": 3,
+        "11": 6,
+        "1": 162,
+        "20": 1,
+        "2": 25,
+        "28": 1,
+        "6": 2,
+        "19": 1,
+        "3": 2,
+        "5": 4,
+        "24": 1,
+        "13": 1,
+        "9": 1,
+        "4": 4,
+        "8": 2
+      }
+    },
+    "bundles": [
+      {
+        "page": "BLo1700-2025-02",
+        "sha256": "782e919ce4f12e9b7ad5a2e5e36415b144350ffeeea32c251711343405d261fe",
+        "bytes": 38855,
+        "members": 22,
+        "sgf_members": 22
+      },
+      {
+        "page": "BLo1700-2025-05",
+        "sha256": "e593ffc1520574061c2c6d6c169fce7812c9f2d5dab614affdaa1e64ec59f8ba",
+        "bytes": 42041,
+        "members": 22,
+        "sgf_members": 22
+      },
+      {
+        "page": "BLo1700-2025-08",
+        "sha256": "3f46131ee2ca14908d09795e1194a3f5e55bfaf29d3db905f35e20d1e052b93b",
+        "bytes": 47732,
+        "members": 25,
+        "sgf_members": 25
+      },
+      {
+        "page": "BLo1700-2025-11",
+        "sha256": "e0e25fef38a4e0a0b8a2ef65a3d820b4797869956e622ddf1d4a675fc6cf42b8",
+        "bytes": 90356,
+        "members": 47,
+        "sgf_members": 47
+      },
+      {
+        "page": "Chris001-2025-01",
+        "sha256": "ab019fea87250a2ae9a797d3bab6bf9295280d5fb31e5da097fdc6e4be6d314f",
+        "bytes": 356575,
+        "members": 177,
+        "sgf_members": 177
+      },
+      {
+        "page": "Chris001-2025-04",
+        "sha256": "8a082a24afd32fc9945f5be328dcb6381d92f02122cf653039f95eba420e965e",
+        "bytes": 206997,
+        "members": 106,
+        "sgf_members": 106
+      },
+      {
+        "page": "Gotowest-2025-04",
+        "sha256": "c992592bb8af5965d109c77c9ebe71d12f7f41235bb248b51fd49b509871c87e",
+        "bytes": 240222,
+        "members": 109,
+        "sgf_members": 109
+      },
+      {
+        "page": "Gotowest-2025-10",
+        "sha256": "6bef110222d64682f315fd632627db6ed37bf8ef0f5c9be106b4c483c6c976cd",
+        "bytes": 716960,
+        "members": 269,
+        "sgf_members": 269
+      },
+      {
+        "page": "Kakko038-2025-12",
+        "sha256": "54d968bb34cd77f218463a4490a2e9107654ab5f29af9bf6e9474e44e14fea0d",
+        "bytes": 14595,
+        "members": 7,
+        "sgf_members": 7
+      },
+      {
+        "page": "Neptunus-2025-02",
+        "sha256": "3ce3f766780095aec8d5848ff660da778efcc9b208e2d76aef43c56f4c82c974",
+        "bytes": 18332,
+        "members": 11,
+        "sgf_members": 11
+      },
+      {
+        "page": "Neptunus-2025-05",
+        "sha256": "2dd584ff7f526068faf1079c74da2c5ba4c62b2b0a67421bdc15dc2932737aae",
+        "bytes": 7906,
+        "members": 5,
+        "sgf_members": 5
+      },
+      {
+        "page": "Neptunus-2025-08",
+        "sha256": "1d6d4ee30315149023dbb119e57a9817b44ba9950667ae5eedea31c5c4ad1b67",
+        "bytes": 187605,
+        "members": 101,
+        "sgf_members": 101
+      },
+      {
+        "page": "Neptunus-2025-11",
+        "sha256": "2c94109b10023038a722bb8606b9bd8432a252c6f318f0d216947af5240a082f",
+        "bytes": 79307,
+        "members": 43,
+        "sgf_members": 43
+      },
+      {
+        "page": "Olduck-2025-03",
+        "sha256": "3b8b632ad411fafde63659b10c63c8d08f82731156bc2b880bb992cbc6bd3c41",
+        "bytes": 573604,
+        "members": 263,
+        "sgf_members": 263
+      },
+      {
+        "page": "Olduck-2025-06",
+        "sha256": "a60e1579388ce3b2b42a8eb792dfe2eaaf5b7a775cba54e405f52e3d26db82c1",
+        "bytes": 989442,
+        "members": 460,
+        "sgf_members": 460
+      },
+      {
+        "page": "Olduck-2025-09",
+        "sha256": "3f77af2d8c9a5f5e82ce8cf1f17647c8976a3946941283d839c9eb1411bceeb2",
+        "bytes": 597828,
+        "members": 272,
+        "sgf_members": 272
+      },
+      {
+        "page": "Olduck-2025-12",
+        "sha256": "fae0264b404690499a52bdfe1bd2aa5f7d6741c221ff5e4e9ee4f9c2fe2186e1",
+        "bytes": 711673,
+        "members": 326,
+        "sgf_members": 326
+      },
+      {
+        "page": "Pitolone-2025-07",
+        "sha256": "fea8e9cdd3c08158825b188b30d64966ded6035b9f3d36cb2f5d3583a62944bf",
+        "bytes": 54972,
+        "members": 39,
+        "sgf_members": 39
+      },
+      {
+        "page": "Pitolone-2025-10",
+        "sha256": "b30c63169709fa347821e5bc66c1023011892d2fe9a811f43b508502851f30b1",
+        "bytes": 53349,
+        "members": 37,
+        "sgf_members": 37
+      },
+      {
+        "page": "Yaizai-2025-02",
+        "sha256": "07a34496610656fe49629cf19b8ee4b3ab132a57e78af82ac9f34111f14a8055",
+        "bytes": 46771,
+        "members": 25,
+        "sgf_members": 25
+      },
+      {
+        "page": "akasaka39-2025-01",
+        "sha256": "e256812af7d93d70c77682b77f161a816e3ceedc308e20adf735d681dc6b0cd3",
+        "bytes": 229213,
+        "members": 113,
+        "sgf_members": 113
+      },
+      {
+        "page": "akasaka39-2025-04",
+        "sha256": "639de742af363d2fc72d90aaf96984658987a7136c97f8692671ad5a0051d348",
+        "bytes": 193135,
+        "members": 99,
+        "sgf_members": 99
+      },
+      {
+        "page": "akasaka39-2025-07",
+        "sha256": "69efc386b87b05f91f2f167efdf8116b6f9610f3f699e89d689c2477b6d78d63",
+        "bytes": 313185,
+        "members": 154,
+        "sgf_members": 154
+      },
+      {
+        "page": "akasaka39-2025-10",
+        "sha256": "bb84f71c692bd0abf65b6c67e2c79c9c78a137ab3b47e4636586c706714c2e22",
+        "bytes": 260769,
+        "members": 130,
+        "sgf_members": 130
+      },
+      {
+        "page": "andreyEAO-2025-11",
+        "sha256": "0d6e2b4128117c38e577b91564ebc1838b4beeabc05dea9e9268c162c0b3e861",
+        "bytes": 79215,
+        "members": 44,
+        "sgf_members": 44
+      },
+      {
+        "page": "aof-2025-01",
+        "sha256": "2551f3556971786a7ed385c609ca720c7d7a485752e857556208b1ff798a677e",
+        "bytes": 383804,
+        "members": 173,
+        "sgf_members": 173
+      },
+      {
+        "page": "aof-2025-04",
+        "sha256": "399e41993b3509aa829ab0470b94c1595da3a604518188019891c92b5b31ce7c",
+        "bytes": 416645,
+        "members": 188,
+        "sgf_members": 188
+      },
+      {
+        "page": "aof-2025-07",
+        "sha256": "fa199c249a83f112c52d762767a569c242270d45a7311b63396a2814a656aa37",
+        "bytes": 290808,
+        "members": 130,
+        "sgf_members": 130
+      },
+      {
+        "page": "aof-2025-10",
+        "sha256": "576666b5954b385fa7b91ceefbb5a3e294e988aa644a79c5b9c34cb1b2fdfa92",
+        "bytes": 398775,
+        "members": 179,
+        "sgf_members": 179
+      },
+      {
+        "page": "arthur75-2025-03",
+        "sha256": "65654323265f7aa46ffe87024bab96276454166171c5707dcda719851c4b2482",
+        "bytes": 614108,
+        "members": 290,
+        "sgf_members": 290
+      },
+      {
+        "page": "arthur75-2025-06",
+        "sha256": "e19f1b2a784b1674b4bfcc22eba9f6ecf3a0a24ca3136f2910ff5c9aa8b5d9e3",
+        "bytes": 537489,
+        "members": 254,
+        "sgf_members": 254
+      },
+      {
+        "page": "arthur75-2025-09",
+        "sha256": "a2813f12f7d56c99af9e8489140d280529fba8cfa2806b436d041a4323981d8f",
+        "bytes": 463186,
+        "members": 222,
+        "sgf_members": 222
+      },
+      {
+        "page": "arthur75-2025-12",
+        "sha256": "a877f2c01d46b226b008c69c2ffbe3ccfcbf788cdb72e0d24e22e3f15ce8bf94",
+        "bytes": 260802,
+        "members": 131,
+        "sgf_members": 131
+      },
+      {
+        "page": "cardo-2025-02",
+        "sha256": "3aa8afffa9f9b783482e3f0e9bbba820b9654301f7fa9535305e43ccccdeb126",
+        "bytes": 197678,
+        "members": 89,
+        "sgf_members": 89
+      },
+      {
+        "page": "cardo-2025-05",
+        "sha256": "48d0d48e5e900b65c417bb3740da94e807f8e9a819cdd6e84245b7fd326ebe83",
+        "bytes": 78427,
+        "members": 36,
+        "sgf_members": 36
+      },
+      {
+        "page": "cardo-2025-08",
+        "sha256": "48696adcb080033c85d9fd3ed915ce6b6cc59333530b9503be8abd5a1d115e56",
+        "bytes": 196516,
+        "members": 83,
+        "sgf_members": 83
+      },
+      {
+        "page": "cardo-2025-11",
+        "sha256": "3ebf1db5c511129a31470f2a2829ce062cd770c534de3e88e7ce68b9d6986c36",
+        "bytes": 329334,
+        "members": 141,
+        "sgf_members": 141
+      },
+      {
+        "page": "chipstar-2025-01",
+        "sha256": "f1397537149c5fd69ea3a3d3753318f5f89a191cbbc3aef8c7f00e0438cf70e8",
+        "bytes": 191282,
+        "members": 105,
+        "sgf_members": 105
+      },
+      {
+        "page": "chipstar-2025-04",
+        "sha256": "cfffddc3755a8babeb2bb6b74b5e5e5e6b986e1d10d74ebee2b17872c5601ec9",
+        "bytes": 194627,
+        "members": 112,
+        "sgf_members": 112
+      },
+      {
+        "page": "chipstar-2025-07",
+        "sha256": "4bd812418dfed3e7b50abf9316ffae57baf1ddd5563008fb9c9c2d72c0ee9b3d",
+        "bytes": 47071,
+        "members": 24,
+        "sgf_members": 24
+      },
+      {
+        "page": "chipstar-2025-10",
+        "sha256": "c85e2f264be6722779f0b313ac64a5fe1da6dbc88ddb3ecb317ed2ead7856487",
+        "bytes": 296752,
+        "members": 161,
+        "sgf_members": 161
+      },
+      {
+        "page": "dopingg-2025-02",
+        "sha256": "046053db4d77be201d1fd12d274b914604140eec0720ccbad859289e0b0d57e6",
+        "bytes": 52190,
+        "members": 25,
+        "sgf_members": 25
+      },
+      {
+        "page": "dopingg-2025-05",
+        "sha256": "47618c9852c1e416b07516cc33c8e7149655949bdd395f5617924d8ffa1e633c",
+        "bytes": 87547,
+        "members": 40,
+        "sgf_members": 40
+      },
+      {
+        "page": "dopingg-2025-08",
+        "sha256": "eb3b1b22c1887d6b6f3c156562ee84d0a9a67a2a76fa8efe2d693de6e4fdea89",
+        "bytes": 381527,
+        "members": 200,
+        "sgf_members": 200
+      },
+      {
+        "page": "dopingg-2025-11",
+        "sha256": "0aa8ee0b534a77c6e9b4cafe7ece33cf042f9997df5a61d68b768cfd994ada27",
+        "bytes": 229249,
+        "members": 114,
+        "sgf_members": 114
+      },
+      {
+        "page": "ergodicgo-2025-01",
+        "sha256": "511760e7a1adb95bd880f4f26f39f083068a75aaaaeb9e7766236f1f1eeb8bc5",
+        "bytes": 16676,
+        "members": 8,
+        "sgf_members": 8
+      },
+      {
+        "page": "ergodicgo-2025-04",
+        "sha256": "b5265ebcdfdc1b4a8cadaa40a8a2338a042096d6c51217839f5b15be9267a07a",
+        "bytes": 15739,
+        "members": 8,
+        "sgf_members": 8
+      },
+      {
+        "page": "ergodicgo-2025-07",
+        "sha256": "d08307f1db731b36dbd5d747dcdf0aff7f3ba05f72346d5ca4ed273c684722e0",
+        "bytes": 25799,
+        "members": 12,
+        "sgf_members": 12
+      },
+      {
+        "page": "ergodicgo-2025-10",
+        "sha256": "fe9a4847c84fb9101fed83f8c2b4ba19a56e630af3cb8a74e6f281eb3af06fee",
+        "bytes": 20495,
+        "members": 12,
+        "sgf_members": 12
+      },
+      {
+        "page": "erioko0313-2025-03",
+        "sha256": "f47d09165cb6b20dda7c57451f485d425754a73ef5dd8a2b02eeb1563217f662",
+        "bytes": 635697,
+        "members": 300,
+        "sgf_members": 300
+      },
+      {
+        "page": "erioko0313-2025-06",
+        "sha256": "cd5507e7fb72b467e789952b759306db44434ec424e5b27c6a0225e7b5e387ad",
+        "bytes": 659755,
+        "members": 314,
+        "sgf_members": 314
+      },
+      {
+        "page": "erioko0313-2025-09",
+        "sha256": "4d770096467920c0771a0d6d2eec8c100e506c5e8231098c45439814ca432229",
+        "bytes": 296163,
+        "members": 142,
+        "sgf_members": 142
+      },
+      {
+        "page": "erioko0313-2025-12",
+        "sha256": "8b3ef2fb9f8f580bac63ee0c0dc11a363276143cd676d18638db992495f942dd",
+        "bytes": 461967,
+        "members": 213,
+        "sgf_members": 213
+      },
+      {
+        "page": "huyc1961-2025-03",
+        "sha256": "a7f39963eef889a7a41c7984e0b289249cece1bd77d26b47d1e50ae830369294",
+        "bytes": 157076,
+        "members": 87,
+        "sgf_members": 87
+      },
+      {
+        "page": "huyc1961-2025-06",
+        "sha256": "2fc107ac0a1e77636d3376c9d466c67176eee5867f66f009dda19506c3b9eaad",
+        "bytes": 179260,
+        "members": 96,
+        "sgf_members": 96
+      },
+      {
+        "page": "huyc1961-2025-09",
+        "sha256": "95dd729f3039c0001c02dd673f63984b591810ee8b11147f1f08b81526bfd311",
+        "bytes": 183987,
+        "members": 98,
+        "sgf_members": 98
+      },
+      {
+        "page": "huyc1961-2025-12",
+        "sha256": "afd70cb6b0953cfa9f99d948eec47757a170d3f19919e40697fd93af737e3625",
+        "bytes": 169973,
+        "members": 93,
+        "sgf_members": 93
+      },
+      {
+        "page": "kejia-2025-03",
+        "sha256": "ff112aa729a4e6a10f6eaa006fe19dda22fc795a89dd64d9d3cd83a9de37de28",
+        "bytes": 51916,
+        "members": 24,
+        "sgf_members": 24
+      },
+      {
+        "page": "kejia-2025-06",
+        "sha256": "3981f6894ebb57132b6e9d24274742d86618f51c579136c9eef00593c1d5c7f1",
+        "bytes": 60444,
+        "members": 28,
+        "sgf_members": 28
+      },
+      {
+        "page": "kejia-2025-09",
+        "sha256": "a48c718654abdfa311a98099485ecb0cb765fda2339ffea68e6d99d3eaf95ee4",
+        "bytes": 177427,
+        "members": 81,
+        "sgf_members": 81
+      },
+      {
+        "page": "kejia-2025-12",
+        "sha256": "86b6b4caa960ef9582e649fa6719d0b11804277de2cd4b0e4e6c84c5ffaeed32",
+        "bytes": 139467,
+        "members": 64,
+        "sgf_members": 64
+      },
+      {
+        "page": "lokon-2025-02",
+        "sha256": "a0f0c70bbab11b86d63ca44db699f3b3ef9d16141f1bbef81fabc9d05ab0ea20",
+        "bytes": 23496,
+        "members": 10,
+        "sgf_members": 10
+      },
+      {
+        "page": "lokon-2025-11",
+        "sha256": "0c016aa08c9450176a47c672026f3e79a0e8046ff296050e19c669aa0828b7c3",
+        "bytes": 11533,
+        "members": 5,
+        "sgf_members": 5
+      },
+      {
+        "page": "lorbas72-2025-03",
+        "sha256": "ff58eab4862c4c5ee24b68bb79f583d8c70471984686e46f423269e38d431761",
+        "bytes": 156534,
+        "members": 74,
+        "sgf_members": 74
+      },
+      {
+        "page": "lorbas72-2025-06",
+        "sha256": "322b3f23d898b6046b9a9e7c48e2fb09177bbae699063a71aeb5ac671f458574",
+        "bytes": 275803,
+        "members": 123,
+        "sgf_members": 123
+      },
+      {
+        "page": "lorbas72-2025-09",
+        "sha256": "8677f8d6b926e0ffc143fe7b05628e4a4f06ebd64f4436e03ea94054e251f95d",
+        "bytes": 172620,
+        "members": 76,
+        "sgf_members": 76
+      },
+      {
+        "page": "lorbas72-2025-12",
+        "sha256": "7a13ac62fba5e16dbd02da4abee88adf079768d13816cb150fb8bf8c3f3044d8",
+        "bytes": 245496,
+        "members": 115,
+        "sgf_members": 115
+      },
+      {
+        "page": "maitrepo-2025-03",
+        "sha256": "800a1ee6a8c69e2f96f4fcc4621cb2379ab22a234680fccecdc816d63344a454",
+        "bytes": 315411,
+        "members": 168,
+        "sgf_members": 168
+      },
+      {
+        "page": "maitrepo-2025-06",
+        "sha256": "19a0fdf856e50d1df4db6fca3fae038e76f7f14f3dedb7bca66a2a923c0c39a6",
+        "bytes": 380802,
+        "members": 194,
+        "sgf_members": 194
+      },
+      {
+        "page": "maitrepo-2025-09",
+        "sha256": "98dadf1bfe0c7510a408c42b3c50a725bfe7c1fd83bc1d306006988dabccf567",
+        "bytes": 219616,
+        "members": 118,
+        "sgf_members": 118
+      },
+      {
+        "page": "maitrepo-2025-12",
+        "sha256": "8ac84e6ca3c8c95fb30a48a40fac46397340b860621bf3b5d674a66c0014aebf",
+        "bytes": 431351,
+        "members": 227,
+        "sgf_members": 227
+      },
+      {
+        "page": "minnmann-2025-01",
+        "sha256": "fd16fc38a1532a4192be2b7151280db12db240469f8acc233d90a67116af4579",
+        "bytes": 66792,
+        "members": 32,
+        "sgf_members": 32
+      },
+      {
+        "page": "minnmann-2025-04",
+        "sha256": "cdbe9db37fbde3476a50e8274a172f13dff2d26b0e2b27b94bc3dbe44c577d50",
+        "bytes": 51326,
+        "members": 25,
+        "sgf_members": 25
+      },
+      {
+        "page": "minnmann-2025-07",
+        "sha256": "40205efdc3c43877a8763eecf15093eb4adea2fc0d3ca4c5afdf3188195e958a",
+        "bytes": 19540,
+        "members": 9,
+        "sgf_members": 9
+      },
+      {
+        "page": "minnmann-2025-10",
+        "sha256": "3f029736e1147c4872665875cb002788f6e56c88fd3a7eb43cd8e8dd7ae49897",
+        "bytes": 58615,
+        "members": 26,
+        "sgf_members": 26
+      },
+      {
+        "page": "nexdor-2025-02",
+        "sha256": "dc7a266ed60be7579d73410a5575589b43db683639bc3a3cda7ff7e09f6ea060",
+        "bytes": 245986,
+        "members": 206,
+        "sgf_members": 206
+      },
+      {
+        "page": "rare-2025-02",
+        "sha256": "fd90f0fa1394a511aa68e130a4996f6be8559b4c291b11a48e8ae83f21a1779a",
+        "bytes": 146753,
+        "members": 66,
+        "sgf_members": 66
+      },
+      {
+        "page": "rare-2025-05",
+        "sha256": "f0f8c83a0d41afc57afb4acdeff3d367e998c427e4323139fa81d900b9437bf0",
+        "bytes": 186165,
+        "members": 83,
+        "sgf_members": 83
+      },
+      {
+        "page": "rare-2025-08",
+        "sha256": "3d5c595eabbaec6f1e1dc3dfd2ee509a24085d5ae047cc1b4e9fce0ea7de08b3",
+        "bytes": 185540,
+        "members": 83,
+        "sgf_members": 83
+      },
+      {
+        "page": "rare-2025-11",
+        "sha256": "e060c30ba4988409ad22b0892555151a8af089c87a5896fe29a9902b613d27a0",
+        "bytes": 203478,
+        "members": 89,
+        "sgf_members": 89
+      },
+      {
+        "page": "skew2-2025-02",
+        "sha256": "ebf3aa85022befd69675087f204c16c53797f36861625e3125b105919736cad3",
+        "bytes": 304828,
+        "members": 145,
+        "sgf_members": 145
+      },
+      {
+        "page": "skew2-2025-05",
+        "sha256": "cdc4da9d8e568233a827cdb1024a6bf4b9d9d0e94eed50364ce19a778bde92ec",
+        "bytes": 394250,
+        "members": 187,
+        "sgf_members": 187
+      },
+      {
+        "page": "skew2-2025-08",
+        "sha256": "00bb2b699293150479a9e0342130ccdfd2865aa010daf46223465619028e3d8d",
+        "bytes": 384716,
+        "members": 180,
+        "sgf_members": 180
+      },
+      {
+        "page": "skew2-2025-11",
+        "sha256": "90610b896fce43d1eed6293f2fc694a2b401cea55da4d58fa425721de7ce71e0",
+        "bytes": 199253,
+        "members": 95,
+        "sgf_members": 95
+      },
+      {
+        "page": "takama-2025-02",
+        "sha256": "bffdf533aae34dac4435cec53617aa305b5cd2dfa446b1f050b36212f4362999",
+        "bytes": 388630,
+        "members": 167,
+        "sgf_members": 167
+      },
+      {
+        "page": "takama-2025-05",
+        "sha256": "9b3af9e31c2fa78fae535b8edca0b5b69d90c2f0f04f8e70361a1c978d223240",
+        "bytes": 119134,
+        "members": 51,
+        "sgf_members": 51
+      },
+      {
+        "page": "takama-2025-08",
+        "sha256": "2bcc4ae93c26877558fb3f75a2e9861bd14e87dea8693c4b4f8440d51e49609c",
+        "bytes": 222571,
+        "members": 98,
+        "sgf_members": 98
+      },
+      {
+        "page": "takama-2025-11",
+        "sha256": "a485e128ca8a74c38b92691cbf9bf8acd901ee0b5b1963a49b031b91c441dfe2",
+        "bytes": 463088,
+        "members": 205,
+        "sgf_members": 205
+      },
+      {
+        "page": "tang0-2025-03",
+        "sha256": "aeb363fd8bc06e3e333cb12c51df1bc09ae1c0338494201adef3066fdb964336",
+        "bytes": 69845,
+        "members": 36,
+        "sgf_members": 36
+      },
+      {
+        "page": "tang0-2025-06",
+        "sha256": "43123a5617913ecb68e7320e7b655ef24448623ad4da8b7776c5183cff453515",
+        "bytes": 130101,
+        "members": 64,
+        "sgf_members": 64
+      },
+      {
+        "page": "tang0-2025-09",
+        "sha256": "bac087692cda8e8a8bd38567ae358bc5e13137ec663b370bfd5db18f72b560d4",
+        "bytes": 168579,
+        "members": 88,
+        "sgf_members": 88
+      },
+      {
+        "page": "tang0-2025-12",
+        "sha256": "fa5674b3fcde4132833856e6265d439fd8ece7344b4f05705fd6d8654b25a981",
+        "bytes": 124710,
+        "members": 61,
+        "sgf_members": 61
+      },
+      {
+        "page": "threeone-2025-02",
+        "sha256": "d3e396cdf8b745cd1cb9c7c994dc3dca456b7d814081c2649e7d1d2c1bcebebb",
+        "bytes": 8174,
+        "members": 5,
+        "sgf_members": 5
+      },
+      {
+        "page": "threeone-2025-08",
+        "sha256": "2f2226ada5dd8b0257b17d7b4ea2fc8b194cc3b0d8cb71a8b1b89aaab999854f",
+        "bytes": 10965,
+        "members": 6,
+        "sgf_members": 6
+      },
+      {
+        "page": "threeone-2025-11",
+        "sha256": "ffa63ad80091a0a6bc513c7790d58c64fc51ecaaf07d4e4574eb3321fb6233c5",
+        "bytes": 12585,
+        "members": 7,
+        "sgf_members": 7
+      },
+      {
+        "page": "yuumsuzuki-2025-01",
+        "sha256": "5e9e010f70188764fd37ad08e753222b2cbf3fe17f31c4d61f55ba180770b22b",
+        "bytes": 1322095,
+        "members": 614,
+        "sgf_members": 614
+      },
+      {
+        "page": "yuumsuzuki-2025-04",
+        "sha256": "acbedf0a44b8ce0543549d0cc57cb2704d472cd20e086cfe02690ce9c8635c5c",
+        "bytes": 790830,
+        "members": 363,
+        "sgf_members": 363
+      },
+      {
+        "page": "yuumsuzuki-2025-07",
+        "sha256": "5b4081ff3857001d58cc325ae8a25991907a8ec6ed2d6c8d8f67929fd18b1f47",
+        "bytes": 600574,
+        "members": 273,
+        "sgf_members": 273
+      },
+      {
+        "page": "yuumsuzuki-2025-10",
+        "sha256": "b9f61fead170cc77af5177d9e33ed9d6226ef43b1803068acd086c684d1166bf",
+        "bytes": 1053364,
+        "members": 486,
+        "sgf_members": 486
+      },
+      {
+        "page": "zousigaya-2025-03",
+        "sha256": "f58aea27eb8375fabfba82455d5837265d2e25c4956512b47ef395067b6351e3",
+        "bytes": 166171,
+        "members": 75,
+        "sgf_members": 75
+      },
+      {
+        "page": "zousigaya-2025-06",
+        "sha256": "a94df4a60597fbe604fb690e3ca99decd6ef8a61b1c9fe89d15a00cc59763be2",
+        "bytes": 180293,
+        "members": 80,
+        "sgf_members": 80
+      },
+      {
+        "page": "zousigaya-2025-09",
+        "sha256": "cfb8fb455e75af947ad5566cc12f220a41e7a0531b6db71e53eb451349b7aeee",
+        "bytes": 30523,
+        "members": 13,
+        "sgf_members": 13
+      },
+      {
+        "page": "zousigaya-2025-12",
+        "sha256": "982e95dc9ca3b51a41332f63451be6ca6b0b55dcc42ada0b5b21dfbac25a886c",
+        "bytes": 168242,
+        "members": 77,
+        "sgf_members": 77
+      }
+    ],
+    "archive_pages": [
+      {
+        "page": "AGT73-2025-01",
+        "public_html_sha256": "f11a5080ad52dc9df0b62d690eb05b7e67118177c6ab1cfa148f80edab48fa27",
+        "raw_response_sha256": "aaf50caf2ec66ce92cca252fac339100af44894224b1d20a908fd9b92892839c",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "AGT73-2025-04",
+        "public_html_sha256": "d0157ffec2c3272de0e591ea6e37bccd6a4ea21994c9cce309cfe50ec27d40d0",
+        "raw_response_sha256": "0c37027c6be7e5edd391c7bfab387ea71dfa250492c3a0ac9564f64cbe9a5b34",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "AGT73-2025-07",
+        "public_html_sha256": "e6ec4ab1d4b4ddde3628ea141db226397befad035baffe9f739d256a55fcca86",
+        "raw_response_sha256": "253dcd8b5d05b3fd6805b6f5bc1f2316cbe6de23af9c4cfddd5e1bb28aba83fd",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "AGT73-2025-10",
+        "public_html_sha256": "2df0f89aa043c0e64b8995d0b378037e9886bddc63342c5aef470f6f697edaac",
+        "raw_response_sha256": "e7181886ed18f357da021960c17b160247f21e6c780a9ae47c66a89c41349cae",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "BLo1700-2025-02",
+        "public_html_sha256": "3a7cbaa76a3391247a93b46218b95da1c1240465bbf4fef06d1bf18cf7a5f728",
+        "raw_response_sha256": "0084c7203dcfedc43be83f263f0e326f48f89c40ab0da7752ebb34f0724f564c",
+        "rows": 22,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "BLo1700-2025-05",
+        "public_html_sha256": "5441a39d97bfe7a2b4c60685aaa711c4bc8a4a7230f69f1d27ab3193c6e0ad22",
+        "raw_response_sha256": "c0f9b57b27284d2a678b3e6936fffa7d780872465ca32329512758ea41dfeedc",
+        "rows": 22,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "BLo1700-2025-08",
+        "public_html_sha256": "9594b6eaba0dddeb498ea1bb7c6a6a76f8df0aed3eefc7b2ab9a11b33df44f94",
+        "raw_response_sha256": "b164ff3a9b9dd42b0288f7c3afbb89c1eec6dea151c06f90a9276f46612f66e4",
+        "rows": 25,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "BLo1700-2025-11",
+        "public_html_sha256": "ba776cbd37e4c7e0a7a67ccdf1d76850d0da68bfab9e20fc423e4e1471aeb715",
+        "raw_response_sha256": "94c4d185477986fabd9b7410bc27deac9588efed0c005bcb395edf61ef529412",
+        "rows": 47,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "CasualGO02-2025-01",
+        "public_html_sha256": "ab47f064255f0bfd92e42bcd1a8a5c8c4551f189a64e3c2c7efe2d646275bd66",
+        "raw_response_sha256": "c39a1c12e2d8e9b352c57ae465f4530bec6444134521b8c53bb6d67d91f1a5fb",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "CasualGO02-2025-04",
+        "public_html_sha256": "94675e6048cc215d2004bf5b132d4602f4f563bf719c128b34433db9ae31aee6",
+        "raw_response_sha256": "dcafc1b93f67970369c22cb2eee50bb88e6d68f2bb5d2119850a0b17409104d7",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "CasualGO02-2025-07",
+        "public_html_sha256": "99f911ec8c6a0d142378bf71b43d83ba91ac8c3e827fb501a123040e20950741",
+        "raw_response_sha256": "cecc4db370b043061cc59efc11ca36b56c1f00346582121a2c9e9cdc7659f846",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "CasualGO02-2025-10",
+        "public_html_sha256": "e812b6b3988362ad48850859bb8e06f37bd693fc057ea5053fbeabb2e8718a1a",
+        "raw_response_sha256": "672f05cca06376245d8af7a6bc11e6e5bedab80bf8ce62d8942c5845e442e30d",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Chris001-2025-01",
+        "public_html_sha256": "0a57a1bc09fcda7db19f56052bf58a4cdebb0147de7bd071b6643bd0adae6e40",
+        "raw_response_sha256": "6a8cee0e4d4ec50dedb1ed87aa1b99a1f144c10d0106022a2c64d13a1c5b2dfa",
+        "rows": 177,
+        "unlinked_rows": 6
+      },
+      {
+        "page": "Chris001-2025-04",
+        "public_html_sha256": "305d44f10295f9ec3092230e4e96b48e1cafcc97668a8814de833a8b299a9e1b",
+        "raw_response_sha256": "591aa47e29bae59ba56615f304bb94421834b7b4fd39b4410854d590d32c5246",
+        "rows": 106,
+        "unlinked_rows": 3
+      },
+      {
+        "page": "Chris001-2025-07",
+        "public_html_sha256": "9f06e620360a7cc8f5c4649e3d614e8a6cedf420e3933e2cd8629dbd96aff686",
+        "raw_response_sha256": "d6f782d1037cb4f9b40c57cfa8f35b59290916580033bab439fea5070adee54c",
+        "rows": 11,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Chris001-2025-10",
+        "public_html_sha256": "ba0979d2ccd476bbe5433a644315f31fb6c3c8f9fa883ad74ef67d9d60dd3fb0",
+        "raw_response_sha256": "32f575a1e9678418c6cc2ac220362be7bc6b0d1a95a8b4611cbb6da51df82ad8",
+        "rows": 69,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Gotowest-2025-01",
+        "public_html_sha256": "d9ac324b7d6074136d333abbdac90b063330025b62f4037ad82fdacf2788b8de",
+        "raw_response_sha256": "cfc55e116010673c8fecfa2f7d95f536e3d63e76c2df3944d4ade6325156dd35",
+        "rows": 99,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Gotowest-2025-04",
+        "public_html_sha256": "fb27837b00aabca6062cade5064b6fe220e3bbf743a498fed7c759e1aa39c36c",
+        "raw_response_sha256": "b6b62432327afee4ecf20f29ae4d9178b504c36df3035422d461e4bc00312d68",
+        "rows": 109,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Gotowest-2025-07",
+        "public_html_sha256": "26aadcdaa50be3e298e183059c6f265107115e140c381977125928857fdd30e5",
+        "raw_response_sha256": "2d8442f522e81096d58da9e04b0b3154f8286fc760503643dd8382ad0c61f398",
+        "rows": 34,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Gotowest-2025-10",
+        "public_html_sha256": "61868de90250bd3c0f3301efe6a7e7e35b76ac0ec246b8929062636a0b291b70",
+        "raw_response_sha256": "62366556c0ef38b1b0dec075db3ec30a52133fa2471262c9456b5c2bae37964c",
+        "rows": 269,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Kakko038-2025-03",
+        "public_html_sha256": "0ee2bf65eedeff3ccf3630351fcc8b3d248f164a08b0905c63acbd8b1420dab4",
+        "raw_response_sha256": "01689946edfab7cd98f308597abd67d111958181c3c2c4073f0d33218cdc4297",
+        "rows": 4,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Kakko038-2025-06",
+        "public_html_sha256": "47e486616d0ba24f7af18077f9ad8f2363e84bc788006207c448718f056b85f9",
+        "raw_response_sha256": "c22b9edca51cdf850738e444b5bf357a2b153746bd3820e7525c5ff239ab0035",
+        "rows": 4,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Kakko038-2025-09",
+        "public_html_sha256": "874793ed2bd3387e437c763078226d7d2f2ce951b16480ec173ed2fc401f31b5",
+        "raw_response_sha256": "162f5257fc8fd356da924fc5b9fdac68959b7303b274e70be5fc8a3d0e961f93",
+        "rows": 4,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Kakko038-2025-12",
+        "public_html_sha256": "7a161b46ebeb2ec1775358410c0c5dc27ba61fc086f756fac9137099972f812b",
+        "raw_response_sha256": "47b285f1637e13b197a203563d2ee01e4c79839ed8b2cf0373ef32f5efd9647b",
+        "rows": 7,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Maike16-2025-01",
+        "public_html_sha256": "58da0349ca52b70031bf33bac88db8f7a98519e9ad1717d4405759e7ba626338",
+        "raw_response_sha256": "d756f826e83492ccd6da0f587c1cb1611aa220a3c4eb1964e02a3180b756457e",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Maike16-2025-04",
+        "public_html_sha256": "713606eecceaa5ea043ad9612ba2c18bd6899d7dad16fba18c655e6aa2301d67",
+        "raw_response_sha256": "436b1908d0856feb3c120b4844e2f251104888a5da6a22dd3e3c3bc8c7f1db15",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Maike16-2025-07",
+        "public_html_sha256": "3e862f1221fecf5986d746f1fbe8482f89a0b08221e658f41c04d98e72d89452",
+        "raw_response_sha256": "cda2ced8efbf9c8c0c269cd4a329e463861b4b77f11f4522fd24f4dd0f63abc6",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Maike16-2025-10",
+        "public_html_sha256": "4ab104e8af3d027c1ddf1d80870832b0fafef03264c768f80fe2279d6d1dbdf3",
+        "raw_response_sha256": "58a49deb991060735296b9edf37f454451ef69227962da0136a85dceb5612e46",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "MalikK-2025-01",
+        "public_html_sha256": "d36ac69c882dbb4b737f5f08bfa9e39da085a4b7df860309100543b229899a03",
+        "raw_response_sha256": "ba450a395d16910285080740d79e400843c338fa09c0a9f96f064e230cd0f5ce",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "MalikK-2025-04",
+        "public_html_sha256": "11d1612b1ffa89e99563defcdbac00b7de6c5d0b75a205c36b9cd27b1bb23af3",
+        "raw_response_sha256": "31facc36c8dc209c9b6ba8b417408dd9730cbe1173b68731917926d64ccb54d0",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "MalikK-2025-07",
+        "public_html_sha256": "2f4ba94f69bff02cc97da73d3394fb14a79050296767e771a9eac8f25d6f1623",
+        "raw_response_sha256": "b3700c0bf6ba83d9aaeea183fe64133c6894c0c40734db7dd3189e301da4ab44",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "MalikK-2025-10",
+        "public_html_sha256": "38bda18edbec9cc0850c8197c8c456ea146f604cb324b5db76d2b8495f1d5ff2",
+        "raw_response_sha256": "0db60aa2d6a190855f0fb8262a961fb50b6d5f7d435f2eac8b39d005ad685e59",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Neptunus-2025-02",
+        "public_html_sha256": "bde5c3ac97f6d7d99ec4e09fba9164ba99bc697988bdcbaf11aa9c9a347fb698",
+        "raw_response_sha256": "ca992dbe568f8b5dd98ff272b1179d394ff1d404dce2959cefc1eeaf419992bf",
+        "rows": 11,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Neptunus-2025-05",
+        "public_html_sha256": "265f0a86b34d3090d82061d0595652ad9ccc1eecee4a8c890977e399876e5af5",
+        "raw_response_sha256": "2ec2b0e6acee5a0b74be22a3a3b5de9283c0d4840d79b73f210c482d4a78e57c",
+        "rows": 5,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Neptunus-2025-08",
+        "public_html_sha256": "9545d0dcd6a31415484df68daf9592f741712e2982908c48b0df6a02eb2f8f77",
+        "raw_response_sha256": "5816e223a9b5d3e0a4c1f08e4b2eabc2f2f279f2c3a850ee1d34a858f8dc5430",
+        "rows": 101,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Neptunus-2025-11",
+        "public_html_sha256": "693c4e998af1299e91854bc8fd529d1149e3376730d5b72a6e3f26d3a5eb3856",
+        "raw_response_sha256": "444de1d50df4ed6131307755d44b41acfcd7c2336ecba746df0c481b4952bc81",
+        "rows": 43,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Olduck-2025-03",
+        "public_html_sha256": "f37c72b69d66fa601811cb1c8fd16043bda04ffe234a4a41cd6cc297ea7f51e7",
+        "raw_response_sha256": "0f9a5d667ab0e1588ea0ec37fbe166203c4435c5c5991d7331e3971b8e33fbc8",
+        "rows": 263,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Olduck-2025-06",
+        "public_html_sha256": "3b2cdb1d5bb6f5b86e3bb246f96af953493430b4704f482ef1c551a2d02a72a2",
+        "raw_response_sha256": "30dd80a749da5f18cf0a929239c1d708b1636616d694ddaf2bb4be8a7c84f00a",
+        "rows": 460,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Olduck-2025-09",
+        "public_html_sha256": "414630570e323243f1b1287d396625776a9f55483148b2befcea00498a9bdad4",
+        "raw_response_sha256": "d7a1fcd2d8f284eeea9fb5d86adc020c530555b9554bc5bd8815d57907939b49",
+        "rows": 272,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Olduck-2025-12",
+        "public_html_sha256": "fc306332619c699f161ee2fec6b1205010e0613bd00ad7c2e4f169f94bfc2253",
+        "raw_response_sha256": "5a5523b7ce33376d2ba8dd477c6073b8efedd18361ab89a62263dda2f05fa95b",
+        "rows": 326,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Pitolone-2025-01",
+        "public_html_sha256": "654c8ab060d23434fd1ec9d47a43cb6d8b851f65c9622b1a9083670123f76422",
+        "raw_response_sha256": "ed39a586b4af607f0e83aaaf5247ac28a6878b867d2eff2cc6987bb2dda386ec",
+        "rows": 73,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Pitolone-2025-04",
+        "public_html_sha256": "00f0337efe252c7377f4657ac62b689307995f352fd05e328bce72cd91eaa54f",
+        "raw_response_sha256": "b54cd767172e4e4e2c3b06949ce6e1a19340f96f205b1c7def4e81f5f9147976",
+        "rows": 45,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Pitolone-2025-07",
+        "public_html_sha256": "1250ccfa1f8a4d49f7d0952da47c33d4278e64a3e4f7126b69e5339a29dde67d",
+        "raw_response_sha256": "0a14eda62bedb5f108ca2ea0192596921659464f33c82b21c5121eb7964ceb44",
+        "rows": 39,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Pitolone-2025-10",
+        "public_html_sha256": "0ed0746d06abb96260d9a08b6490240dc3aa1d6609a226a82c6431de6da41d60",
+        "raw_response_sha256": "f23f08bdfc040f2e90ea0ed39a2cf0cb8be5143d83bf311262bec446b8465a65",
+        "rows": 37,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Roadt01dan-2025-03",
+        "public_html_sha256": "c8b2cbc856d3b519f4c52be81781c3b96db684003d63c0e6cdf29885868e4944",
+        "raw_response_sha256": "a2308c4adb6fdbc23d543e6fd1ea19fedb81c1ffaa6618379f3165d1a7e847cb",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Roadt01dan-2025-06",
+        "public_html_sha256": "610dc929e1cc2d4fce68bcba37da9f583fede98b27a76584ca110fb3e65ea0e4",
+        "raw_response_sha256": "364b254c9f69f38923d10ea36fd799cbd644320a86efdabf735fde3c2ff7191d",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Roadt01dan-2025-09",
+        "public_html_sha256": "abea97ca6cae9f6f1f833f715bfb9cbb7ef6305930a19049b0cbf30aeb3c0af3",
+        "raw_response_sha256": "076b67d2c9db9e18f5af3e7e602fe8c95feb4adbb1a486d7f4dddd8c35ee7e66",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Roadt01dan-2025-12",
+        "public_html_sha256": "8fc997e4d09d2e0005245c5f34d0b743cdbfd83cfda60f13cf02d1390cfb2345",
+        "raw_response_sha256": "f4fedfa119de17a3d4a0e11b75a2c5720faf43647bb27be6189a1468cbd68ec4",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Strauss-2025-02",
+        "public_html_sha256": "ebe59216b1032e368e50c0c5c9fd1708130eed01621f5c5bd3ddc8ce55735572",
+        "raw_response_sha256": "19bcfa6df0e05adb0b32756c67dd1655f74a433f80a15a3f37a089ce449b3ed1",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Strauss-2025-05",
+        "public_html_sha256": "2f796820a6c6d17bb872323afc08c4c5a06694b0873a1002fad64ffacdd30888",
+        "raw_response_sha256": "6c5ee018459bb969e468283f27591110e1c615c33b1b3650c1dcbb49793be1ee",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Strauss-2025-08",
+        "public_html_sha256": "b51f200619ef6bd12a896e304a74d554c89bae74c9e5ba972caff8bd584ab226",
+        "raw_response_sha256": "6b28dbdde79b9ee18ad16e98a746bd4823e620b81b744fa17a76559ed541ac55",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Strauss-2025-11",
+        "public_html_sha256": "df1e295b183765105a2ca01bc0db96a7a42984f046d81a07c13e0f2d413348e6",
+        "raw_response_sha256": "be27ac452684426b484f74f35a5e60b9b828b4587d0fbd14e61b31f082b83be4",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "WizardSS-2025-02",
+        "public_html_sha256": "0ea6ccc09452735db7ed496d68e7ea70b0d89e3de32a38e7dbb3544875bc91c3",
+        "raw_response_sha256": "bd8ce3d5c2798fadd518750a6950c97f4d02bc660da3fe8a37f26fffe29a609f",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "WizardSS-2025-05",
+        "public_html_sha256": "d1aaba8a06c2c89c1a7158b4168d4a43351ac9dbe6ed14486e935f563c9c9660",
+        "raw_response_sha256": "0b16e9334e929507eee204f386babf6f924106d143d34466d63b304eeafc29c9",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "WizardSS-2025-08",
+        "public_html_sha256": "f1a36b53edb7bbbb481945885e75e487f15a4aa8eeeb2551e833cfe57c8d5888",
+        "raw_response_sha256": "9d264ae55b5913368a74c309f1ccf87088b2150aca616730d8a58640ff6a4ded",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "WizardSS-2025-11",
+        "public_html_sha256": "2bae45439fc0cc327ced2a22859e9be5a0a118c4d3f3639ed9272852e43b8bae",
+        "raw_response_sha256": "7db85cd55e1473e0d8e89b99b8919c6f9aaa34dc0373a4088ea2c9e0a3de4bfe",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Yaizai-2025-02",
+        "public_html_sha256": "08390c55243e92fa63bc710dd74683c278dedf0e97a3c8a2a69154f37edf8d7f",
+        "raw_response_sha256": "3094b93b5791ec6722006055f1d82f3ccd93c8012be7799cc5c6c61c8c7940b4",
+        "rows": 25,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Yaizai-2025-05",
+        "public_html_sha256": "2ef8b178ad8d6f452c83d92cd5f80bdb961fdd2b676bcdcb1947ad010f4378eb",
+        "raw_response_sha256": "ad9d6f98bcdfe9b0574e6c2651fb9b30d57e2c2df38408c6af8cb076d9f931a4",
+        "rows": 116,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Yaizai-2025-08",
+        "public_html_sha256": "695df4927e6728e31652fadf6a010299b046048ba159265dd38203dc4cc58235",
+        "raw_response_sha256": "ce4499531cfd8941918d8e4a7cc7e2491320014cc8afa11d3aea357eb64ea1d7",
+        "rows": 99,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "Yaizai-2025-11",
+        "public_html_sha256": "b65c03373d45ab92bfc8a4b90fbc286d375ad5e961784c25726d76679d8751d8",
+        "raw_response_sha256": "0fb64b791d819e1f4b5e48e867dbadcecdccfbfbc06e6a8540c9ec0df2ba14b9",
+        "rows": 105,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "akasaka39-2025-01",
+        "public_html_sha256": "4e02c10172d214e277becba4028bfa483429232c2db52cd0479dfd84ab402f06",
+        "raw_response_sha256": "a41fe18a68a0d63b11047ac0955bc5fe9f1fc27413d6fbcffc9c0f6ceff6ae7b",
+        "rows": 113,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "akasaka39-2025-04",
+        "public_html_sha256": "c7b1e82ce51f5ab216de151978488a223841afa91473a5b33854afb0b1bbf766",
+        "raw_response_sha256": "2a65067897001c36d9eb54dd86502ea93addc37a4ff20c510e8cb012cf939282",
+        "rows": 99,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "akasaka39-2025-07",
+        "public_html_sha256": "c9619174dccb4857c791e2c99b281e83086e0b0127be8e781725cd815cd8cd6f",
+        "raw_response_sha256": "f84074ac64569d5b7bc5c2849c763fd4437ec3c36209850e155eb0595c503e87",
+        "rows": 154,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "akasaka39-2025-10",
+        "public_html_sha256": "a39e376fd87683e2878b416b67afd65c5b05f50ce0a0160bbce49ad7645b02da",
+        "raw_response_sha256": "26e77c7e141a47317bbfee7705f04fb604579520caf49f4f9fc382adcc9a1b93",
+        "rows": 130,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "andreyEAO-2025-02",
+        "public_html_sha256": "f2fe5b219ed48d18ca5c297f7431d5c895bdc261a5daff7e0075742a70a54b51",
+        "raw_response_sha256": "8b00577da046a77afa2f5b75a5787691116c2075f6bb636d90837637d0d87204",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "andreyEAO-2025-05",
+        "public_html_sha256": "6ead3afc891d811993ba96c47c2a46af4747ef6b90d9914307715cf695d8fb77",
+        "raw_response_sha256": "cf74af8af95b6dea51b99571e079a8fc4bd019780c69d7da2e0c39844ad911a7",
+        "rows": 7,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "andreyEAO-2025-08",
+        "public_html_sha256": "6e5eb7bfc17bf3d103a3c84409134f1b5177f5af1dd49a4dbdb6de974abe4845",
+        "raw_response_sha256": "cca1afa67980086ec9cc1795dbb1ad51aea39a1ebe49dbf1af65ef2b8c6c2a86",
+        "rows": 2,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "andreyEAO-2025-11",
+        "public_html_sha256": "2a4f0eb40ee58827acc84226e35f86da672c8d0516f3570fd7b7d98d9c4753b1",
+        "raw_response_sha256": "4bed26f966d9d1ff2f87fb7961c4195dc8c214073a1f333ebb3b209065ba4204",
+        "rows": 44,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "aof-2025-01",
+        "public_html_sha256": "cc25bc4b1e23f37b3ccfbc82eee12c455d8b046dc040f8e3d45bfe79bb9f97f3",
+        "raw_response_sha256": "80f1c2861dfd2604628e3a5116ef34b77dca55654336b1e812a6b405abc99ddb",
+        "rows": 173,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "aof-2025-04",
+        "public_html_sha256": "292bc42f38123c88de62ac2391986d94571e7fec44435c1dc7807d3766796a87",
+        "raw_response_sha256": "6acc9bad5518996baa1d7b3640af282738bd27d4289a33c4c6efe3db347f5dfc",
+        "rows": 188,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "aof-2025-07",
+        "public_html_sha256": "5455b1344800ad0d6bb82a1495d86a6c739845a9daac122076f8215964b11502",
+        "raw_response_sha256": "a03afb4eb4dc7863d48cf566481effac4debcda6b8cc2cd16e3869fc4bdfcc9e",
+        "rows": 130,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "aof-2025-10",
+        "public_html_sha256": "cd5cf272a47dd46a3b52b7f0e8175cf0a9fa90fb65ddbbcb6248bf496c6ecf79",
+        "raw_response_sha256": "676a6a3b8a021ad54a7be9cc399ee077915c747f0a9e1a005b797f6e0dd5a535",
+        "rows": 179,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "arthur75-2025-03",
+        "public_html_sha256": "68f000ba511c3a050ccac602652c92929b6174cc191c7d2a63c0b626adad3ba1",
+        "raw_response_sha256": "20af697382184a6ee7187a162cc9b7a6ea8f056fa395545621c8bfe97318ef79",
+        "rows": 290,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "arthur75-2025-06",
+        "public_html_sha256": "050167286b83a27ce1aaf296ef26e79e27608c97854dddb36e75e70f229129e2",
+        "raw_response_sha256": "61bac343f5c93161f42cd21dc4a74f05a68fea62a7f7d559a8c593dfe54b386a",
+        "rows": 254,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "arthur75-2025-09",
+        "public_html_sha256": "edd1b84e93e26c8227b6b24f3001f89b5f64736cb2613bc32b923602d1daaa73",
+        "raw_response_sha256": "70e287663d80d8453b44d7d9def392ef8e8189e2f1a98e7f213616fb51d49492",
+        "rows": 222,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "arthur75-2025-12",
+        "public_html_sha256": "2c5de02e6afb6e7ff65af0f2d4f6924eeb62037dc567fdb685a28b5a8f71df18",
+        "raw_response_sha256": "d68728707b5095977ff7da66199992771432973d14eb4772acf26beea9b64af5",
+        "rows": 131,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "cardo-2025-02",
+        "public_html_sha256": "f2991fe42b2560ec3dda1d5863fb3e199a5233058784464af9c4fdb08ee906b4",
+        "raw_response_sha256": "717b0f4c3e1ea78f207090f87201adbc530dabbbbc85d8dc351ff20057d1f0ca",
+        "rows": 89,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "cardo-2025-05",
+        "public_html_sha256": "1e0fb635c2d0aa95b13adbc62f52d60ec3d6595f49268e0793dff68096fe5cc1",
+        "raw_response_sha256": "e2994d948bbfa0264f188d1a136e3f122663c9604a090347ad1c338c177681ec",
+        "rows": 36,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "cardo-2025-08",
+        "public_html_sha256": "f72412c19682458e2089a2e8f0f03932fc46bfe6939ec949b3482faf542d089a",
+        "raw_response_sha256": "038442fb3c9c8806eb74807f01f22dfd45c167772686c08f4302374cd2748ef3",
+        "rows": 83,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "cardo-2025-11",
+        "public_html_sha256": "47ae2025999e77f2b78df79a7156102efca6089a87b8db272d69cc56af07e9d9",
+        "raw_response_sha256": "c775bbbcc23684833174d4f3dac7ef3edfa76f3fd5d5e32a2c9dcb1a8b265000",
+        "rows": 141,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "chipstar-2025-01",
+        "public_html_sha256": "64ff655f4b8b66f27c87a93787edc7f195e24346f71780fc2ccc60102fc4febd",
+        "raw_response_sha256": "579c3f9df19881fb3d39eca3ec949c46ec0cc1a744557dd07067dccf043e4022",
+        "rows": 105,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "chipstar-2025-04",
+        "public_html_sha256": "741b1aa5eaab3ff5970204508bb45ea9b9c9ea807c4ab615c32416e148b9661b",
+        "raw_response_sha256": "1716b15b0e3c93846f063c552a6a7885c0ba07243ee2efa14741c2e74b40df99",
+        "rows": 112,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "chipstar-2025-07",
+        "public_html_sha256": "ba6fae1f722dcd59c531e370f2cfa4eea07b27c145ac14945bbd8b894b3fe1a1",
+        "raw_response_sha256": "3d0c85bb1002ab0f6df5d3b10d7f8057aa52cc017d56e00e359dd0c0b84952f5",
+        "rows": 24,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "chipstar-2025-10",
+        "public_html_sha256": "c216c6cc9eba34886eba916531ef067492fe30c26ee3f735f73817d5cca34a79",
+        "raw_response_sha256": "ab1cd73f24d38dcca1a2f1673de67c250db6ee8dfc3f7e46794caea00bc9e3d7",
+        "rows": 161,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dnjnvjnzv-2025-03",
+        "public_html_sha256": "fbeb8194cbd268c8557bf90e9c23eafccb0c3816148e6351f0dd6f79255abcb9",
+        "raw_response_sha256": "81c132b0a108a1e7c839d18f4a1b6060806f15ee5621098da233cf6b90ffcb71",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dnjnvjnzv-2025-06",
+        "public_html_sha256": "0a9986e2318d9a7ff7bc54301de7f17e275a9524370d1f740736f78de8a4945a",
+        "raw_response_sha256": "3438faab9ce1354f9872e28d92deeb2f2ea6000d31e22db6075148407b1b7390",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dnjnvjnzv-2025-09",
+        "public_html_sha256": "6d5c3133b29faddb3fdfe4745bddd76bc6b000eda5189d2239294d91fb05c3bf",
+        "raw_response_sha256": "a3ec0c42e0491d94ce4495d22640f36617a66e19d7a0f6ec78a58e5f36ad9900",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dnjnvjnzv-2025-12",
+        "public_html_sha256": "faacbb68c9682a597a5a31c15bd04856043e9c898124ba0f74f697dfa90f918f",
+        "raw_response_sha256": "e254aafd3ccce3e6f6dc82eab968da848201edc8d0e5601f32f19b64a55b7037",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "doamna1-2025-02",
+        "public_html_sha256": "5dd69505d26c682500f9171146249cb25349f6cc1f379d9c8baa99216d38221e",
+        "raw_response_sha256": "edd682bf27cebca3dfaad721879efdf43b393045f23627066ece3016f7779707",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "doamna1-2025-05",
+        "public_html_sha256": "676bc30e011d8929b84fe9fc385b67b49aeccdba614fb86e4a959463207ecb83",
+        "raw_response_sha256": "ad8f7866c51f7dad39ff2ec7b2f16087d7fdb16b5a5982f8cc507248e85f7600",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "doamna1-2025-08",
+        "public_html_sha256": "f1fcee9626ca7acd39ae1c887e1cc2672f6b4deadafa400f2d8337b482f7fc57",
+        "raw_response_sha256": "ee8910afa7ed24bc7cefd6a88bd03ec1c32821c003ac22a5960a48bc9249aa2d",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "doamna1-2025-11",
+        "public_html_sha256": "9bb26d32cb3835e5a3e223985c49fb2a01d80e307b4886adf7351fb72fa5508c",
+        "raw_response_sha256": "da5ace374f80563d0e4a746f44857ac375b44c8614fdf1595eacc59a3d7ba9bf",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dopingg-2025-02",
+        "public_html_sha256": "228765f33b699256441b3d02ed409c1db946d4f4f4cf9991f8abc127c6a8c2e2",
+        "raw_response_sha256": "532971cd1533bec33a54430a66a6dcc4871828c32d264f1e3b68626c90a14de5",
+        "rows": 25,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dopingg-2025-05",
+        "public_html_sha256": "951b2b072259950a6cc591832001135aa1afbaf04fec19c1ff361d0c219cc7d6",
+        "raw_response_sha256": "2fd2ffa124a3023bdc85729796a9b99c1ecec92d318e08ebeb6ec43e0084355b",
+        "rows": 40,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dopingg-2025-08",
+        "public_html_sha256": "d1cbc535a111a928876eaf6e1e2c681ec273ac3e2668c078f6c67b1ec15bc77c",
+        "raw_response_sha256": "e1b7db73916e9f6ddc77de86a53a22fc64e8467823736d402ca05e37e00bbd2a",
+        "rows": 200,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "dopingg-2025-11",
+        "public_html_sha256": "4700b0d5d76c74a7a17de0ae82f8ba7840a6474386205e889893d09a2ee9b73d",
+        "raw_response_sha256": "e46b3b5f03d82d59dbd8d90ac935111ae3a9f15894041ce34a781cac3129638c",
+        "rows": 114,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "ergodicgo-2025-01",
+        "public_html_sha256": "0787796dd7203c28a6cb175e749b1f6d837d655b1a53a9f5390f5f987b4116a7",
+        "raw_response_sha256": "81201da635c247799aeb2850a3f3725b624acaaace226788bbb7a722b290ab8b",
+        "rows": 8,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "ergodicgo-2025-04",
+        "public_html_sha256": "ba193dcbf9346f40d4380e2be45192dca3ae2e80a5e6ae85a009341ee272fbce",
+        "raw_response_sha256": "afc4cdb0bf7fce95e5d058c03a2b92e4aff76f173f301cc0ebe1ff4dbda34690",
+        "rows": 8,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "ergodicgo-2025-07",
+        "public_html_sha256": "fd38252ed446c447f4c9ca15b28b051ebf2853b5a3edd6fa7fcd42143fe34e6e",
+        "raw_response_sha256": "45ada0bc504612e355d361f786e5ef345c6fe717237bdf9c1609f153afe7c483",
+        "rows": 12,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "ergodicgo-2025-10",
+        "public_html_sha256": "69eb11289a425e24b60e541e86542c31faf2626e9bb85468412e16807f212d3c",
+        "raw_response_sha256": "1d073617ba6f4009df87d449f9e95cb3d86df48528516be00b8808263b627b75",
+        "rows": 12,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "erioko0313-2025-03",
+        "public_html_sha256": "19648d457f3a652f8a255afa75eec0134b1c8efb75eb905e8d9133f203dcd958",
+        "raw_response_sha256": "2513c9e8c3b6c226ff514c7a21907a8d81d3b6a178b154dc72560a7999ea8a59",
+        "rows": 300,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "erioko0313-2025-06",
+        "public_html_sha256": "15f4a5495702e56932d662ee3a2e992c916a8853e7b76e7d24d18694a3800a99",
+        "raw_response_sha256": "29cb482056a4cc9acecfaaf5d23b2367e07a89c38d29dc5d044e938463d41056",
+        "rows": 314,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "erioko0313-2025-09",
+        "public_html_sha256": "ba30b15107e34172a2120b113fb51b9b9f22d1b9cfa96736c85e34343e588512",
+        "raw_response_sha256": "ce5c22190aff58cc8faa34d1925dede4118a7fb1f29f235bcd731ae1d1a4215a",
+        "rows": 142,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "erioko0313-2025-12",
+        "public_html_sha256": "09d3188cddcc105f588756e1e1b2f72a9d0a21502bcca88f3e4bc29362e2c280",
+        "raw_response_sha256": "fe906c1c91f070a82a1fe3a012c701fd21793731ac072f9f7d2419ab9a158cc7",
+        "rows": 213,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "huyc1961-2025-03",
+        "public_html_sha256": "846751c7fca74853595be5af6c6b5c6561b5e04593681b7dc403794a5abde154",
+        "raw_response_sha256": "3f5289741a97e0b60a4b61ca649dd8e138bd34fea7f6c25b44f616667e1d07d7",
+        "rows": 87,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "huyc1961-2025-06",
+        "public_html_sha256": "dfd86ba287294ff3000aa1d7fc6c00160a71bb74df43fe2d45c1db1a0395e951",
+        "raw_response_sha256": "86d37331970a311346ad3c22a1715eebbd16b472237e7cbcbb252205dbf3f2c4",
+        "rows": 96,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "huyc1961-2025-09",
+        "public_html_sha256": "ecf00a2242a5907e7a0a3ac9c46724efc893fc108915ea1861dc57ad1bb3d93b",
+        "raw_response_sha256": "76a5265dac67eb7d950fae0c9f4139ba360373ad4cdd4a38012892b634dc95a2",
+        "rows": 98,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "huyc1961-2025-12",
+        "public_html_sha256": "2608d79fa7c02f86e1ce2b63dec339892948a4690d466fc889f00c9308046edb",
+        "raw_response_sha256": "b8f1e9144b94ef45543bf9534e2a3eb50b3f6316913b14ed5d2a89bcff64feac",
+        "rows": 93,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kejia-2025-03",
+        "public_html_sha256": "0be17873921df29f9437f7c11290dc62ecd0b64f899c8b8ecc5f983a41bcae03",
+        "raw_response_sha256": "d43ce2dd158ba8834f1e268097b68713a4ea402a4517add514cdf409e7cf6b93",
+        "rows": 24,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kejia-2025-06",
+        "public_html_sha256": "5dfe53119bb080a02571760123d3a58d4046211ba3d7ddeee1d81cf7259de6d8",
+        "raw_response_sha256": "3d5df06f5f59e24e2e5a0b6f77570f24b88fc4918f6bbab31037d45d9f53b486",
+        "rows": 28,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kejia-2025-09",
+        "public_html_sha256": "cd0581b5454ddc9dec2ae15d331509be62168c43b0a86ee9748c2edbe029fe36",
+        "raw_response_sha256": "5203b47402396a5d08358f8832aa0b10f95c680b88bab63f5f7727a4a49cbba2",
+        "rows": 81,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kejia-2025-12",
+        "public_html_sha256": "c56579dcc43c055b3a1753e3209ff928883c6091f9a5ef04c366208987c952c1",
+        "raw_response_sha256": "125bc7343bdd6a4e8a7b8516f85f2236762f3a4dfdf140c1911ab5aecfe43108",
+        "rows": 64,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "komedaka-2025-03",
+        "public_html_sha256": "07ae8760f6af33346edd20cbc7088d44fc68faa5c34defa0649171eb9609b1cb",
+        "raw_response_sha256": "04ace614c7823a1b724f43f40bd2c379cfdfbd118241fcf7ab3dc43c499a4e7d",
+        "rows": 46,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "komedaka-2025-06",
+        "public_html_sha256": "f90e70399eaccb7271a6a289d929a886cfac92306ac308217f87eddef3026def",
+        "raw_response_sha256": "3ea812d933e3550e08d24d3803026f57b6d15963683c6a011b2ae293f5e7fe68",
+        "rows": 36,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "komedaka-2025-09",
+        "public_html_sha256": "af39f10519f3d1c6aa80fe43f273f37768dd5956d55b063e467a36b4cee48e03",
+        "raw_response_sha256": "5a165bc4cbd152dda87fd5fae91b437d474d31899e995fd0702601120443cee6",
+        "rows": 41,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "komedaka-2025-12",
+        "public_html_sha256": "7cbf87b8968872f49ad5c1ebb5ac08e7228aea335752063d6b2c141b467fba6b",
+        "raw_response_sha256": "aa9a0211c9342346f2a18ee2afebecc4c48b77898d18bbacf1f3e8f0559bae4b",
+        "rows": 27,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kzj-2025-01",
+        "public_html_sha256": "7834cc2967797984dca5f9f4809e35c87bde0172d2aa1402feb3609af1e09b31",
+        "raw_response_sha256": "24396be318c53468797ac1ba509494ded5623215691b8b8167a4ed7176cbc06d",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kzj-2025-04",
+        "public_html_sha256": "3accf1bd5a6ef205254beb3fb7cc84b9556b6c50346e0fec79169cacab5c8e50",
+        "raw_response_sha256": "b8b05f02990949101ba7a413ab84cfa53e8d47993cd7c4daf71ac2657e628eb0",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kzj-2025-07",
+        "public_html_sha256": "6d2e094f2792d094e797ae5c93918424d03a56ad8b1267ade2171fefd4b39baa",
+        "raw_response_sha256": "1a747490ec920a90f5401c26a410cfd4333d77588763c6c73702d9e7c37abab7",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "kzj-2025-10",
+        "public_html_sha256": "54683a4a16392358f7dec72af1a94f5c21576c51f22cf37221a9c0aeaa785694",
+        "raw_response_sha256": "936f1c692eafc087ad713360f6fb0200f2e6a898e19e49a8e8c624b10c398fd7",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lbm6754-2025-03",
+        "public_html_sha256": "d74ab13fc9c2bbd493d5047058bfb82e9a00c07bd9b60a85e50b82fa4935bf53",
+        "raw_response_sha256": "7b9f247bad9743251c2391890cec85155339e9e5e63a97748cbeb22b14c62a9f",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lbm6754-2025-06",
+        "public_html_sha256": "2b20e47ec1c86086c44089d06ca6a684e882dfed911fe10877be357726877d41",
+        "raw_response_sha256": "a8e29bcb2ec93363cb231156e45171e3e3c54492b2cb24746c23e1c813fddce3",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lbm6754-2025-09",
+        "public_html_sha256": "6317bbf8dd9bb9ed46e733042b589308ac12b046beefabceb3feb3451c65c779",
+        "raw_response_sha256": "ad8f0fe35019919f4ad72c6bad2bfcdb16d0b642e3ca6fe2a2fa7b40779ac4c9",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lbm6754-2025-12",
+        "public_html_sha256": "4eb7162bb3a2b7ea5e43d892e4b65dc07e0e78bb302edcde031755f9214b279c",
+        "raw_response_sha256": "720107c088583af0f8b6408254dd5b9959102049ccde8db097a4cb8ccfd68801",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lokon-2025-02",
+        "public_html_sha256": "f566b6a364f614a8be21c23286829b89b11518a7c053193e273056044bf09172",
+        "raw_response_sha256": "fa8304c8a17d8d94564b4fd4c0070010925572fe545d238453d41229deecbe35",
+        "rows": 10,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lokon-2025-05",
+        "public_html_sha256": "3243e36160acc0d5e31b7489ee69e53ff254d5130bc369f9d27b414bc20ad29b",
+        "raw_response_sha256": "1d62430dffd6781934aeef5d8041ec3e9613bee30dcace26dd7363b88328e6fd",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lokon-2025-08",
+        "public_html_sha256": "1b4b64a085f9cb63b36ef7d5be8eacd8951ba2ec5b59015b2431dea647d75f99",
+        "raw_response_sha256": "ab7dac1e17e2464b19709f76bdc5d9f369032aaf614f9f33a5060b998b22c8de",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lokon-2025-11",
+        "public_html_sha256": "e6a5392d9298ff5b5d1b03cb6c34ef59c65dde245a8e94ff56a934b514aadc1d",
+        "raw_response_sha256": "9b10a72632deeb6e9030150cf22f28a736373310251f9b40cbd41ed5303dde31",
+        "rows": 5,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lorbas72-2025-03",
+        "public_html_sha256": "2deb25f6422ae7eaa9171298b195bef366556775748dbb498b384acac79d44a0",
+        "raw_response_sha256": "b3d062ed3946f010f487b50ccc7b93b11538bb2534cfe26048a137afc1175400",
+        "rows": 74,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lorbas72-2025-06",
+        "public_html_sha256": "10cd857678a5fb1878e53a5ba6426d38ea3534f70340cfc07359959e5883f82c",
+        "raw_response_sha256": "fd920aa6d348b2639c2dab8f8b258c7001af9116561046a9fb2479ef3b8d76a6",
+        "rows": 123,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lorbas72-2025-09",
+        "public_html_sha256": "92802afb390b302bb24f4ff2f0cd9e19fa7651253fd572b836d01a3248b4a6a3",
+        "raw_response_sha256": "1f20b84488a80a86dbf969b7dc63c9d3b92d8f943aeada1a187d44dc9fcf240a",
+        "rows": 76,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "lorbas72-2025-12",
+        "public_html_sha256": "9f79b3e5b00eeff0d6e45094790301dd1915ffb6737e0d959fe444c3b8ad6aef",
+        "raw_response_sha256": "d67c03a13b87cff90d7cb0eebd8cfd7a9ee328268f89d6b2e33d3fe3d5ce3ece",
+        "rows": 115,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "maitrepo-2025-03",
+        "public_html_sha256": "2bee07bcf183eac91a19f8c1f804b3195395b8891d128f54a9d0bb8b6d3a23d7",
+        "raw_response_sha256": "b8119da2f630655de4a4b64966db2d7f7d047f6e281bf60005375064af937d8d",
+        "rows": 168,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "maitrepo-2025-06",
+        "public_html_sha256": "1f51ed5029180d9a3e799632bef5e8cd378272259d1b7deb8c3b0bf096361f1d",
+        "raw_response_sha256": "57738f6f6780bfa622a7f085ef20263840809c1f98de878a560ea5962f9b1007",
+        "rows": 194,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "maitrepo-2025-09",
+        "public_html_sha256": "10533a81491e94722cb4b0cec46f3e54817cca03269e7ee0eb964ad66e23e936",
+        "raw_response_sha256": "043787d143b23f9648192f3da403554b788d8ab1c11f45d43148f42c622b9ffc",
+        "rows": 118,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "maitrepo-2025-12",
+        "public_html_sha256": "505be9904cc158babbcb57f17ed74fd5ed4e928263c30e2baa86f6cadad71c2b",
+        "raw_response_sha256": "49f4f7db629e8398a7fe72210e5882e83f2aaca6980dffb251e5d0cac26aa98f",
+        "rows": 227,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "math-2025-03",
+        "public_html_sha256": "869c0629cfd1f9aaf1ed97e1d387c5bba1814afa786e640fe19ea311ffb44ada",
+        "raw_response_sha256": "87cd52a78ebfe6c24fd98182f5272ed869bb418aeded3070b916013cf7491be0",
+        "rows": 282,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "math-2025-06",
+        "public_html_sha256": "822b8e82477e2b87b9a78bac92bfc6ff78d36d8e68ee441f78ccfb0eae92e7ce",
+        "raw_response_sha256": "e9f7f6da9efb0566d2c0ea981645ced922a4cfb61bf3e2e277cb919a884134c6",
+        "rows": 322,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "math-2025-09",
+        "public_html_sha256": "f9c4c7db9821a8f15c5fd0f391fccecbc6c62514c9baeaff83df8b548a1648db",
+        "raw_response_sha256": "0c25e008cfe15b3c5dd55c224b3500b1600b0d3d0373393deb60069fef156df8",
+        "rows": 257,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "math-2025-12",
+        "public_html_sha256": "ee9e4e11db5dde498d51f1149962d1112b8ab22fe175feb5abff512f706b6ed9",
+        "raw_response_sha256": "bf7cf57b20e8a63f88b179608a78f8cdc70de953e5a90a9cd7bb29d215af1463",
+        "rows": 72,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "minnmann-2025-01",
+        "public_html_sha256": "4f1e067649f96066e3d87522e74b35843625e11b0bdb7f3b3f6ae4e88c025ad6",
+        "raw_response_sha256": "244af4ae582c99afc944441fb1c5c6200062de367e4cfc2bf00bf13e14d3033c",
+        "rows": 32,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "minnmann-2025-04",
+        "public_html_sha256": "44cb9298fcde9038aa069bd84b425b1101c533324d90b1c447a0695082cd197c",
+        "raw_response_sha256": "1283c7a07be84265702cbfc7d5aacb2f014104933e051dec189e613f233fda5b",
+        "rows": 25,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "minnmann-2025-07",
+        "public_html_sha256": "c95ed20cdc17ab4da932cf5c33bd8e1db5ff749ab289858fad10a94bba3a0c45",
+        "raw_response_sha256": "76c2e4ab2ef440daac2a314026e6623a91027ada25611cc29f7d377c3bbc8fd5",
+        "rows": 9,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "minnmann-2025-10",
+        "public_html_sha256": "b96672afa923d5147f415b5d542bb4724d6705a1a7a8c656c1f077f789a04fb1",
+        "raw_response_sha256": "7ccfa6824e94b6f76a8af259799750b47449d36996e2566a8656c48e4a53e650",
+        "rows": 26,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "mouthorgan-2025-03",
+        "public_html_sha256": "bb38d8afe76a83c5e0cf0bb930f53fb621711897415824d9236a56a5bbc23859",
+        "raw_response_sha256": "d7273e6fed508af5f1e791b3568e53903312e12a23a64c3b3ef6b7cc7a0086e1",
+        "rows": 395,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "mouthorgan-2025-06",
+        "public_html_sha256": "6c77362a5d4c5519c9b89a95f3210c426d00477f22f24c6e5f0e60bfff2ffa64",
+        "raw_response_sha256": "ba92c6aa336d277e81fca7ef2a84376b0b91621603729555fdb1843236ba0819",
+        "rows": 315,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "mouthorgan-2025-09",
+        "public_html_sha256": "a2f7ae989ec6cae3dfb235e0a1324460d5266624dc790633a2a36bf2025096ef",
+        "raw_response_sha256": "7b7889afa19c15ce3c4c8275af15787ea19210000cfb6406f28ac5a0994a886b",
+        "rows": 355,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "mouthorgan-2025-12",
+        "public_html_sha256": "98d18162dbb62887d88e3fcdb5fd2a66013bbc56910dd25cd3710fb4427af7b7",
+        "raw_response_sha256": "00d2c575f43d2f1c0ced99ae6e57170d13e38d54e06dedc73a4d85df9e5c01b1",
+        "rows": 175,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "nexdor-2025-02",
+        "public_html_sha256": "0d355199677759ee70d6e02d80c3ea8a2d3956207bd23f8ebf4e82f5beb19ace",
+        "raw_response_sha256": "fb02952d53439a4581765e6cfff845388085c45dc42c083d37a6ff1b96570e70",
+        "rows": 206,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "nexdor-2025-05",
+        "public_html_sha256": "ec30b8eef624e86c769dcce0e16994144716301dc9015095fc9ed0ae9cacbb9d",
+        "raw_response_sha256": "296e91656217d5dd21f0f5c76ac5ef1feda79465c8c00d62b2f9bb198a579478",
+        "rows": 263,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "nexdor-2025-08",
+        "public_html_sha256": "562b359e45d28d5dc74f2839884c38bd294e31ca3a64775418db9d6efcd565fc",
+        "raw_response_sha256": "19cb09c37b2d70c3883cf103bd458845e7d5136515062fa3a90ffdd9124fb797",
+        "rows": 527,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "nexdor-2025-11",
+        "public_html_sha256": "be3d20b8d73a6da756bb6ab6cd00f16b567dcab50fad0ccf1b78091ac131a9cd",
+        "raw_response_sha256": "0b18d9099bd7eaf0d70275e1163ba530c4f1fbba65136d5d7130fafbed51ea71",
+        "rows": 286,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "rare-2025-02",
+        "public_html_sha256": "924ac968a89ee286ad0232b57b266098ac043a87769f8266eeeef66c280bae71",
+        "raw_response_sha256": "dda11b95434bce030ef92ff0e1b4898487e28fe0ca2bca30b344f54173cc4b25",
+        "rows": 66,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "rare-2025-05",
+        "public_html_sha256": "5c875cca7669401fb7c2097c869f80fd94557ee8752f8172a4069f99670774b4",
+        "raw_response_sha256": "cfaba17dd5d3d36d0299fe47ab98a82aa869ab7a043a2a22985f19432a0aeac7",
+        "rows": 83,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "rare-2025-08",
+        "public_html_sha256": "f2cc6d013d47764feca62e30c93359146c1689ade8c892392a9fffb6bed11374",
+        "raw_response_sha256": "7b6ed8d012ea554669060cf45d3c0d51c4bf826b3afc08ace633d28bde5602b4",
+        "rows": 83,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "rare-2025-11",
+        "public_html_sha256": "a94902004f0a6bafcbe51bcb8fdca79af1c77a86e8d8f1a0184e763ecca5cb3b",
+        "raw_response_sha256": "45a085d6b539d7192dde2fc118cd24e7e2b6a1b51cc9f67b8c4d6dcbcc852656",
+        "rows": 89,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "siroyama5-2025-02",
+        "public_html_sha256": "bdb033121469346130ffaec9090efe911b4157d9c83c292b4aababf88a9c8eaf",
+        "raw_response_sha256": "92c109ccc22df1d9a4bdf46e6d333648c9ebc7259abb29156f4b18a3bed3fd21",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "siroyama5-2025-05",
+        "public_html_sha256": "c5905b14cdb2a45044c4ca97da713a4a0684aaaa677b4d09f3e94a4ce7ff58ff",
+        "raw_response_sha256": "4bf86972ae2e30cdebd2e4c004883805871819c62b2902db911b6913ac7ea7f3",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "siroyama5-2025-08",
+        "public_html_sha256": "d1e8760a943a84c4c4e90bb08d1d613243edd228f23d0e4c3cd1fa902798ca2d",
+        "raw_response_sha256": "aff8363622268b697b2384cb3f7aa9580c87445aea495289c8acabec472da728",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "siroyama5-2025-11",
+        "public_html_sha256": "1cd279929d69a9fbce9e2c93bbfca4c26678491b7cb1452d2caea382488f3dc8",
+        "raw_response_sha256": "f05d287eb8b4a8d49a10b7a9589d0cfc551c43e853121c84cfcba1cedf7efe69",
+        "rows": 0,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "skew2-2025-02",
+        "public_html_sha256": "b65d43038ce05421947c4f0017f9dddaae17f4a971ccf0135ece62a0998b5f3f",
+        "raw_response_sha256": "98c8c13debdfb4fa85218be7a7c97015608fc521f9b39272f896d469e3ca79df",
+        "rows": 145,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "skew2-2025-05",
+        "public_html_sha256": "de689fe509bda2805818cac337b26f9638ff7ad6130da000ccb08868ab45c794",
+        "raw_response_sha256": "abbe9da56ed2143ae7d3d43a56b5752fb45ed42a74bf362adaf1f4d14673f781",
+        "rows": 187,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "skew2-2025-08",
+        "public_html_sha256": "205295b53e3a89f6629214ccb53e31633dc1503ef0002428bb8020e3d847aa0c",
+        "raw_response_sha256": "577f7dc2aaaaf103952b00942eb40971a5639a39c0edc3a91c9e368ebdc311bd",
+        "rows": 180,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "skew2-2025-11",
+        "public_html_sha256": "35bc561e5557e1f541b18e4a47f0cadf17fe24b4c00c4d87c2f7fac429d3c474",
+        "raw_response_sha256": "23a5f23e64a3e3dc840bd21deda93aa10306d0c5a7628c8381cfa60182ebfa62",
+        "rows": 95,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "takama-2025-02",
+        "public_html_sha256": "4666260275605301fce8f7b91bc5a6d90f1eb67646225b28f979c46d66b3d38e",
+        "raw_response_sha256": "2bc2d02e38e62724746386ae3c83bc44a316719657286012285ebce35fdf8bb6",
+        "rows": 167,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "takama-2025-05",
+        "public_html_sha256": "b354b0c8943a6de1157b042ae3dd2c7ad98c9d7caccca8fe343ab86a1733c690",
+        "raw_response_sha256": "fe79408de8f79f72aadfd7f6ac28d2b462c6ae1168653c68abb07f79b017bd91",
+        "rows": 51,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "takama-2025-08",
+        "public_html_sha256": "b86fb3f2decc6097f3cc887ef6934f3cca3905da08d3000c8d5fd8a7b003c112",
+        "raw_response_sha256": "6f2bead819d32e99e71ca9fbcf193af3c46333c430c5d1524c59e2c5d7170f42",
+        "rows": 98,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "takama-2025-11",
+        "public_html_sha256": "212c2c103debd6a95964edd57ef8d6f7f9334d3be2d9731dc81fde119a5828da",
+        "raw_response_sha256": "e48872a2914a8df916fb0501eeb758b6085c788384b85984ebdbb3bc8eece7d2",
+        "rows": 205,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "tang0-2025-03",
+        "public_html_sha256": "a24d245bba26f108a0db6a10febff89852d1c29d6690ff1a91eea671cebf5e23",
+        "raw_response_sha256": "b9d85b4b94330e996f421c3c3b746d5d8d70c13d4abaf9e0333bb68e7bdbb4ad",
+        "rows": 36,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "tang0-2025-06",
+        "public_html_sha256": "197cc564aebdf1aca59d2d096d0e1f93bcedf9d9251fcc76421a30caa1af15b5",
+        "raw_response_sha256": "04512816d0490b1df8133fcfb54ee04fff750be1225fc227a9d6a77bd75f1fc3",
+        "rows": 64,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "tang0-2025-09",
+        "public_html_sha256": "bd33a034368c385db464b91a7f6c9e3b0e763561018c2b18fadde4ebd2f250b3",
+        "raw_response_sha256": "6ea647a0dcdefb2cdfbb6ca79d2db788bbc220b2a6b652b421e3cd99a3c062b8",
+        "rows": 88,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "tang0-2025-12",
+        "public_html_sha256": "95c4c1cc990ad5cdab8a23bc66a8cc74eb3a005e6bdec6d9806ce5bfc1026069",
+        "raw_response_sha256": "999a82f1aa5b495cb9ee7c5f7a2637ee7b502dbb25e616646039d52e52ed2231",
+        "rows": 61,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "threeone-2025-02",
+        "public_html_sha256": "14bcdf0d6c91b64dc2d97cc3fdd262e42a3539e84eada9b02f82b8d78f28080b",
+        "raw_response_sha256": "bd905a2ecb280e52bfbc8dcf454af750afb2b25584e22801095c38ce29a2da1f",
+        "rows": 5,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "threeone-2025-05",
+        "public_html_sha256": "eee416626777a725a52243fca984a378260d3284b8e91463ac66a5297a6e89e5",
+        "raw_response_sha256": "4eb4bc59e5205f1633242a12682ac2724c45234feae6b5a3e77b15af74b119c3",
+        "rows": 6,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "threeone-2025-08",
+        "public_html_sha256": "21ff37d0b3dc27369f84302c5b13755ea45431ccf38ba258492f1fd4d2509583",
+        "raw_response_sha256": "ca2c952093b385d0f1182105beeb8ac38a3c83280925c09391a7dea7eb22c1d7",
+        "rows": 6,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "threeone-2025-11",
+        "public_html_sha256": "f9a559599e7fc5569057b9b24684ecfb65e5989409821a72625c2022531750ed",
+        "raw_response_sha256": "deb9bcfd46e5a95d5107af85dde0f6e03b261db7135e854128857731b064b18d",
+        "rows": 7,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "yuumsuzuki-2025-01",
+        "public_html_sha256": "66f54eeac40e7ccb8e31a29614b03fdfa4e527a291953f9466b9483bb982550d",
+        "raw_response_sha256": "e5310097073e91cb613cd69f2862d655d6df329e2275f5eaaab7935482e97373",
+        "rows": 614,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "yuumsuzuki-2025-04",
+        "public_html_sha256": "2c622bee889808995cc50dc52bae8993e9ef02f1427b987c9e2f49695852e509",
+        "raw_response_sha256": "306896b759ae2b4b3bdfa0cc05ca91c5810000cd2f6410846bbb8c73946d3c53",
+        "rows": 363,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "yuumsuzuki-2025-07",
+        "public_html_sha256": "9fbbc4a2a8d7055b2b35f5f8668891285157e8227796d08195f4261773707d00",
+        "raw_response_sha256": "8678c65ffa0849108b0d14c2e6d0108d0d21ba95036805b8afd9ea18c28ac352",
+        "rows": 273,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "yuumsuzuki-2025-10",
+        "public_html_sha256": "eef4f0fc057efc835299b8b1b76c3c3b65f33a22cc537e7ea18d7aacb3a96531",
+        "raw_response_sha256": "682f932120476e2d5d1c8bb459c01b008a706f23485795b67d5e64ee1cc53c08",
+        "rows": 486,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "zousigaya-2025-03",
+        "public_html_sha256": "e352cd2f0db57f6a0e77c5f2fccaa7d75ccbe8e40e990254df761db610375d41",
+        "raw_response_sha256": "a0024a0daa6e5c10f230d9fbe591780a93c43f7fc8887c29df1243bf81bb97c1",
+        "rows": 75,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "zousigaya-2025-06",
+        "public_html_sha256": "3b87c8d8cb23c76bf33d0f13c57706e95413fc34b41406fdb02a465653b89d84",
+        "raw_response_sha256": "dde00fdbac57be544e705c026343b98efad70d4671619fff5298451dc90e06b0",
+        "rows": 80,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "zousigaya-2025-09",
+        "public_html_sha256": "68d02b1d54d9c2ef4f91d7cf04b741bf1d1f0338faffa8277518ff30cc606c3b",
+        "raw_response_sha256": "9b63f53416dc43020c32cc0c1f09e9880d0624960e3a68d84774a85d01f466aa",
+        "rows": 13,
+        "unlinked_rows": 0
+      },
+      {
+        "page": "zousigaya-2025-12",
+        "public_html_sha256": "44cd9ec7020b670738024df7f018b60546b4d2d46a0c5a27e116a9920f41d504",
+        "raw_response_sha256": "39807597ba6ba3da41a7be1b3ab2995386c89aebd03c88d6d6296aef58cbfcf5",
+        "rows": 77,
+        "unlinked_rows": 0
+      }
+    ],
+    "selected_sgf_bytes": 4645655,
+    "expanded_bundle_bytes": 57683710,
+    "quarantine": {
+      "policy": "Reserve no final evaluation games from these discovery account-months or the cu2 September2025 probe; all selected IDs remain excluded even if retrieval fails.",
+      "sample_sha256": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d",
+      "config_sha256": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8"
+    },
+    "games_parquet_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+    "audit_costs": {
+      "wall_seconds": 4.614926118403673,
+      "cpu_seconds": 4.837887766,
+      "gpu_hours": 0,
+      "scope": "Inspection and per-game artifact writing; excludes final summary write and interpreter startup"
+    }
+  },
+  "counts_by_month": {
+    "all_parsed": {
+      "2025-01": 77,
+      "2025-02": 71,
+      "2025-03": 110,
+      "2025-04": 83,
+      "2025-05": 63,
+      "2025-06": 105,
+      "2025-07": 70,
+      "2025-08": 71,
+      "2025-09": 96,
+      "2025-10": 62,
+      "2025-11": 92,
+      "2025-12": 100
+    },
+    "metadata_compatible": {
+      "2025-01": 24,
+      "2025-02": 16,
+      "2025-03": 20,
+      "2025-04": 23,
+      "2025-05": 16,
+      "2025-06": 24,
+      "2025-07": 19,
+      "2025-08": 25,
+      "2025-09": 14,
+      "2025-10": 10,
+      "2025-11": 26,
+      "2025-12": 24
+    }
+  },
+  "ending_cross_tab": {
+    "all_parsed": {
+      "forfeit": {
+        "games": 29,
+        "final_two_passes": 5
+      },
+      "incomplete_or_unknown": {
+        "games": 14,
+        "final_two_passes": 1
+      },
+      "resignation": {
+        "games": 444,
+        "final_two_passes": 51
+      },
+      "scored": {
+        "games": 466,
+        "final_two_passes": 466
+      },
+      "timeout": {
+        "games": 47,
+        "final_two_passes": 0
+      }
+    },
+    "metadata_compatible": {
+      "forfeit": {
+        "games": 6,
+        "final_two_passes": 1
+      },
+      "incomplete_or_unknown": {
+        "games": 3,
+        "final_two_passes": 1
+      },
+      "resignation": {
+        "games": 114,
+        "final_two_passes": 4
+      },
+      "scored": {
+        "games": 102,
+        "final_two_passes": 102
+      },
+      "timeout": {
+        "games": 16,
+        "final_two_passes": 0
+      }
+    }
+  },
+  "decisions": {
+    "scope": "Retain the E0 2025 KGS/rank/rules/clock population; no automatic era, rank or rules expansion.",
+    "training_ready": false,
+    "calibrated_rank_claims": false,
+    "qualified_raw_profiles": [],
+    "duration_modeling": "Deferred: zero validated elapsed labels.",
+    "personalization": "Deferred: no stable account-generation IDs; handle counts alone are insufficient.",
+    "core_readiness": "Blocked on source eligibility/account grouping, rules/endgames, legal replay, canonical records/splits and masked examples.",
+    "final_evaluation_quarantine": "All original discovery account-month slots, all selected IDs and cu2 September 2025 probe; enforce when building split manifests."
+  }
+}
