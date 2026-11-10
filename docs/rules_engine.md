@@ -12,7 +12,9 @@ boards, turns, captures and ko across 52,900 actions in the pinned native refere
 The automatic certifier resolved **0 of their 108 two-pass endings**. This validates
 ordinary replay; it does not establish usable automatic human-game adjudication,
 KGS equivalence in exceptional positions, or baseline readiness. Bead `6yr.10`
-owns the coverage blocker; `6yr.9` still owns human eligibility/account grouping.
+owns the coverage blocker. The [eligibility policy](../reports/e1_kgs_eligibility_2026-11-10.md)
+supplies conservative handle groups but admits no training games; `6yr.11` owns
+the missing human/ordinary-game and training-use evidence.
 
 ## Caller interface
 

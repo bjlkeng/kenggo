@@ -4,7 +4,9 @@ The E1 audit separates archive discovery, a frozen candidate sample, retrieval a
 
 The [10 November report](../reports/e1_kgs_audit_2026-11-10.md) records the actual sample, costs and deferred capabilities. Its [manifest](../manifests/e1_kgs_audit_2026-11-10.json) and [per-game Parquet](../manifests/e1_kgs_audit_games_2026-11-10.parquet) are the versioned audit evidence.
 
-Use the [locked CPU workspace](workspace.md). The audit adds [SGFmill 1.1.1](https://mjw.woodcraft.me.uk/sgfmill/doc/1.1.1/) for SGF syntax and property access. It is not the project's selected rules engine.
+Use the [locked CPU workspace](workspace.md). The audit uses [SGFmill 1.1.1](https://mjw.woodcraft.me.uk/sgfmill/doc/1.1.1/) for SGF syntax and property access. The separately validated [shared rules adapter](rules_engine.md) also uses its placement/capture primitives; parsing alone does not perform that replay.
+
+The [version-1 eligibility policy](../reports/e1_kgs_eligibility_2026-11-10.md) adds a reproducible admission decision and conservative handle groups. It admits zero training games, keeps personas masked and reserves exposed groups from final evaluation. It does not change the frozen audit counts.
 
 ## Offline checks
 
@@ -14,7 +16,7 @@ export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
 uv run --locked python -m unittest discover -s tests -v
 ```
 
-The fixtures cover source selection, HTML review rows and inaccessible records, request limits, error handling, ZIP mapping, duplicate bytes, results, passes and missing clocks. They do not validate captures, ko, scoring, splits, search or RL.
+The source-audit fixtures cover source selection, HTML review rows and inaccessible records, request limits, error handling, ZIP mapping, duplicate bytes, results, passes and missing clocks. The suite also contains eligibility and shared-rules tests; native-reference validation is documented separately in the [rules guide](rules_engine.md#reproduce-validation). Complete splits, search and RL remain future work.
 
 With the retained run files, reproduce the audit in a fresh output directory:
 
@@ -55,4 +57,4 @@ The parser selects the leftmost SGF variation and flags branching records as unv
 
 SGF `BL` and `WL` describe post-move clocks. The audit counts observed, missing, invalid and overtime-marked values. A contiguous nonincreasing clock pair above the declared Japanese overtime period is a **main-time difference candidate**. It is not yet a validated thinking-time target. Missing or invalid clocks break the chain; overtime and transitions remain ambiguous. No missing duration becomes zero, and no future clock or result enters a model input. ([SGF properties](https://www.red-bean.com/sgf/properties.html))
 
-Exact SGF byte duplicates are excluded after the first sampled occurrence. Matching move-sequence fingerprints are reported as possible duplicates for E1's later deduplication work; they are not proof that two source records are the same game. The audit does not produce training splits. Keep discovery account-months, the selected sample and the preliminary `cu2` September 2025 probe out of reserved final evaluation when E1 constructs splits.
+Exact SGF byte duplicates are excluded after the first sampled occurrence. Matching move-sequence fingerprints are reported as possible duplicates for E1's later deduplication work; they are not proof that two source records are the same game. The audit does not produce training splits. The [eligibility policy](../reports/e1_kgs_eligibility_2026-11-10.md#final-evaluation-exposure) reserves both participant groups in inspected games, all original discovery handles and the `cu2` probe across all dates, while retaining the source-ID, byte/sequence and account-month predicates.
