@@ -4,6 +4,8 @@ Version 1 | 7 November 2026 | Bead `kenggo-n5n.2`
 
 Evaluate move prediction, playing strength and complete-game behavior separately. Use this protocol with the [scope decision](e0_scope_decision.md) and [project plan](go_project_plan_v0.5.md). All numerical thresholds below are project choices, not measured results. E1 must settle the rules-dependent items listed at the end before model qualification. This document specifies evaluation; it reports no trained model or completed match experiment.
 
+The [E1 version-1 game/data contract](e1_game_and_data_contract.md) now fixes rules, adjudication, caps, missing-data masks, stress populations, judgment coverage and absolute length/diversity/failure limits. Its implementation and fixture gates remain open. Apply those limits alongside this protocol's gains, regression allowances, uncertainty and budgets; neither document qualifies a profile by itself.
+
 ## Freeze each comparison before measuring it
 
 Record the comparison ID, hypothesis, candidate and controls, primary metric, useful gain, regression limits, populations, versions, training seeds, evaluation seeds, scheduled looks and total cost cap. Include source/split manifests, input/result masks, ranks, clocks, rules/endgame adapter, checkpoint hashes, sampling or search settings and hardware. Link the code/configuration and W&B runs when the runner exists.

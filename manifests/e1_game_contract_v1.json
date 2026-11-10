@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "contract_id": "kgs_japanese_certified_v1",
+  "date": "2026-11-10",
+  "bead": "kenggo-6yr.3",
+  "review_base": "b3db1db05ebfe468906e6f03bbf414e96289f8a3",
+  "document": "plan/e1_game_and_data_contract.md",
+  "status": "Policy specified; engine, certificates, examples and qualification not implemented or validated.",
+  "scope": {
+    "source": "KGS",
+    "year": 2025,
+    "rank_labels": [
+      "15k",
+      "14k",
+      "13k",
+      "12k",
+      "11k",
+      "10k",
+      "9k",
+      "8k",
+      "7k",
+      "6k",
+      "5k",
+      "4k",
+      "3k",
+      "2k",
+      "1k",
+      "1d"
+    ],
+    "ordinary_ranked_humans": true,
+    "board_size": 19,
+    "first_player": "B",
+    "handicap": 0,
+    "setup_allowed": false,
+    "rules": "Japanese",
+    "komi_halfpoints": 13,
+    "main_seconds": [
+      600,
+      1800
+    ],
+    "byo_yomi_period_count": [
+      3,
+      5
+    ],
+    "byo_yomi_period_seconds": [
+      20,
+      60
+    ],
+    "scope_changed": false
+  },
+  "reference": {
+    "name": "KataGo",
+    "release": "v1.18.2",
+    "commit": "fd0723fdbc0e9d82cf269c9630af8c27c57c07c4",
+    "specification": "Supported Go Rules, Version 3",
+    "selected_shared_engine": false,
+    "source_equivalence_verified": false,
+    "parameters": {
+      "ko": "SIMPLE",
+      "scoring": "TERRITORY",
+      "tax": "SEKI",
+      "multiStoneSuicideLegal": false,
+      "hasButton": false,
+      "whiteHandicapBonusRule": "0",
+      "friendlyPassOk": false,
+      "komi": 6.5
+    },
+    "history_modes": {
+      "excludeTerritoryAdjacentToAtari": true,
+      "alwaysComputePassAliveUnderSuicideRules": false
+    },
+    "files": [
+      {
+        "path": "cpp/command/gtp.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/command/gtp.cpp",
+        "sha256": "90adb3ca7b247e0895e2399073e98a1ee891809a961a1ec1401d2ed1dfe0fa2a",
+        "bytes": 147155
+      },
+      {
+        "path": "cpp/game/board.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/board.cpp",
+        "sha256": "1f34d6999fab22bbb187bb9177585262da4f71f01190775dcee4e79577b8b3b8",
+        "bytes": 93527
+      },
+      {
+        "path": "cpp/game/board.h",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/board.h",
+        "sha256": "b4357217197546531b37baf1cc0f0f3a272ccd02fa8cd08378bde10114658bb1",
+        "bytes": 18352
+      },
+      {
+        "path": "cpp/game/boardhistory.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/boardhistory.cpp",
+        "sha256": "46e5af6ae3749ad61153f87705418aec2d4b85cb2247c31e6484bab16ad6b369",
+        "bytes": 56422
+      },
+      {
+        "path": "cpp/game/boardhistory.h",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/boardhistory.h",
+        "sha256": "8e66908afae59b462c36906d441a376457524d6dd737577677966a02b512147b",
+        "bytes": 14942
+      },
+      {
+        "path": "cpp/game/rules.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/rules.cpp",
+        "sha256": "87cec3456eb5d250102607c41f87f1b253c0985f24acd5bf08abb3132474ca29",
+        "bytes": 23766
+      },
+      {
+        "path": "cpp/game/rules.h",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/game/rules.h",
+        "sha256": "3b3e6a1b40adb25b6c3de5953c77ad924352efff74e433455ff31b9a5e1d9661",
+        "bytes": 3759
+      },
+      {
+        "path": "cpp/tests/gtp/rules.txt",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/tests/gtp/rules.txt",
+        "sha256": "d91943ea154af483c90ee355adab5e07ed2257b2f8a07747a6bc358efbe4ac36",
+        "bytes": 162
+      },
+      {
+        "path": "cpp/tests/testboardarea.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/tests/testboardarea.cpp",
+        "sha256": "c6e50ba2eb422d5542646eb9daa8208060353593d31acb536f638beacc7adf32",
+        "bytes": 79240
+      },
+      {
+        "path": "cpp/tests/testboardbasic.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/tests/testboardbasic.cpp",
+        "sha256": "95481f33b84f67cc3781f3470cac343456a7c5814e5b783e7e095b295710918b",
+        "bytes": 77875
+      },
+      {
+        "path": "cpp/tests/testrules.cpp",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/cpp/tests/testrules.cpp",
+        "sha256": "59d5dbb2b02289e78caf2d07c552dc32b7addf89dc12b58988072819dc64256f",
+        "bytes": 178109
+      },
+      {
+        "path": "docs/GTP_Extensions.md",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/docs/GTP_Extensions.md",
+        "sha256": "9aa9f5a09291c7f0db896e01b5c44121f5870f4e87ec62fc75fa1e759e45b0cc",
+        "bytes": 37601
+      },
+      {
+        "path": "docs/rules.html",
+        "url": "https://raw.githubusercontent.com/lightvector/KataGo/fd0723fdbc0e9d82cf269c9630af8c27c57c07c4/docs/rules.html",
+        "sha256": "4abf243e0c7a629d96b302e6bca9623b05bb402c1a971a5d4edf2203aacbbd0b",
+        "bytes": 42127
+      }
+    ],
+    "limits": [
+      "Nearly-Japanese cleanup is diagnostic only; it does not certify arbitrary KGS endings.",
+      "GTP estimated scores, tolerant replay, automatic no-result and post-terminal continuation cannot serve as adapter authority.",
+      "KGS repetition threshold/state-key equivalence is not established."
+    ]
+  },
+  "gameplay": {
+    "actions": 362,
+    "board_actions": 361,
+    "pass_actions": 1,
+    "automatic_resignation": false,
+    "legality": "Simple ko; capture before suicide check; no single/multiple-stone suicide; full history preserved.",
+    "states": [
+      "playing",
+      "pending_adjudication",
+      "resolved",
+      "unresolved",
+      "truncated"
+    ],
+    "two_actual_passes": "Freeze exact state; no inferred score and no further ordinary policy actions.",
+    "eof": "No action or terminal inference.",
+    "recurrence": {
+      "kind": "administrative_guard",
+      "key": [
+        "stone_arrangement",
+        "next_player"
+      ],
+      "placement_occurrence_threshold": 2,
+      "segment": "Since most recent actual pass, including segment initial state; retain full history separately.",
+      "effect": "Truncate at next candidate/learner decision boundary; never illegal move, draw or inferred rule no-result."
+    },
+    "limits": {
+      "nominal_actual_actions": 800,
+      "maximum_actual_actions_with_boundary_reply": 801,
+      "response_wall_seconds": 60,
+      "game_wall_seconds": 3600
+    },
+    "truncation": "Saved candidate/learner-to-move state; bootstrap, stop recursion across reset; no valid observation means invalid learning batch."
+  },
+  "adjudication": {
+    "board_mutation": false,
+    "accepted_authorities": [
+      "independently_checkable_certificate",
+      "authorized_independent_neutral_referee_with_provenance"
+    ],
+    "complete_status_and_point_maps_required": true,
+    "whole_chain_consistency_required": true,
+    "flood_fill_or_neural_estimate_is_certificate": false,
+    "source_RE_is_certificate": false,
+    "score": "2*(T_white+C_black+D_black-T_black-C_white-D_white)+13; C/D count removed stones of named color, T already includes classified vacated points.",
+    "permitted_scored_draw": false,
+    "limits_per_judgment": {
+      "proof_or_search_nodes": 100000,
+      "process_cpu_seconds": 2,
+      "wall_seconds": 10,
+      "gpu_hours": 0
+    },
+    "unsupported_or_exhausted": "unresolved",
+    "referee_actions_in_candidate_trajectory": false,
+    "source_result_preserved": true,
+    "arithmetic_example": {
+      "T_white": 35,
+      "C_black": 3,
+      "D_black": 1,
+      "T_black": 40,
+      "C_white": 5,
+      "D_white": 2,
+      "expected_white_minus_black_halfpoints": -3
+    }
+  },
+  "learning": {
+    "source_policy_actions": "Only after eligibility, provenance, strict replay and split gates; missing result alone does not create a move exclusion.",
+    "value_result_kinds": [
+      "scored",
+      "resignation"
+    ],
+    "masked_value_result_kinds": [
+      "missing",
+      "unknown",
+      "void",
+      "no_result",
+      "draw_at_6.5",
+      "timeout",
+      "forfeit",
+      "conflict"
+    ],
+    "value_view": "Mover-to-play for SL/search; fixed B color for PPO; identities excluded from value computation.",
+    "missing_identity": "Default identity; no personalization without validated account grouping.",
+    "historical_rank_missing": "Exclude source game from initial population; intentional opponent-rank input masking is separately seeded/logged.",
+    "duration_valid": false,
+    "dynamic_clock_inputs_valid": false,
+    "static_known_clock_settings_allowed": true,
+    "future_timing_revision": "Require verified main-time/event semantics and consecutive valid clocks, excluding adjustments, resets, pause effects and overtime transitions.",
+    "unresolved_or_faulty_rollout": "Retain trajectory; invalidate collection batch and perform no optimizer update. Never discard only the failed game or invent reward zero.",
+    "invalid_transition_fields": "learning_valid=false; reward and learning-boundary flags absent; no GAE/bootstrap or optimizer update."
+  },
+  "qualification": {
+    "status": "No candidate or raw profile qualified.",
+    "all_required": true,
+    "grouping": "Each A profile/B checkpoint; full validation panel, each opponent family, each of six stress contexts; frozen profiles/colors remain separate strata.",
+    "binary_method": "E0 exact stratum bounds with allocated assertion alpha; missing/unjudgeable outcomes adverse; each promoted checkpoint must pass.",
+    "integrity_max_reproducible_defects": 0,
+    "upper_game_rate_limits": {
+      "agent_runtime_failure": 0.01,
+      "cap_or_recurrence": 0.01,
+      "unresolved": 0.01,
+      "dispute": 0.01,
+      "premature_or_unjudgeable_candidate_pass": 0.01,
+      "length_above_600_or_unresolved": 0.05
+    },
+    "pass_judgment_coverage_min": 0.99,
+    "min_pass_bearing_games_per_color_per_group": 100,
+    "premature_pass_score_loss_points": 1,
+    "length_tail_actions": 600,
+    "diversity": {
+      "applies_to": "A only",
+      "samples_per_position": 32,
+      "min_lower_mean_pairwise_disagreement": 0.1,
+      "min_lower_mean_unique_actions": 2.0,
+      "max_upper_category_total_variation": 0.1,
+      "min_distinct_mover_accounts_per_cell": 30,
+      "min_game_sides_per_cell": 100,
+      "category_priority": [
+        "pass",
+        "capture",
+        "save_atari",
+        "give_atari",
+        "self_atari",
+        "other"
+      ]
+    },
+    "stress": {
+      "generators": [
+        "uniform_legal_placement_self_play",
+        "capture_first_vs_uniform_legal_placement"
+      ],
+      "prefix_actions": [
+        60,
+        180,
+        300
+      ],
+      "contexts": 6,
+      "pass_only_if_no_legal_placement": true,
+      "independent_seeds_per_root_context": true,
+      "balanced_generator_colors": true,
+      "continuation_candidate_colors": [
+        "B",
+        "W"
+      ],
+      "missing_early_ended_roots_retained": true
+    },
+    "illustrative_zero_failure_count": {
+      "assertions": 30,
+      "strata": 6,
+      "marginal_alpha": 0.0001388888888888889,
+      "rate_limit": 0.01,
+      "independent_color_pair_blocks_per_stratum": 884
+    },
+    "budgets_unchanged": true,
+    "pass_judgment_score_semantics": "Minimax under the frozen ordinary-play/scoring contract; complete certificates or sufficient checked bounds, never one favorable rollout or a score at an administrative cutoff."
+  },
+  "evidence": {
+    "audit_manifest": "manifests/e1_kgs_audit_2026-11-10.json",
+    "audit_parquet": "manifests/e1_kgs_audit_games_2026-11-10.parquet",
+    "audit_extension": {
+      "input_parquet_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+      "quantile_method": "Nearest rank: sorted lengths[ceil(p*n)-1]; observed source actions, not certified terminations.",
+      "lengths": {
+        "all": {
+          "games": 1000,
+          "min": 0,
+          "max": 352,
+          "median_nearest_rank": 242,
+          "p90_nearest_rank": 294,
+          "p99_nearest_rank": 329,
+          "above_600": 0
+        },
+        "metadata_compatible": {
+          "games": 241,
+          "min": 6,
+          "max": 346,
+          "median_nearest_rank": 237,
+          "p90_nearest_rank": 295,
+          "p99_nearest_rank": 326,
+          "above_600": 0
+        },
+        "compatible_scored": {
+          "games": 102,
+          "min": 145,
+          "max": 346,
+          "median_nearest_rank": 265,
+          "p90_nearest_rank": 306,
+          "p99_nearest_rank": 346,
+          "above_600": 0
+        },
+        "compatible_resigned": {
+          "games": 114,
+          "min": 6,
+          "max": 308,
+          "median_nearest_rank": 197,
+          "p90_nearest_rank": 284,
+          "p99_nearest_rank": 307,
+          "above_600": 0
+        }
+      },
+      "records_with_actions_after_two_passes": [],
+      "selected_sgf_bytes": 4645655,
+      "costs": {
+        "wall_seconds": 1.1254498874768615,
+        "cpu_seconds": 1.395665001,
+        "gpu_hours": 0,
+        "scope": "Read/hash/parse selected SGFs and compute statistics; excludes interpreter startup and final JSON write."
+      }
+    },
+    "public_kgs_documentation": {
+      "observations": [
+        {
+          "url": "https://www.gokgs.com/help/ruelsets.html",
+          "started_utc": "2026-11-10T20:36:01.529718+00:00",
+          "start_offset_seconds": 3.907829523086548e-06,
+          "status": 200,
+          "bytes": 6140,
+          "sha256": "b4565ab0270ecc43447df4877d3173be70e9bf2fdd1bb4d953babeec9d651e49",
+          "body_path": "kgs_rules.html",
+          "elapsed_seconds": 0.11644257605075836
+        },
+        {
+          "url": "https://www.gokgs.com/help/timesystems.html",
+          "started_utc": "2026-11-10T20:36:06.534959+00:00",
+          "start_offset_seconds": 5.0052429074421525,
+          "status": 200,
+          "bytes": 8995,
+          "sha256": "337b89ac8ce41831c8b3b2d1eae42f520ad7b49cf17468a4b57bb32c27a2fd77",
+          "body_path": "kgs_time.html",
+          "elapsed_seconds": 0.058884636498987675
+        },
+        {
+          "url": "https://www.gokgs.com/json/dataTypes.html",
+          "started_utc": "2026-11-10T20:36:11.540294+00:00",
+          "start_offset_seconds": 10.010557174682617,
+          "status": 200,
+          "bytes": 21238,
+          "sha256": "90e799ea082356dd1638c119e288835993b4d6b13fb726deba5543641352a9a0",
+          "body_path": "kgs_types.html",
+          "elapsed_seconds": 0.13062244933098555
+        },
+        {
+          "url": "https://www.gokgs.com/json/downstream.html",
+          "started_utc": "2026-11-10T20:36:16.545449+00:00",
+          "start_offset_seconds": 15.015733983367682,
+          "status": 200,
+          "bytes": 48536,
+          "sha256": "40eeba553e11c660e9af7acf4f3badf0dac8c1b0c36c787068d05e2b7b6e179e",
+          "body_path": "kgs_downstream.html",
+          "elapsed_seconds": 0.10754560120403767
+        }
+      ],
+      "costs": {
+        "requests": 4,
+        "response_bytes": 84909,
+        "wall_seconds": 15.123558521270752,
+        "cpu_seconds": 0.019517478999999997,
+        "gpu_hours": 0
+      },
+      "budget": {
+        "max_requests": 8,
+        "concurrency": 1,
+        "min_start_interval_seconds": 5,
+        "max_response_bytes": 1048576,
+        "max_total_response_bytes": 8388608,
+        "wall_seconds": 600,
+        "cpu_seconds": 60,
+        "automatic_retries": 0,
+        "gpu_hours": 0
+      }
+    },
+    "sgf_reference": {
+      "version": "FF[4]",
+      "properties_last_updated": "2006-06-25",
+      "urls": [
+        "https://www.red-bean.com/sgf/properties.html",
+        "https://www.red-bean.com/sgf/go.html"
+      ]
+    },
+    "local_capture_directory": "runs/e1-contract-sources-2026-11-10",
+    "accounting": "KGS direct documentation and cached-SGF inspection costs measured separately. External indexed search, KataGo exploration, authoring/review and human effort were not comprehensively timed. No account login, new SGF acquisition, training, GPU or human matches."
+  },
+  "prerequisites_still_open": [
+    "kenggo-6yr.4",
+    "kenggo-6yr.5",
+    "kenggo-6yr.6",
+    "kenggo-6yr.7",
+    "kenggo-6yr.9"
+  ],
+  "qualified_raw_profiles": [],
+  "e1_ready": false
+}

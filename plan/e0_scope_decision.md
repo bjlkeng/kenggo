@@ -6,6 +6,8 @@ Use KGS as the first candidate source for a population model of human moves on 1
 
 This note implements the scope part of [E0](go_project_plan_v0.5.md#e0-fix-scope-and-evaluation). Evaluation design and budgets remain in `kenggo-n5n.2` and `kenggo-n5n.3`. The [selected stack](go_project_plan_v0.5.md#technology-stack) is unchanged.
 
+**10 November E1 support decision:** the [1,000-candidate audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records, with human status, identities and legal replay still unverified. The proposed 15k, 10k, 5k, 1k and 1d raw profiles all remain deferred; no rank/phase/time cell yet establishes the required support. The [game/data contract](e1_game_and_data_contract.md) preserves this population and fixes numerical qualification gates. Personalization, duration modeling and timing-adaptive search remain deferred; version 1 masks duration targets and dynamic-clock inputs. These findings do not authorize broader dates, rules, ranks or compute.
+
 ## Initial population
 
 The following limits are project choices for the first audit, not measured properties of the corpus.

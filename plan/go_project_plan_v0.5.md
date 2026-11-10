@@ -89,6 +89,8 @@ The [budget and handoff decision](e0_budgets_and_handoff.md) fixes pilot caps an
 
 The [10 November candidate audit](../reports/e1_kgs_audit_2026-11-10.md) records 1,000 retrieved and parsed candidates, 241 metadata-compatible records and deferred capabilities. Historical human status, account grouping, timing and legal replay remain unverified; E1 readiness remains open. The earlier [source-access preflight](../reports/e1_source_access_2026-11-10.md) preserves the initial access and policy observations.
 
+The [version-1 game and data contract](e1_game_and_data_contract.md) fixes KGS-compatible ordinary play, certified adjudication, administrative boundaries, masks and numerical qualification limits. It pins KataGo's Version 3 reference while keeping its diagnostic cleanup separate from source/candidate actions. Engine, data and match-runner validation remain required.
+
 <!-- pagebreak -->
 
 ## E2. Build and measure human baselines
