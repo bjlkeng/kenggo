@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "bead": "kenggo-6yr.5",
+  "date_utc": "2026-11-11",
+  "review_base": "548212bd8921c56e3868bb9b5f6b38e9a9267ae5",
+  "report": "reports/e1_canonical_2026-11-11.md",
+  "decision": "Canonical/split implementation complete; no source-admitted corpus or usable partitions.",
+  "configuration": "manifests/e1_split_config_v1.json",
+  "per_game_index": "manifests/e1_canonical_index_2026-11-11.parquet",
+  "index_bytes": 164021,
+  "committed_artifact_scope": "Per-game provenance references, metadata, hashes, counters and decisions; no move sequences, per-move clocks, comments or credentials.",
+  "local_canonical_directory": "runs/e1-canonical-2026-11-11-v4",
+  "canonical_artifact_scope": "All selected actual actions and raw node-clock evidence; diagnostic only when excluded; never implies source admission.",
+  "provenance": {
+    "audit_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+    "sample_sha256": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d",
+    "eligibility_sha256": "57a3b6e520bf53d9b69bfac4db56d40108117e8d6438acaef141862082bd1dd7",
+    "eligibility_policy": "kgs_eligibility_v1",
+    "audit_manifest_sha256": "3465ec3b374682b4f10bc479d02cccd9f77f96a4e0832456a64c6e9c3d46fe3f",
+    "discovery_sha256": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8",
+    "config_file_sha256": "5c722acb2c1bf04e70fee3885cf6984b44809c45d301ffd9eec3bdbc74ce87d7",
+    "uv_lock_sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079",
+    "source_references_sha256": "73b6b6f68ef9797013252accfc0b55212d9e5b7dccf7fa4fe0d73ad1bc7a242c",
+    "code_sha256": {
+      "canonical_audit.py": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+      "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+      "kgs_eligibility.py": "83fdc20a92e4536c8d567e50a04d127bbb83de9be508f131b5d20bf10189dd46",
+      "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+      "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d",
+      "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+      "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+      "adjudication.py": "5994547333b7cb333b99c661858098457f306a6653efb762953db994a02f7be3"
+    }
+  },
+  "results": {
+    "version": "canonical_audit_v1",
+    "records": 1000,
+    "parsed_records": 1000,
+    "structurally_supported_games": 243,
+    "replay_validated_games": 243,
+    "replay_validated_actions": 53151,
+    "observed_actions": 224274,
+    "structural_exclusion_counts": {
+      "invalid_or_unsupported_replay": 757,
+      "missing_moves_or_turn_order": 5,
+      "played_variation_unverified": 47,
+      "rules_or_komi_out_of_scope": 651,
+      "time_control_unknown_or_out_of_scope": 351
+    },
+    "recorded_value_supported_games": 216,
+    "source_admitted_games": 0,
+    "duplicate_components": 1000,
+    "duplicate_excess": 0,
+    "adjudication_calls": 108,
+    "adjudication_execution": {
+      "file": "adjudications.json",
+      "sha256": "5e5f78b6b4b399cd91edc1fadca5c2bd09f71c9db54fb80e6d488b02f172f77f",
+      "cpu_seconds": 0.0660796299999935,
+      "wall_seconds": 0.06594203785061836,
+      "scope": "Full per-call limits/counts/costs, linked to canonical records and deterministic certificate hashes."
+    },
+    "split_manifest_sha256": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+    "canonical_parquet_sha256": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+    "index_parquet_sha256": "2cf8c6d329a4141097244d70dd0bfe26c8db9c3d77f9acdcd7c02632667ad193",
+    "bytes": {
+      "selected_sgf": 4645655,
+      "expanded_bundles": 57683710,
+      "canonical_json": 39305530,
+      "canonical_parquet": 5086165
+    },
+    "training_ready": false,
+    "e1_ready": false
+  },
+  "diagnostic_structure": {
+    "handle_groups": 218,
+    "recorded_results": {
+      "scored": 102,
+      "resignation": 114,
+      "timeout": 16,
+      "forfeit": 6,
+      "incomplete_or_unknown": 5
+    },
+    "explicit_passes": 268,
+    "pending_adjudication": 108,
+    "automatically_certified": 0,
+    "original_metadata_compatible_games": 241,
+    "added_missing_result_games": 2,
+    "additional_actions": 251,
+    "new_native_reference_comparisons": 0,
+    "scope": "243 structural/replay diagnostics only; all source gates remain closed."
+  },
+  "split_manifest": {
+    "adaptation_sides": 0,
+    "canonical_input_sha256": "0d80468243c108cb33c9b873e7caf0985ff49641f9aa1a73d5f858968ace3dcf",
+    "exclusion_counts": {
+      "black_historical_bot_handle": 7,
+      "black_human_unverified": 993,
+      "invalid_or_unsupported_replay": 757,
+      "metadata:archive_sgf_result_mismatch": 5,
+      "metadata:historical_bot_handle": 29,
+      "metadata:missing_moves_or_turn_order": 5,
+      "metadata:played_variation_unverified": 47,
+      "metadata:rules_or_komi_out_of_scope": 651,
+      "metadata:time_control_unknown_or_out_of_scope": 351,
+      "missing_moves_or_turn_order": 5,
+      "no_policy_actions": 5,
+      "ordinary_game_unverified": 1000,
+      "played_variation_unverified": 47,
+      "rules_or_komi_out_of_scope": 651,
+      "source_not_admitted": 1000,
+      "time_control_unknown_or_out_of_scope": 351,
+      "training_reuse_basis_unresolved": 1000,
+      "white_historical_bot_handle": 22,
+      "white_human_unverified": 978
+    },
+    "execution_requirements": {
+      "adaptation": "only listed target colors; shared weights frozen; procedure selected on validation",
+      "confirmation": "frozen candidate; never add development/confirmation rows to adaptation prefixes",
+      "final": "sealed until deployment profiles and shared weights/procedure are frozen; hashes do not prove noninspection",
+      "selection": "development roles only; test-group data never used for selection",
+      "shared_training_and_normalizer_fit": "train role only"
+    },
+    "exposure_sha256": "d48b48f86b15b166233b7dbbdd4c37b2de90d8dfab8802964736db2e19d38aee",
+    "fixture_only": false,
+    "membership_sha256": {
+      "embargo.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "excluded.parquet": "e7ac773f72958eb04f9cab8ec11af7a7c4d7eee44403f1792d450c78886fe388",
+      "final.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "population_confirmation.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "population_development.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "test_prefix.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "train.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "validation_confirmation.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "validation_development.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac",
+      "validation_prefix.parquet": "5473fd7d79006b3e83e6e0542cac2c84d42e5856bb703f2e3b3386bd3e2e43ac"
+    },
+    "plan": {
+      "confirmation_from": "2025-11-01",
+      "grouping_sha256": "2c416459c8ca823d81ecb24ad784afe1a8214d52b9f8d01cd2d1e40c31f7a416",
+      "test_groups": [],
+      "train_before": "2025-09-01",
+      "validation_groups": []
+    },
+    "plan_sha256": "49a490051b453a3077d7acc8d71f1540f9790e16bdd5970d8e163881940f9386",
+    "policy_actions_by_role": {
+      "embargo": 0,
+      "excluded": 0,
+      "final": 0,
+      "population_confirmation": 0,
+      "population_development": 0,
+      "test_prefix": 0,
+      "train": 0,
+      "validation_confirmation": 0,
+      "validation_development": 0,
+      "validation_prefix": 0
+    },
+    "provenance": {
+      "audit_manifest_sha256": "3465ec3b374682b4f10bc479d02cccd9f77f96a4e0832456a64c6e9c3d46fe3f",
+      "audit_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+      "code_sha256": {
+        "adjudication.py": "5994547333b7cb333b99c661858098457f306a6653efb762953db994a02f7be3",
+        "canonical_audit.py": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_eligibility.py": "83fdc20a92e4536c8d567e50a04d127bbb83de9be508f131b5d20bf10189dd46",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "config_file_sha256": "5c722acb2c1bf04e70fee3885cf6984b44809c45d301ffd9eec3bdbc74ce87d7",
+      "discovery_sha256": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8",
+      "eligibility_policy": "kgs_eligibility_v1",
+      "eligibility_sha256": "57a3b6e520bf53d9b69bfac4db56d40108117e8d6438acaef141862082bd1dd7",
+      "sample_sha256": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d",
+      "source_references_sha256": "73b6b6f68ef9797013252accfc0b55212d9e5b7dccf7fa4fe0d73ad1bc7a242c",
+      "uv_lock_sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079"
+    },
+    "roles": {
+      "embargo": 0,
+      "excluded": 1000,
+      "final": 0,
+      "population_confirmation": 0,
+      "population_development": 0,
+      "test_prefix": 0,
+      "train": 0,
+      "validation_confirmation": 0,
+      "validation_development": 0,
+      "validation_prefix": 0
+    },
+    "value_actions_by_role": {
+      "embargo": 0,
+      "excluded": 0,
+      "final": 0,
+      "population_confirmation": 0,
+      "population_development": 0,
+      "test_prefix": 0,
+      "train": 0,
+      "validation_confirmation": 0,
+      "validation_development": 0,
+      "validation_prefix": 0
+    },
+    "version": "whole_game_splits_v1"
+  },
+  "budget": {
+    "metadata_input_bytes": 67108864,
+    "selected_sgf_bytes": 67108864,
+    "per_sgf_bytes": 1048576,
+    "per_zip_bytes": 8388608,
+    "expanded_zip_bytes": 268435456,
+    "serialized_canonical_json_bytes": 268435456,
+    "cpu_seconds_per_pass": 900,
+    "wall_seconds_per_pass": 1800,
+    "workers": 1,
+    "http_requests": 0,
+    "gpu_hours": 0
+  },
+  "runs": [
+    {
+      "directory": "runs/e1-canonical-2026-11-11",
+      "outcome": "failed_before_ZIP_or_SGF_reads",
+      "error": "KeyError: bundles; aggregate manifest stores the list under summary.bundles.",
+      "adapter_code_sha256": "e172baed99ea0ed59af86870aaf49b22d5113eec958815660a6fb5f46a443074",
+      "wall_seconds_tool_reported": 0.222711318,
+      "cpu_seconds": null,
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "sgf_reads": 0,
+      "artifacts_written": 0
+    },
+    {
+      "directory": "runs/e1-canonical-2026-11-11-v2",
+      "outcome": "complete",
+      "records": 1000,
+      "superseded_for_missing_adjudication_evidence": true,
+      "adapter_code_sha256": "3b23daa98848ccf49bbc7b17dfc2842dd7c3a7eecccca22326710b906ad89216",
+      "canonical_parquet_sha256": "8b5215a409b6785c54de4ac307613b1cd47f37cd196af7f3e3b6ed03b7205383",
+      "index_parquet_sha256": "038bd568331dca14dbeaacd16d392126cbdaeba40192cf3e8663df0228e26a12",
+      "split_manifest_sha256": "c9c3941a3d32ef86c70f98e8a17952cb65a37917b27ffac640d6a7d21b40f3f0",
+      "adjudication_execution": null,
+      "costs": {
+        "started_utc": "2026-11-11T00:56:46.462421+00:00",
+        "cpu_seconds": 24.349964688,
+        "wall_seconds": 24.21855347789824,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Frozen-input verification, selected SGF parsing/replay and artifact writing; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-canonical-2026-11-11-v3",
+      "outcome": "complete",
+      "records": 1000,
+      "superseded_for_missing_adjudication_evidence": true,
+      "adapter_code_sha256": "715d4c30b665d38392f9f47ab8f41405e0b9b37f520812a608fd3fbe58cecdfc",
+      "canonical_parquet_sha256": "8b5215a409b6785c54de4ac307613b1cd47f37cd196af7f3e3b6ed03b7205383",
+      "index_parquet_sha256": "038bd568331dca14dbeaacd16d392126cbdaeba40192cf3e8663df0228e26a12",
+      "split_manifest_sha256": "a28a777e874723eb5fceb4876a1654ed4049d84fc1bcb557babc28dd0bde6ea5",
+      "adjudication_execution": null,
+      "costs": {
+        "started_utc": "2026-11-11T01:00:47.447218+00:00",
+        "cpu_seconds": 24.2614541,
+        "wall_seconds": 24.114710642956197,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Frozen-input verification, selected SGF parsing/replay and artifact writing; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-canonical-reproduced",
+      "outcome": "complete",
+      "records": 1000,
+      "superseded_for_missing_adjudication_evidence": true,
+      "adapter_code_sha256": "715d4c30b665d38392f9f47ab8f41405e0b9b37f520812a608fd3fbe58cecdfc",
+      "canonical_parquet_sha256": "8b5215a409b6785c54de4ac307613b1cd47f37cd196af7f3e3b6ed03b7205383",
+      "index_parquet_sha256": "038bd568331dca14dbeaacd16d392126cbdaeba40192cf3e8663df0228e26a12",
+      "split_manifest_sha256": "a28a777e874723eb5fceb4876a1654ed4049d84fc1bcb557babc28dd0bde6ea5",
+      "adjudication_execution": null,
+      "costs": {
+        "started_utc": "2026-11-11T01:05:02.436013+00:00",
+        "cpu_seconds": 24.291290916999998,
+        "wall_seconds": 24.153388341888785,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Frozen-input verification, selected SGF parsing/replay and artifact writing; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-canonical-2026-11-11-v4",
+      "outcome": "complete",
+      "records": 1000,
+      "superseded_for_missing_adjudication_evidence": false,
+      "adapter_code_sha256": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+      "canonical_parquet_sha256": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+      "index_parquet_sha256": "2cf8c6d329a4141097244d70dd0bfe26c8db9c3d77f9acdcd7c02632667ad193",
+      "split_manifest_sha256": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+      "adjudication_execution": {
+        "file": "adjudications.json",
+        "sha256": "5e5f78b6b4b399cd91edc1fadca5c2bd09f71c9db54fb80e6d488b02f172f77f",
+        "cpu_seconds": 0.0660796299999935,
+        "wall_seconds": 0.06594203785061836,
+        "scope": "Full per-call limits/counts/costs, linked to canonical records and deterministic certificate hashes."
+      },
+      "costs": {
+        "started_utc": "2026-11-11T01:21:04.121310+00:00",
+        "cpu_seconds": 24.496916854,
+        "wall_seconds": 24.34866355266422,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Frozen-input verification, selected SGF parsing/replay and artifact writing; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-canonical-reproduced-v2",
+      "outcome": "complete",
+      "records": 1000,
+      "superseded_for_missing_adjudication_evidence": false,
+      "adapter_code_sha256": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+      "canonical_parquet_sha256": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+      "index_parquet_sha256": "2cf8c6d329a4141097244d70dd0bfe26c8db9c3d77f9acdcd7c02632667ad193",
+      "split_manifest_sha256": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+      "adjudication_execution": {
+        "file": "adjudications.json",
+        "sha256": "6be0ec90684e5140d4d2fad0c5f4869687637d2d5eb6d815c015bd3c97b1ce05",
+        "cpu_seconds": 0.0644350020000064,
+        "wall_seconds": 0.06432240549474955,
+        "scope": "Full per-call limits/counts/costs, linked to canonical records and deterministic certificate hashes."
+      },
+      "costs": {
+        "started_utc": "2026-11-11T01:22:31.800848+00:00",
+        "cpu_seconds": 24.421192289999997,
+        "wall_seconds": 24.271305099129677,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Frozen-input verification, selected SGF parsing/replay and artifact writing; excludes imports and final summary write."
+      }
+    }
+  ],
+  "reproduction": {
+    "exact_canonical_parquet": true,
+    "exact_index_parquet": true,
+    "exact_split_manifest_and_membership": true,
+    "equal_nontiming_summary": true,
+    "volatile_summary_fields": [
+      "adjudication_execution",
+      "costs"
+    ],
+    "directories": [
+      "runs/e1-canonical-2026-11-11-v4",
+      "runs/e1-canonical-reproduced-v2"
+    ]
+  },
+  "cost_scope": "Recorded complete passes only, plus the separately labeled failed setup observation. Tests, authoring, other offline inspections and independent review are outside those timers.",
+  "admission_policy": "kgs_eligibility_v1",
+  "qualified_profiles": [],
+  "e1_ready": false,
+  "downstream": {
+    "example_encoding": "kenggo-6yr.6",
+    "affirmative_source_evidence": "kenggo-6yr.11",
+    "usable_certified_endings": "kenggo-6yr.10",
+    "readiness": "kenggo-6yr.7"
+  }
+}

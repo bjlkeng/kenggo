@@ -1,0 +1,7 @@
+{
+  "grouping_sha256": "2c416459c8ca823d81ecb24ad784afe1a8214d52b9f8d01cd2d1e40c31f7a416",
+  "train_before": "2025-09-01",
+  "confirmation_from": "2025-11-01",
+  "validation_groups": [],
+  "test_groups": []
+}

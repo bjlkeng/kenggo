@@ -16,7 +16,7 @@ export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
 uv run --locked python -m unittest discover -s tests -v
 ```
 
-The source-audit fixtures cover source selection, HTML review rows and inaccessible records, request limits, error handling, ZIP mapping, duplicate bytes, results, passes and missing clocks. The suite also contains eligibility and shared-rules tests; native-reference validation is documented separately in the [rules guide](rules_engine.md#reproduce-validation). Complete splits, search and RL remain future work.
+The source-audit fixtures cover source selection, HTML review rows and inaccessible records, request limits, error handling, ZIP mapping, duplicate bytes, results, passes and missing clocks. The suite also contains eligibility, canonical-record, whole-game split and shared-rules tests; native-reference validation is documented separately in the [rules guide](rules_engine.md#reproduce-validation). The [canonical builder](../reports/e1_canonical_2026-11-11.md) adds provenance, replay and immutable split artifacts with zero currently admitted games. Example encoding, search and RL remain future work.
 
 With the retained run files, reproduce the audit in a fresh output directory:
 
