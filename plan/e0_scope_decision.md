@@ -8,6 +8,8 @@ This note implements the scope part of [E0](go_project_plan_v0.5.md#e0-fix-scope
 
 **10 November E1 support decision:** the [1,000-candidate audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records, with human status, identities and legal replay still unverified. The proposed 15k, 10k, 5k, 1k and 1d raw profiles all remain deferred; no rank/phase/time cell yet establishes the required support. The [game/data contract](e1_game_and_data_contract.md) preserves this population and fixes numerical qualification gates. Personalization, duration modeling and timing-adaptive search remain deferred; version 1 masks duration targets and dynamic-clock inputs. These findings do not authorize broader dates, rules, ranks or compute.
 
+**11 November owner-approved admission revision:** use screened, presumed-human ordinary-ranked KGS games under [eligibility version 2](../reports/e1_kgs_admission_2026-11-11.md). Explicit Ranked metadata, known-bot exclusions and absence of contradictory event/type evidence support a documented presumption, not verified human control. The owner states that permission to use is available; record that as the local research training/evaluation basis. The frozen sample now has 241 source-admitted games. Preserve all existing population settings, masks and final quarantine; rank support, downstream artifact regeneration and endgame readiness remain unmet.
+
 ## Initial population
 
 The following limits are project choices for the first audit, not measured properties of the corpus.
@@ -16,7 +18,7 @@ The following limits are project choices for the first audit, not measured prope
 | --- | --- |
 | Source and access route | Public KGS game archives and their original SGFs, with source metadata where available. E1 must establish a permitted, reproducible discovery and download route before collecting the sample. |
 | Era | Games started from **2025-01-01 through 2025-12-31**, using the source date and recording its timezone or date ambiguity. This gives a fixed, completed year after the July 2024 Human SL release. |
-| Players and ranks | Two human players in ordinary ranked games, with both historical KGS ranks known and within **15k–1k or 1d**. Retain each exact rank and the pair of ranks. Missing, provisional or ambiguous ranks need an explicit E1 policy and do not establish support for an exact-rank profile. |
+| Players and ranks | Two presumed-human players in presumed ordinary ranked games under the approved version-2 screening policy, with both historical KGS ranks known and within **15k–1k or 1d**. Retain each exact rank and the pair of ranks. Missing, provisional or ambiguous ranks need an explicit E1 policy and do not establish support for an exact-rank profile. |
 | Board and handicap | **19 x 19, even games**, Black first, no handicap or setup stones. Any 9 x 9 work is a separately labeled debugging experiment and supplies no evidence of 19 x 19 strength. |
 | Time-control family | Main time **10–30 minutes per player**, followed by Japanese byo-yomi with **3–5 periods of 20–60 seconds**. Require known time settings; retain the exact tuple. These bounds define the initial family rather than asserting a server-wide definition of non-blitz play. Exclude other clock systems and settings initially. |
 | Rules and komi | **KGS Japanese rules, 6.5 komi to White**, pending E1's exact legality and endgame contract. Require explicit metadata or a documented source-specific interpretation; do not infer rules from the server name alone. |

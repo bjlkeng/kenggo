@@ -1,5 +1,9 @@
 # KGS eligibility and account grouping, version 1
 
+**Subsequent policy:** the owner-approved [version-2 admission policy](e1_kgs_admission_2026-11-11.md)
+admits 241 screened, presumed-human source games. Version 1 and the evidence below
+remain reproducible as the earlier decision.
+
 **Decision, 10 November 2026:** the frozen 1,000-game audit supplies **zero
 training-eligible games** under `kgs_eligibility_v1`. The 241 metadata-compatible
 games remain unverified for historical human control, ordinary game context and

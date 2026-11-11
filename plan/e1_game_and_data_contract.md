@@ -4,7 +4,7 @@ Version 1 | 10 November 2026 | Bead `kenggo-6yr.3`
 
 Use **KGS Japanese ordinary play with certified adjudication of a frozen ending**. Keep the source population at even 19 x 19, Black first, 6.5 komi and the [E0 rank/date/clock scope](e0_scope_decision.md). Two passes request adjudication; they do not supply a score. An unsupported ending stays unresolved. The [versioned manifest](../manifests/e1_game_contract_v1.json) pins the reference, limits, qualification thresholds and evidence.
 
-This is the policy input to the shared engine, canonical records, examples and match runner. It does not implement or validate those components. The [audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records among 1,000 candidates, but no verified training population. Every proposed raw rank profile remains deferred; human eligibility/account grouping and continued source-use policy remain with `kenggo-6yr.9`. E1 readiness remains open.
+This is the policy input to the shared engine, canonical records, examples and match runner. It does not implement or validate those components. The [audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records among 1,000 candidates. The subsequent owner-approved [version-2 source policy](../reports/e1_kgs_admission_2026-11-11.md) admits those games as presumed human and ordinary ranked, using owner-attested research-use permission. That revision preserves grouping, quarantine and missing-data masks; it supplies no verified-human or generated-ending claim. Every proposed raw rank profile remains deferred, and E1 readiness remains open for data support, downstream artifacts and usable ending/pass judgments.
 
 ## Reference and compatibility boundary
 

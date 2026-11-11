@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "policy": "kgs_eligibility_v2",
+  "bead": "kenggo-6yr.11",
+  "date_utc": "2026-11-11",
+  "review_base": "a837fa80a1a0934d20e3faf2a63c2d1b7c7a93ca",
+  "report": "reports/e1_kgs_admission_2026-11-11.md",
+  "owner_decision": {
+    "path": "manifests/e1_kgs_admission_policy_v2.json",
+    "sha256": "461a7fed1ea637d8d39cfa1437a06f6d4e198a59af9bf1cabd6c245ef444c4bc"
+  },
+  "source_policy_evidence": {
+    "policy": "kgs_eligibility_v2",
+    "decision_sha256": "461a7fed1ea637d8d39cfa1437a06f6d4e198a59af9bf1cabd6c245ef444c4bc",
+    "classifier_code_sha256": "8439a5f87cc603691306b862985735f6b39bbbdb21b71695e662803ce18cc9e9",
+    "source_use_basis": "Owner-attested permission for this project's local research training and evaluation. No independent licence verification or raw-corpus redistribution permission is claimed."
+  },
+  "input_sha256": {
+    "audit": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+    "sample": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d",
+    "discovery": "ab090ed01bac1bdb8e0cfa978e3f18d1ce2307eaa75309fbf643047bfc96c8c8",
+    "legacy_decisions": "57a3b6e520bf53d9b69bfac4db56d40108117e8d6438acaef141862082bd1dd7",
+    "canonical_index": "2cf8c6d329a4141097244d70dd0bfe26c8db9c3d77f9acdcd7c02632667ad193"
+  },
+  "code_sha256": {
+    "kgs_admission.py": "8439a5f87cc603691306b862985735f6b39bbbdb21b71695e662803ce18cc9e9",
+    "kgs_eligibility.py": "beae05f73846882f37dc30050aef799d4895e278f1e25fe60d90e2b018c6fd1b"
+  },
+  "per_game_decisions": "manifests/e1_kgs_admission_games_2026-11-11.parquet",
+  "decisions_sha256": "7e63e6c50a78a751dc0494533f6a5e80881019b23b58289a503e9257ceda7295",
+  "results": {
+    "input_games": 1000,
+    "metadata_compatible_games": 241,
+    "status_counts": {
+      "admitted_presumed_human": 241,
+      "excluded": 759
+    },
+    "reason_counts": {
+      "black_historical_bot_handle": 7,
+      "metadata:archive_sgf_result_mismatch": 5,
+      "metadata:historical_bot_handle": 29,
+      "metadata:missing_moves_or_turn_order": 5,
+      "metadata:played_variation_unverified": 47,
+      "metadata:rules_or_komi_out_of_scope": 651,
+      "metadata:time_control_unknown_or_out_of_scope": 351,
+      "white_historical_bot_handle": 22
+    },
+    "training_eligible_games": 241,
+    "human_verified_games": 0,
+    "ordinary_verified_games": 0,
+    "presumed_human_games": 971,
+    "presumed_ordinary_games": 1000,
+    "eligible_handle_groups": 216,
+    "identity_valid_game_sides": 0,
+    "historical_bot_exclusion_games": 29,
+    "final_eligible_sampled_games": 0
+  },
+  "eligible_coverage": {
+    "games": 241,
+    "result_counts": {
+      "forfeit": 6,
+      "incomplete_or_unknown": 3,
+      "resignation": 114,
+      "scored": 102,
+      "timeout": 16
+    },
+    "by_player_rank": {
+      "15k": {
+        "player_game_appearances": 10,
+        "moves": 897,
+        "explicit_passes": 5,
+        "two_pass_ending_appearances": 4,
+        "result_counts": {
+          "resignation": 4,
+          "scored": 4,
+          "incomplete_or_unknown": 2
+        }
+      },
+      "14k": {
+        "player_game_appearances": 2,
+        "moves": 119,
+        "explicit_passes": 1,
+        "two_pass_ending_appearances": 1,
+        "result_counts": {
+          "forfeit": 1,
+          "scored": 1
+        }
+      },
+      "13k": {
+        "player_game_appearances": 3,
+        "moves": 376,
+        "explicit_passes": 2,
+        "two_pass_ending_appearances": 2,
+        "result_counts": {
+          "scored": 2,
+          "resignation": 1
+        }
+      },
+      "12k": {
+        "player_game_appearances": 27,
+        "moves": 2841,
+        "explicit_passes": 29,
+        "two_pass_ending_appearances": 23,
+        "result_counts": {
+          "scored": 23,
+          "forfeit": 1,
+          "resignation": 3
+        }
+      },
+      "11k": {
+        "player_game_appearances": 29,
+        "moves": 2964,
+        "explicit_passes": 21,
+        "two_pass_ending_appearances": 15,
+        "result_counts": {
+          "resignation": 10,
+          "scored": 13,
+          "forfeit": 2,
+          "incomplete_or_unknown": 4
+        }
+      },
+      "10k": {
+        "player_game_appearances": 22,
+        "moves": 3091,
+        "explicit_passes": 14,
+        "two_pass_ending_appearances": 13,
+        "result_counts": {
+          "resignation": 7,
+          "timeout": 4,
+          "scored": 11
+        }
+      },
+      "9k": {
+        "player_game_appearances": 55,
+        "moves": 6141,
+        "explicit_passes": 34,
+        "two_pass_ending_appearances": 30,
+        "result_counts": {
+          "timeout": 4,
+          "resignation": 23,
+          "scored": 26,
+          "forfeit": 2
+        }
+      },
+      "8k": {
+        "player_game_appearances": 11,
+        "moves": 1138,
+        "explicit_passes": 7,
+        "two_pass_ending_appearances": 7,
+        "result_counts": {
+          "scored": 7,
+          "resignation": 4
+        }
+      },
+      "7k": {
+        "player_game_appearances": 21,
+        "moves": 2756,
+        "explicit_passes": 16,
+        "two_pass_ending_appearances": 13,
+        "result_counts": {
+          "resignation": 8,
+          "scored": 13
+        }
+      },
+      "6k": {
+        "player_game_appearances": 12,
+        "moves": 1282,
+        "explicit_passes": 7,
+        "two_pass_ending_appearances": 6,
+        "result_counts": {
+          "resignation": 6,
+          "scored": 6
+        }
+      },
+      "5k": {
+        "player_game_appearances": 5,
+        "moves": 448,
+        "explicit_passes": 1,
+        "two_pass_ending_appearances": 1,
+        "result_counts": {
+          "scored": 1,
+          "resignation": 2,
+          "forfeit": 2
+        }
+      },
+      "4k": {
+        "player_game_appearances": 57,
+        "moves": 6687,
+        "explicit_passes": 43,
+        "two_pass_ending_appearances": 27,
+        "result_counts": {
+          "scored": 27,
+          "resignation": 30
+        }
+      },
+      "3k": {
+        "player_game_appearances": 48,
+        "moves": 4712,
+        "explicit_passes": 28,
+        "two_pass_ending_appearances": 24,
+        "result_counts": {
+          "scored": 20,
+          "resignation": 26,
+          "forfeit": 2
+        }
+      },
+      "2k": {
+        "player_game_appearances": 44,
+        "moves": 5067,
+        "explicit_passes": 18,
+        "two_pass_ending_appearances": 16,
+        "result_counts": {
+          "scored": 16,
+          "resignation": 28
+        }
+      },
+      "1k": {
+        "player_game_appearances": 56,
+        "moves": 6350,
+        "explicit_passes": 27,
+        "two_pass_ending_appearances": 22,
+        "result_counts": {
+          "scored": 22,
+          "timeout": 10,
+          "resignation": 24
+        }
+      },
+      "1d": {
+        "player_game_appearances": 80,
+        "moves": 8031,
+        "explicit_passes": 13,
+        "two_pass_ending_appearances": 12,
+        "result_counts": {
+          "resignation": 52,
+          "timeout": 14,
+          "scored": 12,
+          "forfeit": 2
+        }
+      }
+    },
+    "games_with_final_two_passes": 108
+  },
+  "admitted_actions": 52900,
+  "admitted_explicit_passes": 266,
+  "quarantine": {
+    "groups": 695,
+    "grouping_sha256": "2c416459c8ca823d81ecb24ad784afe1a8214d52b9f8d01cd2d1e40c31f7a416",
+    "original_fields_unchanged": [
+      "source_url",
+      "sgf_sha256",
+      "black_handle",
+      "white_handle",
+      "black_group",
+      "white_group",
+      "black_identity_valid",
+      "white_identity_valid",
+      "black_persona",
+      "white_persona",
+      "final_evaluation_excluded",
+      "quarantine_reasons",
+      "metadata_compatible"
+    ],
+    "compared_decisions": 1000
+  },
+  "replay_evidence": {
+    "manifest": "manifests/e1_rules_validation_v1.json",
+    "games": 241,
+    "actions": 52900,
+    "native_discrepancies": 0,
+    "certified_of_two_pass_endings": [
+      0,
+      108
+    ],
+    "new_corpus_replay_performed": false,
+    "scope": "Admitted IDs equal the original metadata-compatible subset; replay validity also checked against the retained canonical index."
+  },
+  "production_artifacts": {
+    "canonical_policy": "kgs_eligibility_v1",
+    "examples_still_empty": true,
+    "regeneration_and_pin_update_required": true,
+    "owner_bead": "kenggo-6yr.7"
+  },
+  "reproduction": {
+    "identical_v2_decision_hashes": true,
+    "legacy_v1_hash_unchanged": true
+  },
+  "runs": [
+    {
+      "directory": "runs/e1-kgs-admission-2026-11-11-v2",
+      "costs": {
+        "wall_seconds": 0.18910572119057178,
+        "cpu_seconds": 0.47028944699999997,
+        "http_requests": 0,
+        "raw_sgf_reads": 0,
+        "gpu_hours": 0,
+        "scope": "One frozen-metadata policy pass and per-game writes; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-kgs-admission-2026-11-11-repeat",
+      "costs": {
+        "wall_seconds": 0.19817685335874557,
+        "cpu_seconds": 0.48838191200000003,
+        "http_requests": 0,
+        "raw_sgf_reads": 0,
+        "gpu_hours": 0,
+        "scope": "One frozen-metadata policy pass and per-game writes; excludes imports and final summary write."
+      }
+    },
+    {
+      "directory": "runs/e1-kgs-eligibility-v1-recheck-2026-11-11",
+      "costs": {
+        "wall_seconds": 0.1923895487561822,
+        "cpu_seconds": 0.4775718079999999,
+        "http_requests": 0,
+        "raw_sgf_reads": 0,
+        "gpu_hours": 0,
+        "scope": "One frozen-metadata policy pass and per-game writes; excludes imports and final summary write."
+      }
+    }
+  ],
+  "budget": {
+    "cpu_seconds_limit": 600,
+    "wall_seconds_limit": 900,
+    "http_requests": 0,
+    "raw_sgf_reads": 0,
+    "gpu_hours": 0,
+    "scope": "Frozen metadata classification/reproduction. No expanded sample or acquisition."
+  },
+  "training_ready": false,
+  "e1_ready": false,
+  "qualified_profiles": [],
+  "validation": {
+    "finished_utc": "2026-11-11T18:51:20.244889+00:00",
+    "checks": [
+      {
+        "name": "lock",
+        "command": [
+          "uv",
+          "lock",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.009122,
+        "wall_seconds": 0.009333284571766853
+      },
+      {
+        "name": "environment",
+        "command": [
+          "uv",
+          "sync",
+          "--locked",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.008491,
+        "wall_seconds": 0.008694061078131199
+      },
+      {
+        "name": "smoke",
+        "command": [
+          "uv",
+          "run",
+          "--locked",
+          "python",
+          "-m",
+          "kenggo.smoke"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 2.1666990000000004,
+        "wall_seconds": 1.3323135608807206
+      },
+      {
+        "name": "tests",
+        "command": [
+          "uv",
+          "run",
+          "--locked",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 16.200921,
+        "wall_seconds": 15.278203818947077
+      },
+      {
+        "name": "build",
+        "command": [
+          "uv",
+          "build",
+          "--no-sources"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.016352000000001254,
+        "wall_seconds": 0.01661372184753418
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.003080000000000638,
+        "wall_seconds": 0.0033998461440205574
+      }
+    ],
+    "cpu_seconds": 18.404665,
+    "wall_seconds": 16.64875939209014,
+    "cpu_limit_seconds": 180,
+    "wall_limit_seconds": 300,
+    "native_reference": "/home/bojji/code/kenggo/.cache/katago-reference/katago-reference",
+    "kgs_requests": 0,
+    "gpu_seconds": 0,
+    "tests_passed": 112,
+    "native_reference_methods_passed": 5,
+    "tests_skipped": 0,
+    "local_log_directory": "runs/e1-admission-validation-2026-11-11",
+    "log_sha256": {
+      "build.stderr.txt": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+      "build.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "environment.stderr.txt": "33090d25ef2ecfcb2c147382eb9384941042e3773f9deca20559aaff89e3382a",
+      "environment.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lock.stderr.txt": "900256cb7285772552e9ce8f946a8232043e2f6f2bfda749daafb295dcbb20ee",
+      "lock.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "smoke.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "smoke.stdout.txt": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde",
+      "tests.stderr.txt": "d595467c2a15e36e05c930c4ca1c4d8779c45f2294602018728e4f7a0e2726b6",
+      "tests.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "validation.json": "1c3c2679a1088b82e483b99fcf8bad1a68e0410ce3a6f46761da23318688ae79",
+      "whitespace.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "whitespace.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "local_links_checked": 79,
+    "remote_url_syntax_checked": 53
+  }
+}

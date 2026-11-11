@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "policy": "kgs_eligibility_v2",
+  "date_utc": "2026-11-11",
+  "bead": "kenggo-6yr.11",
+  "authority": "project_owner",
+  "owner_decisions": {
+    "human_screening": "Yeah best guess as to human or not as you recommend.",
+    "source_use": "We have permission to use"
+  },
+  "population": {
+    "source": "KGS",
+    "scope": "The original frozen 1000-game 2025 candidate audit; existing rank, rules, komi, clock and structural filters still apply.",
+    "audit_sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a",
+    "sample_sha256": "3beace1967c494dd8063fb2ce3d167388366020ccb376d054ea9220c3076284d"
+  },
+  "human_evidence": "Presumed human when the retained archive says Ranked and neither participant belongs to a documented bot handle group; this is an owner-approved screening assumption, not verified historical human control or proof of unaided play.",
+  "ordinary_game_evidence": "Presumed ordinary only for explicit archive Type=Ranked without SGF event/round evidence or another inherited exclusion; unknown and other types remain excluded.",
+  "source_use_basis": "Owner-attested permission for this project's local research training and evaluation. No independent licence verification or raw-corpus redistribution permission is claimed.",
+  "grouping": "Preserve conservative whole-handle groups and reviewed aliases; identity and personalization remain masked.",
+  "final_quarantine": "Preserve the original inspected source IDs, SGF/sequence hashes, account-months and all 695 exposed handle groups across dates.",
+  "limits": "Source admission does not establish rules replay, a populated split, rank support, a fitted normalizer, generated-game adjudication, profile qualification or E1 readiness. No new acquisition or source change is authorized by this artifact."
+}

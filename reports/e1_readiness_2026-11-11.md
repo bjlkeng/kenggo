@@ -1,5 +1,10 @@
 # E1 readiness and manual validation
 
+**Later owner decision:** [version-2 admission](e1_kgs_admission_2026-11-11.md)
+now admits 241 screened, presumed-human source games with owner-attested research
+permission. The inspection below predates that approval. Downstream artifacts
+still require regeneration; the endgame decision and overall readiness remain open.
+
 **11 November 2026, UTC: E1 is not ready for baseline training.** The implemented
 pipeline passes its checks, but the retained source supplies no admitted training
 games and the selected endgame method has no demonstrated coverage on the real

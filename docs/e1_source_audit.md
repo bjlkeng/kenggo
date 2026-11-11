@@ -1,6 +1,6 @@
 # Reproduce the bounded KGS source audit
 
-The E1 audit separates archive discovery, a frozen candidate sample, retrieval and offline inspection. It does not train a model or establish legal replay. The [E0 population](../plan/e0_scope_decision.md) and [E1 contract](../plan/go_project_plan_v0.5.md#e1-establish-the-data-and-game-contract) govern its exclusions and support decisions.
+The E1 audit separates archive discovery, a frozen candidate sample, retrieval and offline inspection. It does not train a model or establish legal replay. The [E0 population](../plan/e0_scope_decision.md) and [E1 contract](../plan/go_project_plan_v0.5.md#e1-establish-the-data-and-game-contract) govern its exclusions and support decisions. The later [owner-approved admission revision](../reports/e1_kgs_admission_2026-11-11.md) admits 241 screened, presumed-human source games; its separate command reproduces those decisions without changing the original audit.
 
 The [10 November report](../reports/e1_kgs_audit_2026-11-10.md) records the actual sample, costs and deferred capabilities. Its [manifest](../manifests/e1_kgs_audit_2026-11-10.json) and [per-game Parquet](../manifests/e1_kgs_audit_games_2026-11-10.parquet) are the versioned audit evidence.
 

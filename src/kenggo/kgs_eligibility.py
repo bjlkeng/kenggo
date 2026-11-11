@@ -188,7 +188,7 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def audit(audit_path, sample_path, discovery_path, output):
+def audit(audit_path, sample_path, discovery_path, output, *, classifier=classify, policy_evidence=None):
     started, cpu_start = time.monotonic(), time.process_time()
     if sum(p.stat().st_size for p in (audit_path, sample_path, discovery_path)) > 64 * 1024**2:
         raise ValueError("Policy input byte budget exceeded")
@@ -208,7 +208,10 @@ def audit(audit_path, sample_path, discovery_path, output):
     handles = {r["metadata"][field] for r in records for field in ("PB", "PW")}
     groups = handle_groups(handles | {a["user"] for a in discovery["accounts"]} | {"cu2"})
     exposure = exposure_registry(records, discovery["accounts"], groups)
-    decisions = [classify(r, archived[r["source_url"]], groups, exposure) for r in records]
+    decisions = [classifier(r, archived[r["source_url"]], groups, exposure) for r in records]
+    expected_policy = POLICY if policy_evidence is None else policy_evidence["policy"]
+    if any(d["policy"] != expected_policy for d in decisions):
+        raise ValueError("Classifier and policy evidence disagree")
     accepted = [r for r, d in zip(records, decisions) if d["training_eligible"]]
     compatible = [r for r in records if not r["exclusions"]]
     if time.monotonic() - started > 600 or time.process_time() - cpu_start > 300:
@@ -216,7 +219,7 @@ def audit(audit_path, sample_path, discovery_path, output):
     output.mkdir(parents=True, exist_ok=False)
     pq.write_table(pa.Table.from_pylist(decisions), output / "decisions.parquet", compression="zstd")
     (output / "decisions.json").write_text(json.dumps(decisions, indent=2) + "\n")
-    summary = {"policy": POLICY, "audit_sha256": AUDIT_SHA256,
+    summary = {"policy": expected_policy, "audit_sha256": AUDIT_SHA256,
                "sample_sha256": sha256(sample_path), "discovery_sha256": sha256(discovery_path),
                "code_sha256": sha256(Path(__file__)), "decisions_parquet_sha256": sha256(output / "decisions.parquet"),
                "input_games": len(records), "metadata_compatible_games": len(compatible),
@@ -235,10 +238,19 @@ def audit(audit_path, sample_path, discovery_path, output):
                "quarantine_reason_counts": dict(sorted(Counter(x for d in decisions for x in d["quarantine_reasons"]).items())),
                "final_eligible_sampled_games": sum(not d["final_evaluation_excluded"] for d in decisions),
                "metadata_compatible_coverage": coverage(compatible), "eligible_coverage": coverage(accepted),
-               "source_use_scope": "local_audit_only; no affirmative training or redistribution basis established",
+               "source_use_scope": ("local_audit_only; no affirmative training or redistribution basis established"
+                                    if policy_evidence is None else policy_evidence["source_use_basis"]),
                "costs": {"wall_seconds": time.monotonic() - started, "cpu_seconds": time.process_time() - cpu_start,
                          "http_requests": 0, "raw_sgf_reads": 0, "gpu_hours": 0,
                          "scope": "One frozen-metadata policy pass and per-game writes; excludes imports and final summary write."}}
+    if policy_evidence is not None:
+        summary.update(source_policy_evidence=policy_evidence,
+                       presumed_human_games=sum(all(d[c + "_human_status"] == "presumed_human"
+                                                    for c in ("black", "white")) for d in decisions),
+                       presumed_ordinary_games=sum(d["ordinary_status"] == "presumed_ordinary_ranked"
+                                                   for d in decisions),
+                       eligible_handle_groups=len({d[c + "_group"] for d in decisions if d["training_eligible"]
+                                                   for c in ("black", "white")}))
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps({key: summary[key] for key in ("policy", "input_games", "metadata_compatible_games",
                      "status_counts", "training_eligible_games", "observed_handle_groups",
