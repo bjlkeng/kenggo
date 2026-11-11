@@ -35,7 +35,7 @@ uv build --no-sources
 git diff --check
 ```
 
-The build creates a source distribution and wheel in ignored `dist/`. Building the wheel does not check its runtime dependencies; run the smoke check after installation too. Behavior tests cover acquisition/auditing and the rules adapter. Run the separate [pinned native reference checks](rules_engine.md#reproduce-validation) for rules changes; a skipped reference test is not a passing comparison. Splitting, search and RL implementations/tests are still future work. The installation smoke does not validate Go behavior.
+The build creates a source distribution and wheel in ignored `dist/`. Building the wheel does not check its runtime dependencies; run the smoke check after installation too. Behavior tests cover acquisition/auditing, eligibility, canonical records, splits, [masked examples and board encoding](../reports/e1_examples_2026-11-11.md), and the rules adapter. Run the separate [pinned native reference checks](rules_engine.md#reproduce-validation) for rules changes; a skipped reference test is not a passing comparison. Search and RL implementations/tests are still future work. The installation smoke does not validate Go behavior.
 
 ## GPU readiness is separate
 

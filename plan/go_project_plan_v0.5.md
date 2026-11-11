@@ -91,6 +91,8 @@ The [10 November candidate audit](../reports/e1_kgs_audit_2026-11-10.md) records
 
 The [version-1 game and data contract](e1_game_and_data_contract.md) fixes KGS-compatible ordinary play, certified adjudication, administrative boundaries, masks and numerical qualification limits. It pins KataGo's Version 3 reference while keeping its diagnostic cleanup separate from source/candidate actions. Data, usable ending coverage and match-runner validation remain required.
 
+The [masked example builder](../reports/e1_examples_2026-11-11.md) implements shared pre-move encoding, sharded arrays and train-only normalization. Synthetic fixtures exercise usable examples; the real corpus still produces none, with an explicitly unfitted normalizer. Dynamic clocks and duration targets remain masked. This implementation does not establish E1 readiness.
+
 <!-- pagebreak -->
 
 ## E2. Build and measure human baselines

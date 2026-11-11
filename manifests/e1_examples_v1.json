@@ -1,0 +1,915 @@
+{
+  "schema_version": 1,
+  "bead": "kenggo-6yr.6",
+  "date_utc": "2026-11-11",
+  "review_base": "ca25ae41cd2d67d8ac2ed4f10ec23cc6c72b5fe2",
+  "report": "reports/e1_examples_2026-11-11.md",
+  "decision": "Masked example and shared encoding implementation complete; no admitted real examples or fitted production statistics.",
+  "local_output_directory": "runs/e1-examples-2026-11-11-v3",
+  "artifact_scope": "Versioned schema, hashes, counters, bounded diagnostic source/position references and costs; no board arrays, raw clocks or move sequences.",
+  "results": {
+    "version": "example_audit_v1",
+    "config": {
+      "hide_mover_per_mille": 100,
+      "hide_opponent_per_mille": 200,
+      "history": 0,
+      "rank_seed": 20261111,
+      "shard_size": 256
+    },
+    "canonical_records": 1000,
+    "canonical_sha256": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+    "split_sha256": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+    "examples_manifest_sha256": "9c2f8c65dd30fbb2ede0a0deed770e0c2d51867ee31a10fd5c9784870d08a881",
+    "normalizer_sha256": "7bb87b37343ad55f014a3f831d37bbf7558de18889068d5e8aeab7e6646277a8",
+    "diagnostics_sha256": "f72664df6da1c5db48e09a069e3784477b51f7996e0999cd84d072dba7a55521",
+    "counts": {
+      "embargo": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "excluded": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "final": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "population_confirmation": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "test_prefix": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_confirmation": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_prefix": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      }
+    },
+    "normalizer_fitted": false,
+    "diagnostic_games": 5,
+    "diagnostic_positions": 16,
+    "diagnostic_mismatches": 0,
+    "code_sha256": {
+      "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+      "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+      "examples.py": "92834a68b876b265a1c534d109ef4431edd25310f72e0b86570f92e8b4a76073",
+      "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+      "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+      "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+      "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+    },
+    "uv_lock_sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079",
+    "training_ready": false,
+    "e1_ready": false
+  },
+  "example_manifest": {
+    "artifacts": {
+      "embargo": [
+        {
+          "arrays": "embargo/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "embargo/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "excluded": [
+        {
+          "arrays": "excluded/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "excluded/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "final": [
+        {
+          "arrays": "final/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "final/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "population_confirmation": [
+        {
+          "arrays": "population_confirmation/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "population_confirmation/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "population_development": [
+        {
+          "arrays": "population_development/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "population_development/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "test_prefix": [
+        {
+          "arrays": "test_prefix/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "test_prefix/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "train": [
+        {
+          "arrays": "train/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "train/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "validation_confirmation": [
+        {
+          "arrays": "validation_confirmation/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "validation_confirmation/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "validation_development": [
+        {
+          "arrays": "validation_development/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "validation_development/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ],
+      "validation_prefix": [
+        {
+          "arrays": "validation_prefix/00000.npz",
+          "arrays_sha256": "642d160d1ecc9e0a6a525a820380cdda70cb50a091ba9c4cf3ff255c6c748c09",
+          "metadata": "validation_prefix/00000.parquet",
+          "metadata_sha256": "5100fcadaa1f183434363ca6baf7c5ff0308b60e42b7314517dc87a7f58f4294",
+          "rows": 0
+        }
+      ]
+    },
+    "canonical_sha256": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+    "code_sha256": {
+      "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+      "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+      "examples.py": "92834a68b876b265a1c534d109ef4431edd25310f72e0b86570f92e8b4a76073",
+      "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+      "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+      "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+      "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+    },
+    "config": {
+      "hide_mover_per_mille": 100,
+      "hide_opponent_per_mille": 200,
+      "history": 0,
+      "rank_seed": 20261111,
+      "shard_size": 256
+    },
+    "counts": {
+      "embargo": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "excluded": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "final": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "population_confirmation": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "test_prefix": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_confirmation": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      },
+      "validation_prefix": {
+        "duration_valid": 0,
+        "examples": 0,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 0,
+        "value_valid": 0
+      }
+    },
+    "encoding": "mover_encoding_v1",
+    "exclusions": {
+      "black_historical_bot_handle": 7,
+      "black_human_unverified": 993,
+      "invalid_or_unsupported_replay": 757,
+      "metadata:archive_sgf_result_mismatch": 5,
+      "metadata:historical_bot_handle": 29,
+      "metadata:missing_moves_or_turn_order": 5,
+      "metadata:played_variation_unverified": 47,
+      "metadata:rules_or_komi_out_of_scope": 651,
+      "metadata:time_control_unknown_or_out_of_scope": 351,
+      "missing_moves_or_turn_order": 5,
+      "no_policy_actions": 5,
+      "ordinary_game_unverified": 1000,
+      "played_variation_unverified": 47,
+      "rules_or_komi_out_of_scope": 651,
+      "source_not_admitted": 1000,
+      "time_control_unknown_or_out_of_scope": 351,
+      "training_reuse_basis_unresolved": 1000,
+      "white_historical_bot_handle": 22,
+      "white_human_unverified": 978
+    },
+    "execution_requirements": {
+      "adaptation": "only listed target colors; shared weights frozen; procedure selected on validation",
+      "confirmation": "frozen candidate; never add development/confirmation rows to adaptation prefixes",
+      "final": "sealed until deployment profiles and shared weights/procedure are frozen; hashes do not prove noninspection",
+      "selection": "development roles only; test-group data never used for selection",
+      "shared_training_and_normalizer_fit": "train role only"
+    },
+    "fixture_only": false,
+    "input_keys": [
+      "board",
+      "legal",
+      "scalars",
+      "scalar_valid",
+      "ranks",
+      "rank_valid",
+      "history_actions",
+      "history_colors",
+      "history_valid"
+    ],
+    "rank_vocabulary": [
+      "15k",
+      "14k",
+      "13k",
+      "12k",
+      "11k",
+      "10k",
+      "9k",
+      "8k",
+      "7k",
+      "6k",
+      "5k",
+      "4k",
+      "3k",
+      "2k",
+      "1k",
+      "1d"
+    ],
+    "rules": "kgs_japanese_certified_v1",
+    "scalars": [
+      "mover_is_black",
+      "mover_komi",
+      "prisoners_for_mover",
+      "prisoners_for_opponent",
+      "pass_streak",
+      "move_number",
+      "cap_pending",
+      "truncated",
+      "cleanup_phase",
+      "main_seconds",
+      "period_seconds",
+      "periods",
+      "mover_clock",
+      "opponent_clock",
+      "mover_overtime",
+      "opponent_overtime"
+    ],
+    "schema": {
+      "action": {
+        "dtype": "int16",
+        "shape": []
+      },
+      "board": {
+        "dtype": "bool",
+        "shape": [
+          3,
+          19,
+          19
+        ]
+      },
+      "duration": {
+        "dtype": "float32",
+        "shape": []
+      },
+      "duration_valid": {
+        "dtype": "bool",
+        "shape": []
+      },
+      "history_actions": {
+        "dtype": "int16",
+        "shape": [
+          0
+        ]
+      },
+      "history_colors": {
+        "dtype": "int8",
+        "shape": [
+          0
+        ]
+      },
+      "history_valid": {
+        "dtype": "bool",
+        "shape": [
+          0
+        ]
+      },
+      "legal": {
+        "dtype": "bool",
+        "shape": [
+          362
+        ]
+      },
+      "policy_valid": {
+        "dtype": "bool",
+        "shape": []
+      },
+      "rank_valid": {
+        "dtype": "bool",
+        "shape": [
+          2
+        ]
+      },
+      "ranks": {
+        "dtype": "int16",
+        "shape": [
+          2
+        ]
+      },
+      "scalar_valid": {
+        "dtype": "bool",
+        "shape": [
+          16
+        ]
+      },
+      "scalars": {
+        "dtype": "float32",
+        "shape": [
+          16
+        ]
+      },
+      "value": {
+        "dtype": "float32",
+        "shape": []
+      },
+      "value_valid": {
+        "dtype": "bool",
+        "shape": []
+      }
+    },
+    "source_roles": {
+      "embargo": 0,
+      "excluded": 1000,
+      "final": 0,
+      "population_confirmation": 0,
+      "population_development": 0,
+      "test_prefix": 0,
+      "train": 0,
+      "validation_confirmation": 0,
+      "validation_development": 0,
+      "validation_prefix": 0
+    },
+    "split_sha256": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+    "uv_lock_sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079",
+    "version": "supervised_examples_v1"
+  },
+  "diagnostics": {
+    "evidence": [
+      {
+        "actions": 306,
+        "canonical_sha256": "162a22af84b94de70e0850a9ae47cfd976e59de3ea4c72fae66ea9b100291199",
+        "positions": [
+          {
+            "input_sha256_by_history": {
+              "0": "ae73e545623e2ef4ecaa6e6294c9eb8e0bdac029e468124289d48be951c44ebc",
+              "32": "51532753a81183a3e7dadda9d9a497e051923576145b709edcfeaeafbdab9b29",
+              "64": "ac486afeb8cf26ca132219e2118f777be7af43bc8b631c13590a02aeb708cd1c",
+              "8": "42bdd2cb471ddbbc08e0ee6e44421eacaae9620deac58dfc9ffa05a6e8e61426"
+            },
+            "ply": 0,
+            "state_sha256": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "43f857166f7ff0b855235ee4f63b73eaec539f8971dc1c24ef15f8ec79e51d61",
+              "32": "911c5debe9db62ca3d0e9f519b0029deced3d6935e19157e6ec20f788b3cbaba",
+              "64": "b9637f5dc03624c053d5261b1988e4887566eea0d84ac89ffc2f0c8d9f50ce08",
+              "8": "410a741a00068ee7b7a215e861efa2cf060594fa970a2aff510adf1b25c15ec0"
+            },
+            "ply": 153,
+            "state_sha256": "eab1a4e7674c3370be055c4dd10689fa7d555830d0c145809c3922999be894c9"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "8edcce6465222bfdb18a9962d2e07b517bef525d9eb0ba67e2df825b98e7e9f1",
+              "32": "51417fa7e133615512c7ab49a294790958cbbb2c07b649d8622ebf42be964bcb",
+              "64": "ef043fe8b5e34ab2379303f5d8e50eeb9780b205e9e4feeadf547cfad5db44b1",
+              "8": "96111ff7f3e56c85ec968ca611d78a356c8d44b3011f63de9909154e56b251c8"
+            },
+            "ply": 304,
+            "state_sha256": "883e377912b0496195a41d2f95a74544a6ebd2cb5f13c8a2b63074df9a69935c"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "2751f42518476efcec07e3f98105384fcd4135709781a543657feeea13e63a0c",
+              "32": "bd479fbae43c805dcc9969d92663a64e16d68285fdf0a58de6683222ba3f310d",
+              "64": "e71ce952e2b3c91f475b55e49683a54f487cb53f9c699b8b849601e9bdbdc20a",
+              "8": "6c8ceac7cbf08d0b741890503d63c70e3979d82d761831928bdde39ed86b6b7d"
+            },
+            "ply": 305,
+            "state_sha256": "8ccb88bd8e9ea4003545cfd35fd1dc89a0c4e8098c17d8b956d67694b56f5187"
+          }
+        ],
+        "result_kind": "scored",
+        "source_admitted": false,
+        "source_url": "https://files.gokgs.com/games/2025/1/10/Jabul-yuumsuzuki.sgf"
+      },
+      {
+        "actions": 284,
+        "canonical_sha256": "211cc545749f3a89ee3f1aba745843c83d40ef6c056f9b6f80d594d94f747d62",
+        "positions": [
+          {
+            "input_sha256_by_history": {
+              "0": "72990964ff2ec26fefd95cc229b4bcaf50443c92b37fe5540181c9baebf9d50f",
+              "32": "ea79a834fc3d04c91ed115e63b3e67513ca8606e0ecc237a82210c74e5598668",
+              "64": "f4a39670ad036aa4b7fc1d7b83dfcfbd3c81e1eb913ece205d2afcfc4d95e2b5",
+              "8": "ecddf9e9cd0ee0c06f0e00873c906c029f897cf8220f9512ef48948941f8a56e"
+            },
+            "ply": 0,
+            "state_sha256": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "449c52175ab8b403de7bddbcd89ac283e8c4774f126470023bd823c55626573e",
+              "32": "00202fca4b57c78379bd91c0281510b74b912bbdadf3dc308e7b56fb435b7a78",
+              "64": "4336737e7de558c55242b4290c8af5b521a2914b7b6c8844a0beba1ce99536b3",
+              "8": "5dd00dd08a7c3501a81804e0e9841d09bff549bebd30ab845f6ec56d7cb621d6"
+            },
+            "ply": 142,
+            "state_sha256": "2fbb3533740dd76d9ebdfd4cc5c0973e269f762cc8fd06bd32e3ad6e277dbedc"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "eaa5a8de988dc901f094107641446e5f7971870f088dd6a2eda37920f5b94e5c",
+              "32": "ed064e0d05d56f4d28c993cd0f29a40273fa67a52d86efb07519bb8643d326fe",
+              "64": "7cedb36ec063cb5acc27406a84551bcf63c659b692135c42ba2363892b295c29",
+              "8": "82a4592cbd78a93c6013f2c76aa5b998e32e8d33f7288a3d224b9da7966d28fe"
+            },
+            "ply": 283,
+            "state_sha256": "3ad4781e15cca9917e449a1b014e275ef6eea435cf09698657439ba9d1f13a8f"
+          }
+        ],
+        "result_kind": "resignation",
+        "source_admitted": false,
+        "source_url": "https://files.gokgs.com/games/2025/1/14/Sakka-chipstar.sgf"
+      },
+      {
+        "actions": 203,
+        "canonical_sha256": "daf2ea561116c55f71ef74b79771ff473f1b1799b1a1ac40ce23c18c2ccb1f02",
+        "positions": [
+          {
+            "input_sha256_by_history": {
+              "0": "a2092c8486b875988f913fb3ff46313a496ed67476ba8481aed7a92f74255430",
+              "32": "19d8ba28b2feef70f1532e4e61e3e6ea2a2c83ab16044c7ba76894c2bcdc7f01",
+              "64": "5734a9ccfb17a1d5957a2b352a06502365a86530d1061ee6b4f0d9f6d4d54080",
+              "8": "cae9eae4d9761be273c2730daa598ed4ab8cd01d76eb16db41710924434ac274"
+            },
+            "ply": 0,
+            "state_sha256": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "eded946e7ddbc5dc148129c8b130c25b2729fbfbaa0cef1f5f80770ae8017a06",
+              "32": "aaa164d1abf2ad18620bc8bee3a8e1caf47c66fb504ea60bc8f1205cee4856c8",
+              "64": "a306be9fea54402fba3413827bf0e224a6fcc1dac29cd2a21732e9348595f3e5",
+              "8": "83e2c6a92de41770b90d8e5246263a6eb0441e4cd1d4151624b79eba09858ff9"
+            },
+            "ply": 101,
+            "state_sha256": "7febdd52132692a104331976df53c4290986645eca6453244f6634847464596c"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "7c215b6c36d8844a989ccb2bc01f477ad50fb1b1dd56d393a77c227a18f6801c",
+              "32": "131ec90f51d7e753953ae4b29b62cd105daa8eb425f01bf71c2cc948430ed3ac",
+              "64": "fdbbd54aa7d0bd6fd7090ecb9acc99b16a5965471457317fb579e67dfb04fbc2",
+              "8": "c495f1667b1ed6efbf72c16ac96ab56c4870de4162dc2ba0a35e01c8135d9ee2"
+            },
+            "ply": 202,
+            "state_sha256": "02aeb368a6ccbbcb00071dacce7df412ee5b4b99dc87f31afde12b0eebda6e98"
+          }
+        ],
+        "result_kind": "timeout",
+        "source_admitted": false,
+        "source_url": "https://files.gokgs.com/games/2025/1/13/Neptunus-akasaka39.sgf"
+      },
+      {
+        "actions": 173,
+        "canonical_sha256": "c670893a9d6c38ca63ae5cb3a3f788100967d93ea2598cf9c44556aba90e6251",
+        "positions": [
+          {
+            "input_sha256_by_history": {
+              "0": "6e4482720e2cc55acef1c6a461c8af92c0a1ef6eebdd735c11d4d7ae4f98fac3",
+              "32": "bccfb64e4c19ee38623cc4c638adba0f160459d1f75aa536e326fe9ce184729e",
+              "64": "72ba1468d8120ddf58cb2fae0538a00ca8e267b9765580ee753fb266913de8d2",
+              "8": "c0e4f55fa5c7d73696020b9246f8095c614692f01b4afe20e2c823ffb71feb29"
+            },
+            "ply": 0,
+            "state_sha256": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "e2d106f9908f49edb60b58d1d6758dbd330a7582f377b864c4a35f21f7f139ca",
+              "32": "31e9b798684eebddc0547e6c21eda3c735e9627667089623e390bff3bebc5924",
+              "64": "1f9e9fcce4f7d8b08579a79d29a9f9b24b40a1e6382ac9d3d3056ad047f16bb4",
+              "8": "bebce068580159a6fc2d61a04fce10a2782a6a4c3d8b1183610432373b56c685"
+            },
+            "ply": 86,
+            "state_sha256": "20fce4159926ee9a4232526d4abe54a526e34f3d1b8efaefdff3f2e845a28821"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "8baa4bd468b836c9505887f63c31359aa7d08d6de75e26a58a9fa7648eb363b4",
+              "32": "b621f0e40a6c2ee975ee420018d0f608ee2bbf15bb5fa2d8e6aa1f57d372e888",
+              "64": "fe6c9851df1cdc247a3a845fad2d36da0e842938f1c4344b91bac4dcb2ac19d5",
+              "8": "8042d5db2c370773ebceec55c05d2c29873929013ebeec00c3d91b1022a76579"
+            },
+            "ply": 172,
+            "state_sha256": "86a21f68216661dc73fd27da92426debee020cf69928081c7a33d5c3aaf11dc1"
+          }
+        ],
+        "result_kind": "forfeit",
+        "source_admitted": false,
+        "source_url": "https://files.gokgs.com/games/2025/11/14/andreyEAO-Le0nid.sgf"
+      },
+      {
+        "actions": 10,
+        "canonical_sha256": "e7165ab232200519d954ab68871d137ffdfbd8fce7a92ee73755b739c8d1d0f2",
+        "positions": [
+          {
+            "input_sha256_by_history": {
+              "0": "d22f171bb071b0a1525adf4c1fc9ca046ef36bab4c2c4fcde1517064ff91b6f7",
+              "32": "7c1a8404b002016e80c642c9be66a47fba392a85b5c8fab283480a18bad39913",
+              "64": "5a0da6e2fdf2ab9a4f3d25cf2e75a5dc1c02284ba89a603964fd9926d2a209b1",
+              "8": "154c7a495c31dbffcba7bbeac4ad3eed481244cdff76a784f9b078b02c6ce77e"
+            },
+            "ply": 0,
+            "state_sha256": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "ba7184babf4b7aa4ddc6ad12b641a636157ea9134586869e82265d8644bac0e5",
+              "32": "e925a887e50fe7470e6a9e57bf650c11e7529c064a0fd82528c06c1ac2fcc220",
+              "64": "5d6888045c6d88fce9f9a921dd843a0b13849e299bccd327451236ca6cdcf84a",
+              "8": "14fe558f693b915da9f42d5a84f471aee349afdd0784e87889f9e6405c41f536"
+            },
+            "ply": 5,
+            "state_sha256": "7192a659d8d3299a9e7856a1ce3941f3a38aa78fd39fd30f76bf84ed5c3ea90e"
+          },
+          {
+            "input_sha256_by_history": {
+              "0": "008d7716341dabab7d61dfdd850b9c58ab44be3f57ab2219be5151ceed4e38ae",
+              "32": "e104a13e33f773cf9aa7a7801bd1e4b1b2f15aacb86aeaa6a8e586e3db9e3946",
+              "64": "1ea0c7e76f67ae0646cab95fa6cca81c9538dd2015610a2b2a71d6824398e026",
+              "8": "57591e6fe42ef927def1b299ae24b4e3843440c0aa4057eb81d8eb1792de9418"
+            },
+            "ply": 9,
+            "state_sha256": "545077ddf7f6e2ee91af4237476c4fa8f403e5bfe7ca5dc3c4d8f51511afd42c"
+          }
+        ],
+        "result_kind": "incomplete_or_unknown",
+        "source_admitted": false,
+        "source_url": "https://files.gokgs.com/games/2025/11/17/Neptunus-m1.sgf"
+      }
+    ],
+    "games": 5,
+    "history_windows": [
+      0,
+      8,
+      32,
+      64
+    ],
+    "mismatches": 0,
+    "positions": 16,
+    "scope": "Offline encoding diagnostics only; no new native corpus comparison or source admission.",
+    "selection": "First source URL per supported result kind; first/middle/last/first-pass indices, deduplicated.",
+    "source_actions_replayed": 976,
+    "training_examples_emitted": 0
+  },
+  "preprocessing": {
+    "input_keys": [
+      "board",
+      "legal",
+      "scalars",
+      "scalar_valid",
+      "ranks",
+      "rank_valid",
+      "history_actions",
+      "history_colors",
+      "history_valid"
+    ],
+    "scalar_order": [
+      "mover_is_black",
+      "mover_komi",
+      "prisoners_for_mover",
+      "prisoners_for_opponent",
+      "pass_streak",
+      "move_number",
+      "cap_pending",
+      "truncated",
+      "cleanup_phase",
+      "main_seconds",
+      "period_seconds",
+      "periods",
+      "mover_clock",
+      "opponent_clock",
+      "mover_overtime",
+      "opponent_overtime"
+    ],
+    "fitted_scalar_indices": [
+      2,
+      3,
+      5,
+      9,
+      10,
+      11
+    ],
+    "coordinates": "Top-left row-major, no mover-view rotation; aa=0, sa=18, as=342, ss=360, pass=361.",
+    "planes": [
+      "mover stones",
+      "opponent stones",
+      "simple-ko point"
+    ],
+    "history": "Prior actual moves only, oldest to newest; left padding action=-1/color=0/valid=false; pass=361/valid=true.",
+    "labels": "Recorded next action and supported mover-view result only; duration always masked; no synthetic EOF action.",
+    "persona": "Policy-only metadata separate from shared input arrays; later held-out target annotations do not establish an adapted embedding.",
+    "nominal_clock": "Exact known tuple within 600-1800 main seconds, 3-5 periods of 20-60 seconds; missing/untimed remains masked.",
+    "normalizer": "Valid policy-training inputs only; stable running mean/squared deviations and population standard deviation; constant scale=1; empty train is unfitted.",
+    "dynamic_clock_and_duration_valid": false
+  },
+  "limits": {
+    "workers": 1,
+    "canonical_records": 1000,
+    "canonical_file_bytes": 67108864,
+    "canonical_json_bytes": 268435456,
+    "diagnostic_games": 5,
+    "diagnostic_positions": 20,
+    "cpu_seconds": 120,
+    "wall_seconds": 180,
+    "gpu_hours": 0,
+    "http_requests": 0
+  },
+  "completed_owner_runs": [
+    {
+      "directory": "runs/e1-examples-2026-11-11-v2",
+      "status": "superseded: unstable normalization variance",
+      "summary_sha256": "972c4e2e7f806e51c266712bee86a3a6276102e93f73af85c36fa7f48760daa6",
+      "examples_manifest_sha256": "150d794f6b8f4c6c81be9e942a999a201ffbee875e46b31e8379747f7d878664",
+      "code_sha256": {
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+        "examples.py": "1f3270467a2a5c57071ae05ed09c70b1af5f2275c2d1e86cc4e6c9ca8f0c66b3",
+        "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "costs": {
+        "started_utc": "2026-11-11T01:47:59.514984+00:00",
+        "cpu_seconds": 11.414782056,
+        "wall_seconds": 11.364462712779641,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Pinned-input verification, shard/normalizer writes and sampled replay checks; excludes imports and final summary/failure write."
+      }
+    },
+    {
+      "directory": "runs/e1-examples-reproduced",
+      "status": "superseded: unstable normalization variance",
+      "summary_sha256": "0a73bf50f1533810c61471c2bc5665f29647aacd75850799171eef719db41d13",
+      "examples_manifest_sha256": "150d794f6b8f4c6c81be9e942a999a201ffbee875e46b31e8379747f7d878664",
+      "code_sha256": {
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+        "examples.py": "1f3270467a2a5c57071ae05ed09c70b1af5f2275c2d1e86cc4e6c9ca8f0c66b3",
+        "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "costs": {
+        "started_utc": "2026-11-11T01:48:32.222916+00:00",
+        "cpu_seconds": 11.337991702,
+        "wall_seconds": 11.291309325024486,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Pinned-input verification, shard/normalizer writes and sampled replay checks; excludes imports and final summary/failure write."
+      }
+    },
+    {
+      "directory": "runs/e1-examples-2026-11-11-v3",
+      "status": "final",
+      "summary_sha256": "009d152f83bea783bdf8724dbd64328a0b1604ad4ef461da5d0a8040bd4fcd9f",
+      "examples_manifest_sha256": "9c2f8c65dd30fbb2ede0a0deed770e0c2d51867ee31a10fd5c9784870d08a881",
+      "code_sha256": {
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+        "examples.py": "92834a68b876b265a1c534d109ef4431edd25310f72e0b86570f92e8b4a76073",
+        "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "costs": {
+        "started_utc": "2026-11-11T02:03:15.474746+00:00",
+        "cpu_seconds": 11.382846503,
+        "wall_seconds": 11.3356974394992,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Pinned-input verification, shard/normalizer writes and sampled replay checks; excludes imports and final summary/failure write."
+      }
+    },
+    {
+      "directory": "runs/e1-examples-reproduced-v2",
+      "status": "final",
+      "summary_sha256": "6e6028d91bef264d94e0a1636243685bb1e94dd8731f888d061bb115c5d3c471",
+      "examples_manifest_sha256": "9c2f8c65dd30fbb2ede0a0deed770e0c2d51867ee31a10fd5c9784870d08a881",
+      "code_sha256": {
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+        "examples.py": "92834a68b876b265a1c534d109ef4431edd25310f72e0b86570f92e8b4a76073",
+        "examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "costs": {
+        "started_utc": "2026-11-11T02:04:00.811532+00:00",
+        "cpu_seconds": 11.431946542,
+        "wall_seconds": 11.39323459751904,
+        "workers": 1,
+        "http_requests": 0,
+        "gpu_hours": 0,
+        "scope": "Pinned-input verification, shard/normalizer writes and sampled replay checks; excludes imports and final summary/failure write."
+      }
+    }
+  ],
+  "failed_owner_runs": [
+    {
+      "directory": "runs/e1-examples-2026-11-11",
+      "stage": "Sampled diagnostic context validation, after empty shards and unfitted normalizer were written.",
+      "error": "ValueError: Source input context is outside the v1 contract",
+      "cause": "Incorrectly fixed nominal clock to the fixture tuple instead of the approved family.",
+      "partial_example_manifest_sha256": "6b67fbef2e6713336343aa3462d7862477ee47e4dd359398519a34583178612f",
+      "code_sha256": {
+        "canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+        "data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+        "encoding.py": "3c2cf9535dd6e76be17222dab85e0f11d0c643144cb8ceec37657de645d75a53",
+        "examples.py": "29d38492d2668faf935c18ebe3ce16d745a76774722cbf122020730f0e034015",
+        "examples_audit.py": "0707c2c538e3fe9853bef3ddee92cf38ebe6c88a264fa8b9a8e62224b6f984ee",
+        "go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+        "kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+        "sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d"
+      },
+      "cpu_seconds": null,
+      "wall_seconds": null,
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "accounting_limit": "CPU/total wall timing not captured on the initial exception; not a successful run."
+    }
+  ],
+  "reproduction": "Final manifest, all 10 NPZ/Parquet pairs, normalizer and sampled diagnostics match byte-for-byte.",
+  "training_ready": false,
+  "e1_ready": false
+}
