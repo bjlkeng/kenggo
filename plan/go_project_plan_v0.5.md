@@ -93,6 +93,8 @@ The [version-1 game and data contract](e1_game_and_data_contract.md) fixes KGS-c
 
 The [masked example builder](../reports/e1_examples_2026-11-11.md) implements shared pre-move encoding, sharded arrays and train-only normalization. Synthetic fixtures exercise usable examples; the real corpus still produces none, with an explicitly unfitted normalizer. Dynamic clocks and duration targets remain masked. This implementation does not establish E1 readiness.
 
+The [11 November readiness inspection](../reports/e1_readiness_2026-11-11.md) rechecked the frozen artifacts and passed all 105 CPU/native tests. The epic remains open: source admission is zero, automatic certification resolves none of 108 two-pass endings, and no populated training or unseen evaluation cohort exists. The report supplies manual checks and concrete source/endgame options without changing the current contract.
+
 <!-- pagebreak -->
 
 ## E2. Build and measure human baselines

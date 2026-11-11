@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-11-11",
+  "bead": "kenggo-6yr.7",
+  "prerequisite_beads": [
+    "kenggo-6yr.10",
+    "kenggo-6yr.11"
+  ],
+  "review_base": "524f270921e1ca338db716121f7f0bee77edd839",
+  "report": "reports/e1_readiness_2026-11-11.md",
+  "e1_ready": false,
+  "training_ready": false,
+  "source_contract_changed": false,
+  "game_contract_changed": false,
+  "qualified_profiles": [],
+  "decision": "Keep E1 and its pass-only gate unfinished: no admitted corpus, populated splits or demonstrated usable ending/pass evidence.",
+  "inspection": {
+    "version": "e1_readiness_inspection_v1",
+    "review_base": "524f270921e1ca338db716121f7f0bee77edd839",
+    "verified_sha256": {
+      "runs/e1-canonical-2026-11-11-v4/canonical.parquet": "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0",
+      "runs/e1-canonical-2026-11-11-v4/index.parquet": "2cf8c6d329a4141097244d70dd0bfe26c8db9c3d77f9acdcd7c02632667ad193",
+      "runs/e1-canonical-2026-11-11-v4/splits/manifest.json": "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d",
+      "runs/e1-canonical-2026-11-11-v4/adjudications.json": "5e5f78b6b4b399cd91edc1fadca5c2bd09f71c9db54fb80e6d488b02f172f77f",
+      "runs/e1-examples-2026-11-11-v3/examples/manifest.json": "9c2f8c65dd30fbb2ede0a0deed770e0c2d51867ee31a10fd5c9784870d08a881",
+      "runs/e1-examples-2026-11-11-v3/normalizer.json": "7bb87b37343ad55f014a3f831d37bbf7558de18889068d5e8aeab7e6646277a8",
+      "runs/e1-examples-2026-11-11-v3/diagnostics.json": "f72664df6da1c5db48e09a069e3784477b51f7996e0999cd84d072dba7a55521",
+      "uv.lock": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079",
+      "src/kenggo/canonical_audit.py": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+      "src/kenggo/canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "src/kenggo/data_splits.py": "383f40225b25fec81c503a3cbfdc67585d1fc7382d62cad03a4a95c934d7c46d",
+      "src/kenggo/kgs_eligibility.py": "83fdc20a92e4536c8d567e50a04d127bbb83de9be508f131b5d20bf10189dd46",
+      "src/kenggo/kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "src/kenggo/e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+      "src/kenggo/sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d",
+      "src/kenggo/rules_replay.py": "252f211e78761120274409ea846d152188f8447d828e4c41ff70de74248f68a9",
+      "src/kenggo/go.py": "60fe1d16809107ae4dac184a409ac08dbdec4a363ad3bef8ca19cc1937cef11c",
+      "src/kenggo/adjudication.py": "5994547333b7cb333b99c661858098457f306a6653efb762953db994a02f7be3",
+      "src/kenggo/encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+      "src/kenggo/examples.py": "92834a68b876b265a1c534d109ef4431edd25310f72e0b86570f92e8b4a76073",
+      "src/kenggo/examples_audit.py": "33e43b1e1e1635f91c0e6584f7b8975ac1d8f5078544bc21b85ae5a35853b5cd"
+    },
+    "canonical_records": 1000,
+    "structurally_supported_games": 243,
+    "supported_actions": 53151,
+    "supported_explicit_passes": 268,
+    "source_admitted_games": 0,
+    "split_games": {
+      "train": 0,
+      "population_development": 0,
+      "population_confirmation": 0,
+      "validation_prefix": 0,
+      "validation_development": 0,
+      "validation_confirmation": 0,
+      "test_prefix": 0,
+      "final": 0,
+      "embargo": 0,
+      "excluded": 1000
+    },
+    "example_rows": {
+      "train": 0,
+      "population_development": 0,
+      "population_confirmation": 0,
+      "validation_prefix": 0,
+      "validation_development": 0,
+      "validation_confirmation": 0,
+      "test_prefix": 0,
+      "final": 0,
+      "embargo": 0,
+      "excluded": 0
+    },
+    "normalizer_fitted": false,
+    "normalizer_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "two_pass_endings": 108,
+    "certified_endings": 0,
+    "structural_rank_appearances": {
+      "10k": 22,
+      "11k": 29,
+      "12k": 27,
+      "13k": 3,
+      "14k": 2,
+      "15k": 10,
+      "1d": 80,
+      "1k": 58,
+      "2k": 44,
+      "3k": 50,
+      "4k": 57,
+      "5k": 5,
+      "6k": 12,
+      "7k": 21,
+      "8k": 11,
+      "9k": 55
+    },
+    "identity_valid_sides": 0,
+    "duration_valid_games": 0,
+    "adjudication_methods": [
+      "singleton_eyes_v1"
+    ],
+    "costs": {
+      "cpu_seconds": 1.589693874,
+      "wall_seconds": 1.540003969334066,
+      "http_requests": 0,
+      "gpu_seconds": 0
+    },
+    "scope": "Reads frozen artifacts and validates their pins, schemas and counts; no new source replay or positive readiness verdict."
+  },
+  "inspection_method": [
+    "Compare retained canonical summary/provenance with the versioned canonical manifest.",
+    "Check 21 artifact, source-code and lockfile pins.",
+    "Use production load_corpus to validate canonical records and membership hashes/role counts.",
+    "Use read_shards for every role to validate NPZ and Parquet hashes, schemas and counts.",
+    "Recompute fit_normalizer from the train role and compare the retained unfitted result.",
+    "Count structural records, actions, passes, certification evidence, ranks and masks from frozen canonical records without another corpus replay."
+  ],
+  "validation": {
+    "started_utc": "2026-11-11T15:46:15.297635+00:00",
+    "checks": [
+      {
+        "name": "artifact_inspection",
+        "command": [
+          "uv",
+          "run",
+          "--locked",
+          "python",
+          "/tmp/inspect_e1_readiness.py"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 2.71982,
+        "wall_seconds": 1.8267518505454063
+      },
+      {
+        "name": "lock",
+        "command": [
+          "uv",
+          "lock",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.008010000000000073,
+        "wall_seconds": 0.008262990042567253
+      },
+      {
+        "name": "environment",
+        "command": [
+          "uv",
+          "sync",
+          "--locked",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.00813200000000025,
+        "wall_seconds": 0.008354242891073227
+      },
+      {
+        "name": "smoke",
+        "command": [
+          "uv",
+          "run",
+          "--locked",
+          "python",
+          "-m",
+          "kenggo.smoke"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 2.1562429999999995,
+        "wall_seconds": 1.339108344167471
+      },
+      {
+        "name": "tests",
+        "command": [
+          "uv",
+          "run",
+          "--locked",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 16.154349999999997,
+        "wall_seconds": 15.26893635187298
+      },
+      {
+        "name": "build",
+        "command": [
+          "uv",
+          "build",
+          "--no-sources"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.015670000000003625,
+        "wall_seconds": 0.015885152854025364
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exit_code": 0,
+        "cpu_seconds": 0.001474999999999227,
+        "wall_seconds": 0.001760115846991539
+      }
+    ],
+    "cpu_seconds": 21.0637,
+    "wall_seconds": 18.469275106675923,
+    "cpu_limit_seconds": 300,
+    "wall_limit_seconds": 600,
+    "gpu_seconds": 0,
+    "kgs_requests": 0,
+    "native_reference": "/home/bojji/code/kenggo/.cache/katago-reference/katago-reference",
+    "scope": "Root-owned local artifact verification and required CPU checks; excludes independent reviewer and documentation browsing.",
+    "tests_passed": 105,
+    "native_reference_methods_passed": 5,
+    "tests_skipped": 0
+  },
+  "native_reference_sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7",
+  "local_evidence_directory": "runs/e1-readiness-2026-11-11",
+  "local_evidence_sha256": {
+    "runs/e1-readiness-2026-11-11/artifact_inspection.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/artifact_inspection.stdout.txt": "d6b62307eca68f87104a97679092e8e7846eab811db5e88982c4f0a6ad95b551",
+    "runs/e1-readiness-2026-11-11/build.stderr.txt": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+    "runs/e1-readiness-2026-11-11/build.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/environment.stderr.txt": "fe765bde9d184af15794765ccb2aaf93fd62377c4805743067efe208fd809e34",
+    "runs/e1-readiness-2026-11-11/environment.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/inspection.py": "3dc68d77749613af46f846a9fedfb0980fdc1d5ba72874f20d88a5dab42f353e",
+    "runs/e1-readiness-2026-11-11/lock.stderr.txt": "24d5a012dffcb02a80ac95b38efbcc669b2a21b71553e00244ef7390fd0c84dc",
+    "runs/e1-readiness-2026-11-11/lock.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/smoke.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/smoke.stdout.txt": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde",
+    "runs/e1-readiness-2026-11-11/tests.stderr.txt": "607f7a3f5fe5bed08f01295c77db78e786cd82205ec3726fc34954d75e08f7f5",
+    "runs/e1-readiness-2026-11-11/tests.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/validation.json": "c6b578de49951ff489efe5d218df89ce729defbf22acbf0dbcb0db8c6fd3aab3",
+    "runs/e1-readiness-2026-11-11/validation_runner.py": "793cbfc5d395c3eb956c914b04add1f1775af93912933ce74a48c57015e93baa",
+    "runs/e1-readiness-2026-11-11/whitespace.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/e1-readiness-2026-11-11/whitespace.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "other_measured_work": [
+    {
+      "scope": "Earlier root artifact-only inspection before adding rank/mask/certification counters; excluded from the final verification batch.",
+      "cpu_seconds": 1.619263751,
+      "wall_seconds": 1.5731754722073674,
+      "measurement_scope": "Probe internals, excluding imports and final output.",
+      "http_requests": 0,
+      "gpu_seconds": 0
+    },
+    {
+      "scope": "Read-only agent explored four already inspected cached endings with an unvalidated Benson-style classifier; no accepted result artifact or new implementation.",
+      "cpu_seconds": 0.505,
+      "wall_seconds": 0.342,
+      "cpu_limit_seconds_per_probe": 20,
+      "wall_limit_seconds_per_probe": 60,
+      "http_requests": 0,
+      "gpu_seconds": 0,
+      "acceptance_evidence": false
+    }
+  ],
+  "network_scope": "Primary alternative-source documentation was read. Zero direct KGS requests, new game downloads, authentication or external messages.",
+  "proposed_source_preflight": {
+    "approved": false,
+    "source": "OGS publisher-provided JSON sample at https://za3k.com/ogs/",
+    "records": 1000,
+    "compressed_bytes_limit": 2097152,
+    "expanded_bytes_limit": 16777216,
+    "cpu_seconds_limit": 300,
+    "wall_seconds_limit": 600,
+    "gpu_seconds_limit": 0,
+    "stop_if": "Release, human/type/rank provenance or applicable research-use basis cannot be established.",
+    "not_evidence_of": "2025 coverage, source admission, rule equivalence, rank support or ending readiness."
+  },
+  "gate_limits": "CPU/component success and frozen source inspection do not qualify a trained profile, establish the future 99% pass-judgment gate, authorize scaling, or prove an untouched final cohort exists."
+}
