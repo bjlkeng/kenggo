@@ -9,13 +9,15 @@ independent KataGo comparison and the limits of this implementation.
 
 All 241 metadata-compatible cached audit games replayed legally, with identical
 boards, turns, captures and ko across 52,900 actions in the pinned native reference.
-The automatic certifier resolved **0 of their 108 two-pass endings**. This validates
-ordinary replay; it does not establish usable automatic human-game adjudication,
-KGS equivalence in exceptional positions, or baseline readiness. Bead `6yr.10`
-owns the coverage blocker. The [approved admission policy](../reports/e1_kgs_admission_2026-11-11.md)
-admits 241 presumed-human source games while preserving conservative groups and
-quarantine. The readiness gate still requires downstream artifact regeneration,
-population support and usable ending/pass judgments.
+The narrow automatic certifier resolved **0 of their 108 two-pass endings**.
+The [empirical ending revision](../plan/e1_empirical_endgame_contract_v2.md) adds
+pinned KataGo cleanup on a clone, with independently replayed native scoring and
+a distinct `empirical_score` outcome. Its finite judgments do not establish exact
+KGS equivalence or optimal play. The [approved admission
+policy](../reports/e1_kgs_admission_2026-11-11.md) admits the 241 source games, and
+the [population build](e1_population.md) supplies separate training, validation
+and sealed final artifacts. The [completion report](../reports/e1_completion_2026-11-11.md)
+records the endgame coverage, data-readiness checks and limitations.
 
 ## Caller interface
 
@@ -66,7 +68,7 @@ resignation is absent. Calling `boundary(learner)` returns:
 
 | Ending | Learning fields |
 | --- | --- |
-| Certified score or explicit resignation | Valid, learner reward ±1, terminated, no bootstrap |
+| Certified score, accepted empirical score or explicit resignation | Valid, learner reward ±1, terminated, no bootstrap |
 | Playing/chunk boundary or administrative cap | Valid only at learner-to-move; reward 0, nonterminal, saved state for bootstrap; cap is truncated |
 | Pending/unresolved adjudication or a fault | Invalid; reward, termination/truncation and bootstrap fields are absent |
 
@@ -113,7 +115,7 @@ configured `authorized_hashes` catalog to `adjudicate`. The default catalog is
 empty. The payload binds its complete whole-chain and empty-region map, referee,
 provenance and budget to the full replay snapshot and rules ID. Its SHA-256 must
 already be authorized outside the incoming record. **There is no production
-referee/catalog.** Tests authorize only named synthetic fixture decisions. Hash
+neutral-map referee/catalog.** Tests authorize only named synthetic fixture decisions. Hash
 authorization establishes which decision a trusted operator accepted, not proof
 that an arbitrary referee or map is correct. Referee independence and its budget
 must be established before that operator authorizes a payload.
@@ -133,6 +135,72 @@ bounded board operations and publish counts/times. Exhaustion remains unresolved
 or unjudgeable. A neutral referee records its own separately authorized budget;
 local validation still uses the automatic limits. Invalid maps do not alter the
 original state or source result.
+
+## Empirical ending referee
+
+The ordinary-play ID remains `kgs_japanese_certified_v1` so historical source
+snapshots retain their meaning. The separate outcome kind and pinned referee
+profile identify the revised adjudication policy. Source results, policy actions
+and the ordinary board/history remain unchanged.
+
+Build the native verifier as below, then prepare the Linux x86_64 AVX2 referee.
+Fresh extraction needs `unsquashfs` from `squashfs-tools`. The fetcher downloads
+only missing pinned artifacts, verifies their hashes before extraction, preserves
+existing files, and extracts without executing the AppImage. Add `--verify-only`
+to check an existing cache with zero requests or writes.
+
+```bash
+python3 tools/fetch_katago_referee.py \
+  --profile manifests/e1_katago_referee_profile_v2.json \
+  --profile-sha256 2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4
+```
+
+For a game already in `pending_adjudication`:
+
+```python
+from kenggo.adjudication import adjudicate_empirical
+from kenggo.katago_referee import KataGoReferee, Profile
+
+profile = Profile.load(
+    "manifests/e1_katago_referee_profile_v2.json",
+    "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4",
+)
+with KataGoReferee(
+    profile,
+    engine=".cache/katago-referee/squashfs-root/usr/bin/katago",
+    model=".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+    config="configs/katago_referee_v1.cfg",
+    native=".cache/katago-reference/katago-reference",
+    runtime_root=".cache/katago-referee/squashfs-root",
+) as referee:
+    ended, decision = adjudicate_empirical(pending, referee)
+```
+
+Each accepted ending has two legal, native-scored cleanup transcripts at 32 and
+128 visits. Both must agree on the winner; the returned margin always comes from
+the 128-visit transcript. Report both margins. The profile permits 64 cleanup
+moves per transcript and bounds combined visits/replay work, CPU, wall time and
+transport/evidence sizes. Failures return unresolved. Threads sharing an instance
+are serialized; callers must still fix a total experiment budget.
+
+Loading a saved empirical outcome requires `load_game(...,
+empirical_referee=referee, authorized_hashes=reviewed_catalog)`. Obtain the catalog
+from an independently pinned, reviewed artifact; never let the incoming record
+authorize its own hash. Loading replays both transcripts with the pinned native
+verifier and checks winner agreement, the selected margin and the work ledger.
+
+The [E1 comparison](../reports/e1_completion_2026-11-11.md#ending-method-and-development-evidence)
+records the completed exposed-source panel. Its [accepted evidence catalog](../manifests/e1_endgame_evidence_v2.json)
+has independent SHA-256
+`1edf50eeaa993b598d510e5643022c868087cd5207b7cfe872bb1e8a3792183b`.
+It authorizes only those recorded source decisions and exact fixtures; a later
+experiment must freeze its own catalog.
+
+For pass judgments, use `kenggo.adjudication.judge_pass` when its exact certificate
+is available; otherwise use `referee.judge_pass` on the exact pre-pass state.
+Keep the method tag. Neural predictions are empirical, and unknown judgments stay
+adverse for qualification. The dense pass fixtures demonstrate why exact proofs
+remain useful even after adding the neural referee.
 
 ## Source replay and persistence
 

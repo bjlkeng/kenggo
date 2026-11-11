@@ -35,6 +35,20 @@ def by_id(rows):
 
 
 class SplitTests(unittest.TestCase):
+    def test_unused_reserved_groups_require_the_independently_pinned_registry(self):
+        registry = {"alice": "a", "bob": "b", "reserved": "t"}
+        frozen = SplitPlan(digest(registry), "2025-09-01", "2025-11-01", (), ("t",))
+        source = {**entry("training"), "grouping_sha256": digest(registry)}
+        with self.assertRaisesRegex(ValueError, "absent"):
+            build_splits([source], frozen, exposed_groups=[])
+        result = build_splits([source], frozen, exposed_groups=[], group_registry=registry)
+        self.assertEqual(result[0]["role"], "train")
+        self.assertEqual(len(result), 1)
+        with self.assertRaisesRegex(ValueError, "registry"):
+            build_splits([source], frozen, exposed_groups=[], group_registry={**registry, "extra": "x"})
+        with self.assertRaisesRegex(ValueError, "inspected"):
+            build_splits([source], frozen, exposed_groups=["t"], group_registry=registry)
+
     def test_both_colors_cohort_bridges_and_whole_day_roles(self):
         entries = [entry("train"), entry("val-prefix", ("v", "a")), entry("test-prefix", ("a", "t")),
                    entry("v-dev", ("a", "v"), "2025-09-01"), entry("v-conf", ("v", "a"), "2025-11-01"),

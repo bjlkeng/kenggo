@@ -1,10 +1,10 @@
 import copy
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, replace
 import json
 import unittest
 
 from kenggo.adjudication import Limits, adjudicate, judge_pass
-from kenggo.go import Game, IllegalMove, PASS, digest, move_category, require_valid_batch
+from kenggo.go import Game, IllegalMove, Outcome, PASS, digest, move_category, require_valid_batch
 from kenggo.rules_replay import dump_game, load_game, replay_sgf
 from go_fixtures import (CYCLE, cap_actions, dense, ko_patches, neutral_decision,
                          ordinary_cases, point, rows, two_passes)
@@ -236,6 +236,26 @@ class RulesTests(unittest.TestCase):
 
 
 class AdjudicationTests(unittest.TestCase):
+    def test_empirical_outcomes_are_distinct_terminal_rewards(self):
+        for score in (-3, 13):
+            winner = "W" if score > 0 else "B"
+            outcome = Outcome("empirical_score", "referee_fixture", winner, score, "fixture evidence")
+            frozen = two_passes(Game.new())
+            game = replace(frozen, status="resolved", outcome=outcome)
+            self.assertEqual(game.moves, frozen.moves)
+            self.assertEqual(game.positions, frozen.positions)
+            for color in ("B", "W"):
+                boundary = game.boundary(color)
+                self.assertEqual(boundary.reward, 1 if color == winner else -1)
+                self.assertTrue(boundary.terminated)
+                self.assertFalse(boundary.truncated)
+                self.assertIsNone(boundary.bootstrap)
+            with self.assertRaisesRegex(ValueError, "independently configured referee"):
+                load_game(dump_game(game))
+        for invalid in (True, 13.0, 0, 2, None):
+            with self.assertRaises(ValueError):
+                Outcome("empirical_score", "fixture", "W", invalid, "fixture evidence")
+
     def test_persisted_score_rejects_boolean_and_float_halfpoints(self):
         ended, _ = adjudicate(two_passes(Game.from_fixture(dense(), captured_white=6)))
         self.assertEqual(ended.outcome.white_minus_black_halfpoints, 1)

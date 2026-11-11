@@ -1,5 +1,9 @@
 # Canonical KGS records and whole-game splits
 
+This report describes the frozen version-1 artifacts. The later
+[populated data build](../docs/e1_population.md) uses the approved admission policy
+and a separately sealed final cohort; its new pins preserve this reproduction.
+
 **11 November 2026, UTC — `kenggo-6yr.5`.** The canonical builder retains all
 1,000 selected games and their original SGF references. It validates replay,
 preserves missingness and provenance, and writes deterministic whole-game

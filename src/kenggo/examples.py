@@ -5,6 +5,7 @@ from hashlib import sha256
 from io import BytesIO
 import json
 from pathlib import Path
+import re
 import zipfile
 
 import numpy as np
@@ -25,6 +26,7 @@ CANONICAL_SHA256 = "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae
 SPLIT_SHA256 = "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d"
 PREFIXES = {"validation_prefix", "test_prefix"}
 UNUSED = {"excluded", "embargo"}
+FINAL_ROLES = {"test_prefix", "final", "embargo"}
 CODE_FILES = ("encoding.py", "examples.py", "examples_audit.py", "go.py", "rules_replay.py",
               "data_splits.py", "canonical_data.py", "kgs_source.py", "sgf_audit.py")
 LABEL_SCHEMA = {"action": ("int16", ()), "policy_valid": ("bool", ()),
@@ -62,6 +64,73 @@ def file_hash(path):
     return sha256(Path(path).read_bytes()).hexdigest()
 
 
+def read_pinned_json(path, expected_sha256, *, max_bytes=64 * 1024):
+    path = Path(path)
+    if (not isinstance(expected_sha256, str) or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None
+            or path.stat().st_size > max_bytes or file_hash(path) != expected_sha256):
+        raise ValueError("JSON input differs from its independently supplied pin")
+    return json.loads(path.read_text())
+
+
+@dataclass(frozen=True)
+class DatasetProfile:
+    sha256: str
+    canonical_sha256: str
+    split_sha256: str
+    population_inputs_sha256: str
+    sealed_source_ids_sha256: str
+    max_records: int
+    max_examples_per_role: int
+    cpu_seconds: int
+    wall_seconds: int
+
+
+def load_dataset_profile(path, expected_sha256):
+    value = read_pinned_json(path, expected_sha256)
+    hashes = {"canonical_sha256", "split_sha256", "population_inputs_sha256", "sealed_source_ids_sha256"}
+    limits = {"max_records", "max_examples_per_role", "cpu_seconds", "wall_seconds"}
+    if (set(value) != {"version", "limits"} | hashes or value["version"] != "population_example_profile_v1"
+            or set(value["limits"]) != limits
+            or any(not isinstance(value[k], str) or re.fullmatch(r"[0-9a-f]{64}", value[k]) is None for k in hashes)
+            or any(type(value["limits"][k]) is not int or value["limits"][k] <= 0 for k in limits)):
+        raise ValueError("Invalid production dataset profile")
+    return DatasetProfile(expected_sha256, **{k: value[k] for k in hashes}, **value["limits"])
+
+
+@dataclass(frozen=True)
+class FinalRelease:
+    sha256: str
+    canonical_sha256: str
+    split_sha256: str
+    examples_sha256: str
+
+
+def load_final_release(path, expected_sha256):
+    value = read_pinned_json(path, expected_sha256)
+    hashes = {"canonical_sha256", "split_sha256", "examples_sha256"}
+    if (set(value) != {"version", "stage", "selection_frozen"} | hashes
+            or value["version"] != "final_release_v1" or value["stage"] != "E7"
+            or value["selection_frozen"] is not True
+            or any(not isinstance(value[k], str) or re.fullmatch(r"[0-9a-f]{64}", value[k]) is None for k in hashes)):
+        raise ValueError("Final access requires an explicit E7 release authorization")
+    return FinalRelease(expected_sha256, **{k: value[k] for k in hashes})
+
+
+def require_final_release(release, canonical_sha256, split_sha256, examples_sha256=None):
+    if (not isinstance(release, FinalRelease)
+            or (release.canonical_sha256, release.split_sha256) != (canonical_sha256, split_sha256)
+            or examples_sha256 is not None and release.examples_sha256 != examples_sha256):
+        raise PermissionError("Sealed final data requires a matching E7 release authorization")
+
+
+def sealed_sources(manifest):
+    sources = manifest.get("sealed_source_ids", [])
+    if (not isinstance(sources, list) or any(not isinstance(key, str) or not key for key in sources)
+            or sources != sorted(set(sources))):
+        raise ValueError("Invalid sealed source registry")
+    return frozenset(sources)
+
+
 def source_context(record):
     metadata = record["metadata"]
     overtime = japanese_overtime(metadata["OT"])
@@ -87,9 +156,13 @@ def replay_record(record):
     return game
 
 
-def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False):
-    """Positive fixtures are explicit; production remains bound to reviewed source evidence."""
-    if not fixture_only and (canonical_sha256, split_sha256) != (CANONICAL_SHA256, SPLIT_SHA256):
+def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
+                 profile=None, decode_sealed=True):
+    expected = ((CANONICAL_SHA256, SPLIT_SHA256) if profile is None else
+                (profile.canonical_sha256, profile.split_sha256))
+    if fixture_only and profile is not None:
+        raise ValueError("Synthetic fixtures cannot use a production profile")
+    if not fixture_only and (canonical_sha256, split_sha256) != expected:
         raise ValueError("Unreviewed production source; revise the source policy before admission")
     canonical_path = Path(canonical_path)
     if canonical_path.stat().st_size > 64 * 1024**2 or file_hash(canonical_path) != canonical_sha256:
@@ -97,9 +170,18 @@ def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fi
     manifest, partitions = read_membership(split_dir, split_sha256)
     if manifest["version"] != SPLIT_VERSION or manifest["fixture_only"] is not fixture_only:
         raise ValueError("Split version or fixture scope mismatch")
-    table = pq.read_table(canonical_path)
-    if table.num_rows > 1000:
+    sealed = sealed_sources(manifest)
+    if profile is not None and (digest(sorted(sealed)) != profile.sealed_source_ids_sha256
+            or manifest["provenance"].get("population_inputs_sha256") != profile.population_inputs_sha256):
+        raise ValueError("Dataset profile differs from its source or sealing provenance")
+    headers = pq.read_table(canonical_path, columns=["source_url", "canonical_sha256"])
+    if headers.num_rows > (1000 if profile is None else profile.max_records):
         raise ValueError("Canonical record budget exceeded")
+    hashes = {row["source_url"]: row["canonical_sha256"] for row in headers.to_pylist()}
+    if len(hashes) != headers.num_rows or not sealed <= set(hashes):
+        raise ValueError("Canonical IDs are duplicated or omit a sealed source")
+    filters = [("source_url", "not in", sorted(sealed))] if sealed and not decode_sealed else None
+    table = pq.read_table(canonical_path, filters=filters)
     records, byte_count = {}, 0
     for row in table.to_pylist():
         byte_count += len(row["canonical_json"].encode())
@@ -110,6 +192,9 @@ def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fi
         if (key in records or record["source"]["source_url"] != key
                 or digest(record) != row["canonical_sha256"]):
             raise ValueError("Canonical source ID or record digest mismatch")
+        if (profile is not None and type(record.get("sealed_final")) is not bool
+                or bool(record.get("sealed_final", False)) != (key in sealed)):
+            raise ValueError("Canonical sealing marker differs from the frozen registry")
         records[key] = record
     seen = set()
     for role, rows in partitions.items():
@@ -117,9 +202,17 @@ def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fi
             raise ValueError("Split role count mismatch")
         for row in rows:
             key = row["source_url"]
-            if key in seen or key not in records or row["role"] != role:
+            if key in seen or key not in hashes or row["role"] != role:
                 raise ValueError("Source IDs must have exactly one matching role")
             seen.add(key)
+            if key in sealed and role not in FINAL_ROLES | {"excluded"}:
+                raise ValueError("Sealed final source entered a development or training role")
+            if not fixture_only and role in FINAL_ROLES and key not in sealed:
+                raise ValueError("Final-role source is absent from the sealed registry")
+            if row["canonical_sha256"] != hashes[key]:
+                raise ValueError("Membership hash differs from its canonical record")
+            if key in sealed and not decode_sealed:
+                continue
             record = records[key]
             gate = record["eligibility"]
             if (digest(record) != row["canonical_sha256"] or len(record["actions"]) != row["actions"]
@@ -127,8 +220,23 @@ def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fi
                     or row["identity_valid"] != [gate["black_identity_valid"], gate["white_identity_valid"]]
                     or row["actions_by_color"] != [sum(m["color"] == c for m in record["actions"]) for c in ("B", "W")]):
                 raise ValueError("Split membership differs from canonical evidence")
-    if seen != set(records):
+    if seen != set(hashes):
         raise ValueError("Canonical games are missing from the split")
+    return records, manifest, partitions
+
+
+def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
+                profile=None, include_sealed=False, final_release=None):
+    """Return development records unless an independently authorized E7 release is supplied."""
+    if include_sealed:
+        require_final_release(final_release, canonical_sha256, split_sha256)
+    records, manifest, partitions = _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
+                                               fixture_only=fixture_only, profile=profile, decode_sealed=include_sealed)
+    if not include_sealed:
+        sealed = sealed_sources(manifest)
+        records = {key: record for key, record in records.items() if key not in sealed}
+        partitions = {role: [row for row in rows if row["source_url"] not in sealed]
+                      for role, rows in partitions.items()}
     return records, manifest, partitions
 
 
@@ -138,6 +246,12 @@ def rank_hidden(source_url, ply, config):
 
 
 def examples_for_game(record, membership, plan, config):
+    if record.get("sealed_final", False):
+        raise PermissionError("Sealed records are available only to the mechanical shard builder")
+    yield from _examples_for_game(record, membership, plan, config)
+
+
+def _examples_for_game(record, membership, plan, config):
     role = membership["role"]
     if role in UNUSED:
         return
@@ -218,12 +332,12 @@ def write_shard(output, role, number, rows, history):
 
 
 def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, output,
-                   *, config=ExampleConfig(), fixture_only=False, check_budget=lambda: None):
+                   *, config=ExampleConfig(), fixture_only=False, profile=None, check_budget=lambda: None):
     output = Path(output)
     if output.exists():
         raise FileExistsError("Example output already exists")
-    records, split, partitions = load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
-                                            fixture_only=fixture_only)
+    records, split, partitions = _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
+                                            fixture_only=fixture_only, profile=profile)
     output.mkdir(parents=True)
     artifacts, counts = {}, {}
     for role in ROLES:
@@ -232,11 +346,11 @@ def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, ou
                  "hidden_mover_rank": 0, "hidden_opponent_rank": 0}
         for membership in partitions[role]:
             check_budget()
-            for example in examples_for_game(records[membership["source_url"]], membership, split["plan"], config):
+            for example in _examples_for_game(records[membership["source_url"]], membership, split["plan"], config):
                 check_budget()
                 _, labels, metadata = example
                 count["examples"] += 1
-                if count["examples"] > 100_000:
+                if count["examples"] > (100_000 if profile is None else profile.max_examples_per_role):
                     raise ValueError("Example count budget exceeded")
                 count["value_valid"] += labels["value_valid"]
                 count["passes"] += labels["action"] == 361
@@ -259,15 +373,23 @@ def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, ou
                 "execution_requirements": split["execution_requirements"], "artifacts": artifacts,
                 "code_sha256": {name: file_hash(Path(__file__).with_name(name)) for name in CODE_FILES},
                 "uv_lock_sha256": file_hash(Path("uv.lock"))}
+    if profile is not None:
+        manifest.update(dataset_profile_sha256=profile.sha256,
+                        sealed_source_ids=sorted(sealed_sources(split)))
     (output / "manifest.json").write_text(encoded(manifest) + "\n")
     return file_hash(output / "manifest.json")
 
 
-def read_shards(directory, expected_sha256, role):
+def read_shards(directory, expected_sha256, role, *, final_release=None):
     directory = Path(directory)
     if role not in ROLES or file_hash(directory / "manifest.json") != expected_sha256:
         raise ValueError("Examples require a known role and independently pinned manifest")
     manifest = json.loads((directory / "manifest.json").read_text())
+    if manifest.get("dataset_profile_sha256") is not None and manifest["fixture_only"] is not False:
+        raise ValueError("A production dataset profile cannot become a synthetic fixture")
+    sealed = sealed_sources(manifest)
+    if not manifest["fixture_only"] and role in FINAL_ROLES and (sealed or manifest["counts"][role]["examples"]):
+        require_final_release(final_release, manifest["canonical_sha256"], manifest["split_sha256"], expected_sha256)
     config = ExampleConfig(**manifest["config"])
     if manifest["version"] != VERSION or manifest["encoding"] != ENCODING or manifest["rules"] != RULES:
         raise ValueError("Unsupported example contract")
@@ -280,13 +402,15 @@ def read_shards(directory, expected_sha256, role):
         for kind, suffix in (("arrays", "npz"), ("metadata", "parquet")):
             if item[kind] != f"{role}/{number:05d}.{suffix}" or file_hash(directory / item[kind]) != item[kind + "_sha256"]:
                 raise ValueError("Example shard path or content changed")
+        metadata = pq.read_table(directory / item["metadata"]).to_pylist()
+        if len(metadata) != item["rows"] or any(row["role"] != role for row in metadata):
+            raise ValueError("Example provenance count or role mismatch")
+        if role not in FINAL_ROLES and any(row["source_url"] in sealed for row in metadata):
+            raise ValueError("Sealed final example entered a development or training shard")
         with np.load(directory / item["arrays"], allow_pickle=False) as data:
             if set(data.files) != set(schema):
                 raise ValueError("Unexpected array fields")
             arrays = {name: data[name] for name in schema}
-        metadata = pq.read_table(directory / item["metadata"]).to_pylist()
-        if len(metadata) != item["rows"] or any(row["role"] != role for row in metadata):
-            raise ValueError("Example provenance count or role mismatch")
         for name, (dtype, shape) in schema.items():
             if (arrays[name].dtype != np.dtype(dtype) or arrays[name].shape != (item["rows"],) + shape
                     or not np.isfinite(arrays[name]).all()):

@@ -1,5 +1,9 @@
 # E1 readiness and manual validation
 
+This is the historical inspection before owner-approved source admission and the
+empirical ending revision. See the later [completion evidence and manual
+checks](e1_completion_2026-11-11.md) for the current data and endgame results.
+
 **Later owner decision:** [version-2 admission](e1_kgs_admission_2026-11-11.md)
 now admits 241 screened, presumed-human source games with owner-attested research
 permission. The inspection below predates that approval. Downstream artifacts

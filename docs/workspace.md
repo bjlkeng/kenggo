@@ -1,6 +1,6 @@
 # Python research workspace
 
-This workspace targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy, PyArrow and SGFmill. The [shared rules adapter](rules_engine.md) provides validated ordinary play and conservative adjudication, with ending coverage still blocked. No learned model exists. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) owns the stack; the [source-audit workflow](e1_source_audit.md) describes the bounded data inspection tools.
+This workspace targets **Linux x86_64 with glibc 2.28 or newer, CPython 3.12.13 and CPU execution**. It installs the `kenggo` package with PyTorch, NumPy, PyArrow and SGFmill. The [shared rules adapter](rules_engine.md) provides validated ordinary play and separately tagged certified/empirical adjudication. The [populated data guide](e1_population.md) describes the baseline artifacts and sealed final cohort. No learned model exists. The [project plan](../plan/go_project_plan_v0.5.md#technology-stack) owns the stack; the [source-audit workflow](e1_source_audit.md) describes the bounded data inspection tools.
 
 ## Clean setup
 
@@ -46,6 +46,10 @@ nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader
 ```
 
 On **9 November 2026**, this workstation's PCI inventory identified a GeForce RTX 3090, but an unsandboxed `nvidia-smi` exited 18 with `Driver/library version mismatch`: NVML **595.99**, loaded kernel module **595.84**. GPU readiness was therefore not established. This is a host-specific observation, not a claim about another machine or a later repaired driver. Bead `kenggo-ydo.7` owns the host/CUDA follow-up and blocks the E2 GPU pilot.
+
+A read-only host check on **11 November 2026** reproduced exit 18 with NVML
+595.99 and kernel module 595.84. E1's CPU data/referee work does not resolve this
+separate GPU setup task.
 
 The locked environment uses a CPU-only PyTorch wheel; `torch_cuda_build: null` is expected and says nothing about physical GPU availability. Before GPU experiments, repair/verify the host driver, select and lock a compatible CUDA build, then execute and synchronize a small CUDA tensor operation and record versions/device details. A successful `nvidia-smi` alone does not validate PyTorch CUDA execution. No driver installation, reboot, CUDA workload or throughput probe is part of this bootstrap. The [E0 cost rules](../plan/e0_budgets_and_handoff.md) still apply to later probes and pilots.
 

@@ -1,0 +1,32 @@
+{
+  "version": "kgs_population_inputs_v1",
+  "original_source_directory": "runs/e1-kgs-audit-2026-11-10-v4",
+  "admission_decisions": {
+    "path": "manifests/e1_kgs_admission_games_2026-11-11.parquet",
+    "sha256": "7e63e6c50a78a751dc0494533f6a5e80881019b23b58289a503e9257ceda7295"
+  },
+  "source_policy": {
+    "path": "manifests/e1_kgs_admission_policy_v2.json",
+    "sha256": "461a7fed1ea637d8d39cfa1437a06f6d4e198a59af9bf1cabd6c245ef444c4bc"
+  },
+  "final_scope_policy": {
+    "path": "manifests/e1_final_scope_policy_v1.json",
+    "sha256": "7ffb942eb4148fc19453073eb1ef1cd767bb45801313cee5393afcbf897565ba"
+  },
+  "sealed_final": {
+    "path": "runs/e1-kgs-final-sealed-2026-11-11/sealed_index.json",
+    "sha256": "168010f08ad33256a6dcd9e8e268861fb41d9b02adc742dcd88697edf677a6ef"
+  },
+  "split_config": {
+    "path": "manifests/e1_split_config_v2.json",
+    "sha256": "7138209f96063af222976b48cfd6ae1176c00eb75c93dd0186c9513965162917"
+  },
+  "limits": {
+    "max_records": 1200,
+    "max_selected_sgf_bytes": 67108864,
+    "max_expanded_zip_bytes": 268435456,
+    "max_canonical_json_bytes": 268435456,
+    "cpu_seconds": 900,
+    "wall_seconds": 1800
+  }
+}

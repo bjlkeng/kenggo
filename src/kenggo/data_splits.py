@@ -83,7 +83,7 @@ def duplicate_components(entries):
     return [sorted(rows, key=lambda r: r["source_url"]) for _, rows in sorted(components.items())]
 
 
-def build_splits(entries, plan, *, exposed_groups):
+def build_splits(entries, plan, *, exposed_groups, group_registry=None):
     """Entries are prepared by the source adapter; raw source assertions cannot grant admission."""
     exposed_groups = frozenset(exposed_groups)
     for row in entries:
@@ -99,6 +99,13 @@ def build_splits(entries, plan, *, exposed_groups):
     if any(r["grouping_sha256"] != plan.grouping_sha256 for r in entries):
         raise ValueError("Changed grouping registry; rebuild canonical inputs and splits")
     known_groups = {g for r in entries for g in r["groups"] if g is not None}
+    if group_registry is not None:
+        if (not isinstance(group_registry, dict) or digest(group_registry) != plan.grouping_sha256
+                or any(not isinstance(key, str) or not isinstance(value, str) or not value
+                       for key, value in group_registry.items())
+                or known_groups - set(group_registry.values())):
+            raise ValueError("Reserved-group registry differs from the frozen grouping pin")
+        known_groups.update(group_registry.values())
     if (set(plan.validation_groups) | set(plan.test_groups)) - known_groups:
         raise ValueError("Reserved group is absent from the canonical frame")
     if set(plan.test_groups) & exposed_groups:

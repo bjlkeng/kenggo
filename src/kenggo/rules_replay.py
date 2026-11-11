@@ -60,7 +60,8 @@ def dump_game(game):
     return canonical(record)
 
 
-def load_game(text, *, allow_fixture=False, authorized_hashes=frozenset()):
+def load_game(text, *, allow_fixture=False, authorized_hashes=frozenset(),
+              empirical_referee=None):
     """Recompute board, ko, captures and recurrence; never trust serialized caches."""
     if not isinstance(text, str) or len(text) > 2_000_000:
         raise ValueError("Invalid state record size")
@@ -108,6 +109,17 @@ def load_game(text, *, allow_fixture=False, authorized_hashes=frozenset()):
                 raise ValueError("A fault is not a scored result")
             game = game.fail(outcome.reason, responsible=(
                 None if outcome.winner is None else opponent(outcome.winner)))
+        elif outcome.kind == "empirical_score":
+            if empirical_referee is None:
+                raise ValueError("An empirical outcome requires an independently configured referee")
+            decision = empirical_referee.verify(game, outcome.evidence,
+                                                authorized_hashes=authorized_hashes)
+            if (decision.status != "resolved" or decision.snapshot != game.snapshot
+                    or decision.reason != outcome.reason
+                    or decision.white_minus_black_halfpoints != outcome.white_minus_black_halfpoints
+                    or decision.evidence != outcome.evidence):
+                raise ValueError("Empirical adjudication failed independent revalidation")
+            game = replace(game, status="resolved", outcome=outcome)
         elif outcome.kind == "score":
             evidence = json.loads(outcome.evidence)
             if evidence["snapshot"] != game.snapshot:

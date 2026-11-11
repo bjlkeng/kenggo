@@ -8,7 +8,18 @@ This note implements the scope part of [E0](go_project_plan_v0.5.md#e0-fix-scope
 
 **10 November E1 support decision:** the [1,000-candidate audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records, with human status, identities and legal replay still unverified. The proposed 15k, 10k, 5k, 1k and 1d raw profiles all remain deferred; no rank/phase/time cell yet establishes the required support. The [game/data contract](e1_game_and_data_contract.md) preserves this population and fixes numerical qualification gates. Personalization, duration modeling and timing-adaptive search remain deferred; version 1 masks duration targets and dynamic-clock inputs. These findings do not authorize broader dates, rules, ranks or compute.
 
-**11 November owner-approved admission revision:** use screened, presumed-human ordinary-ranked KGS games under [eligibility version 2](../reports/e1_kgs_admission_2026-11-11.md). Explicit Ranked metadata, known-bot exclusions and absence of contradictory event/type evidence support a documented presumption, not verified human control. The owner states that permission to use is available; record that as the local research training/evaluation basis. The frozen sample now has 241 source-admitted games. Preserve all existing population settings, masks and final quarantine; rank support, downstream artifact regeneration and endgame readiness remain unmet.
+**11 November owner-approved admission revision:** use screened, presumed-human ordinary-ranked KGS games under [eligibility version 2](../reports/e1_kgs_admission_2026-11-11.md). Explicit Ranked metadata, known-bot exclusions and absence of contradictory event/type evidence support a documented presumption, not verified human control. The owner states that permission to use is available; record that as the local research training/evaluation basis. The frozen sample has 241 source-admitted games. Preserve the population settings, masks and final quarantine.
+
+**11 November baseline scope:** the [populated data build](../docs/e1_population.md)
+supports exploratory population/rank baseline work with 108 training games,
+separate development/confirmation cohorts and 70 sealed final games. This is the
+E1 data capability being handed to E2. The 100-game-side/30-account cell threshold
+governs profile promotion; no exact-rank cell passes it, and all proposed raw
+profiles remain deferred. Neither an architecture's rank input nor a pooled
+training run promises usable play at an unsupported rank. The [empirical ending
+revision](e1_empirical_endgame_contract_v2.md) preserves source actions and labels
+while supplying separately identified referee judgments. The [completion
+evidence](../reports/e1_completion_2026-11-11.md) records its gate and limits.
 
 ## Initial population
 

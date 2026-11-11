@@ -1,0 +1,419 @@
+{
+  "version": "e1_readiness_v2",
+  "date": "2026-11-11",
+  "bead": "kenggo-6yr.7",
+  "epic": "kenggo-6yr",
+  "review_base": "bfa17523cc6f320f4e4fa142a70ea75534d7fd55",
+  "e1_ready": true,
+  "training_ready": true,
+  "scope": "Exploratory E2 population/rank baseline only; profile promotion and later qualification remain gated.",
+  "review_record": "Beads records the required independent review and delivery verdict; automated evidence alone does not close a bead.",
+  "population": {
+    "path": "manifests/e1_population_v2.json",
+    "sha256": "f3a05b9141084037b79a3b01885267f55f95410e33c0f9858a14eb124a3abe53"
+  },
+  "source_admission": {
+    "path": "manifests/e1_kgs_admission_v2.json",
+    "sha256": "a56840389ef98f0c2382cc6c8018a635d7174aa0e5ecfd0e420071b0720c6657"
+  },
+  "prior_negative_readiness": {
+    "path": "manifests/e1_readiness_2026-11-11.json",
+    "sha256": "a8c5f09e92930c16dd9b734b5b2ced87b8c68ca22aa3370deeb1f479db25d852"
+  },
+  "empirical_referee": {
+    "profile": {
+      "path": "manifests/e1_katago_referee_profile_v2.json",
+      "sha256": "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4"
+    },
+    "comparison": {
+      "path": "manifests/e1_endgame_comparison_v2.json",
+      "sha256": "8597c21f2e68eb07b3086342113662fde3a18ebcea711608f9b892c2ca5037ec"
+    },
+    "authorized_evidence_catalog": {
+      "path": "manifests/e1_endgame_evidence_v2.json",
+      "sha256": "1edf50eeaa993b598d510e5643022c868087cd5207b7cfe872bb1e8a3792183b"
+    },
+    "prior_comparison": {
+      "path": "manifests/e1_endgame_comparison_v1.json",
+      "sha256": "f577f2bc63a4095f675dbb444705d9456e020d90730ebb2b57b56e725f55a10e"
+    },
+    "directory": "runs/e1-referee-panel-2026-11-11-v2",
+    "code_sha256_at_execution": {
+      "/home/bojji/code/kenggo/tools/audit_endgame_referee.py": "a308f7f2f982d7a13bf14bbe32c38fee5ec59fda2e69cf7879b5477fb43d6957",
+      "src/kenggo/katago_referee.py": "a498b38b22d0c8a19eec18f55c21eff603ffe6249fecf3b563c063269734f097",
+      "src/kenggo/go.py": "36026290afb03626616522c4ec20d1208a473d8824cb438adda2ec3034dab752",
+      "src/kenggo/adjudication.py": "175c2bdc3b3ac3f570cf056b7bb10eeea87d2e1d9d8ca8996be62f14ba256992",
+      "src/kenggo/rules_replay.py": "d5b096698d26a7f8054c2f002569a8fa0db32462de5424d0ac44be7c61ac84fe",
+      "tests/go_fixtures.py": "db2b43cd002c8ae87c1726587464e29db12345691323c1ff5fef436d3873618f"
+    },
+    "archived_execution_code": "runs/e1-referee-panel-2026-11-11-v2/code",
+    "counts": {
+      "total": 108,
+      "resolved": 108,
+      "unresolved": 0,
+      "known_scored_comparisons": 102,
+      "winner_agrees": 100,
+      "exact_recorded_margin_agrees": 77
+    },
+    "gate": {
+      "minimum_resolution": 0.9,
+      "minimum_recorded_winner_agreement": 0.95,
+      "resolution_passes": true,
+      "winner_agreement_passes": true
+    },
+    "ending_reasons": {
+      "winner_stable_empirical_cleanup": 108
+    },
+    "pass_verdicts": {
+      "acceptable": 21,
+      "unjudgeable": 3
+    },
+    "pass_reasons": {
+      "empirical_loss_below_threshold": 21,
+      "empirical_threshold_disagreement": 3
+    },
+    "cost": {
+      "cpu_seconds": 2282.041241175,
+      "wall_seconds": 2257.71073643025,
+      "http_requests": 0,
+      "gpu_seconds": 0
+    },
+    "exact_scoring_fixtures": 3,
+    "exact_pass_fixtures": 6,
+    "neural_pass_fixture_verdicts": {
+      "unjudgeable": 6
+    },
+    "trace_sha256": "bbdc81a094faa5d7bc834cc1ef5dce255e30164f8fbf2df341582509cfb9dd51",
+    "trace_bytes": 245402710,
+    "claim": "Native arithmetic is exact for each played cleanup transcript; interpreting the original ending is empirical. These exposed-source results are not held-out accuracy.",
+    "post_run_cli_fix": "Failure records are written only into the output directory created by that invocation. Referee decisions and successful experiment execution are unchanged."
+  },
+  "prior_attempts": [
+    {
+      "directory": "runs/e1-referee-probe-2026-11-11",
+      "outcome": "Tiny model failed scoring fixtures.",
+      "record": {
+        "path": "runs/e1-referee-probe-2026-11-11/summary.json",
+        "sha256": "08da5aea363d5d2f41e366304c06364345adfe053689264a53ff459a20731e93"
+      },
+      "cost": {
+        "wall_seconds": 12.359015516005456,
+        "cpu_seconds": 12.387582673
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-referee-probe-2026-11-11/probe.py",
+          "sha256": "cc7d9a2d3f2bcc0072366ec821e82de138386a56fae4da2275d2d768c6c401b8"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-probe-2026-11-11-v2",
+      "outcome": "Tiny model still failed after deterministic configuration correction.",
+      "record": {
+        "path": "runs/e1-referee-probe-2026-11-11-v2/summary.json",
+        "sha256": "e343d7b7124a5f133619dca6061b07a083a0110ee315af85c9632fe8bd9523fb"
+      },
+      "cost": {
+        "wall_seconds": 12.896695378236473,
+        "cpu_seconds": 12.933116286
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-referee-probe-2026-11-11-v2/probe.py",
+          "sha256": "f60c2ed2b899113eb9f09f7b319f7c4ff2e05d2eab45ad455bedea2e18eb95a3"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-probe-2026-11-11-b10",
+      "outcome": "B10 128-visit exact fixture probe passed.",
+      "record": {
+        "path": "runs/e1-referee-probe-2026-11-11-b10/summary.json",
+        "sha256": "f36e1a9dda2fb76cf572c10af21be25a12d504d644861c8a8a8336ceef1eb93a"
+      },
+      "cost": {
+        "wall_seconds": 1.953910087235272,
+        "cpu_seconds": 1.9814613050000003
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-referee-probe-2026-11-11-b10/probe.py",
+          "sha256": "339f18df1061ac5e9ebcb1b5e8f1da090ec579acad924d9de7bc7cb34e2c8ac5"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-probe-2026-11-11-b10-32",
+      "outcome": "B10 32-visit exact fixture probe passed.",
+      "record": {
+        "path": "runs/e1-referee-probe-2026-11-11-b10-32/summary.json",
+        "sha256": "4da1cab0aa241182a1bd2e26b9e1591434ba215d0756c60765a28f9b2fd80666"
+      },
+      "cost": {
+        "wall_seconds": 1.3518409794196486,
+        "cpu_seconds": 1.378154841
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-referee-probe-2026-11-11-b10-32/probe.py",
+          "sha256": "35f972fa73044f528e357603ff7eeed154141fd433bd442e8d868aca2f4b39ba"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-source-probe-2026-11-11",
+      "outcome": "Four hash-selected original source endings passed the cost probe.",
+      "record": {
+        "path": "runs/e1-referee-source-probe-2026-11-11/summary.json",
+        "sha256": "119ddf55eb78e7d0b4ba7e57c3726cd480f7a529d74b4f2f31762424f8762ebb"
+      },
+      "cost": {
+        "wall_seconds": 44.42502807918936,
+        "cpu_seconds": 45.963544424
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-referee-source-probe-2026-11-11/probe.py",
+          "sha256": "3d0aba742abd4c3afbb6044ea6afb4c6aaca509a6fac6dcc14709e0682aedcef"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-integration-fixtures-2026-11-11-v2",
+      "outcome": "Corrected exact scoring/persistence integration passed.",
+      "record": {
+        "path": "runs/e1-referee-integration-fixtures-2026-11-11-v2/summary.json",
+        "sha256": "167a75bbc5e5bfba7d0c116c267d15d81f87af749f6d791610f16781948d78ec"
+      },
+      "cost": {
+        "cpu_seconds": 2.2063458849999997,
+        "wall_seconds": 2.0393402902409434,
+        "http_requests": 0,
+        "gpu_seconds": 0
+      },
+      "artifacts": {
+        "run.json": {
+          "path": "runs/e1-referee-integration-fixtures-2026-11-11-v2/run.json",
+          "sha256": "6a729cb560ffb155d4d346065eea78bd27d4004143ed9456108be73b6179fbe5"
+        },
+        "panel.json": {
+          "path": "runs/e1-referee-integration-fixtures-2026-11-11-v2/panel.json",
+          "sha256": "597814e842a8f2f15e93d551bf2a2f2e4a1da4b118402306ac4d96c3f38120f1"
+        },
+        "fixtures.json": {
+          "path": "runs/e1-referee-integration-fixtures-2026-11-11-v2/fixtures.json",
+          "sha256": "e654e15c3efa2dc31965a838bf181767d97592bf0fe504ff67827497c93eeb37"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-panel-2026-11-11",
+      "outcome": "85/108 resolved: failed the resolution gate.",
+      "record": {
+        "path": "runs/e1-referee-panel-2026-11-11/summary.json",
+        "sha256": "e5a8b0e926c96475ecd1977b2f870db1219b0c89f52ad2143e64a8627120123b"
+      },
+      "cost": {
+        "cpu_seconds": 1907.8164461659999,
+        "wall_seconds": 1888.9725274331868,
+        "http_requests": 0,
+        "gpu_seconds": 0
+      },
+      "artifacts": {
+        "run.json": {
+          "path": "runs/e1-referee-panel-2026-11-11/run.json",
+          "sha256": "1101f9fb4003c787db04311f53dd914cefc5dc11b835a6f23ec7e01b3f51ea8c"
+        },
+        "panel.json": {
+          "path": "runs/e1-referee-panel-2026-11-11/panel.json",
+          "sha256": "4891a5875456f5bee5b812d2c6e0f9aea63b74ebdd30cdddde0a58465cea6172"
+        },
+        "fixtures.json": {
+          "path": "runs/e1-referee-panel-2026-11-11/fixtures.json",
+          "sha256": "1342907937259d158850d86f32d9ea5fa10e4ff11b1f5dcae7452c3505d74ff2"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-real-pass-fixtures-2026-11-11",
+      "outcome": "All six neural pass fixtures unjudgeable; exact checker passed all six.",
+      "record": {
+        "path": "runs/e1-real-pass-fixtures-2026-11-11/summary.json",
+        "sha256": "625ca0e19861493a8cfa4f4f937e50e5f8cd67b4c5194a0e4fb3b7413d66f1ec"
+      },
+      "cost": {
+        "cpu_seconds": 8.109504241,
+        "wall_seconds": 8.032063347287476,
+        "http_requests": 0,
+        "gpu_seconds": 0
+      },
+      "artifacts": {
+        "probe.py": {
+          "path": "runs/e1-real-pass-fixtures-2026-11-11/probe.py",
+          "sha256": "488ccf026ac580790b3ac9ae011aa6d8bdaa19552283464cf6c82a61a62adc40"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-revision-probe-2026-11-11",
+      "outcome": "Aborted on old persistence ledger bound; two saved decisions, remaining raw trace retained.",
+      "record": {
+        "path": "runs/e1-referee-revision-probe-2026-11-11/failure.json",
+        "sha256": "9ded69f6d5bb2db8ed05eacd61a53d40004677a90504fd4313d811bbd277eeb8"
+      },
+      "cost": {
+        "cpu_seconds": 116.602850256,
+        "wall_seconds": 115.45533711928874
+      },
+      "artifacts": {
+        "run.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11/run.json",
+          "sha256": "90a950ab338020c2c6adc0920b16832bc799d1e1fdc61589736f46e9c61039be"
+        },
+        "panel.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11/panel.json",
+          "sha256": "f85a0381cd1d73e4c526f29019dd4eeae20ef07e813bb2cdf1f0dbea135528ff"
+        },
+        "fixtures.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11/fixtures.json",
+          "sha256": "f92dfe2f17dbdbb25fec6dd3edb9457ac4dd6f26fab455acfd7ee971f5f2a139"
+        },
+        "pass_fixtures.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11/pass_fixtures.json",
+          "sha256": "7594a4d8d981ca00d54d7c94d8766db15afd23e13d29fadbb445b433b778f1ea"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-revision-probe-2026-11-11-v2",
+      "outcome": "All five fixed diagnostic cases resolved and persisted after ledger repair.",
+      "record": {
+        "path": "runs/e1-referee-revision-probe-2026-11-11-v2/summary.json",
+        "sha256": "62e23e04a314b00ee7bff30807491f6e34273d1eacb33bd6ae5dc2c342dbeee5"
+      },
+      "cost": {
+        "cpu_seconds": 191.92926506199998,
+        "wall_seconds": 190.06357195042074,
+        "http_requests": 0,
+        "gpu_seconds": 0
+      },
+      "artifacts": {
+        "run.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11-v2/run.json",
+          "sha256": "852e650c62f9c2b28f2446c9f58283ec22bea740f0ac5229bdb7b36d9dec95b4"
+        },
+        "panel.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11-v2/panel.json",
+          "sha256": "f85a0381cd1d73e4c526f29019dd4eeae20ef07e813bb2cdf1f0dbea135528ff"
+        },
+        "fixtures.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11-v2/fixtures.json",
+          "sha256": "62a4baaa8412c0905bbc8d48d22b715f77e81cf49f327b1a82516dc55802d182"
+        },
+        "pass_fixtures.json": {
+          "path": "runs/e1-referee-revision-probe-2026-11-11-v2/pass_fixtures.json",
+          "sha256": "a39b2e97f507e5d5e54f5f2a1897180823a2631ac4ae834f71d9e8be9bc1d078"
+        }
+      }
+    },
+    {
+      "directory": "runs/e1-referee-integration-fixtures-2026-11-11",
+      "outcome": "Neural no-result prediction incorrectly blocked native-scored seki; fixed.",
+      "record": {
+        "path": "runs/e1-referee-integration-fixtures-2026-11-11/fixtures.json",
+        "sha256": "60158a62eb3394a014d1e8bae90a38cab6d2b433ba48906ff30f58dba3771cd1"
+      },
+      "cost": {
+        "recorded_decision_cpu_seconds": 1.5618072020000002,
+        "total_cpu_seconds": null,
+        "total_wall_seconds": null
+      }
+    }
+  ],
+  "probe_code_catalog": {
+    "path": "runs/e1-probe-code-catalog-2026-11-11.json",
+    "sha256": "9e257af85e151b55743964c4d6b80c441d3cb35770c4673a15ad50c5d0d5dccc"
+  },
+  "acquisition_verification": {
+    "path": "runs/e1-referee-acquisition-verification-2026-11-11.json",
+    "sha256": "7dd93ab1affd236a117c34f9b1fb78e7a63528917ea5462d2a4b98a294272bc7"
+  },
+  "fresh_extraction_verification": {
+    "path": "runs/e1-referee-fresh-extraction-2026-11-11.json",
+    "sha256": "68628daf4f267004107a0e7e56febd4c406bdafd58b6384b799facb858ca29d6"
+  },
+  "validation": {
+    "execution_record": {
+      "path": "runs/e1-completion-2026-11-11/validation.json",
+      "sha256": "45c4b89304a3c7341187c3d61cae31afc6e002fca2e76766ae70e126efe940fa"
+    },
+    "runner": {
+      "path": "runs/e1-completion-2026-11-11/validate.py",
+      "sha256": "7429044415470f43aca89f004d929ff8d2605e704cd92f217f89d5d76d63e29d"
+    },
+    "logs": [
+      {
+        "path": "runs/e1-completion-2026-11-11/lock.log",
+        "sha256": "553baccb1864c2a2418d36f2a48b32a131562e0ce185ca4d73de660303e4279a"
+      },
+      {
+        "path": "runs/e1-completion-2026-11-11/environment.log",
+        "sha256": "d91e49ce1a5c4d09e0e654a1cbafc5cb635f69879587edf8770c528a6b253dcd"
+      },
+      {
+        "path": "runs/e1-completion-2026-11-11/smoke.log",
+        "sha256": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde"
+      },
+      {
+        "path": "runs/e1-final-tests-2026-11-11.log",
+        "sha256": "1406d6adc5a5866dabeb227f79bca10288d09a8c8266b8ed1deb5784ae3760ea"
+      },
+      {
+        "path": "runs/e1-completion-2026-11-11/build.log",
+        "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1"
+      },
+      {
+        "path": "runs/e1-completion-2026-11-11/whitespace.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "test_log": {
+      "path": "runs/e1-final-tests-2026-11-11.log",
+      "sha256": "1406d6adc5a5866dabeb227f79bca10288d09a8c8266b8ed1deb5784ae3760ea"
+    },
+    "tests_passed": 170,
+    "tests_skipped": 0,
+    "native_reference": {
+      "path": ".cache/katago-reference/katago-reference",
+      "sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+    },
+    "commands_passed": [
+      "uv lock --check",
+      "uv sync --locked --check",
+      "uv run --locked python -m kenggo.smoke",
+      "KENGGO_KATAGO_REFERENCE=$PWD/.cache/katago-reference/katago-reference uv run --locked python -m unittest discover -s tests -v",
+      "uv build --no-sources",
+      "git diff --check"
+    ],
+    "additional_checks": [
+      "Population input/output pins",
+      "Unchanged source labels and missing-data masks",
+      "Final access denied without E7 release",
+      "Canonical/split/normalizer reproduction",
+      "All referee cases and accepted evidence catalog",
+      "Executed code and trace pins",
+      "Changed local Markdown links",
+      "Raw data/models/traces ignored"
+    ]
+  },
+  "qualified_profiles": [],
+  "human_rank_claim": null,
+  "deferred": [
+    "Timing and personalization without valid source inputs",
+    "Raw profile promotion and E5 complete-game/pass qualification",
+    "CUDA readiness, tracked by kenggo-ydo.7",
+    "E7 final release until selection is frozen"
+  ],
+  "report": "reports/e1_completion_2026-11-11.md"
+}

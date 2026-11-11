@@ -2,9 +2,17 @@
 
 Version 1 | 10 November 2026 | Bead `kenggo-6yr.3`
 
+**Current ending revision:** the [version-2 empirical endgame contract](e1_empirical_endgame_contract_v2.md)
+adds pinned KataGo cleanup and empirical pass comparisons. It supersedes the
+certificate-only acceptance and pass-proof requirements below, with a distinct
+`empirical_score` outcome and its own resource bounds. Ordinary play, source
+labels, masks, full history, learning boundaries and candidate qualification
+thresholds remain as specified here. The version-1 manifest and narrow exact
+certifier remain reproducible historical contracts.
+
 Use **KGS Japanese ordinary play with certified adjudication of a frozen ending**. Keep the source population at even 19 x 19, Black first, 6.5 komi and the [E0 rank/date/clock scope](e0_scope_decision.md). Two passes request adjudication; they do not supply a score. An unsupported ending stays unresolved. The [versioned manifest](../manifests/e1_game_contract_v1.json) pins the reference, limits, qualification thresholds and evidence.
 
-This is the policy input to the shared engine, canonical records, examples and match runner. It does not implement or validate those components. The [audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records among 1,000 candidates. The subsequent owner-approved [version-2 source policy](../reports/e1_kgs_admission_2026-11-11.md) admits those games as presumed human and ordinary ranked, using owner-attested research-use permission. That revision preserves grouping, quarantine and missing-data masks; it supplies no verified-human or generated-ending claim. Every proposed raw rank profile remains deferred, and E1 readiness remains open for data support, downstream artifacts and usable ending/pass judgments.
+This is the policy input to the shared engine, canonical records, examples and match runner. The [audit](../reports/e1_kgs_audit_2026-11-10.md) found 241 metadata-compatible records among 1,000 candidates. The subsequent owner-approved [version-2 source policy](../reports/e1_kgs_admission_2026-11-11.md) admits those games as presumed human and ordinary ranked, using owner-attested research-use permission. That revision preserves grouping, quarantine and missing-data masks; it supplies no verified-human or generated-ending claim. The later [population build](../docs/e1_population.md) and [completion evidence](../reports/e1_completion_2026-11-11.md) record implementation and current readiness. Every proposed raw rank profile remains deferred pending data support and complete-game qualification.
 
 ## Reference and compatibility boundary
 

@@ -1,0 +1,43 @@
+{
+  "schema": "katago_referee_profile_v2",
+  "profile_id": "katago_b10_32_128_winner_v2",
+  "engine_version": "KataGo v1.18.1;92ee95c0a4b25fec214da00951ab69e97e207729;EigenAVX2",
+  "native_revision": "fd0723fdbc0e9d82cf269c9630af8c27c57c07c4",
+  "model_name": "kata1-b10c128-s1141046784-d204142634",
+  "artifacts": {
+    "engine": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308",
+    "model": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4",
+    "config": "b32ea66000fd5ab90e7a649ab17380472228c4ccee0ccd14433070cc5602d251",
+    "native": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+  },
+  "runtime_files": {
+    "usr/lib/libbz2.so.1.0": "5e516f77fc36dd924fdf02c8489a217f55fa1548883d32c3a5e041fb25d47d6e",
+    "usr/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+    "usr/lib/libzip.so.4": "05746c16c79c34f3b408c5a6a5ddf9bd18e61c1cfd35f587e215ea37f23fe4ad"
+  },
+  "library_dirs": [
+    "usr/lib"
+  ],
+  "cleanup_visits": [
+    32,
+    128
+  ],
+  "pass_visits": [
+    32,
+    128
+  ],
+  "cleanup_move_limit": 64,
+  "acceptable_gain": 0.5,
+  "premature_gain": 1.5,
+  "no_result_limit": 0.01,
+  "limits": {
+    "nodes": 150000,
+    "cpu_seconds": 120,
+    "wall_seconds": 180,
+    "request_bytes": 4194304,
+    "response_bytes": 33554432,
+    "stderr_bytes": 4194304,
+    "evidence_bytes": 8388608
+  },
+  "score_selection": "higher_visit_when_winners_agree"
+}

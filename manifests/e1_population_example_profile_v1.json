@@ -1,0 +1,13 @@
+{
+  "version": "population_example_profile_v1",
+  "canonical_sha256": "b7bf307fbb5ea25b5cf53f1fad6e94780c3b4873a830b07e6f94f61caa5836e0",
+  "split_sha256": "faac0c8f9446ac86ff00f842a6c8b656b396d57a64ee654cd2ad51d693b958da",
+  "population_inputs_sha256": "eb757c00a387ee598af672378d6848c826dd064dbeecabfd1921c97798cc8fe0",
+  "sealed_source_ids_sha256": "d4c371690fa26d66963f34001c332c2cf3db84f59171e1be13df1bdb0dd90e3e",
+  "limits": {
+    "max_records": 1200,
+    "max_examples_per_role": 100000,
+    "cpu_seconds": 1800,
+    "wall_seconds": 2700
+  }
+}

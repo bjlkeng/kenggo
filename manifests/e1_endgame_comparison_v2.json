@@ -1,0 +1,3284 @@
+{
+  "version": "empirical_referee_comparison_v1",
+  "directory": "runs/e1-referee-panel-2026-11-11-v2",
+  "profile_sha256": "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4",
+  "artifacts": {
+    "run.json": "b74d0114d2a9dbc27cf36c351ca6140caef22de23eee903300177b7df7cbcf24",
+    "panel.json": "4891a5875456f5bee5b812d2c6e0f9aea63b74ebdd30cdddde0a58465cea6172",
+    "summary.json": "fffd06f2d3979d76313b17498504d93d5445a1ecd1f7225c7f39beb72d2f20c9",
+    "fixtures.json": "c832aaea1f8c639e93e0ca595919bdae3de7a03f42126ef4e38abef04ece574f",
+    "authorized_evidence.json": "1edf50eeaa993b598d510e5643022c868087cd5207b7cfe872bb1e8a3792183b"
+  },
+  "trace_sha256": "bbdc81a094faa5d7bc834cc1ef5dce255e30164f8fbf2df341582509cfb9dd51",
+  "trace_bytes": 245402710,
+  "ending_counts": {
+    "total": 108,
+    "resolved": 108,
+    "unresolved": 0,
+    "known_scored_comparisons": 102,
+    "winner_agrees": 100,
+    "exact_recorded_margin_agrees": 77
+  },
+  "readiness_check": {
+    "minimum_resolution": 0.9,
+    "minimum_recorded_winner_agreement": 0.95,
+    "resolution_passes": true,
+    "winner_agreement_passes": true
+  },
+  "ending_reasons": {
+    "winner_stable_empirical_cleanup": 108
+  },
+  "pass_verdicts": {
+    "acceptable": 21,
+    "unjudgeable": 3
+  },
+  "pass_reasons": {
+    "empirical_loss_below_threshold": 21,
+    "empirical_threshold_disagreement": 3
+  },
+  "cost": {
+    "cpu_seconds": 2282.041241175,
+    "wall_seconds": 2257.71073643025,
+    "http_requests": 0,
+    "gpu_seconds": 0
+  },
+  "endings": [
+    {
+      "case": 0,
+      "source_url": "https://files.gokgs.com/games/2025/1/10/Jabul-yuumsuzuki.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "22.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        45,
+        45
+      ],
+      "selected_white_minus_black_halfpoints": 45,
+      "cleanup_moves": [
+        20,
+        20
+      ],
+      "evidence_sha256": "bb5391d84657954195578eea66703bffc67552093619fa99c17009917302fc10",
+      "artifact_sha256": "06c72ccb82cbce86440f6c62488370de64cfe95f9bae40b93b09c8e8b240595e",
+      "cpu_seconds": 23.488576768,
+      "wall_seconds": 23.28245111834258,
+      "recorded_white_minus_black_halfpoints": 45,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 1,
+      "source_url": "https://files.gokgs.com/games/2025/1/13/negi72-ergodicgo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        9,
+        9
+      ],
+      "selected_white_minus_black_halfpoints": 9,
+      "cleanup_moves": [
+        9,
+        9
+      ],
+      "evidence_sha256": "26e60c98aa944cc95b2658828242466aa325b56e01857439616b354e441b4471",
+      "artifact_sha256": "55ebdf9929ac7b9a3bde089ad4b04363ca9e1c36291992abf60e059d8b56bb72",
+      "cpu_seconds": 4.850175764999996,
+      "wall_seconds": 4.811564147472382,
+      "recorded_white_minus_black_halfpoints": 9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 2,
+      "source_url": "https://files.gokgs.com/games/2025/1/14/chipstar-takushin5.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "12.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        25,
+        25
+      ],
+      "selected_white_minus_black_halfpoints": 25,
+      "cleanup_moves": [
+        27,
+        31
+      ],
+      "evidence_sha256": "6095be7e8dc9f01292164e89347a99f449caa23b88745994bd8800a6163af20b",
+      "artifact_sha256": "a6e5c29d504bed1557dfdec75a8ade733201eaab8be41ac95646f484c574b02e",
+      "cpu_seconds": 33.23547187599999,
+      "wall_seconds": 32.90357960667461,
+      "recorded_white_minus_black_halfpoints": 25,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 3,
+      "source_url": "https://files.gokgs.com/games/2025/1/15/Sakka-chipstar.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "30.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -61,
+        -63
+      ],
+      "selected_white_minus_black_halfpoints": -63,
+      "cleanup_moves": [
+        27,
+        25
+      ],
+      "evidence_sha256": "ac6e536dbeaa8928864dc2bf2807badc73d98f2da2ba7e1773889580fe6f7a9d",
+      "artifact_sha256": "fb1791bee64ac963873340b82b91a28b7f8b4d7c91ad1c16a8dbf5dba1d69fc3",
+      "cpu_seconds": 30.199838907,
+      "wall_seconds": 29.90678419545293,
+      "recorded_white_minus_black_halfpoints": -61,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 4,
+      "source_url": "https://files.gokgs.com/games/2025/1/15/chipstar-gomugo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        13,
+        13
+      ],
+      "selected_white_minus_black_halfpoints": 13,
+      "cleanup_moves": [
+        41,
+        36
+      ],
+      "evidence_sha256": "aea722b720456892ff467396470eade856020249a5ba40a1b93ee3c47113d4b6",
+      "artifact_sha256": "c08bbda40b57ea1c4a25034fcb6805b0fb76ea8ba71e1a3db6325beaba1f3d5f",
+      "cpu_seconds": 41.791681614,
+      "wall_seconds": 41.32827502861619,
+      "recorded_white_minus_black_halfpoints": 15,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 5,
+      "source_url": "https://files.gokgs.com/games/2025/1/17/alterego11-ergodicgo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "18.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        37,
+        37
+      ],
+      "selected_white_minus_black_halfpoints": 37,
+      "cleanup_moves": [
+        5,
+        5
+      ],
+      "evidence_sha256": "d0b008cf0020a3ccead2a4a5ee2f37ebdcfcf3f697f581274d1d4c6fc14b1765",
+      "artifact_sha256": "c23ae6068539176e092c0d917e0e7dabfa0df62efae771116edec499d77a9df1",
+      "cpu_seconds": 4.943311548999986,
+      "wall_seconds": 4.88054146617651,
+      "recorded_white_minus_black_halfpoints": 37,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 6,
+      "source_url": "https://files.gokgs.com/games/2025/1/28/Chris001-lebernard.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "8.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -17,
+        -17
+      ],
+      "selected_white_minus_black_halfpoints": -17,
+      "cleanup_moves": [
+        6,
+        6
+      ],
+      "evidence_sha256": "e5b001a2fd60ef705da9fd7e589c77f8df82c62dece670756b68938e1033dd6a",
+      "artifact_sha256": "7221d45c16c7608c88016b3d051b8e1e7a096ace6cbd9446ae5c0f76a3f1a54b",
+      "cpu_seconds": 4.601233050000019,
+      "wall_seconds": 4.55278592556715,
+      "recorded_white_minus_black_halfpoints": -17,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 7,
+      "source_url": "https://files.gokgs.com/games/2025/1/29/ThomasPoon-minnmann.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "15.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        31,
+        29
+      ],
+      "selected_white_minus_black_halfpoints": 29,
+      "cleanup_moves": [
+        15,
+        17
+      ],
+      "evidence_sha256": "f2b6c77c7fe31aa49823f84ad7c48adf878a27f8d8f6b5ba733b8898668759f0",
+      "artifact_sha256": "55fc0d5c762744911fd1ed87970ee55bbb53048c2feb11dcc0fa15e22feefb28",
+      "cpu_seconds": 18.024791761000017,
+      "wall_seconds": 17.83552684355527,
+      "recorded_white_minus_black_halfpoints": 31,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 8,
+      "source_url": "https://files.gokgs.com/games/2025/1/3/ergodicgo-alterego11.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "17.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        35,
+        35
+      ],
+      "selected_white_minus_black_halfpoints": 35,
+      "cleanup_moves": [
+        10,
+        10
+      ],
+      "evidence_sha256": "73d75c126362a798c813c82d74c5db2f98278ccb1bcf024de65f1e0d48a3d1d3",
+      "artifact_sha256": "c00e87ed2897d05e3d6f7d8c9bf0ec1d8c0b19b10e3b85638fc5554ffb24e720",
+      "cpu_seconds": 8.673897205999992,
+      "wall_seconds": 8.576954220421612,
+      "recorded_white_minus_black_halfpoints": 35,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 9,
+      "source_url": "https://files.gokgs.com/games/2025/1/30/aibo-minnmann.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "27.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -55,
+        -55
+      ],
+      "selected_white_minus_black_halfpoints": -55,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "0526e9ae7be3fc7d8ba7cbaddf0bc1cfd82311f1312cb58c8b226e02231ba9f1",
+      "artifact_sha256": "b9fc9bbab42f28ad2f9e3b7113a9a2c294acc634fc5a741a3a9ee81af5d839f7",
+      "cpu_seconds": 17.315483368999992,
+      "wall_seconds": 17.126837343908846,
+      "recorded_white_minus_black_halfpoints": -55,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 10,
+      "source_url": "https://files.gokgs.com/games/2025/10/14/chipstar-badog.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "23.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        47,
+        43
+      ],
+      "selected_white_minus_black_halfpoints": 43,
+      "cleanup_moves": [
+        41,
+        45
+      ],
+      "evidence_sha256": "744f2a5ab98475d583a1d32def49fed21766f98f789d366fc88cd4514f2f99fa",
+      "artifact_sha256": "2a8dff7b801770cac0d1fdcf0f6fc88c7439a272929a1496bca786bbf8232ce7",
+      "cpu_seconds": 57.523605126999996,
+      "wall_seconds": 56.91622753068805,
+      "recorded_white_minus_black_halfpoints": 47,
+      "margin_delta_halfpoints": -4,
+      "winner_agrees": true
+    },
+    {
+      "case": 11,
+      "source_url": "https://files.gokgs.com/games/2025/10/2/Santos-yuumsuzuki.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "35.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -71,
+        -71
+      ],
+      "selected_white_minus_black_halfpoints": -71,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "8ead8fb972a064c1533137d17c76719443a51da8494b45fee5f586cd055e1223",
+      "artifact_sha256": "2300ad43a5bbe505455bcaa0d5849683244f5f77716d5fde7af108fdd4594aa8",
+      "cpu_seconds": 23.93349336600005,
+      "wall_seconds": 23.675868820399046,
+      "recorded_white_minus_black_halfpoints": -71,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 12,
+      "source_url": "https://files.gokgs.com/games/2025/10/25/minnmann-beak.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "0.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -1,
+        -1
+      ],
+      "selected_white_minus_black_halfpoints": -1,
+      "cleanup_moves": [
+        20,
+        20
+      ],
+      "evidence_sha256": "2a01b0f863b569231cc97da39dcd32d7e7828ff17e03e5cb6994443efddd4ec7",
+      "artifact_sha256": "58c59dcec86682d9384af8a2bd5c7513f30f99c802361e3d8b7fb0c02aae371c",
+      "cpu_seconds": 17.76018074199999,
+      "wall_seconds": 17.575708085671067,
+      "recorded_white_minus_black_halfpoints": -1,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 13,
+      "source_url": "https://files.gokgs.com/games/2025/10/30/chipstar-ikeikeo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "10.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -21,
+        -21
+      ],
+      "selected_white_minus_black_halfpoints": -21,
+      "cleanup_moves": [
+        20,
+        20
+      ],
+      "evidence_sha256": "4016138cb76a5b07fc09a21c3ee0811c553a983ef3ed880048748dc26b4eb5b1",
+      "artifact_sha256": "cf8cf13199afeb8df3128b535701fcda0f50437ea51cca6bd79de6780968152a",
+      "cpu_seconds": 24.46677386300007,
+      "wall_seconds": 24.20262905303389,
+      "recorded_white_minus_black_halfpoints": -21,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 14,
+      "source_url": "https://files.gokgs.com/games/2025/10/5/ABE3-akasaka39.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "6.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        13,
+        13
+      ],
+      "selected_white_minus_black_halfpoints": 13,
+      "cleanup_moves": [
+        18,
+        18
+      ],
+      "evidence_sha256": "5d63179d68f4d0b424a4236e8ff2d9cad120cff2dcede4d1953254e55d834cac",
+      "artifact_sha256": "09db46ddf65e7d4b72472bdcc98ce62715946bc239bfe036767b8a4bca03780e",
+      "cpu_seconds": 16.19357179699989,
+      "wall_seconds": 16.018003024160862,
+      "recorded_white_minus_black_halfpoints": 13,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 15,
+      "source_url": "https://files.gokgs.com/games/2025/10/6/yuumsuzuki-Santos.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "34.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -69,
+        -69
+      ],
+      "selected_white_minus_black_halfpoints": -69,
+      "cleanup_moves": [
+        9,
+        9
+      ],
+      "evidence_sha256": "1d524ed8821b017a3f48d4aeb0060e659ede915e54c25255e60b649b28c0986f",
+      "artifact_sha256": "4b069e6e1040ee5bf4de499a8877385a1129d685863d08da4ef89222bad56491",
+      "cpu_seconds": 8.917988525000055,
+      "wall_seconds": 8.822339192032814,
+      "recorded_white_minus_black_halfpoints": -69,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 16,
+      "source_url": "https://files.gokgs.com/games/2025/11/10/Youngduke-andreyEAO.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "90.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -181,
+        -181
+      ],
+      "selected_white_minus_black_halfpoints": -181,
+      "cleanup_moves": [
+        45,
+        44
+      ],
+      "evidence_sha256": "363d4de51762672ba9c66a22b38eda3d185613ff707a6eaa833b447c43b6a07a",
+      "artifact_sha256": "058d1a3b2bdc27a16f077a22d7059fdc89e1ea132310eb318d12d75a61dccf35",
+      "cpu_seconds": 69.24683006700002,
+      "wall_seconds": 68.49341814219952,
+      "recorded_white_minus_black_halfpoints": -181,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 17,
+      "source_url": "https://files.gokgs.com/games/2025/11/16/Fabrice-dopingg.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "16.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        33,
+        33
+      ],
+      "selected_white_minus_black_halfpoints": 33,
+      "cleanup_moves": [
+        25,
+        25
+      ],
+      "evidence_sha256": "9ed9d17398b5c9719f6caa8ad9043e793bc7dc568b5cd0373082e3192dadfd8b",
+      "artifact_sha256": "d1da473169ef1c18634012ef111ce097f8ddfb47fbdf1d03c8e785ba9c5e0ec1",
+      "cpu_seconds": 27.018751211999984,
+      "wall_seconds": 26.725381886586547,
+      "recorded_white_minus_black_halfpoints": 33,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 18,
+      "source_url": "https://files.gokgs.com/games/2025/11/16/dopingg-k65.sgf",
+      "recorded_result": {
+        "kind": "resignation",
+        "margin": null,
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        81,
+        81
+      ],
+      "selected_white_minus_black_halfpoints": 81,
+      "cleanup_moves": [
+        16,
+        16
+      ],
+      "evidence_sha256": "d06900c2fbbe8ef0b8a1e959fdb2e5cc3312d5763f0323be8c9b0df545a0a169",
+      "artifact_sha256": "215a75c69a5321bef0e180da0158cb63f4cfce3e57815842db5aed6cb244184d",
+      "cpu_seconds": 18.706559785999957,
+      "wall_seconds": 18.497070726938546
+    },
+    {
+      "case": 19,
+      "source_url": "https://files.gokgs.com/games/2025/11/21/Olegv-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "28.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -57,
+        -57
+      ],
+      "selected_white_minus_black_halfpoints": -57,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "d1015ead5da7c3c2a0d828f3f95c65d91f488983dabd098aaf675e2dbc6a5249",
+      "artifact_sha256": "7a0e09a01931f9fa9bcfa38ad25df5a8612c895e3a0ffed553fb4783179783c9",
+      "cpu_seconds": 14.62604200800007,
+      "wall_seconds": 14.456286010332406,
+      "recorded_white_minus_black_halfpoints": -57,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 20,
+      "source_url": "https://files.gokgs.com/games/2025/11/26/gas-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -1,
+        -1
+      ],
+      "selected_white_minus_black_halfpoints": -1,
+      "cleanup_moves": [
+        18,
+        18
+      ],
+      "evidence_sha256": "75a9e5d86551e88a2db650da40a81eb25baff412497b813a6b18d5d4b25bc017",
+      "artifact_sha256": "7b77446c05f5778685cc07e520bff2a967a44b28481367813671b85ed6f6559b",
+      "cpu_seconds": 4.984894395999959,
+      "wall_seconds": 4.936468750238419,
+      "recorded_white_minus_black_halfpoints": -15,
+      "margin_delta_halfpoints": 14,
+      "winner_agrees": true
+    },
+    {
+      "case": 21,
+      "source_url": "https://files.gokgs.com/games/2025/11/27/RPL003-takama.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "27.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        55,
+        55
+      ],
+      "selected_white_minus_black_halfpoints": 55,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "b6ca68a0ea2a7a96cb2fe176060eb26897a2a0071446d48a50ef3be9335e3edd",
+      "artifact_sha256": "5131ee75ed9ed99fa1299d56ed1364c390cd68e6f6009685093223bc893b69c9",
+      "cpu_seconds": 16.162969454000006,
+      "wall_seconds": 15.999091217294335,
+      "recorded_white_minus_black_halfpoints": 55,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 22,
+      "source_url": "https://files.gokgs.com/games/2025/11/27/Tangaroa-takama.sgf",
+      "recorded_result": {
+        "kind": "resignation",
+        "margin": null,
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        75,
+        75
+      ],
+      "selected_white_minus_black_halfpoints": 75,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "a61769887d6dc46efe972fd5abf981638954e7a49bf3d7e3f4c92fede0242881",
+      "artifact_sha256": "55435edfd27d37e274622a4df3f1a21011764f65aff2f8659eb52f8460e260cc",
+      "cpu_seconds": 13.587494825999954,
+      "wall_seconds": 13.430528419092298
+    },
+    {
+      "case": 23,
+      "source_url": "https://files.gokgs.com/games/2025/11/3/takama-f85.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        7,
+        7
+      ],
+      "evidence_sha256": "9ca96e218358a8f40ce6a7e826655290211fc1b1996cbfdc848c85edb43745f5",
+      "artifact_sha256": "476bd13c6833bcbb974d636b4439b627404d13dc171410c06f91ab203e0e075d",
+      "cpu_seconds": 4.936510279999993,
+      "wall_seconds": 4.895671772770584,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 24,
+      "source_url": "https://files.gokgs.com/games/2025/11/4/andreyEAO-alterego11.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "17.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        35,
+        35
+      ],
+      "selected_white_minus_black_halfpoints": 35,
+      "cleanup_moves": [
+        28,
+        28
+      ],
+      "evidence_sha256": "dc7344e720a2602798cb5e6e92a14bdd21cffaeef64e0e22b4bf5d132d0715b6",
+      "artifact_sha256": "b6730b020b3d8f81acacde4643b664e9d1aedbd26b65cc75f180f4bd2d90d0b5",
+      "cpu_seconds": 24.940879677999988,
+      "wall_seconds": 24.67096070665866,
+      "recorded_white_minus_black_halfpoints": 35,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 25,
+      "source_url": "https://files.gokgs.com/games/2025/11/7/tizk-threeone.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "11.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        23,
+        23
+      ],
+      "selected_white_minus_black_halfpoints": 23,
+      "cleanup_moves": [
+        10,
+        10
+      ],
+      "evidence_sha256": "b98c66f3c90273c3714a2dd9a9b2224d5cbc1cf0e62dfedafef2bbb81d8d6016",
+      "artifact_sha256": "931d8ba21d74685a6cb4ff2edb5d5f0562b4270633bd8deca3d27771587e56e1",
+      "cpu_seconds": 8.098144723000019,
+      "wall_seconds": 8.0059171654284,
+      "recorded_white_minus_black_halfpoints": 23,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 26,
+      "source_url": "https://files.gokgs.com/games/2025/11/9/PAPS111-andreyEAO.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        16,
+        16
+      ],
+      "evidence_sha256": "1523ad94a0f570b31543aa78e0b3726d2e3a9d67176272b2664593c0efe6ac74",
+      "artifact_sha256": "e64e6d0f9e89f8ac5585c663849c1ab04e97051a8b17ca7ca738d32110fa8dca",
+      "cpu_seconds": 15.004975510000122,
+      "wall_seconds": 14.854829734191298,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 27,
+      "source_url": "https://files.gokgs.com/games/2025/12/11/scdcsa-maitrepo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "21.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        43,
+        43
+      ],
+      "selected_white_minus_black_halfpoints": 43,
+      "cleanup_moves": [
+        32,
+        34
+      ],
+      "evidence_sha256": "998a4a7052a14830362f12b7d66725583c22aaf75dd5df2262a40302416da908",
+      "artifact_sha256": "5d4ce3b85433025aa7c69b53fe57ec734e223cd1bcaee6c9d4e65bac1425237b",
+      "cpu_seconds": 44.89436510400003,
+      "wall_seconds": 44.4042434040457,
+      "recorded_white_minus_black_halfpoints": 43,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 28,
+      "source_url": "https://files.gokgs.com/games/2025/12/15/tang0-tomy48.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "11.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        23,
+        23
+      ],
+      "selected_white_minus_black_halfpoints": 23,
+      "cleanup_moves": [
+        11,
+        11
+      ],
+      "evidence_sha256": "910c0f16a5deae7d880b2b9ebf64ec9275c28ee65d011174aafccc2f9f108c38",
+      "artifact_sha256": "c07914dc73e0d555e56b1f99450ce760fbdc3dc6012f98566f52ff76377029f1",
+      "cpu_seconds": 11.669863043000078,
+      "wall_seconds": 11.544331257231534,
+      "recorded_white_minus_black_halfpoints": 23,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 29,
+      "source_url": "https://files.gokgs.com/games/2025/12/20/zousigaya-garapan.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "9.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        19,
+        19
+      ],
+      "selected_white_minus_black_halfpoints": 19,
+      "cleanup_moves": [
+        15,
+        15
+      ],
+      "evidence_sha256": "09dfb0d71108023ddb2fe249522c05cd5cd3a3341d35b42af3da99a185a16445",
+      "artifact_sha256": "8335dd0eb5b766c61e4e50b4c5a1d0fbc9bb4b537caa93dc54285021b601a532",
+      "cpu_seconds": 16.577201383999977,
+      "wall_seconds": 16.407881102524698,
+      "recorded_white_minus_black_halfpoints": 19,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 30,
+      "source_url": "https://files.gokgs.com/games/2025/12/23/lorbas72-Arisha2017.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "20.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        41,
+        41
+      ],
+      "selected_white_minus_black_halfpoints": 41,
+      "cleanup_moves": [
+        8,
+        8
+      ],
+      "evidence_sha256": "f0dbf196bee80316f12e294d01ac85fe3ab4412d76f118780d76140e678f0e46",
+      "artifact_sha256": "081014db0b7843e4c0468e7af6760e42a8bcb8635527ca678e53d880576afa99",
+      "cpu_seconds": 6.110905342000024,
+      "wall_seconds": 6.038629147224128,
+      "recorded_white_minus_black_halfpoints": 41,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 31,
+      "source_url": "https://files.gokgs.com/games/2025/12/25/tang0-duptelme.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "31.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        63,
+        63
+      ],
+      "selected_white_minus_black_halfpoints": 63,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "d9b163994dc7281dd914733a897385da2f5de5459a00b7b0ef4010e74210f305",
+      "artifact_sha256": "68d9e59ad8051ff78727f848e8ef0e44055269a071f31e70e7538afd49375311",
+      "cpu_seconds": 17.574584416999983,
+      "wall_seconds": 17.391761168837547,
+      "recorded_white_minus_black_halfpoints": 63,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 32,
+      "source_url": "https://files.gokgs.com/games/2025/12/28/lorbas72-PascalGo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "47.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -109,
+        -109
+      ],
+      "selected_white_minus_black_halfpoints": -109,
+      "cleanup_moves": [
+        27,
+        25
+      ],
+      "evidence_sha256": "b51835fedb810e098815e465171077a76ae460377acc66884d1b738ce544210e",
+      "artifact_sha256": "61a7550879f37004f7d732cc45f86ab0ada8e9316a1d70002c97ed3e1017853c",
+      "cpu_seconds": 31.524604656000065,
+      "wall_seconds": 31.17199068982154,
+      "recorded_white_minus_black_halfpoints": -95,
+      "margin_delta_halfpoints": -14,
+      "winner_agrees": true
+    },
+    {
+      "case": 33,
+      "source_url": "https://files.gokgs.com/games/2025/12/29/kejia-Fedya555.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "28.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        57,
+        57
+      ],
+      "selected_white_minus_black_halfpoints": 57,
+      "cleanup_moves": [
+        10,
+        10
+      ],
+      "evidence_sha256": "f74d788958d69bab139ab492c92fa44a7b54faa2300070ff18c47b88474d7ea0",
+      "artifact_sha256": "21b5bf172aa98090255e6980aa8dc5b838501db06b5ee59fe870066c881bc3a5",
+      "cpu_seconds": 9.29561942099997,
+      "wall_seconds": 9.187655157409608,
+      "recorded_white_minus_black_halfpoints": 57,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 34,
+      "source_url": "https://files.gokgs.com/games/2025/12/30/SirBernd-lorbas72.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "36.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        75,
+        75
+      ],
+      "selected_white_minus_black_halfpoints": 75,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "4df6946f0f399b5ae60289ccdb4185c20df70d630964e0eb9a1a617383e3b2c8",
+      "artifact_sha256": "98d04794a435552e98f9a97a4447db02926330f89932eb108251be4bbb0da89d",
+      "cpu_seconds": 15.261703860000011,
+      "wall_seconds": 15.110549403354526,
+      "recorded_white_minus_black_halfpoints": 73,
+      "margin_delta_halfpoints": 2,
+      "winner_agrees": true
+    },
+    {
+      "case": 35,
+      "source_url": "https://files.gokgs.com/games/2025/12/4/maitrepo-ishikawa.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "2.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -5,
+        -5
+      ],
+      "selected_white_minus_black_halfpoints": -5,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "58f942a945bf06362637a55040ae983a6ff5c8078f1c4b30d192f8fa7507cd04",
+      "artifact_sha256": "bacb74ffb8d2c79db682ab3ad158244c1ec5e3dc13f2eeb0bc126ad8514f2ad3",
+      "cpu_seconds": 9.88814299000012,
+      "wall_seconds": 9.775501596741378,
+      "recorded_white_minus_black_halfpoints": -5,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 36,
+      "source_url": "https://files.gokgs.com/games/2025/12/8/zousigaya-VPP79.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "8.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        17,
+        17
+      ],
+      "selected_white_minus_black_halfpoints": 17,
+      "cleanup_moves": [
+        30,
+        32
+      ],
+      "evidence_sha256": "1be9737b453603b9adf8ea5d7bcfb0871be1ec29887ff120bc12f0619f2e7531",
+      "artifact_sha256": "3f0b6a379f0a3cdf5d378f027f806a4d8fd5c6933fa5a2218f209271e39143ff",
+      "cpu_seconds": 32.219287963000056,
+      "wall_seconds": 31.877000594511628,
+      "recorded_white_minus_black_halfpoints": 17,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 37,
+      "source_url": "https://files.gokgs.com/games/2025/12/9/huyc1961-marco01.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "2.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        5,
+        5
+      ],
+      "selected_white_minus_black_halfpoints": 5,
+      "cleanup_moves": [
+        11,
+        11
+      ],
+      "evidence_sha256": "023b7d5c94820ad1cbbae06aac0ef82bdaae69af31eec71dd20b517d25bb9ba9",
+      "artifact_sha256": "81de43bfe51eca4263d63e3d3487a94d28cbe6a739fc29ddab7e470ac334a1fd",
+      "cpu_seconds": 5.116260221999937,
+      "wall_seconds": 5.069576099514961,
+      "recorded_white_minus_black_halfpoints": 5,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 38,
+      "source_url": "https://files.gokgs.com/games/2025/2/1/gogo42-cardo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "18.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -37,
+        -37
+      ],
+      "selected_white_minus_black_halfpoints": -37,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "91bf90900a14edbe1099301492bb6dd277d23e3a82ad0f344c3350388c21fa96",
+      "artifact_sha256": "b5556dc242c345ec638aec212ac556e61139aa87d299386bd37f13fef4996390",
+      "cpu_seconds": 11.622083325999938,
+      "wall_seconds": 11.51129864063114,
+      "recorded_white_minus_black_halfpoints": -37,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 39,
+      "source_url": "https://files.gokgs.com/games/2025/2/12/takama-Tangaroa.sgf",
+      "recorded_result": {
+        "kind": "resignation",
+        "margin": null,
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -71,
+        -71
+      ],
+      "selected_white_minus_black_halfpoints": -71,
+      "cleanup_moves": [
+        27,
+        31
+      ],
+      "evidence_sha256": "740312c495ad80bc402f776765f8aeaf9f55fd93efac31caf9f58b8ed8f06790",
+      "artifact_sha256": "7b8baa3710f1a5eabff94e984c053b01ac024a5ac2cca3cd36515f864dcb3fb9",
+      "cpu_seconds": 38.56825112299998,
+      "wall_seconds": 38.154488906264305
+    },
+    {
+      "case": 40,
+      "source_url": "https://files.gokgs.com/games/2025/2/13/doume2-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "3.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        7,
+        7
+      ],
+      "selected_white_minus_black_halfpoints": 7,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "2bb2e28c6f3c0b6d7dc32ba850139632c5a8d16546b3b45955841a999c4df6ab",
+      "artifact_sha256": "61f21bccfe77ec59a041a2aed0ac5f80a12d7059fbc766afe4660735dd338291",
+      "cpu_seconds": 6.895809019000012,
+      "wall_seconds": 6.830046939663589,
+      "recorded_white_minus_black_halfpoints": 7,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 41,
+      "source_url": "https://files.gokgs.com/games/2025/2/24/Artem0102-lokon.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "80.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        159,
+        159
+      ],
+      "selected_white_minus_black_halfpoints": 159,
+      "cleanup_moves": [
+        27,
+        26
+      ],
+      "evidence_sha256": "f6d198b4e47a625d82225d0348c3b125c97508a1b521634aa63480ffd5cb2438",
+      "artifact_sha256": "32fb7c2543278238ea2013732eacba250a335276bc2adad8ae63b4cebda48590",
+      "cpu_seconds": 28.315298727000027,
+      "wall_seconds": 27.997845611535013,
+      "recorded_white_minus_black_halfpoints": 161,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 42,
+      "source_url": "https://files.gokgs.com/games/2025/2/28/KAM2015-lokon.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "9.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -19,
+        -19
+      ],
+      "selected_white_minus_black_halfpoints": -19,
+      "cleanup_moves": [
+        24,
+        24
+      ],
+      "evidence_sha256": "3bb88448edf4d85d01ce2712a87259138a40184a6026b5575338e93d0c328054",
+      "artifact_sha256": "96db03d1d7f20e8a2fc788e1f5610a60fa1e62b0b41e7ba2597fc27f742cd7d3",
+      "cpu_seconds": 22.402515511000047,
+      "wall_seconds": 22.165639298968017,
+      "recorded_white_minus_black_halfpoints": -19,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 43,
+      "source_url": "https://files.gokgs.com/games/2025/2/28/cardo-PAPGUZ.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "28.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -67,
+        -67
+      ],
+      "selected_white_minus_black_halfpoints": -67,
+      "cleanup_moves": [
+        21,
+        21
+      ],
+      "evidence_sha256": "ed21b91e2f1806fff70530192e54650bad1512b585b219aafcc60af953b4c60c",
+      "artifact_sha256": "b49b9bbd3aabf38eb40f70360134975d6bf43861a24b6a7137b69aecf2777bf9",
+      "cpu_seconds": 22.69064539700014,
+      "wall_seconds": 22.454857721924782,
+      "recorded_white_minus_black_halfpoints": -57,
+      "margin_delta_halfpoints": -10,
+      "winner_agrees": true
+    },
+    {
+      "case": 44,
+      "source_url": "https://files.gokgs.com/games/2025/3/2/lorbas72-chika.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "15.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        1,
+        1
+      ],
+      "selected_white_minus_black_halfpoints": 1,
+      "cleanup_moves": [
+        15,
+        17
+      ],
+      "evidence_sha256": "12d6c60c1d55ebac237f9d89b305dbca977dd19f73f829244bd002b50664c19c",
+      "artifact_sha256": "d7391c8f63c1feec4f784b25c8b66881dc9b54671a3781cc218e23e76adb5d62",
+      "cpu_seconds": 5.955256963000011,
+      "wall_seconds": 5.8763753566890955,
+      "recorded_white_minus_black_halfpoints": -31,
+      "margin_delta_halfpoints": 32,
+      "winner_agrees": false
+    },
+    {
+      "case": 45,
+      "source_url": "https://files.gokgs.com/games/2025/3/21/SirTinky-zousigaya.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "9.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -19,
+        -15
+      ],
+      "selected_white_minus_black_halfpoints": -15,
+      "cleanup_moves": [
+        27,
+        29
+      ],
+      "evidence_sha256": "d70891dd76afbb2a840fa90148691aa9e16d718f3fd9f3a749151a6fbe0538b8",
+      "artifact_sha256": "ef928f69db9229493d71763125f87b466ee8ec6b3c67a7016469b5242f701545",
+      "cpu_seconds": 34.10409977400002,
+      "wall_seconds": 33.75242486130446,
+      "recorded_white_minus_black_halfpoints": -19,
+      "margin_delta_halfpoints": 4,
+      "winner_agrees": true
+    },
+    {
+      "case": 46,
+      "source_url": "https://files.gokgs.com/games/2025/3/21/tang0-elendil12.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "15.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        21,
+        21
+      ],
+      "selected_white_minus_black_halfpoints": 21,
+      "cleanup_moves": [
+        9,
+        9
+      ],
+      "evidence_sha256": "efe46857f19d2e28b16d29157c6cb0053890c491b509f937e674f0246eefd299",
+      "artifact_sha256": "2e5accb0e1ab5faec8f39b5b97d034e45279e632d8b0ca505b5ca5ff053f823a",
+      "cpu_seconds": 6.582327267999972,
+      "wall_seconds": 6.502379608340561,
+      "recorded_white_minus_black_halfpoints": 31,
+      "margin_delta_halfpoints": -10,
+      "winner_agrees": true
+    },
+    {
+      "case": 47,
+      "source_url": "https://files.gokgs.com/games/2025/3/23/zousigaya-ML2022.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "80.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -161,
+        -161
+      ],
+      "selected_white_minus_black_halfpoints": -161,
+      "cleanup_moves": [
+        28,
+        45
+      ],
+      "evidence_sha256": "281dcae9680c430383cb45bdca9e132a8bba324968f97e3ce7f5d85ac86c3814",
+      "artifact_sha256": "a83299018d654374eb13ddb41db65dcb54da956f6ed14534bedbb8728100d5e0",
+      "cpu_seconds": 43.56024473900004,
+      "wall_seconds": 43.07292055245489,
+      "recorded_white_minus_black_halfpoints": -161,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 48,
+      "source_url": "https://files.gokgs.com/games/2025/3/28/PonnukiBoy-huyc1961.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "6.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -13,
+        -13
+      ],
+      "selected_white_minus_black_halfpoints": -13,
+      "cleanup_moves": [
+        33,
+        33
+      ],
+      "evidence_sha256": "00b628beceb45424f5d77a91d3e3470b35fa638042bd0eea1a6f39c0ade5f6e4",
+      "artifact_sha256": "0898354388eadc06a09890a9724070ffce6101936b737e255d91c245158fb53b",
+      "cpu_seconds": 34.879062000999966,
+      "wall_seconds": 34.50363551918417,
+      "recorded_white_minus_black_halfpoints": -13,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 49,
+      "source_url": "https://files.gokgs.com/games/2025/3/3/hasenobu-arthur75.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "11.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        21,
+        21
+      ],
+      "selected_white_minus_black_halfpoints": 21,
+      "cleanup_moves": [
+        24,
+        24
+      ],
+      "evidence_sha256": "f9677e5b76ce84cfa0b85318ecf2cb4bb81df22673198699c67096539d7f9737",
+      "artifact_sha256": "15e3833d420bb5ba981853b691bd5f5e3741c0508824e0992120b60ef111063b",
+      "cpu_seconds": 20.351667893000013,
+      "wall_seconds": 20.131656005978584,
+      "recorded_white_minus_black_halfpoints": 23,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 50,
+      "source_url": "https://files.gokgs.com/games/2025/3/6/labatjour-lorbas72.sgf",
+      "recorded_result": {
+        "kind": "incomplete_or_unknown",
+        "margin": null,
+        "winner": null
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        31,
+        31
+      ],
+      "selected_white_minus_black_halfpoints": 31,
+      "cleanup_moves": [
+        29,
+        29
+      ],
+      "evidence_sha256": "b257a2a5d1745c3295a490ad7614d73c6d18e8118a23223b08e511b3d865ca5f",
+      "artifact_sha256": "bd2f1bad4aab9dad336d27b41024e894d7a4b66aae630f23a4724c8f809cbd3d",
+      "cpu_seconds": 32.60145238900009,
+      "wall_seconds": 32.25230702664703
+    },
+    {
+      "case": 51,
+      "source_url": "https://files.gokgs.com/games/2025/3/9/su71-huyc1961.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "20.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -41,
+        -41
+      ],
+      "selected_white_minus_black_halfpoints": -41,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "aa8995d944dd8960181ead74eec66f90f28ed0968489462d950dd6e7bafef4c9",
+      "artifact_sha256": "a5d41ba75c0454a6a650a0ec709756f51460f628046924924cff49d57ab7b941",
+      "cpu_seconds": 18.974444479999647,
+      "wall_seconds": 18.770538609474897,
+      "recorded_white_minus_black_halfpoints": -41,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 52,
+      "source_url": "https://files.gokgs.com/games/2025/4/1/alterego11-ergodicgo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "1.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        3,
+        3
+      ],
+      "selected_white_minus_black_halfpoints": 3,
+      "cleanup_moves": [
+        23,
+        23
+      ],
+      "evidence_sha256": "15aaabdbba71e4c81776dd624811e5a9454855e9bfad0d21f62225b085fc1fa5",
+      "artifact_sha256": "f2ccc1d80752767d6178f4f35790750882dd3fe692e76814563ef7aa333aeac1",
+      "cpu_seconds": 11.255730088999826,
+      "wall_seconds": 11.136519212275743,
+      "recorded_white_minus_black_halfpoints": 3,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 53,
+      "source_url": "https://files.gokgs.com/games/2025/4/12/bankeik-Chris001.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "6.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        13,
+        13
+      ],
+      "selected_white_minus_black_halfpoints": 13,
+      "cleanup_moves": [
+        16,
+        16
+      ],
+      "evidence_sha256": "1f3ad2b89822a1ef9245439294f7bcbb46896f47f955ce58f8aa1a56227b1c67",
+      "artifact_sha256": "48da8af93ff297c664f418e0e97a610bda8c6a50383e37e6d0642b1c1708d227",
+      "cpu_seconds": 8.952413621000005,
+      "wall_seconds": 8.840428318828344,
+      "recorded_white_minus_black_halfpoints": 13,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 54,
+      "source_url": "https://files.gokgs.com/games/2025/4/15/rtmt-chipstar.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "8.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -23,
+        -23
+      ],
+      "selected_white_minus_black_halfpoints": -23,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "7422fc306c04033af23512a9cfbb8195b06aa22b07ad223badbcd4f187d7a679",
+      "artifact_sha256": "36cd2f60ab3dec0e82bd398e74b2d6e528269fa905d4f3a76cd7955ea2b71c3d",
+      "cpu_seconds": 12.269735425999897,
+      "wall_seconds": 12.131392293609679,
+      "recorded_white_minus_black_halfpoints": -17,
+      "margin_delta_halfpoints": -6,
+      "winner_agrees": true
+    },
+    {
+      "case": 55,
+      "source_url": "https://files.gokgs.com/games/2025/4/27/SylvainR-chipstar.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "12.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        23,
+        23
+      ],
+      "selected_white_minus_black_halfpoints": 23,
+      "cleanup_moves": [
+        18,
+        20
+      ],
+      "evidence_sha256": "68292cd0b32561e2ed4d2d709d300a9e652fd1f77090a2ccbad2dc6842003dd7",
+      "artifact_sha256": "c9c1601281e542c7c20a07b984d4403bb594205c314ea5195a0c5b9eab54b857",
+      "cpu_seconds": 19.673175854000192,
+      "wall_seconds": 19.463207689113915,
+      "recorded_white_minus_black_halfpoints": 25,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 56,
+      "source_url": "https://files.gokgs.com/games/2025/4/30/jasonho-minnmann.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "2.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -5,
+        -5
+      ],
+      "selected_white_minus_black_halfpoints": -5,
+      "cleanup_moves": [
+        11,
+        11
+      ],
+      "evidence_sha256": "79d35354a41d291ff13459322798f651d134def83b531ac36420f6ede1133f00",
+      "artifact_sha256": "e4dd3fc4d9eeba4042ade1a3c6c0524ad530737846c6009de643f999bed1a397",
+      "cpu_seconds": 4.89029337199986,
+      "wall_seconds": 4.830869602970779,
+      "recorded_white_minus_black_halfpoints": -5,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 57,
+      "source_url": "https://files.gokgs.com/games/2025/4/7/boha-yuumsuzuki.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -15,
+        -15
+      ],
+      "selected_white_minus_black_halfpoints": -15,
+      "cleanup_moves": [
+        19,
+        19
+      ],
+      "evidence_sha256": "df7f9aa9e5fe37cec137f83c6a812f06afb57411bc1c51d3fc14d0d89058db5d",
+      "artifact_sha256": "b09b17ab380cd6cd213d2b9de27d77e12dd7dc207edb8076a44e0104c58efb17",
+      "cpu_seconds": 16.47020630599991,
+      "wall_seconds": 16.29545304737985,
+      "recorded_white_minus_black_halfpoints": -15,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 58,
+      "source_url": "https://files.gokgs.com/games/2025/4/7/kawa098-akasaka39.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "15.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -21,
+        -21
+      ],
+      "selected_white_minus_black_halfpoints": -21,
+      "cleanup_moves": [
+        41,
+        41
+      ],
+      "evidence_sha256": "e1d50c44866054fe19420e4768a2794e40ef9dda70f5d8d7613432d7501e0627",
+      "artifact_sha256": "1c16bc9ed2cf42b7a5742b853a99961109067402a1f70e4b744749f8e4f0e1fb",
+      "cpu_seconds": 55.58441059200004,
+      "wall_seconds": 54.97436625417322,
+      "recorded_white_minus_black_halfpoints": -31,
+      "margin_delta_halfpoints": 10,
+      "winner_agrees": true
+    },
+    {
+      "case": 59,
+      "source_url": "https://files.gokgs.com/games/2025/5/22/k65-dopingg.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "32.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        65,
+        65
+      ],
+      "selected_white_minus_black_halfpoints": 65,
+      "cleanup_moves": [
+        24,
+        24
+      ],
+      "evidence_sha256": "3069b53b740ad0ac5c027da3e09f7e55c3dabf32a68c7b1898d537c465d8e222",
+      "artifact_sha256": "56af1dead392e24c02628460180a511529b50ec58c22d404539b105c881dbb3b",
+      "cpu_seconds": 24.378264351000325,
+      "wall_seconds": 24.112580836750567,
+      "recorded_white_minus_black_halfpoints": 65,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 60,
+      "source_url": "https://files.gokgs.com/games/2025/5/25/k65-dopingg.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "22.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        43,
+        43
+      ],
+      "selected_white_minus_black_halfpoints": 43,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "23ceac81ff7ab38e04b9d739148dc303f81d9ab292068bf90e6b616cf6f0f76a",
+      "artifact_sha256": "a484fc1f696e3c5baa01b050e776a289654c25d7354497f0aa8741b9e8f99217",
+      "cpu_seconds": 10.563829483000063,
+      "wall_seconds": 10.45685038343072,
+      "recorded_white_minus_black_halfpoints": 45,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 61,
+      "source_url": "https://files.gokgs.com/games/2025/5/25/rare-wk.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "1.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -3,
+        -3
+      ],
+      "selected_white_minus_black_halfpoints": -3,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "8ce980aba00f974061cd0a95de9f33bb65d275e83f0cd44b831c1e727f8e730e",
+      "artifact_sha256": "f29482da53cbedcdeed1219b415d53dda1697ec4733ba17997bf4e77363e1aca",
+      "cpu_seconds": 6.153672517999894,
+      "wall_seconds": 6.07576412614435,
+      "recorded_white_minus_black_halfpoints": -3,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 62,
+      "source_url": "https://files.gokgs.com/games/2025/5/26/arthur75-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        9,
+        9
+      ],
+      "selected_white_minus_black_halfpoints": 9,
+      "cleanup_moves": [
+        24,
+        24
+      ],
+      "evidence_sha256": "af0ef9d2ff67dfbcd02217b0d81b0ad2b6487a5b0cc9e371f093759b86e91592",
+      "artifact_sha256": "35e7356e9647f2484cdb8c06e1fedd0b136236ab6b4d1b828752df829c35f1ef",
+      "cpu_seconds": 24.804746710000018,
+      "wall_seconds": 24.53099043853581,
+      "recorded_white_minus_black_halfpoints": 9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 63,
+      "source_url": "https://files.gokgs.com/games/2025/5/5/cardo-ohtsukenji.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "17.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        23,
+        23
+      ],
+      "selected_white_minus_black_halfpoints": 23,
+      "cleanup_moves": [
+        20,
+        20
+      ],
+      "evidence_sha256": "9ea90db3f3ab8c05dd68b835120b6601145f17e040237a6eada8770410c57ac5",
+      "artifact_sha256": "bd2f73d0ed34ccc373676d3310c8b4b1b4e5043ed7df64b9d164e1baeeaa0194",
+      "cpu_seconds": 23.05349203699984,
+      "wall_seconds": 22.802378862164915,
+      "recorded_white_minus_black_halfpoints": 35,
+      "margin_delta_halfpoints": -12,
+      "winner_agrees": true
+    },
+    {
+      "case": 64,
+      "source_url": "https://files.gokgs.com/games/2025/6/12/miura2271-maitrepo.sgf",
+      "recorded_result": {
+        "kind": "forfeit",
+        "margin": null,
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -5,
+        -7
+      ],
+      "selected_white_minus_black_halfpoints": -7,
+      "cleanup_moves": [
+        23,
+        43
+      ],
+      "evidence_sha256": "bfe2b5430336b7df90e67f18233c358c374378b7e1a04ab2fad037872963f48f",
+      "artifact_sha256": "08483ef8211eb23eb3da384e97f54e29650184ef1864eee77e3462605cafa9b8",
+      "cpu_seconds": 53.18870017300014,
+      "wall_seconds": 52.61693528294563
+    },
+    {
+      "case": 65,
+      "source_url": "https://files.gokgs.com/games/2025/6/14/KG12345-zousigaya.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "18.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        37,
+        37
+      ],
+      "selected_white_minus_black_halfpoints": 37,
+      "cleanup_moves": [
+        19,
+        19
+      ],
+      "evidence_sha256": "d770c2245b5c35d30a9a7a03e018976cab9bfb828fea26e0bbe74653fa7f7d63",
+      "artifact_sha256": "ef22ed91093800aef6232b4f0f07f0eda8506663ddc624ab5aa1371d4c237a43",
+      "cpu_seconds": 20.19036379999966,
+      "wall_seconds": 19.944306222721934,
+      "recorded_white_minus_black_halfpoints": 37,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 66,
+      "source_url": "https://files.gokgs.com/games/2025/6/14/tang0-bajngrob.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "41.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -85,
+        -85
+      ],
+      "selected_white_minus_black_halfpoints": -85,
+      "cleanup_moves": [
+        29,
+        29
+      ],
+      "evidence_sha256": "745466186be164f6b14650468cb79e4afb1d9b27a3327c305edb7526cb4a10e8",
+      "artifact_sha256": "784d2455830de6b8d9fbb53702273844a9b908c7c48e6ed7ec2dca51c6111280",
+      "cpu_seconds": 39.27156416300022,
+      "wall_seconds": 38.863652143627405,
+      "recorded_white_minus_black_halfpoints": -83,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 67,
+      "source_url": "https://files.gokgs.com/games/2025/6/15/huyc1961-sasdev.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        15,
+        15
+      ],
+      "selected_white_minus_black_halfpoints": 15,
+      "cleanup_moves": [
+        23,
+        23
+      ],
+      "evidence_sha256": "cf90fba5c937ff7595697674b5462b09d4e239ec3daa33bb2590c8954a331f97",
+      "artifact_sha256": "03ac54ba2aa27545f75e45bb1d368f47f2f39ca5710595457b0c3d933e14e27b",
+      "cpu_seconds": 20.0974018469999,
+      "wall_seconds": 19.86856159567833,
+      "recorded_white_minus_black_halfpoints": 15,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 68,
+      "source_url": "https://files.gokgs.com/games/2025/6/16/alterego11-lorbas72.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "19.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -39,
+        -39
+      ],
+      "selected_white_minus_black_halfpoints": -39,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "2f71f7f4d9faaf642953398782fd91739bda2663cf20e66c02b93fc3db0d94d0",
+      "artifact_sha256": "5014ec40dbcd52e1344d750ff611d558f4d0f8df71913ca7cec2f112e51f79f2",
+      "cpu_seconds": 12.147161437000022,
+      "wall_seconds": 12.021539088338614,
+      "recorded_white_minus_black_halfpoints": -39,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 69,
+      "source_url": "https://files.gokgs.com/games/2025/6/2/huyc1961-butterfly6.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "1.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -3,
+        -3
+      ],
+      "selected_white_minus_black_halfpoints": -3,
+      "cleanup_moves": [
+        25,
+        25
+      ],
+      "evidence_sha256": "395e51d376e69cb5fb264e9f78c45985fd3957fa0b8623c176732974fce2a4e6",
+      "artifact_sha256": "7012f0caa2b2bdb79af3fef87ff6fb93967b3b537cf8056bfc2c6e2a91667043",
+      "cpu_seconds": 15.582990639999707,
+      "wall_seconds": 15.413587057963014,
+      "recorded_white_minus_black_halfpoints": -3,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 70,
+      "source_url": "https://files.gokgs.com/games/2025/6/23/lorbas72-Pineappple.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "33.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        67,
+        67
+      ],
+      "selected_white_minus_black_halfpoints": 67,
+      "cleanup_moves": [
+        16,
+        16
+      ],
+      "evidence_sha256": "3f59c05d24b4c3b47f6033fef90a5a29f64e4c7c74e00c5e621b5fc580df4b8d",
+      "artifact_sha256": "2ba756409e5dfde32ad99976c889fc98557d54d1a09bc43753e501ed37ae5407",
+      "cpu_seconds": 16.520091944000114,
+      "wall_seconds": 16.33887810818851,
+      "recorded_white_minus_black_halfpoints": 67,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 71,
+      "source_url": "https://files.gokgs.com/games/2025/6/25/zousigaya-makobe12.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "19.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        39,
+        39
+      ],
+      "selected_white_minus_black_halfpoints": 39,
+      "cleanup_moves": [
+        11,
+        11
+      ],
+      "evidence_sha256": "8560afb474dcdc6a579d9f02c484b5e6dcb3e1a1a32f01ac63efc3b817281839",
+      "artifact_sha256": "85af68bd55ad6006af14a36d010e7a54b179a52ec2493ddf4a3e762a276f5138",
+      "cpu_seconds": 9.988322643999936,
+      "wall_seconds": 9.867874222807586,
+      "recorded_white_minus_black_halfpoints": 39,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 72,
+      "source_url": "https://files.gokgs.com/games/2025/6/27/Olduck-Naokun.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "18.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -37,
+        -37
+      ],
+      "selected_white_minus_black_halfpoints": -37,
+      "cleanup_moves": [
+        16,
+        16
+      ],
+      "evidence_sha256": "ce94f42de24c3e767c8f8c829cfddc3ce352f5e838333833fa9085667ec39e3f",
+      "artifact_sha256": "c497a52f73c24c7279b20c049266fedb96b56ed3e44152d982f878de399c6230",
+      "cpu_seconds": 17.93291216800003,
+      "wall_seconds": 17.739450881257653,
+      "recorded_white_minus_black_halfpoints": -37,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 73,
+      "source_url": "https://files.gokgs.com/games/2025/6/28/zousigaya-manriev.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "25.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -51,
+        -51
+      ],
+      "selected_white_minus_black_halfpoints": -51,
+      "cleanup_moves": [
+        34,
+        34
+      ],
+      "evidence_sha256": "82d7102670c09b55861382145133743dce3656653e180887980217bf1949f0be",
+      "artifact_sha256": "aa2218ba60da2d2936a2442ea7dadfb7f8d1bde09e9c851743e0b6e22d36c9e7",
+      "cpu_seconds": 37.03406436,
+      "wall_seconds": 36.608062016777694,
+      "recorded_white_minus_black_halfpoints": -51,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 74,
+      "source_url": "https://files.gokgs.com/games/2025/6/29/lorbas72-mustafi.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "26.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        53,
+        53
+      ],
+      "selected_white_minus_black_halfpoints": 53,
+      "cleanup_moves": [
+        14,
+        14
+      ],
+      "evidence_sha256": "16c500d7ca808e94f5fa744046a08ee11e9fd65267ed30ada972f16b9f400a98",
+      "artifact_sha256": "f2c593bc0af133267dbeb464a8f308d66bb7f7ec9ca203f7c4be19152634f6a5",
+      "cpu_seconds": 15.47203289800018,
+      "wall_seconds": 15.304366142489016,
+      "recorded_white_minus_black_halfpoints": 53,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 75,
+      "source_url": "https://files.gokgs.com/games/2025/6/3/arthur75-sedaslmz.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "9.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -19,
+        -19
+      ],
+      "selected_white_minus_black_halfpoints": -19,
+      "cleanup_moves": [
+        18,
+        18
+      ],
+      "evidence_sha256": "5513251f6b374b05c1e51fcf7a8ca31c61e62cf5dc8f229fe179015fb85012bc",
+      "artifact_sha256": "fe66d7d47f8181843ee89a95de13d3c92c912371651fca21410d13c7f13422c6",
+      "cpu_seconds": 20.6835596410001,
+      "wall_seconds": 20.453760605305433,
+      "recorded_white_minus_black_halfpoints": -19,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 76,
+      "source_url": "https://files.gokgs.com/games/2025/6/30/Olduck-AHaselmaie.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "34.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        69,
+        69
+      ],
+      "selected_white_minus_black_halfpoints": 69,
+      "cleanup_moves": [
+        10,
+        10
+      ],
+      "evidence_sha256": "ee836cf718dd7add33648fb7f2b4b7d2ecb8eb0895603b408972e4e74d4a3ef3",
+      "artifact_sha256": "3232f361df933a0cfdd7e2679c7d170c8d1bfb0a402a5f56c106b7ca0d377110",
+      "cpu_seconds": 6.787034766000033,
+      "wall_seconds": 6.716230126097798,
+      "recorded_white_minus_black_halfpoints": 69,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 77,
+      "source_url": "https://files.gokgs.com/games/2025/6/9/rhone1-arthur75.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "16.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        33,
+        33
+      ],
+      "selected_white_minus_black_halfpoints": 33,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "e23ff5afb033415f1770125ee21928f8f3fa3616cf0dac6b7810cd2d51181e9c",
+      "artifact_sha256": "d92040b54e7d1f4546c76675c3cfb6cf66df4b303cf256a943ab94bdfb7b7a4a",
+      "cpu_seconds": 10.255511734000038,
+      "wall_seconds": 10.13813311420381,
+      "recorded_white_minus_black_halfpoints": 33,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 78,
+      "source_url": "https://files.gokgs.com/games/2025/7/1/alterego11-ergodicgo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "28.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -55,
+        -55
+      ],
+      "selected_white_minus_black_halfpoints": -55,
+      "cleanup_moves": [
+        18,
+        18
+      ],
+      "evidence_sha256": "86ce517520e150524c0cd7990dcda90f080b1f1ee42943eda948205f2f582559",
+      "artifact_sha256": "a4875717b7b5e845d6c9c412dbb96a807cfb16831840ac3db0117ff568d087ee",
+      "cpu_seconds": 17.484604499999932,
+      "wall_seconds": 17.30286329984665,
+      "recorded_white_minus_black_halfpoints": -57,
+      "margin_delta_halfpoints": 2,
+      "winner_agrees": true
+    },
+    {
+      "case": 79,
+      "source_url": "https://files.gokgs.com/games/2025/7/14/razuseki-akasaka39.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "11.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -23,
+        -23
+      ],
+      "selected_white_minus_black_halfpoints": -23,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "e8d93f8087f4207c41738938c0d7a69fc245d4be5b0cace45fc5be784e73a73d",
+      "artifact_sha256": "ab556c5e3221f8e968bc33af6ad67a6abfff878f95a6bbddbb353df20897dfb4",
+      "cpu_seconds": 14.44309218300009,
+      "wall_seconds": 14.277269344776869,
+      "recorded_white_minus_black_halfpoints": -23,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 80,
+      "source_url": "https://files.gokgs.com/games/2025/7/17/Astone-yuumsuzuki.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "13.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -27,
+        -27
+      ],
+      "selected_white_minus_black_halfpoints": -27,
+      "cleanup_moves": [
+        27,
+        26
+      ],
+      "evidence_sha256": "edec7a18dcf82ea20e882989db70f907b8abbdb23aeae96efad79ffe4a12ead3",
+      "artifact_sha256": "e2b6e47771e8cc4d3bc9fb51471781b3da63d464e4bfa724770a387cb0c22d52",
+      "cpu_seconds": 27.497214205999853,
+      "wall_seconds": 27.197171226143837,
+      "recorded_white_minus_black_halfpoints": -27,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 81,
+      "source_url": "https://files.gokgs.com/games/2025/7/17/yuumsuzuki-moex.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        28,
+        28
+      ],
+      "evidence_sha256": "a0609265ca748dc916bf81e344cc3bdef808726da050beff8bd157cc92976573",
+      "artifact_sha256": "9d8aab6096821fdf7218228088a34ce05dbf698ae8ddb0c3ab0aa40945faaed8",
+      "cpu_seconds": 26.932655286,
+      "wall_seconds": 26.62903446611017,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 82,
+      "source_url": "https://files.gokgs.com/games/2025/7/19/yuumsuzuki-othmno1.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        15,
+        15
+      ],
+      "evidence_sha256": "d9d5e8bc281817e33b02f46a725607842158ed999059181bb42a42cb7292d303",
+      "artifact_sha256": "22ee7514792b6bce7e771bcc63f914b07f406b8e223b35e1907e3f02218f38bf",
+      "cpu_seconds": 11.214310913999952,
+      "wall_seconds": 11.104894171468914,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 83,
+      "source_url": "https://files.gokgs.com/games/2025/7/29/BasilDiug-yuumsuzuki.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "53.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        5,
+        5
+      ],
+      "selected_white_minus_black_halfpoints": 5,
+      "cleanup_moves": [
+        40,
+        40
+      ],
+      "evidence_sha256": "891df69cf3a84156f71c4388ac163742fe3fb3e501c9aee77365d3f45ed7b55b",
+      "artifact_sha256": "e9297cfbf5fd497e1842c05167d49ba26808e870d796d002bdee12f4022b4204",
+      "cpu_seconds": 18.524758195999993,
+      "wall_seconds": 18.320745803415775,
+      "recorded_white_minus_black_halfpoints": -107,
+      "margin_delta_halfpoints": 112,
+      "winner_agrees": false
+    },
+    {
+      "case": 84,
+      "source_url": "https://files.gokgs.com/games/2025/7/7/syvers-akasaka39.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        30,
+        30
+      ],
+      "evidence_sha256": "7ce129b90d8c24c76bf7ecccbc2bdf9e90fe6a02dd4e6d75dee5b6826a32aebb",
+      "artifact_sha256": "4280e9401bb62569e0bddd4d4904a35e7b61cd130827f3ad870f4309beff9c7e",
+      "cpu_seconds": 30.38263757100026,
+      "wall_seconds": 30.074683194048703,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 85,
+      "source_url": "https://files.gokgs.com/games/2025/7/9/ergodicgo-mustafi.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "0.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        1,
+        1
+      ],
+      "selected_white_minus_black_halfpoints": 1,
+      "cleanup_moves": [
+        13,
+        13
+      ],
+      "evidence_sha256": "59e89c06d1091aa56d36923073337eeaa2aa4175013892190a5d587c03b4a764",
+      "artifact_sha256": "8493b432a63ea28592f484687c5fcb2bde026983e099c7d0e62175b4a208d8bb",
+      "cpu_seconds": 6.597614804999921,
+      "wall_seconds": 6.515989422798157,
+      "recorded_white_minus_black_halfpoints": 1,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 86,
+      "source_url": "https://files.gokgs.com/games/2025/7/9/ljz585858-akasaka39.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "8.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        17,
+        17
+      ],
+      "selected_white_minus_black_halfpoints": 17,
+      "cleanup_moves": [
+        22,
+        22
+      ],
+      "evidence_sha256": "5ff8500013272ed0ccded25ad5d5d9fd6ac53745f17e3408330c6aff832aeeb6",
+      "artifact_sha256": "ef314a7d0a6e9cf9b3e81c5792cac2ad0195b305e246cc43a99273b7539ee534",
+      "cpu_seconds": 23.60974185000009,
+      "wall_seconds": 23.355712599121034,
+      "recorded_white_minus_black_halfpoints": 17,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 87,
+      "source_url": "https://files.gokgs.com/games/2025/8/12/Gneral-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "24.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        51,
+        51
+      ],
+      "selected_white_minus_black_halfpoints": 51,
+      "cleanup_moves": [
+        16,
+        18
+      ],
+      "evidence_sha256": "8fa2a647dbcc0b2497a4f0a7b9bff400d7e5f77f48572bf3cb70fab15b23eb47",
+      "artifact_sha256": "25518ba9cbe6d47d7f1b6c8809a82d02de18138bb1f9bfa7008266c18e466a7a",
+      "cpu_seconds": 23.010391063000043,
+      "wall_seconds": 22.77520858310163,
+      "recorded_white_minus_black_halfpoints": 49,
+      "margin_delta_halfpoints": 2,
+      "winner_agrees": true
+    },
+    {
+      "case": 88,
+      "source_url": "https://files.gokgs.com/games/2025/8/12/takama-einer.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "27.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        55,
+        55
+      ],
+      "selected_white_minus_black_halfpoints": 55,
+      "cleanup_moves": [
+        12,
+        12
+      ],
+      "evidence_sha256": "61bfd8abcc0de3b56fe36435cc79bb547cee944e82bd2cbb0617d41b166065da",
+      "artifact_sha256": "ac49555a5fe66b67706c80a65ddb7e1f5bda6572cf6f56275cee91e90d76222a",
+      "cpu_seconds": 10.561139583999875,
+      "wall_seconds": 10.439402035437524,
+      "recorded_white_minus_black_halfpoints": 55,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 89,
+      "source_url": "https://files.gokgs.com/games/2025/8/14/skew2-Nikytia02.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "2.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -5,
+        -5
+      ],
+      "selected_white_minus_black_halfpoints": -5,
+      "cleanup_moves": [
+        9,
+        11
+      ],
+      "evidence_sha256": "31283ad8d7354e9203edc280dd80428b214176ad84f8f92cd5ee7e6e6872cc3c",
+      "artifact_sha256": "55e7440703bc060ab4820a7d6bef4b3ef314a4a9bc0517cf5397bdc642b1c0ff",
+      "cpu_seconds": 6.469677496999793,
+      "wall_seconds": 6.404861466959119,
+      "recorded_white_minus_black_halfpoints": -5,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 90,
+      "source_url": "https://files.gokgs.com/games/2025/8/15/Nikytia00-skew2-6.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        15,
+        15
+      ],
+      "selected_white_minus_black_halfpoints": 15,
+      "cleanup_moves": [
+        10,
+        10
+      ],
+      "evidence_sha256": "7ee2720806c10c0ed5700ef91260447938f4610e96e0626a3e886dbbaa9ae008",
+      "artifact_sha256": "44d78d09d692ddb2f0ac88f9a06193942a950c2841ece7032d770eded5d92b3b",
+      "cpu_seconds": 8.21855717399967,
+      "wall_seconds": 8.132833398878574,
+      "recorded_white_minus_black_halfpoints": 15,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 91,
+      "source_url": "https://files.gokgs.com/games/2025/8/20/y57172-threeone.sgf",
+      "recorded_result": {
+        "kind": "resignation",
+        "margin": null,
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -43,
+        -41
+      ],
+      "selected_white_minus_black_halfpoints": -41,
+      "cleanup_moves": [
+        19,
+        21
+      ],
+      "evidence_sha256": "b081969a05ecfa249d8aeb67b55bc17eb7b5b4287bf6dc7354341caa2692a120",
+      "artifact_sha256": "9b99b96801020936015e1c0d1fcdacf3bc0ed15af899c12cf6c4347f314cc605",
+      "cpu_seconds": 26.38385663699978,
+      "wall_seconds": 26.098838076926768
+    },
+    {
+      "case": 92,
+      "source_url": "https://files.gokgs.com/games/2025/8/27/ykawa-Neptunus.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "3.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -7,
+        -7
+      ],
+      "selected_white_minus_black_halfpoints": -7,
+      "cleanup_moves": [
+        25,
+        25
+      ],
+      "evidence_sha256": "2b731cb4e86e3d66d086f718185e1b84e46131b9b7c2c3289fb6570b75acb5b3",
+      "artifact_sha256": "1c21245646732beb01dd2d266aa61655ebffa667299d23f832afdc983e97622b",
+      "cpu_seconds": 27.573225915000194,
+      "wall_seconds": 27.2733808811754,
+      "recorded_white_minus_black_halfpoints": -7,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 93,
+      "source_url": "https://files.gokgs.com/games/2025/8/29/dopingg-tonton2.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "36.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -73,
+        -73
+      ],
+      "selected_white_minus_black_halfpoints": -73,
+      "cleanup_moves": [
+        19,
+        19
+      ],
+      "evidence_sha256": "a34f13fcb0eef1de2633a7350007efed1d21104e32e9ca278d2b1ce12e4dc75f",
+      "artifact_sha256": "1a770d6eff90fd058bc6229e0839b2103caa4ad73933d793267eff9c501535a9",
+      "cpu_seconds": 24.98846437200018,
+      "wall_seconds": 24.702886655926704,
+      "recorded_white_minus_black_halfpoints": -73,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 94,
+      "source_url": "https://files.gokgs.com/games/2025/8/3/tipee-takama.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "10.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        21,
+        21
+      ],
+      "selected_white_minus_black_halfpoints": 21,
+      "cleanup_moves": [
+        17,
+        17
+      ],
+      "evidence_sha256": "6592b1679c7da8912853bf22a96dd680d27f54d16bfbbb17b3121323010c8f90",
+      "artifact_sha256": "e2fe9be7053144d7318eb8c2c13093145ee211312ccc616f462314eea78e0f0e",
+      "cpu_seconds": 18.71269561599979,
+      "wall_seconds": 18.507637171074748,
+      "recorded_white_minus_black_halfpoints": 21,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 95,
+      "source_url": "https://files.gokgs.com/games/2025/8/30/takama-mashiko.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "17.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        35,
+        35
+      ],
+      "selected_white_minus_black_halfpoints": 35,
+      "cleanup_moves": [
+        26,
+        24
+      ],
+      "evidence_sha256": "73dc244ce6eb2f895b6bac3b376d3624162481ecac84c73df79b77b4c5255416",
+      "artifact_sha256": "d152b9e6674672e84467e32121c2a14f7316cad5a0c45f20c643640072846fe2",
+      "cpu_seconds": 21.724954465999872,
+      "wall_seconds": 21.4848799277097,
+      "recorded_white_minus_black_halfpoints": 35,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 96,
+      "source_url": "https://files.gokgs.com/games/2025/8/5/skew2-Nikytia00.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "4.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -9,
+        -9
+      ],
+      "selected_white_minus_black_halfpoints": -9,
+      "cleanup_moves": [
+        8,
+        8
+      ],
+      "evidence_sha256": "e67fbd439a06fbb75518a5671d2f17d29f52509ed232ec806568a9ffafdabc8a",
+      "artifact_sha256": "9f2381c8b345a596ebee6374f4f2fc8438bfc3b81d541bafa788b2ba2d9e1b1b",
+      "cpu_seconds": 5.805321231000335,
+      "wall_seconds": 5.744281351566315,
+      "recorded_white_minus_black_halfpoints": -9,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 97,
+      "source_url": "https://files.gokgs.com/games/2025/8/7/Nikytia02-skew2.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "6.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -13,
+        -13
+      ],
+      "selected_white_minus_black_halfpoints": -13,
+      "cleanup_moves": [
+        4,
+        4
+      ],
+      "evidence_sha256": "80ea7d02502ef9462d0d543d3bf8bd6b703968d5c7778cb3561d252bfd390549",
+      "artifact_sha256": "462489b9b9f906404ab5d185f50e53652b0867cc65d743fb375a08a6e24834c3",
+      "cpu_seconds": 3.8480842369999664,
+      "wall_seconds": 3.7996885208413005,
+      "recorded_white_minus_black_halfpoints": -13,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 98,
+      "source_url": "https://files.gokgs.com/games/2025/8/7/cardo-gianmaria.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "23.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        47,
+        47
+      ],
+      "selected_white_minus_black_halfpoints": 47,
+      "cleanup_moves": [
+        5,
+        5
+      ],
+      "evidence_sha256": "aa112bd691457c4bc3d4837abeaeb4d3e073fb3c9847c289d6ada6a1d45b03dd",
+      "artifact_sha256": "75c576bb79ae0ca164f45bf5c7e562a53de3f776ed7bc224068b4a8fc2961d0a",
+      "cpu_seconds": 4.7024770259997695,
+      "wall_seconds": 4.651607939042151,
+      "recorded_white_minus_black_halfpoints": 47,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 99,
+      "source_url": "https://files.gokgs.com/games/2025/8/7/wk-rare.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "8.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        17,
+        17
+      ],
+      "selected_white_minus_black_halfpoints": 17,
+      "cleanup_moves": [
+        28,
+        28
+      ],
+      "evidence_sha256": "02c2468b12d0191636404de964b8094a8cc8a9003a783201dde1e4d95aa36825",
+      "artifact_sha256": "9b4d728dad5cc2f0ffde08167451de9aecb10f9cfb8f4a6b2eee59628a7d7389",
+      "cpu_seconds": 20.771829572999877,
+      "wall_seconds": 20.534661567769945,
+      "recorded_white_minus_black_halfpoints": 17,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 100,
+      "source_url": "https://files.gokgs.com/games/2025/8/8/kitaichi-Neptunus.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "20.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -43,
+        -43
+      ],
+      "selected_white_minus_black_halfpoints": -43,
+      "cleanup_moves": [
+        35,
+        35
+      ],
+      "evidence_sha256": "7830ff0c70e33404e9f67d5a7a0a6a026d7bca9dfe00a4692c26ac2a4deb3b74",
+      "artifact_sha256": "784a3c983974112dbb2362e41a436c3ca65700174100caa86e4729ea8a5e684e",
+      "cpu_seconds": 46.21041164600001,
+      "wall_seconds": 45.690544279292226,
+      "recorded_white_minus_black_halfpoints": -41,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 101,
+      "source_url": "https://files.gokgs.com/games/2025/9/1/tang0-JDig-2.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "21.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -37,
+        -37
+      ],
+      "selected_white_minus_black_halfpoints": -37,
+      "cleanup_moves": [
+        29,
+        35
+      ],
+      "evidence_sha256": "7dd057fea8a1c794a60dbea2e646acedbc314b0aa869cd002fc30798d9a52296",
+      "artifact_sha256": "4e29760f9c299deae3e7ceaaf284dbc76b6ed4d1a07294a3e3b07ca0d298354e",
+      "cpu_seconds": 50.21802785199998,
+      "wall_seconds": 49.67043644376099,
+      "recorded_white_minus_black_halfpoints": -43,
+      "margin_delta_halfpoints": 6,
+      "winner_agrees": true
+    },
+    {
+      "case": 102,
+      "source_url": "https://files.gokgs.com/games/2025/9/13/zousigaya-utopia.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -15,
+        -15
+      ],
+      "selected_white_minus_black_halfpoints": -15,
+      "cleanup_moves": [
+        19,
+        19
+      ],
+      "evidence_sha256": "e8cf3776eb44ea5c3fa337e35f8bf8873f33ba7613c76953a5986762cc59266d",
+      "artifact_sha256": "29cf5144bdfbf368c5c1f4d3a1b84e72ebd240fc24fc900c5e5ee0f096e515b9",
+      "cpu_seconds": 18.639461707999544,
+      "wall_seconds": 18.44201297033578,
+      "recorded_white_minus_black_halfpoints": -15,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 103,
+      "source_url": "https://files.gokgs.com/games/2025/9/14/Jacobs-zousigaya.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "0.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        1,
+        1
+      ],
+      "selected_white_minus_black_halfpoints": 1,
+      "cleanup_moves": [
+        26,
+        25
+      ],
+      "evidence_sha256": "b16b6859f395eb223796e4a26735620ac91e6fc8ffadd3daa3a8b4c7765bf9fb",
+      "artifact_sha256": "ef09c50b0a44f4937cf8c0ba0cf9328fdcca4adb72b8510a31e0eaa7d4b8afa5",
+      "cpu_seconds": 18.21861634800007,
+      "wall_seconds": 18.023125687614083,
+      "recorded_white_minus_black_halfpoints": 1,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 104,
+      "source_url": "https://files.gokgs.com/games/2025/9/14/misarin60-zousigaya.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "34.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        67,
+        67
+      ],
+      "selected_white_minus_black_halfpoints": 67,
+      "cleanup_moves": [
+        34,
+        34
+      ],
+      "evidence_sha256": "830e7650df00642ddd639a622048debac3456305a46c7619ee491e87e5ae1b71",
+      "artifact_sha256": "d9a606eba3410afa3a861b59a210f03578f8a990577911c5bbaa28ccf2878007",
+      "cpu_seconds": 47.13336702300012,
+      "wall_seconds": 46.62528848275542,
+      "recorded_white_minus_black_halfpoints": 69,
+      "margin_delta_halfpoints": -2,
+      "winner_agrees": true
+    },
+    {
+      "case": 105,
+      "source_url": "https://files.gokgs.com/games/2025/9/15/huyc1961-sdo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "0.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -1,
+        -1
+      ],
+      "selected_white_minus_black_halfpoints": -1,
+      "cleanup_moves": [
+        15,
+        15
+      ],
+      "evidence_sha256": "92c99ccfb9a103347b66fd7be3bf3989b9273800a6e0fa6b74d49b3e3c1cd864",
+      "artifact_sha256": "8d69680b876343d9f00c315fca65bc9febcaf8bdf5ac7b18fe821039c5de2df3",
+      "cpu_seconds": 9.129121907999888,
+      "wall_seconds": 9.009619959630072,
+      "recorded_white_minus_black_halfpoints": -1,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 106,
+      "source_url": "https://files.gokgs.com/games/2025/9/20/Abeille-kejia.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "16.5",
+        "winner": "B"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        -33,
+        -33
+      ],
+      "selected_white_minus_black_halfpoints": -33,
+      "cleanup_moves": [
+        5,
+        5
+      ],
+      "evidence_sha256": "3fe5b11ae52dcdc7042fd88ebaf5e799a7e820cb42b8be8145f9b63637c64e5e",
+      "artifact_sha256": "d3906105b0594682b8234630f67a52d3ba29aec7ee4df6fa1a2d6fc47a382cb9",
+      "cpu_seconds": 4.116284087000167,
+      "wall_seconds": 4.088260289281607,
+      "recorded_white_minus_black_halfpoints": -33,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    },
+    {
+      "case": 107,
+      "source_url": "https://files.gokgs.com/games/2025/9/20/kejia-brigolo.sgf",
+      "recorded_result": {
+        "kind": "scored",
+        "margin": "7.5",
+        "winner": "W"
+      },
+      "status": "resolved",
+      "reason": "winner_stable_empirical_cleanup",
+      "native_scores_halfpoints": [
+        15,
+        15
+      ],
+      "selected_white_minus_black_halfpoints": 15,
+      "cleanup_moves": [
+        7,
+        7
+      ],
+      "evidence_sha256": "4a939e6f4d76e5c61d6a8465af27da8b0235a9f7bb86cc810596b66c76dab142",
+      "artifact_sha256": "d71081a1bab75dd1cf076d21218f67c3b0fa8a50de4c101ca754175afc287bca",
+      "cpu_seconds": 6.839437565000026,
+      "wall_seconds": 6.752330634742975,
+      "recorded_white_minus_black_halfpoints": 15,
+      "margin_delta_halfpoints": 0,
+      "winner_agrees": true
+    }
+  ],
+  "passes": [
+    {
+      "source_url": "https://files.gokgs.com/games/2025/12/11/scdcsa-maitrepo.sgf",
+      "pre_move_index": 259,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 0,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.403707500000003,
+        0.20681670000000096
+      ],
+      "artifact_sha256": "14a4930106b31fbefc1698f23d85598c0c951c036aad8fe6075fc3304a653172"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/12/20/zousigaya-garapan.sgf",
+      "pre_move_index": 277,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 1,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.2036670400000009,
+        0.2103971299999987
+      ],
+      "artifact_sha256": "0c144c0de7c72ed405e2954abcba9e2220fc5b5c81a22f37c500fdf670ddc4cd"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/12/28/lorbas72-PascalGo.sgf",
+      "pre_move_index": 258,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 2,
+      "verdict": "unjudgeable",
+      "reason": "empirical_threshold_disagreement",
+      "gains_points": [
+        1.6491222000000008,
+        1.275855700000001
+      ],
+      "artifact_sha256": "7ad27b55c9204359683b8c8f60b2eb11704211624a3ab1aa20b6234181bc3340"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/12/11/scdcsa-maitrepo.sgf",
+      "pre_move_index": 283,
+      "color": "W",
+      "prior_pass_streak": 1,
+      "case": 3,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.2525157,
+        0.10304700000000011
+      ],
+      "artifact_sha256": "16dca89b656d5ee1fffc6e5716127ac63d648fea884791d06461f3489c0f4f19"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/4/7/boha-yuumsuzuki.sgf",
+      "pre_move_index": 243,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 4,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.05441127000000012,
+        0.03621387000000009
+      ],
+      "artifact_sha256": "1d691a334537bb7e35305791b31fd129634684634c83ca169f0ed15c6f76248f"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/3/23/zousigaya-ML2022.sgf",
+      "pre_move_index": 255,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 5,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        -1.0815021000000087,
+        -0.528753800000004
+      ],
+      "artifact_sha256": "6ecc1b71f93bd3fdc54a448ca88852eee7eff592be7606e93593ca8df6600867"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/11/10/Youngduke-andreyEAO.sgf",
+      "pre_move_index": 266,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 6,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.4954201999999981,
+        0.15956119999999885
+      ],
+      "artifact_sha256": "e2dd6cc3c5aea623099032eab7292ef7d25c09b896c11274a3f7589f01b154ca"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/6/27/Olduck-Naokun.sgf",
+      "pre_move_index": 251,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 7,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.2154024000000021,
+        0.0744232000000018
+      ],
+      "artifact_sha256": "8f475333afb3e3909409759cea34e2ac1119dfb6163c233ff8e185b60d96085e"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/7/14/razuseki-akasaka39.sgf",
+      "pre_move_index": 322,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 8,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.22168470000000084,
+        0.02935740000000031
+      ],
+      "artifact_sha256": "a4662895db83bac69945af0f5834706ffe4ac370a20f84501dfacaa614741d41"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/8/12/Gneral-rare.sgf",
+      "pre_move_index": 299,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 9,
+      "verdict": "unjudgeable",
+      "reason": "empirical_threshold_disagreement",
+      "gains_points": [
+        1.7231492999999993,
+        1.0730111999999998
+      ],
+      "artifact_sha256": "d5394f06447e18ae28cd79a240c5228b6ba1ef16e27ac9ffe55a7644f3abe4ae"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/1/3/ergodicgo-alterego11.sgf",
+      "pre_move_index": 207,
+      "color": "W",
+      "prior_pass_streak": 1,
+      "case": 10,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.409783400000002,
+        0.06954879999999974
+      ],
+      "artifact_sha256": "05941a2b2e9f62b5e5210e82b5578017d574e14bf6e440769f307faf8de37cdd"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/9/13/zousigaya-utopia.sgf",
+      "pre_move_index": 305,
+      "color": "W",
+      "prior_pass_streak": 1,
+      "case": 11,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        -0.018107930000000216,
+        -0.04982956000000005
+      ],
+      "artifact_sha256": "d6548d2fa23d4fb2da97659ae4e1e0f1a394491cfa743f5190c6b826b1933512"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/6/30/Olduck-AHaselmaie.sgf",
+      "pre_move_index": 157,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 12,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.19279860000000326,
+        -0.02017699999999678
+      ],
+      "artifact_sha256": "233680acb24edb1588a15da0fe7abb60edbed71c6eace0b753346a23f69bcc57"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/7/7/syvers-akasaka39.sgf",
+      "pre_move_index": 249,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 13,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        -0.01330000000000009,
+        -0.04200518000000031
+      ],
+      "artifact_sha256": "9bde51844693da5b8d5dabe65fb28208e2c47805e8b2ce21cd0746945bded484"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/5/25/rare-wk.sgf",
+      "pre_move_index": 259,
+      "color": "W",
+      "prior_pass_streak": 1,
+      "case": 14,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.10144343999999994,
+        0.020373980000000014
+      ],
+      "artifact_sha256": "90a4bfb16174ac18171e0b17c750c1b11a4e9f3b24c3c40120b949b22499c654"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/8/27/ykawa-Neptunus.sgf",
+      "pre_move_index": 260,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 15,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.05051580999999983,
+        0.04519013999999988
+      ],
+      "artifact_sha256": "e7ad668e5009410dd4ea16f8d601fa5034b9f484bc3137027c874f208ea62a12"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/12/25/tang0-duptelme.sgf",
+      "pre_move_index": 268,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 16,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.3800828000000003,
+        0.02252460000000056
+      ],
+      "artifact_sha256": "15b54320dfaf0974dd024981762fb262c74adf5fd8dc33d3a04c58532737da0b"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/10/6/yuumsuzuki-Santos.sgf",
+      "pre_move_index": 232,
+      "color": "B",
+      "prior_pass_streak": 1,
+      "case": 17,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        -0.0407185000000041,
+        -0.05449169999999981
+      ],
+      "artifact_sha256": "2b9a7d4425c810b74fee42d6121497775c588fd98589236341c2603f27d3943e"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/9/15/huyc1961-sdo.sgf",
+      "pre_move_index": 258,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 18,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.24242946600000004,
+        0.289532386
+      ],
+      "artifact_sha256": "6ae111b203a01b42650ffbeb92b75bfc4611ad961e8a1d5a5b23e8bb27804d4c"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/8/30/takama-mashiko.sgf",
+      "pre_move_index": 227,
+      "color": "W",
+      "prior_pass_streak": 1,
+      "case": 19,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.16642459999999915,
+        0.2789083000000012
+      ],
+      "artifact_sha256": "da8c731f42d113861f09532764f822c5f29e4ce4ed89777704c852f0988d0533"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/9/20/kejia-brigolo.sgf",
+      "pre_move_index": 237,
+      "color": "W",
+      "prior_pass_streak": 0,
+      "case": 20,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.1397497200000002,
+        0.08869436000000075
+      ],
+      "artifact_sha256": "7ecd6590de89e563284f5d6a68b1889dcb025b830cc2b1fc194635d369c0a795"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/6/12/miura2271-maitrepo.sgf",
+      "pre_move_index": 254,
+      "color": "B",
+      "prior_pass_streak": 1,
+      "case": 21,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.07706706000000008,
+        0.010327960000000136
+      ],
+      "artifact_sha256": "f7c2fa0927f3d698e005de2b024b3430e1f2d2c28e4d5c74e94638391d909a0b"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/1/17/alterego11-ergodicgo.sgf",
+      "pre_move_index": 224,
+      "color": "B",
+      "prior_pass_streak": 1,
+      "case": 22,
+      "verdict": "acceptable",
+      "reason": "empirical_loss_below_threshold",
+      "gains_points": [
+        0.006560199999999128,
+        0.0637951000000001
+      ],
+      "artifact_sha256": "c15fde88c5ae8e505ccfb92530b2fb35fd8079d33f98ef795784d47e42676913"
+    },
+    {
+      "source_url": "https://files.gokgs.com/games/2025/9/1/tang0-JDig-2.sgf",
+      "pre_move_index": 258,
+      "color": "B",
+      "prior_pass_streak": 0,
+      "case": 23,
+      "verdict": "unjudgeable",
+      "reason": "empirical_threshold_disagreement",
+      "gains_points": [
+        0.9777521,
+        -0.9143982999999984
+      ],
+      "artifact_sha256": "a969f7c0bb2669185d18392e603777b5e9fc7f1f782c5bdefe342e1f93a668b1"
+    }
+  ],
+  "claim": "Exposed-source implementation readiness only; no final evaluation or candidate qualification."
+}

@@ -1,0 +1,362 @@
+{
+  "version": "e1_population_evidence_v2",
+  "bead": "kenggo-6yr.7",
+  "review_base": "bfa17523cc6f320f4e4fa142a70ea75534d7fd55",
+  "date": "2026-11-11",
+  "scope": "Exploratory E2 population/rank baseline; no promoted profile, personalization, timing model or human rank claim. Combined E1 readiness is a separate reviewed gate.",
+  "inputs": {
+    "population": {
+      "path": "manifests/e1_population_inputs_v1.json",
+      "sha256": "eb757c00a387ee598af672378d6848c826dd064dbeecabfd1921c97798cc8fe0"
+    },
+    "split_plan": {
+      "path": "manifests/e1_split_config_v2.json",
+      "sha256": "7138209f96063af222976b48cfd6ae1176c00eb75c93dd0186c9513965162917"
+    },
+    "final_reservation": {
+      "path": "manifests/e1_final_reservation_v1.json",
+      "sha256": "0584ad8cf3b85a7ba5b4bfad5c671de8a592aec76ea38503aadcabd4f77e2585"
+    },
+    "final_scope": {
+      "path": "manifests/e1_final_scope_policy_v1.json",
+      "sha256": "7ffb942eb4148fc19453073eb1ef1cd767bb45801313cee5393afcbf897565ba"
+    },
+    "example_profile": {
+      "path": "manifests/e1_population_example_profile_v2.json",
+      "sha256": "d05c952f9dc5a625c3b4f63e35c2b2805634d99ef08652dd543b563a55e0a836"
+    }
+  },
+  "artifacts": {
+    "canonical": {
+      "path": "runs/e1-population-2026-11-11/canonical.parquet",
+      "sha256": "b7bf307fbb5ea25b5cf53f1fad6e94780c3b4873a830b07e6f94f61caa5836e0"
+    },
+    "canonical_summary": {
+      "path": "runs/e1-population-2026-11-11/summary.json",
+      "sha256": "b1ad0a495b59ceb6900f008baf09658a5b8ccd8d2c6320d5e5ea2741bdec1164"
+    },
+    "index": {
+      "path": "runs/e1-population-2026-11-11/index.parquet",
+      "sha256": "1c3828f3891968ddf70c82870a14517b54ffe347c3d39af3af2d9a9e9a94f864"
+    },
+    "split_manifest": {
+      "path": "runs/e1-population-2026-11-11/splits/manifest.json",
+      "sha256": "faac0c8f9446ac86ff00f842a6c8b656b396d57a64ee654cd2ad51d693b958da"
+    },
+    "examples_manifest": {
+      "path": "runs/e1-population-examples-2026-11-11/examples/manifest.json",
+      "sha256": "6ab3c58ac36d5872788932754e40792116f23a5465c009ca4eaf22470f06099d"
+    },
+    "example_summary": {
+      "path": "runs/e1-population-examples-2026-11-11/summary.json",
+      "sha256": "5a32e857bf874ff45cef6d416b51c81efb778111f379d0d991a4f049d181f49d"
+    },
+    "normalizer": {
+      "path": "runs/e1-population-examples-2026-11-11/normalizer.json",
+      "sha256": "134c56051c304d8216384e59acbf1e79fc71d225b5d44b9c3daa0a85c7357567"
+    },
+    "diagnostics": {
+      "path": "runs/e1-population-examples-2026-11-11/diagnostics.json",
+      "sha256": "f5bc05d09bf3adc44063b4712ffab1dfe62bdd29ec0378334bdcc4894040a792"
+    },
+    "nonfinal_checks": {
+      "path": "runs/e1-population-2026-11-11/nonfinal_checks.json",
+      "sha256": "6db83761063956932c98e35685233db8cc744b48a8ce3799c9a493dd943c0ee7"
+    },
+    "shard_integrity": {
+      "path": "runs/e1-population-examples-2026-11-11/integrity.json",
+      "sha256": "893d3cc0bf42e4620f51fb2e179b5d70f266d35d49ed801908ee1e314469897e"
+    },
+    "source_label_integrity": {
+      "path": "runs/e1-population-examples-2026-11-11/source_label_integrity.json",
+      "sha256": "89047560e93b10415056e98131e44cc10d78c7ae3afb68310eb7d916c868c02e"
+    },
+    "source_label_check_code": {
+      "path": "runs/e1-population-examples-2026-11-11/source_label_check.py",
+      "sha256": "97f660705abc9349da54cf68cd7d43c4934deb5c3192eac34772874dd3157dc7"
+    },
+    "acquisition_costs": {
+      "path": "runs/e1-kgs-final-sealed-2026-11-11/costs.json",
+      "sha256": "b70d4bd5afa9f4ae1dcffb95d23b7a0c56a5df74a646a9b43532859040015622"
+    },
+    "acquisition_requests": {
+      "path": "runs/e1-kgs-final-sealed-2026-11-11/requests.jsonl",
+      "sha256": "82bc7f204f046aa87821effc135be71e04e62ba768f404caa44acf4e260da331"
+    },
+    "sealed_final_index": {
+      "path": "runs/e1-kgs-final-sealed-2026-11-11/sealed_index.json",
+      "sha256": "168010f08ad33256a6dcd9e8e268861fb41d9b02adc742dcd88697edf677a6ef"
+    },
+    "repeat_summary": {
+      "path": "runs/e1-population-repeat-2026-11-11/summary.json",
+      "sha256": "9b233c9c45712a1c71638fb2bd8830a26b7d38a268689a685080bd0f9ad48187"
+    },
+    "encoding_probe": {
+      "path": "runs/e1-population-2026-11-11/encoding_probe.json",
+      "sha256": "ab2588c91673021f3ca3b63d1f525ab26b2de00cde70b7317b33a3471e894e69"
+    }
+  },
+  "records": {
+    "retained": 1200,
+    "original": 1000,
+    "admitted_original": 241,
+    "sealed_candidates": 200,
+    "sealed_usable_final": 70,
+    "exposed_groups_preserved": 695,
+    "reserved_final_groups": 190,
+    "validation_groups": 142
+  },
+  "roles": {
+    "excluded": 889,
+    "validation_prefix": 59,
+    "train": 108,
+    "population_development": 14,
+    "validation_development": 10,
+    "final": 70,
+    "population_confirmation": 28,
+    "validation_confirmation": 22
+  },
+  "examples": {
+    "embargo": {
+      "examples": 0,
+      "sealed": true
+    },
+    "excluded": {
+      "duration_valid": 0,
+      "examples": 0,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 0,
+      "value_valid": 0
+    },
+    "final": {
+      "examples": 15223,
+      "sealed": true
+    },
+    "population_confirmation": {
+      "duration_valid": 0,
+      "examples": 5954,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 41,
+      "value_valid": 5575
+    },
+    "population_development": {
+      "duration_valid": 0,
+      "examples": 3363,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 20,
+      "value_valid": 3363
+    },
+    "test_prefix": {
+      "examples": 0,
+      "sealed": true
+    },
+    "train": {
+      "duration_valid": 0,
+      "examples": 23395,
+      "hidden_mover_rank": 2423,
+      "hidden_opponent_rank": 4797,
+      "passes": 101,
+      "value_valid": 21367
+    },
+    "validation_confirmation": {
+      "duration_valid": 0,
+      "examples": 4508,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 22,
+      "value_valid": 3750
+    },
+    "validation_development": {
+      "duration_valid": 0,
+      "examples": 2563,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 14,
+      "value_valid": 2563
+    },
+    "validation_prefix": {
+      "duration_valid": 0,
+      "examples": 0,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 0,
+      "value_valid": 0
+    }
+  },
+  "verified_nonfinal_examples": 39783,
+  "verified_source_value_targets": 36618,
+  "normalizer_fit_examples": 23395,
+  "reproduction": {
+    "canonical_index_and_all_splits_byte_identical": true,
+    "files_compared": 13,
+    "normalizer_byte_identical": true,
+    "hashed_shard_artifacts": 446,
+    "diagnostic_games": 5,
+    "diagnostic_positions": 16,
+    "diagnostic_mismatches": 0,
+    "source_action_or_value_errors": 0
+  },
+  "sealed_final": {
+    "source_targets_inspected": false,
+    "used_for_settings_or_referee_selection": false,
+    "public_reader_requires_E7_release": true,
+    "release_created": false,
+    "final_shards_hashed_without_decoding": 60
+  },
+  "rank_support_nonfinal": {
+    "4k": {
+      "sides": 53,
+      "groups": 24,
+      "pass_actions": 40
+    },
+    "1d": {
+      "sides": 62,
+      "groups": 25,
+      "pass_actions": 9
+    },
+    "12k": {
+      "sides": 15,
+      "groups": 10,
+      "pass_actions": 17
+    },
+    "2k": {
+      "sides": 36,
+      "groups": 18,
+      "pass_actions": 14
+    },
+    "15k": {
+      "sides": 10,
+      "groups": 5,
+      "pass_actions": 5
+    },
+    "3k": {
+      "sides": 40,
+      "groups": 23,
+      "pass_actions": 26
+    },
+    "6k": {
+      "sides": 6,
+      "groups": 4,
+      "pass_actions": 3
+    },
+    "9k": {
+      "sides": 27,
+      "groups": 13,
+      "pass_actions": 13
+    },
+    "13k": {
+      "sides": 3,
+      "groups": 3,
+      "pass_actions": 2
+    },
+    "10k": {
+      "sides": 15,
+      "groups": 7,
+      "pass_actions": 9
+    },
+    "11k": {
+      "sides": 28,
+      "groups": 13,
+      "pass_actions": 20
+    },
+    "7k": {
+      "sides": 15,
+      "groups": 9,
+      "pass_actions": 14
+    },
+    "14k": {
+      "sides": 2,
+      "groups": 2,
+      "pass_actions": 1
+    },
+    "1k": {
+      "sides": 42,
+      "groups": 22,
+      "pass_actions": 19
+    },
+    "8k": {
+      "sides": 9,
+      "groups": 7,
+      "pass_actions": 5
+    },
+    "5k": {
+      "sides": 1,
+      "groups": 1,
+      "pass_actions": 1
+    }
+  },
+  "promoted_raw_profiles": [],
+  "masks": {
+    "duration_targets_valid": false,
+    "dynamic_clock_inputs_valid": false,
+    "identity_persona_valid": false,
+    "source_results_replaced_by_referee": false
+  },
+  "acquisition": {
+    "http_requests": 72,
+    "response_bytes": 13183226,
+    "workers": 1,
+    "minimum_observed_request_start_interval_seconds": 5.000064528547227,
+    "wall_seconds": 494.34087019227445,
+    "cpu_seconds": 3.379354,
+    "automatic_retries": 0,
+    "gpu_hours": 0
+  },
+  "costs": {
+    "canonical": {
+      "started_utc": "2026-11-11T19:44:24.636904+00:00",
+      "cpu_seconds": 31.487106436999998,
+      "wall_seconds": 31.469137732870877,
+      "http_requests": 0,
+      "gpu_hours": 0
+    },
+    "canonical_repeat": {
+      "started_utc": "2026-11-11T19:47:10.780485+00:00",
+      "cpu_seconds": 31.860215965,
+      "wall_seconds": 31.845628035254776,
+      "http_requests": 0,
+      "gpu_hours": 0
+    },
+    "encoding_probe": {
+      "version": "positive_encoding_probe_v1",
+      "dataset_profile_sha256": "becd98aee08fcaf4dd9487c3f018edc39fe54269a6696b523961e4a9b2481354",
+      "games": 5,
+      "examples": 1237,
+      "artifacts_written": false,
+      "cpu_seconds": 54.252261063,
+      "wall_seconds": 54.21507069282234,
+      "limits": {
+        "games": 5,
+        "cpu_seconds": 120,
+        "wall_seconds": 180
+      },
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "scope": "Training encoding only; no final examples or diagnostic positions."
+    },
+    "full_encoding": {
+      "started_utc": "2026-11-11T19:47:09.567170+00:00",
+      "cpu_seconds": 2362.267775066,
+      "wall_seconds": 2362.243782467209,
+      "workers": 1,
+      "http_requests": 0,
+      "gpu_hours": 0,
+      "scope": "Pinned-input verification, shard/normalizer writes and sampled replay checks; excludes imports and final summary/failure write."
+    },
+    "shard_integrity": {
+      "cpu_seconds": 1.060313763,
+      "wall_seconds": 0.816029473207891,
+      "http_requests": 0,
+      "gpu_seconds": 0
+    },
+    "source_label_integrity": {
+      "cpu_seconds": 2.1473815579999997,
+      "wall_seconds": 1.9710543267428875,
+      "http_requests": 0,
+      "gpu_seconds": 0
+    }
+  }
+}

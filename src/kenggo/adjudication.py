@@ -193,6 +193,24 @@ def adjudicate(game, *, neutral=None, authorized_hashes=frozenset(), limits=Limi
     return replace(game, status="unresolved" if score is None else "resolved", outcome=outcome), decision
 
 
+def adjudicate_empirical(game, referee):
+    """Resolve a frozen ending under an explicitly configured empirical referee."""
+    if game.status != "pending_adjudication":
+        raise ValueError("Only a frozen two-pass ending can be adjudicated")
+    decision = referee.adjudicate(game)
+    if decision.snapshot != game.snapshot:
+        raise ValueError("Referee returned a different original snapshot")
+    if decision.status == "resolved":
+        score = decision.white_minus_black_halfpoints
+        outcome = Outcome("empirical_score", decision.reason,
+                          "W" if score > 0 else "B", score, decision.evidence)
+    elif decision.status == "unresolved" and decision.white_minus_black_halfpoints is None:
+        outcome = Outcome("unresolved", decision.reason, evidence=decision.evidence)
+    else:
+        raise ValueError("Invalid referee decision")
+    return replace(game, status=decision.status, outcome=outcome), decision
+
+
 @dataclass(frozen=True)
 class PassJudgment:
     verdict: str

@@ -1,4 +1,4 @@
-"""Shared ordinary-play state for kgs_japanese_certified_v1."""
+"""Shared ordinary-play state with separately identified adjudication evidence."""
 
 from dataclasses import dataclass, replace
 import hashlib
@@ -121,16 +121,16 @@ class Outcome:
     evidence: str | None = None
 
     def __post_init__(self):
-        if (self.kind not in ("score", "resignation", "fault", "unresolved")
+        if (self.kind not in ("score", "empirical_score", "resignation", "fault", "unresolved")
                 or not isinstance(self.reason, str) or not self.reason
                 or self.winner not in (None, "B", "W")
                 or (self.evidence is not None and not isinstance(self.evidence, str))):
             raise ValueError("Invalid outcome fields")
-        if self.kind == "score":
+        if self.kind in ("score", "empirical_score"):
             score = self.white_minus_black_halfpoints
             if (type(score) is not int or score % 2 != 1
                     or self.winner != ("W" if score > 0 else "B") or not self.evidence):
-                raise ValueError("A score requires exact odd integer half-points and evidence")
+                raise ValueError("A score requires odd integer half-points and evidence")
         elif self.white_minus_black_halfpoints is not None:
             raise ValueError("Only scored outcomes have a territory margin")
         if self.kind == "unresolved" and (self.winner is not None or not self.evidence):
@@ -142,7 +142,7 @@ class Outcome:
 
     def value(self, color):
         opponent(color)
-        if self.kind not in ("score", "resignation"):
+        if self.kind not in ("score", "empirical_score", "resignation"):
             return None
         return 1 if self.winner == color else -1
 
