@@ -51,6 +51,11 @@ A read-only host check on **11 November 2026** reproduced exit 18 with NVML
 595.99 and kernel module 595.84. E1's CPU data/referee work does not resolve this
 separate GPU setup task.
 
+The [CUDA workspace and recovery guide](gpu_workspace.md) records the matching
+installed driver files, required host restart, separate pinned CUDA dependencies
+and an actual synchronized GPU check. The GPU readiness bead remains open until
+that check passes after restart.
+
 The locked environment uses a CPU-only PyTorch wheel; `torch_cuda_build: null` is expected and says nothing about physical GPU availability. Before GPU experiments, repair/verify the host driver, select and lock a compatible CUDA build, then execute and synchronize a small CUDA tensor operation and record versions/device details. A successful `nvidia-smi` alone does not validate PyTorch CUDA execution. No driver installation, reboot, CUDA workload or throughput probe is part of this bootstrap. The [E0 cost rules](../plan/e0_budgets_and_handoff.md) still apply to later probes and pilots.
 
 ## Artifact locations

@@ -1,0 +1,104 @@
+{
+  "version": "gpu_workspace_preparation_v1",
+  "date": "2026-11-11",
+  "bead": "kenggo-ydo.7",
+  "review_base": "1579d8c5327b3feb89f85a93c7deedb044e15808",
+  "environment_prepared": true,
+  "gpu_ready": false,
+  "host_repair_required": "Owner must save work and restart Ubuntu to load the installed matching NVIDIA module; verify after restart.",
+  "host": {
+    "os": "Ubuntu 22.04.5 LTS",
+    "kernel": "6.8.0-138-generic",
+    "loaded_module": "595.84",
+    "installed_module": "595.99.02",
+    "installed_userspace_packages": "595.99.02",
+    "nvidia_smi_exit_code": 18,
+    "display_manager_active": true,
+    "restart_required": true,
+    "passwordless_sudo_available": false,
+    "driver_or_service_changes_performed": false
+  },
+  "environment": {
+    "python": "3.12.13",
+    "uv": "0.11.16",
+    "torch": "2.15.0+cu132",
+    "cuda_build": "13.2",
+    "third_party_distributions": 32,
+    "application": "editable current Git checkout, installed separately with --no-deps --no-sources",
+    "directory": ".cache/venvs/cuda",
+    "installed_payload_bytes": 5709593620,
+    "cpu_project_and_lock_unchanged": true
+  },
+  "artifacts": {
+    "cuda_requirements": {
+      "path": "environments/cuda/requirements.lock",
+      "sha256": "a1940d8b47088144e39e34bfe1cc78b286cb48f0430192418be56e4440cc12f7"
+    },
+    "cuda_check_code": {
+      "path": "src/kenggo/cuda_smoke.py",
+      "sha256": "cc7e20e3c2d1446c2d25ffc4531fc835c8f11346dd6b92abd81c4fa0d13dd990"
+    },
+    "cpu_project": {
+      "path": "pyproject.toml",
+      "sha256": "69a69b6a139f3adf35b4b607bc6afda3221d358be92fe4521f285af50a87bc64"
+    },
+    "cpu_lock": {
+      "path": "uv.lock",
+      "sha256": "6d1af3e5a9a1cff6794b472cc1d9ee9275ad5c2ce3bfc0d02c303ee6501ee079"
+    },
+    "package_integrity": {
+      "path": "runs/gpu-setup-2026-11-11/package-integrity.json",
+      "sha256": "7b4301dcbf7e739627427197cd9e1f188f751eb6d62f0ab6544836a6afee4e1b"
+    },
+    "failed_cuda_check": {
+      "path": "runs/gpu-setup-2026-11-11/cuda-smoke-before-reboot.json",
+      "sha256": "77bf02a4a6a631c15cbf330a86cbc750faf3fa4dd972e46f8b31f1207b20450a"
+    },
+    "cpu_smoke": {
+      "path": "runs/gpu-setup-2026-11-11/cpu-smoke.json",
+      "sha256": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde"
+    },
+    "cpu_tests": {
+      "path": "runs/gpu-setup-2026-11-11/cpu-tests.log",
+      "sha256": "8150bc798073d2d4078a167f9d234e1dd3e9bc5e2805fbff6457fa7ec15aae1f"
+    },
+    "cuda_environment_tests": {
+      "path": "runs/gpu-setup-2026-11-11/cuda-environment-tests.log",
+      "sha256": "bbd6c73784daa75e3f9b44d8fff24b5a8f65dd0ec411900fe11e7c589e2d9d6b"
+    }
+  },
+  "validation": {
+    "cpu_tests_passed": 170,
+    "cuda_environment_tests_passed": 170,
+    "tests_skipped": 0,
+    "native_reference_enabled": true,
+    "cpu_smoke_passed": true,
+    "cuda_wheel_cpu_smoke_passed": true,
+    "cuda_tensor_check_passed": false,
+    "lock_environment_build_whitespace_checks_passed": true,
+    "package_integrity_passed": true,
+    "limits": "CPU tests and import/package checks in the CUDA environment do not establish GPU execution."
+  },
+  "resources": {
+    "installation_wall_limit_seconds": 900,
+    "installation_cache_budget_bytes": 10737418240,
+    "upstream_download_parallelism": 2,
+    "automatic_http_retries": 0,
+    "dependency_preparation_seconds_uv_reported_rounded": 90,
+    "setup_cpu_and_network_totals": "Not comprehensively instrumented; no complete setup cost or throughput claim.",
+    "cuda_check_wall_limit_seconds": 60,
+    "actual_cuda_check": {
+      "cpu_seconds": 0.0004623679999999908,
+      "wall_seconds": 0.011018752120435238,
+      "gpu_allocation_seconds": 0.0,
+      "cost_scope": "Check body after imports; GPU allocation starts at the first CUDA availability probe."
+    },
+    "kgs_requests": 0,
+    "training_runs": 0
+  },
+  "references": [
+    "https://ubuntu.com/server/docs/how-to/graphics/install-nvidia-drivers/#driver-library-version-mismatch-error",
+    "https://docs.nvidia.com/deploy/cuda-compatibility/forward-compatibility.html",
+    "https://docs.astral.sh/uv/guides/integration/pytorch/"
+  ]
+}
