@@ -1,0 +1,209 @@
+{
+  "version": "e1_population_evidence_v3",
+  "date": "2026-11-13",
+  "bead": "kenggo-bck",
+  "review_base": "a1f6c45d22ef7b7ad451bef233689d0da31603b0",
+  "scope": "Exploratory E2 population/rank baseline; no promoted profile, personalization, timing model or human rank claim. Combined E1 readiness is a separate reviewed gate.",
+  "base_population": {
+    "path": "manifests/e1_population_v2.json",
+    "sha256": "f3a05b9141084037b79a3b01885267f55f95410e33c0f9858a14eb124a3abe53"
+  },
+  "manual_review": {
+    "path": "manifests/e1_manual_review_v1.json",
+    "sha256": "44fc41edd839f53745bf28a8c315ef94b2e78e5ee3f049bcda491b9903b9b5dd"
+  },
+  "inputs": {
+    "population": {
+      "path": "manifests/e1_population_inputs_v1.json",
+      "sha256": "eb757c00a387ee598af672378d6848c826dd064dbeecabfd1921c97798cc8fe0"
+    },
+    "example_profile": {
+      "path": "manifests/e1_population_example_profile_v3.json",
+      "sha256": "3093ee6cb6ea0355ab2314884bce588dbd7f018ea7e809dd63ab1f7be7ea3036"
+    }
+  },
+  "artifacts": {
+    "canonical": {
+      "path": "runs/e1-population-2026-11-11/canonical.parquet",
+      "sha256": "b7bf307fbb5ea25b5cf53f1fad6e94780c3b4873a830b07e6f94f61caa5836e0"
+    },
+    "split_manifest": {
+      "path": "runs/e1-manual-filter-2026-11-13/splits/manifest.json",
+      "sha256": "858bf34e2767d724853286a136f2c3a0f14af0d3f5a881c83a7894192465a6f4"
+    },
+    "examples_manifest": {
+      "path": "runs/e1-manual-filter-2026-11-13/examples/manifest.json",
+      "sha256": "3ba84e660df1e50478994ec98c8c4b25132559034328f3de21a6ac2e527cd4c4"
+    },
+    "normalizer": {
+      "path": "runs/e1-manual-filter-2026-11-13/normalizer.json",
+      "sha256": "90edb1b0d2b0e5ae8ca4eb8946d09877e097960b57da3e07109ad373acf09c6a"
+    },
+    "diagnostics": {
+      "path": "runs/e1-population-examples-2026-11-11/diagnostics.json",
+      "sha256": "f5bc05d09bf3adc44063b4712ffab1dfe62bdd29ec0378334bdcc4894040a792"
+    },
+    "derivation_summary": {
+      "path": "runs/e1-manual-filter-2026-11-13/summary.json",
+      "sha256": "0da9234f0d10a576f2dc53f865227a6ad20542c04ad5d1f8585994af330c25de"
+    },
+    "verification": {
+      "path": "runs/e1-manual-filter-2026-11-13/verification.json",
+      "sha256": "eccd0afd9fc38f5d9e930609b7ef02f1d43379be93ad378666435b61463b7430"
+    },
+    "repeat_summary": {
+      "path": "runs/e1-manual-filter-repeat-2026-11-13/summary.json",
+      "sha256": "3253136ccf65f5cfae8d4ee23af0031e9b2e165c87b4a83f6d3d18dc33b71da5"
+    }
+  },
+  "records": {
+    "retained": 1200,
+    "original": 1000,
+    "original_source_admitted": 241,
+    "owner_excluded": 2,
+    "usable_original": 239,
+    "sealed_candidates": 200,
+    "sealed_usable_final": 70
+  },
+  "roles": {
+    "embargo": 0,
+    "excluded": 891,
+    "final": 70,
+    "population_confirmation": 28,
+    "population_development": 14,
+    "test_prefix": 0,
+    "train": 106,
+    "validation_confirmation": 22,
+    "validation_development": 10,
+    "validation_prefix": 59
+  },
+  "examples": {
+    "embargo": {
+      "examples": 0,
+      "sealed": true
+    },
+    "excluded": {
+      "duration_valid": 0,
+      "examples": 0,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 0,
+      "value_valid": 0
+    },
+    "final": {
+      "examples": 15223,
+      "sealed": true
+    },
+    "population_confirmation": {
+      "duration_valid": 0,
+      "examples": 5954,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 41,
+      "value_valid": 5575
+    },
+    "population_development": {
+      "duration_valid": 0,
+      "examples": 3363,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 20,
+      "value_valid": 3363
+    },
+    "test_prefix": {
+      "examples": 0,
+      "sealed": true
+    },
+    "train": {
+      "duration_valid": 0,
+      "examples": 22916,
+      "hidden_mover_rank": 2367,
+      "hidden_opponent_rank": 4693,
+      "passes": 97,
+      "value_valid": 20888
+    },
+    "validation_confirmation": {
+      "duration_valid": 0,
+      "examples": 4508,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 22,
+      "value_valid": 3750
+    },
+    "validation_development": {
+      "duration_valid": 0,
+      "examples": 2563,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 14,
+      "value_valid": 2563
+    },
+    "validation_prefix": {
+      "duration_valid": 0,
+      "examples": 0,
+      "hidden_mover_rank": 0,
+      "hidden_opponent_rank": 0,
+      "passes": 0,
+      "value_valid": 0
+    }
+  },
+  "policy_examples": 54527,
+  "nonfinal_policy_examples": 39304,
+  "nonfinal_valid_value_targets": 36139,
+  "normalizer_fit_examples": 22916,
+  "integrity": {
+    "surviving_train_rows_compared": 22916,
+    "removed_train_rows": 479,
+    "surviving_arrays_and_metadata_equal": true,
+    "excluded_games_emit_no_examples": true,
+    "canonical_unchanged": true,
+    "unchanged_split_files": [
+      "population_development",
+      "population_confirmation",
+      "validation_prefix",
+      "validation_development",
+      "validation_confirmation",
+      "test_prefix",
+      "final",
+      "embargo"
+    ],
+    "unchanged_example_roles": [
+      "population_development",
+      "population_confirmation",
+      "validation_prefix",
+      "validation_development",
+      "validation_confirmation",
+      "test_prefix",
+      "final",
+      "embargo",
+      "excluded"
+    ],
+    "final_targets_decoded": false,
+    "splits_examples_profile_normalizer_reproduce_byte_for_byte": true
+  },
+  "historical_referee_comparison": {
+    "reference": {
+      "path": "manifests/e1_endgame_comparison_v2.json",
+      "sha256": "8597c21f2e68eb07b3086342113662fde3a18ebcea711608f9b892c2ca5037ec"
+    },
+    "unchanged": true,
+    "interpretation": "All 108 cases and the original 100/102 recorded-winner agreement remain historical evidence. The post-selected usable remainder is not a new accuracy evaluation."
+  },
+  "diagnostics_scope": "The unchanged historical diagnostics supply example selection; no new encoding or neural inference was run.",
+  "current_input_contract": "Load the v3 profile and its independent hash, the new split and example manifest, and the refitted normalizer. Canonical records retain historical admission evidence; current membership excludes the two reviewed games. Retain these exclusions in later corpus expansions.",
+  "promoted_raw_profiles": [],
+  "masks": {
+    "duration_targets_valid": false,
+    "dynamic_clock_inputs_valid": false,
+    "identity_persona_valid": false,
+    "source_results_replaced_by_referee": false
+  },
+  "costs": {
+    "cpu_seconds": 2.710494911,
+    "gpu_seconds": 0,
+    "http_requests": 0,
+    "wall_seconds": 2.2855388298630714,
+    "workers": 1
+  },
+  "output_bytes": 8210658
+}

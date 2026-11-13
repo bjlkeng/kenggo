@@ -2,6 +2,11 @@
 
 11 November 2026 | `kenggo-6yr`, `kenggo-6yr.10`, `kenggo-6yr.7`
 
+**13 November update:** the owner excluded cases 044 and 083, accepted the
+admission/example subset checks and the stated limitations. Use the
+[manual-review decision and current inputs](e1_manual_review_2026-11-13.md).
+Counts and referee comparisons below preserve the historical 11 November run.
+
 E1's data and endgame readiness checks pass for **exploratory E2 population/rank
 baseline work**. The [readiness manifest](../manifests/e1_readiness_v2.json) binds
 the populated data, complete referee comparison, accepted evidence catalog and

@@ -5,18 +5,21 @@ policy](../reports/e1_kgs_admission_2026-11-11.md) to the original 1,000 records
 adds a separately reserved final cohort. It supports exploratory population/rank
 baseline work. It does not establish exact-rank opponent profiles, verified human
 identities, personalization, timing labels or calibrated playing strength.
-The [population evidence manifest](../manifests/e1_population_v2.json) pins the
-completed artifacts, integrity checks, source acquisition and measured costs.
+The [current population manifest](../manifests/e1_population_v3.json) pins the
+inputs after the [owner's two-game exclusion and manual sign-off](../reports/e1_manual_review_2026-11-13.md).
+The [version-2 manifest](../manifests/e1_population_v2.json) retains the original
+build, acquisition and integrity evidence for historical reproduction.
 
 ## Fixed cohorts
 
 The [input manifest](../manifests/e1_population_inputs_v1.json) pins source
 decisions, the final index and [split configuration](../manifests/e1_split_config_v2.json).
-The original 241 admitted games produce these whole-game roles:
+The original admission screened 241 games. The owner excluded two complete
+training games (historical ending cases 044 and 083), leaving these current roles:
 
 | Role | Games | Policy examples | Valid value targets |
 | --- | ---: | ---: | ---: |
-| Shared-model training | 108 | 23,395 | 21,367 |
+| Shared-model training | 106 | 22,916 | 20,888 |
 | Population development | 14 | 3,363 | 3,363 |
 | Population confirmation | 28 | 5,954 | 5,575 |
 | Unseen-account development | 10 | 2,563 | 2,563 |
@@ -47,15 +50,57 @@ or referee judgments were inspected to select settings. These are source-handle
 groups, not verified people. Earlier final-account games were not collected, so
 this cohort supplies no personalization prefix.
 
-The full build contains **55,006 policy examples**: 39,783 nonfinal and 15,223
-sealed final examples. All 39,783 nonfinal actions match their source records;
-36,618 valid source outcomes have the correct mover-view sign. All 446 shard
-files pass hash checks. The 60 final array shards were hashed without decoding
-their targets. The train-only normalizer reproduced byte for byte, and five
-exposed diagnostic games passed 16 pre-move checks at all supported history
-windows. Canonical records, index and all split files reproduced byte for byte.
+The current build contains **54,527 policy examples**: 39,304 nonfinal and 15,223
+sealed final examples, with 36,139 valid nonfinal source outcomes. The derivation
+removes 479 training rows and preserves every field of the 22,916 remaining
+training rows. All other example shards and all unrelated split files are
+byte-identical to version 2. Final arrays were copied and hashed without decoding
+their targets. The refitted train-only normalizer and derived split/profile/example
+manifests reproduced byte for byte. Historical source replay and encoding
+diagnostics remain available in the version-2 evidence.
 
-## Reproduce the build
+## Use the current inputs
+
+Reproduce the owner-approved filter from the pinned local version-2 artifacts:
+
+```bash
+uv run --locked python tools/apply_e1_review.py runs/e1-manual-filter-repeat
+```
+
+Use a new output directory. The command verifies the owner decision and source
+pins, changes only the two whole-game memberships, filters stored training rows,
+copies other shards without decoding final targets, and refits the normalizer.
+It makes no HTTP requests or model calls. The limits are 120 CPU seconds,
+180 wall seconds and 256 MiB of output. The existing completed output is
+`runs/e1-manual-filter-2026-11-13/`.
+
+Current consumers use the [version-3 profile](../manifests/e1_population_example_profile_v3.json)
+and the current example manifest:
+
+```python
+from kenggo.examples import load_dataset_profile, load_corpus, read_shards
+
+profile = load_dataset_profile(
+    "manifests/e1_population_example_profile_v3.json",
+    "3093ee6cb6ea0355ab2314884bce588dbd7f018ea7e809dd63ab1f7be7ea3036",
+)
+records, split, partitions = load_corpus(
+    "runs/e1-population-2026-11-11/canonical.parquet", profile.canonical_sha256,
+    "runs/e1-manual-filter-2026-11-13/splits", profile.split_sha256, profile=profile,
+)
+training = read_shards(
+    "runs/e1-manual-filter-2026-11-13/examples",
+    "3ba84e660df1e50478994ec98c8c4b25132559034328f3de21a6ac2e527cd4c4", "train",
+)
+```
+
+Pair these arrays with `runs/e1-manual-filter-2026-11-13/normalizer.json`, pinned
+by the current population manifest. Canonical records preserve historical
+admission evidence; select usable games through the current memberships. Both
+reviewed games have role `excluded` with zero policy/value actions. Preserve the
+[manual exclusion policy](../manifests/e1_manual_review_v1.json) in later expansions.
+
+## Reproduce the historical version-2 build
 
 Use the [locked CPU workspace](workspace.md). The original and sealed source
 archives must already be available at their pinned paths. Reproduction needs no
@@ -86,10 +131,10 @@ and 2,362.24 wall seconds. These are single-run cost observations and
 limits, not comparative performance claims. All work is CPU-only and serial
 within each builder; external source/referee costs are recorded separately.
 
-The old canonical/example commands and version-1 pins remain available to
-reproduce the earlier empty corpus. New production consumers must load the
-explicit population profile and its independent hash. Never infer a trusted hash
-from the incoming manifest itself.
+Apply the current filter after reproducing historical inputs. The old
+canonical/example commands and version-1 pins also remain available for the
+earlier empty corpus. New production consumers use the version-3 profile above.
+Never infer a trusted hash from the incoming manifest itself.
 
 ## Data access and missingness
 

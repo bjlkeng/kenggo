@@ -209,6 +209,7 @@ function sourceInfo(g) {
   const top = node("div", null, {class: "section-top"});
   const identity = add(node("div"), node("h3", title(g), {class: "source-title"}),
     node("p", `Black / White · ${g.metadata.DT || "Date unknown"} · ${g.role.replaceAll("_", " ")} · Recorded ${g.metadata.RE || "unknown"}`, {class:"muted"}));
+  if (g.manual_exclusion) identity.append(badge("Excluded from usable data by owner review", "warn"));
   const actions = node("div", null, {class:"inline"});
   if (g.sgf_base64) actions.append(button("Download original SGF", () => {
     const bytes = Uint8Array.from(atob(g.sgf_base64), c => c.charCodeAt(0));
@@ -223,7 +224,7 @@ function queueButton(primary, secondary, active, fn) {
 }
 
 function renderEndings() {
-  heading("Compare source endings and cleanup", "Start with the two winner disagreements. Check groups, seki, prisoners and cleanup changes, then sample the other margin differences.");
+  heading("Compare source endings and cleanup", "The owner excluded the two winner-disagreement games from usable data. All 108 historical cases remain here so the original referee evidence is preserved.");
   const filter = select({winner:"Winner disagreements", margin:"Any score difference", budgets:"Cleanup budgets disagree on margin", all:"All 108 endings"}, endingFilter, "Ending filter");
   const search = node("input", null, {type:"search", placeholder:"Find a player, date or case…", "aria-label":"Search endings"}); search.value=endingQuery;
   const count=node("span",null,{class:"count"}), queue=node("aside",null,{class:"queue","aria-label":"Ending cases"}), detail=node("div",null,{class:"detail"});
@@ -265,14 +266,14 @@ function renderEndings() {
 
 function renderAdmission() {
   heading("Spot-check source admission", "Search the exposed source population for known bots, aliases or provenance mistakes. Admission is presumed-human screening, not verified identity.");
-  const filter=select({admitted:"Admitted sources", excluded:"Excluded sources", all:"All exposed sources"},admissionFilter,"Admission filter");
+  const filter=select({admitted:"Usable sources", excluded:"Excluded sources", all:"All exposed sources"},admissionFilter,"Admission filter");
   const search=node("input",null,{type:"search",placeholder:"Player, rank, date or exclusion…","aria-label":"Search admission"});search.value=admissionQuery;
   const queue=node("aside",null,{class:"queue","aria-label":"Source games"}),detail=node("div",null,{class:"detail"}),count=node("span",null,{class:"count"});
   add(app,add(node("div",null,{class:"toolbar"}),add(node("div",null,{class:"inline"}),filter,search),count),add(node("div",null,{class:"workspace"}),queue,detail));
   function show(g) {
     detail.replaceChildren();if(!g){detail.append(node("p","No matching source games.",{class:"empty"}));return;}
     const e=g.eligibility;
-    detail.append(sourceInfo(g),add(node("div",null,{class:"chips"}),badge(e.training_eligible?"Admitted · presumed human":"Excluded",e.training_eligible?"":"warn"),badge("Identity / persona masked")),
+    detail.append(sourceInfo(g),add(node("div",null,{class:"chips"}),badge(g.current_usable?"Usable · presumed human":"Excluded",g.current_usable?"":"warn"),badge("Identity / persona masked")),
       table(["Evidence", "Recorded value"],[["Archive type",g.archive.type],["Rules / komi / board",`${g.metadata.RU} / ${g.metadata.KM} / ${g.metadata.SZ}`],["Time control",`${g.metadata.TM} seconds + ${g.metadata.OT}`],["Source-use basis",e.source_use_basis],["Black / White screening",`${e.black_human_status} / ${e.white_human_status}`],["Admission reasons",e.eligibility_reasons.join(", ")||"No exclusion under the approved policy"],["Split exclusions",g.exclusions.join(", ")||"None"],["Recorded value usable",g.value_supported?"Yes, with mover perspective":"No: retain the value mask"]]));
     detail.append(node("p","The archive filename does not determine colors. The Black / White names above come from the SGF. Flag concrete evidence in your notes; this viewer does not quarantine or relabel games.",{class:"notice"}));
     if(g.frames) detail.append(player(g.frames,g.moves,"Source game",0).element);
@@ -281,7 +282,7 @@ function renderAdmission() {
   }
   function update(){
     admissionFilter=filter.value;admissionQuery=search.value;
-    const rows=data.games.filter(g=>(admissionFilter==="all"||g.eligibility.training_eligible===(admissionFilter==="admitted"))&&JSON.stringify([g.metadata,g.exclusions,g.eligibility.eligibility_reasons]).toLowerCase().includes(admissionQuery.toLowerCase()));
+    const rows=data.games.filter(g=>(admissionFilter==="all"||g.current_usable===(admissionFilter==="admitted"))&&JSON.stringify([g.metadata,g.exclusions,g.eligibility.eligibility_reasons]).toLowerCase().includes(admissionQuery.toLowerCase()));
     if(!rows.some(g=>g.id===gameId))gameId=rows[0]?.id;
     count.textContent=`${rows.length} of ${data.counts.source_records} exposed sources`;queue.replaceChildren();
     rows.forEach(g=>queue.append(queueButton(noteFlag(`game:${g.id}`)+title(g),`${g.metadata.DT||"Date unknown"} · ${g.role.replaceAll("_"," ")}`,g.id===gameId,()=>{gameId=g.id;update();})));
@@ -320,6 +321,8 @@ function renderExamples(){
 
 function renderChecklist(){
   heading("Record your manual sign-off", "E1 is recorded as complete for exploratory E2 work. These annotations help you inspect that evidence; they do not close tasks or change research gates.");
+  app.append(node("p", "Owner review recorded on 13 November: exclude cases 044 and 083; admission subset and example checks were acceptable; capability limits accepted. This was a subset review, and GPU readiness remains separate.", {class:"notice"}),
+    jsonDetails("Recorded owner decision", data.manual_review));
   const items=[
     ["endings","Inspect endings","Review both winner disagreements (044 and 083), then sample other score differences. Check living/dead groups, seki, captured stones and cleanup changes. Note remaining uncertainty; empirical agreement is not a proof."],
     ["admission","Spot-check admission","Check familiar accounts for known bots or aliases and verify source/date/rank/rules fields. Permission is owner-attested. Record concrete corrections for quarantine; there is no requirement to manually relabel all 1,000 candidates."],

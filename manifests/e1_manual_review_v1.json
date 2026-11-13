@@ -1,0 +1,38 @@
+{
+  "version": "e1_manual_review_decision_v1",
+  "date": "2026-11-13",
+  "bead": "kenggo-bck",
+  "authority": "Owner decision in the E1 manual-review conversation",
+  "base_population": {
+    "path": "manifests/e1_population_v2.json",
+    "sha256": "f3a05b9141084037b79a3b01885267f55f95410e33c0f9858a14eb124a3abe53"
+  },
+  "historical_comparison": {
+    "path": "manifests/e1_endgame_comparison_v2.json",
+    "sha256": "8597c21f2e68eb07b3086342113662fde3a18ebcea711608f9b892c2ca5037ec"
+  },
+  "excluded_games": [
+    {
+      "case": 44,
+      "source_url": "https://files.gokgs.com/games/2025/3/2/lorbas72-chika.sgf",
+      "sgf_sha256": "dac6f80d91bbfb70f10f542a0e22d323299091dcf199bb3ad0c42761c4ab79fe",
+      "canonical_sha256": "8c21c254ee3855f154d9a3dc1a51a2e52af43ec6f562b2c4ebf9b49a2da7ddb9",
+      "reason": "owner_excluded_recorded_referee_winner_disagreement"
+    },
+    {
+      "case": 83,
+      "source_url": "https://files.gokgs.com/games/2025/7/29/BasilDiug-yuumsuzuki.sgf",
+      "sgf_sha256": "ba9630ee0b00c3967b6d00c5494366392b5cb2a8cea7f429008d8bb34d020721",
+      "canonical_sha256": "f93823dbda73110014125ded97eb043bc0d659ee533d6ef2c0ba37babc5e91c2",
+      "reason": "owner_excluded_recorded_referee_winner_disagreement"
+    }
+  ],
+  "owner_checks": {
+    "source_admission": "Owner spot-checked a subset and reported it seems fine; no additional games or accounts were identified for exclusion.",
+    "stored_examples": "Owner inspected a few examples and reported they seem acceptable; no additional defects identified.",
+    "capability_limits": "Owner accepted the documented limitations.",
+    "coverage": "Subset inspection only; inspected game/example IDs were not supplied.",
+    "gpu_readiness": "Not established by this review; kenggo-ydo.7 remains separate."
+  },
+  "interpretation": "Exclude both whole games from usable data without deciding whether the source or referee winner is correct. Preserve original SGFs, source labels, all historical ending cases and comparison denominators. Do not report accuracy on the post-selected remainder as new referee validation."
+}

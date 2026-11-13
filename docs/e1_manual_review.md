@@ -5,8 +5,8 @@ Generate a single offline page from the existing E1 artifacts, then open it:
 ```bash
 export UV_CACHE_DIR="$PWD/.cache/uv"
 export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
-uv run --locked python tools/build_e1_review.py
-xdg-open runs/e1-manual-review/index.html
+uv run --locked python tools/build_e1_review.py runs/e1-manual-review-filtered/index.html
+xdg-open runs/e1-manual-review-filtered/index.html
 ```
 
 The exporter requires the pinned local corpus, example shards, original SGF
@@ -27,23 +27,27 @@ uv run --locked python tools/build_e1_review.py runs/e1-manual-review-v2/index.h
 ## What to inspect
 
 - **Endgames:** starts with cases 044 and 083, the two winner disagreements.
+  Both are now labeled as owner-excluded from usable data; all historical
+  comparisons remain available without changing their denominators.
   Replay the original game and either saved cleanup budget independently. Orange
   squares show changes from the source ending. Filter all 108 endings by winner,
   score or between-budget margin differences. Source SGF downloads preserve the
   original bytes, comments and variations. The displayed replay follows the
   canonical played main line. Colors come from SGF metadata, not filenames.
 - **Admission:** search all 1,000 previously exposed records by account, rank,
-  date or exclusion. Inspect screening assumptions and metadata, and replay the
-  241 admitted sources. Record concrete bot, alias or provenance findings.
+  date or exclusion. The usable-source filter contains 239 games after the two
+  owner exclusions. Historical replays of all 241 originally admitted games
+  remain available with current role labels.
 - **Examples:** compare a deterministic sample of stored training/development
   rows with their source pre-move boards. Inspect mover/opponent planes, legal
   actions, explicit passes, source-value signs, rank fallbacks and missingness
   masks. Scalars are the stored values before normalization. Sampled games come
   from the existing diagnostics plus the first two source IDs in each allowed
   role; positions include the first two, middle, final and explicit-pass rows.
-- **Sign-off checklist:** record the manual checks, capability limits and separate
-  GPU follow-up. The listed validation/review results describe the recorded E1
-  evidence; opening the page does not run tests or inspect the current host.
+- **Sign-off checklist:** includes the owner's accepted subset checks, capability
+  limits and separate GPU follow-up. The listed validation/review results describe
+  the recorded E1 evidence; opening the page does not run tests or inspect the
+  current host.
 
 Use **Checked** or **Needs follow-up** with a note for each case you inspect.
 Notes save independently per case under the evidence bundle's fingerprint, so
@@ -85,7 +89,7 @@ uv run --locked python -m unittest discover -s tests -p test_manual_review.py -v
 For browser checks, use an existing Node/Playwright installation:
 
 ```bash
-node tools/e1_review/check_browser.cjs runs/e1-manual-review/index.html
+node tools/e1_review/check_browser.cjs runs/e1-manual-review-filtered/index.html
 ```
 
 If necessary, set `NODE_PATH` to the directory containing Playwright and

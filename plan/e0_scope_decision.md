@@ -21,6 +21,12 @@ revision](e1_empirical_endgame_contract_v2.md) preserves source actions and labe
 while supplying separately identified referee judgments. The [completion
 evidence](../reports/e1_completion_2026-11-11.md) records its gate and limits.
 
+**13 November manual review:** the [owner's review](../reports/e1_manual_review_2026-11-13.md)
+excludes two complete training games, leaving 106 usable training games. The
+owner accepted admission and encoded-example subset checks and the stated
+capability limits. All other split assignments, the final reservation and the
+full historical referee comparison remain unchanged.
+
 ## Initial population
 
 The following limits are project choices for the first audit, not measured properties of the corpus.

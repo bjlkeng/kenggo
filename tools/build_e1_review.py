@@ -21,6 +21,8 @@ from kenggo.kgs_source import RANKS
 
 ROOT = Path(__file__).resolve().parents[1]
 READINESS = "fe062804cfb1952715daaed055de85e9d26c7d9fd32f6a64092dc97eff3a1a2a"
+CURRENT_POPULATION = {"path": "manifests/e1_population_v3.json",
+                      "sha256": "bca2a7ae24e94e2b107ed7f3a893e7a841c5d13711ee410f505a7c14c71d1f9d"}
 EXAMPLE_ROLES = ("train", "population_development", "validation_development")
 
 
@@ -145,7 +147,9 @@ def build(output):
     if output.exists():
         raise FileExistsError(f"Keep the existing review export; choose a new output: {output}")
     readiness = pinned({"path": "manifests/e1_readiness_v2.json", "sha256": READINESS})
-    population = pinned(readiness["population"])
+    population = pinned(CURRENT_POPULATION)
+    manual_review = pinned(population["manual_review"])
+    excluded = {item["source_url"] for item in manual_review["excluded_games"]}
     artifacts = population["artifacts"]
     profile_ref = population["inputs"]["example_profile"]
     profile = load_dataset_profile(ROOT / profile_ref["path"], profile_ref["sha256"])
@@ -173,7 +177,8 @@ def build(output):
         row = {"id": key, "metadata": meta, "archive": record["archive"], "eligibility": gate,
                "role": membership[key]["role"], "exclusions": membership[key]["exclusions"],
                "source": record["source"], "recorded_result": record.get("recorded_result"),
-               "value_supported": record["recorded_value_supported"]}
+               "value_supported": record["recorded_value_supported"], "manual_exclusion": key in excluded,
+               "current_usable": gate["training_eligible"] and membership[key]["role"] != "excluded"}
         if gate["training_eligible"] and not record["structural_exclusions"]:
             game = replay_record(record)
             games[key] = game
@@ -201,7 +206,7 @@ def build(output):
             raise TimeoutError("Review export exceeded its 300-second budget")
         key = row["source_url"]
         if key not in games:
-            raise ValueError("Referee case is not an admitted nonfinal source")
+            raise ValueError("Referee case is not a validated historical nonfinal source")
         path = f"{comparison['directory']}/ending-{row['case']:03d}.json"
         saved = pinned({"path": path, "sha256": row["artifact_sha256"]})
         decision = saved["decision"]
@@ -220,10 +225,12 @@ def build(output):
     examples = collect_examples((ROOT / artifacts["examples_manifest"]["path"]).parent,
                                 artifacts["examples_manifest"]["sha256"], targets, records, games)
     payload = {"version": "e1_manual_review_v1", "readiness_sha256": READINESS,
-               "scope": population["scope"], "games": summaries, "endings": endings,
+               "scope": population["scope"], "population": CURRENT_POPULATION, "manual_review": manual_review,
+               "games": summaries, "endings": endings,
                "passes": comparison["passes"], "examples": examples,
                "scalars": list(SCALARS), "ranks": RANKS, "deferred": readiness["deferred"],
-               "counts": {"admitted": len(games), "source_records": len(records),
+               "counts": {"admitted": sum(row["current_usable"] for row in summaries),
+                          "source_replays": len(games), "owner_excluded": len(excluded), "source_records": len(records),
                           "endings": len(endings), "examples": len(examples)},
                "recorded_validation": {"tests": readiness["validation"]["tests_passed"],
                                        "skips": readiness["validation"]["tests_skipped"]}}
@@ -242,6 +249,6 @@ def build(output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("output", type=Path, nargs="?", default=ROOT / "runs/e1-manual-review/index.html")
+    parser.add_argument("output", type=Path, nargs="?", default=ROOT / "runs/e1-manual-review-filtered/index.html")
     args = parser.parse_args()
     build(args.output)
