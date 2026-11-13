@@ -80,6 +80,10 @@ Verify findings against the implementation. Record evidence when dismissing a fa
 
 Record the review scope, reviewer/model, pass count, final verdict, and validation commands/results in the bead. Mention review-driven fixes in the commit message when they changed the patch.
 
+## Manual review by the owner
+
+When the owner needs to manually review something, provide a single-page HTML/JS interface when applicable so the evidence is easy to inspect. Show the relevant results and the checks or decisions needed, and link directly to the generated page. Prefer a self-contained page that opens locally without a server. Record accepted feedback in the owning bead; the page does not replace independent Codex review or acceptance checks.
+
 ## Validation and completion
 
 Follow [the workspace setup](docs/workspace.md) for the pinned Linux CPU environment. From the repository root, the current checks are:
