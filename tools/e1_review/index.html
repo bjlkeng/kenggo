@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>E1 manual review · kenggo</title>
+  <style>/* REVIEW_CSS */</style>
+</head>
+<body>
+  <header>
+    <div><span class="eyebrow">KENGGO / RESEARCH TOOLS</span><h1>E1 manual review</h1></div>
+    <div class="header-actions"><span class="tag">Offline · final data excluded</span>
+      <button id="export">Export notes</button><label class="button secondary">Import notes<input id="import" type="file" accept="application/json,.json" hidden></label></div>
+  </header>
+  <p class="intro">Inspect the evidence, record what you find, and keep source results intact.</p>
+  <div class="statusline"><span id="save-status" role="status" aria-live="polite"></span><span id="progress"></span></div>
+  <nav aria-label="Review sections">
+    <button data-tab="endings" class="active">1. Endgames</button><button data-tab="admission">2. Admission</button>
+    <button data-tab="examples">3. Examples</button><button data-tab="checklist">4. Sign-off checklist</button>
+  </nav>
+  <main id="app"></main>
+  <footer>Review notes are personal annotations. They do not change labels, admission decisions, qualification, or Beads. Export a copy before moving or deleting this page.</footer>
+  <script id="review-data" type="application/json">REVIEW_DATA</script>
+  <script>/* REVIEW_JS */</script>
+</body>
+</html>

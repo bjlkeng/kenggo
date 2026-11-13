@@ -183,6 +183,9 @@ the referee decisions measured above.
 
 ## Manual validation
 
+Use the [local review UI](../docs/e1_manual_review.md) to replay source/cleanup
+games, inspect admission and stored examples, and export your review notes.
+
 1. Inspect **both winner disagreements in the table above**, especially living/dead
    groups, seki, prisoners and cleanup changes. Then sample the comparison's other
    margin disagreements. Treat referee agreement as empirical evidence.
