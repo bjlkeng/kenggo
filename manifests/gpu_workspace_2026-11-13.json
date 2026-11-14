@@ -1,0 +1,151 @@
+{
+  "version": "gpu_workspace_readiness_v1",
+  "date": "2026-11-13",
+  "bead": "kenggo-ydo.7",
+  "review_base": "1579d8c5327b3feb89f85a93c7deedb044e15808",
+  "execution_commit": "29bf4599d0385b5c7b42fca5945b305e530fab7f",
+  "gpu_ready": true,
+  "scope": "Installation readiness on this workstation; no throughput, training or model-quality claim.",
+  "recovery": "Owner restarted Ubuntu; no agent changes to host drivers, services or system configuration.",
+  "historical_preparation": {
+    "path": "manifests/gpu_workspace_2026-11-11.json",
+    "sha256": "91c7ecc10ac23052cbd74d00b383ddd09b5cf7029016dbed0b554447a7fbefe3"
+  },
+  "host": {
+    "gpu": {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=uuid,name,driver_version,memory.total",
+        "--format=csv,noheader,nounits"
+      ],
+      "exit_code": 0,
+      "stdout": "GPU-22498978-f662-7428-0917-71a5906f3bcb, NVIDIA GeForce RTX 3090, 595.99.02, 24576",
+      "stderr": ""
+    },
+    "module_on_disk": {
+      "command": [
+        "modinfo",
+        "-F",
+        "version",
+        "nvidia"
+      ],
+      "exit_code": 0,
+      "stdout": "595.99.02",
+      "stderr": ""
+    },
+    "kernel": {
+      "command": [
+        "uname",
+        "-r"
+      ],
+      "exit_code": 0,
+      "stdout": "6.8.0-149-generic",
+      "stderr": ""
+    },
+    "module_loaded": "NVRM version: NVIDIA UNIX Open Kernel Module for x86_64  595.99.02  Release Build  (dvs-builder@U22-I3-AF05-06-2)  Wed Aug 26 05:20:50 UTC 2026\nGCC version:  gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04.3) \n"
+  },
+  "runtime": {
+    "checks": [
+      "host_driver",
+      "cuda_tensor_autograd",
+      "cuda_synchronize"
+    ],
+    "cost_scope": "Check body after imports; GPU allocation starts at the first CUDA availability probe.",
+    "cpu_seconds": 0.958612026,
+    "device": {
+      "capability": [
+        8,
+        6
+      ],
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 3090",
+      "total_memory_bytes": 25296044032
+    },
+    "gpu_allocation_seconds": 3.5338802250007575,
+    "host": {
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "GPU-22498978-f662-7428-0917-71a5906f3bcb, NVIDIA GeForce RTX 3090, 595.99.02, 24576"
+    },
+    "python": "3.12.13",
+    "scope": "Installation readiness only; no model, dataset or throughput measurement.",
+    "status": "ok",
+    "torch": "2.15.0+cu132",
+    "torch_cuda_build": "13.2",
+    "wall_seconds": 3.5571213749999515
+  },
+  "artifacts": {
+    "host": {
+      "path": "runs/gpu-readiness-2026-11-13/host.json",
+      "sha256": "2763d7da0c94ccf35969270b7a64d1416fe1b3444d29bc969cbe6c96f3626f2f"
+    },
+    "cuda_check": {
+      "path": "runs/gpu-readiness-2026-11-13/cuda-smoke.stdout.json",
+      "sha256": "5d8600c56b3fc1f0822fa83b4cb6bc3c3f8ad6feef0841afb5710b4c0e632711"
+    },
+    "stderr": {
+      "path": "runs/gpu-readiness-2026-11-13/cuda-smoke.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "wrapper": {
+      "path": "runs/gpu-readiness-2026-11-13/wrapper.json",
+      "sha256": "18b010d1a328c6b7479e4c6d0cb8fa30f0b260dbf164685f3a92591229b3788d"
+    },
+    "resource_ledger": {
+      "path": "runs/gpu-readiness-2026-11-13/resources.json",
+      "sha256": "45bce1aae4f761309218a0fa824b030366f90096a969c3af1514182e9d752072"
+    },
+    "cuda_check_code": {
+      "path": "src/kenggo/cuda_smoke.py",
+      "sha256": "cc7e20e3c2d1446c2d25ffc4531fc835c8f11346dd6b92abd81c4fa0d13dd990"
+    },
+    "cuda_requirements": {
+      "path": "environments/cuda/requirements.lock",
+      "sha256": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+    },
+    "cpu_project": {
+      "path": "pyproject.toml",
+      "sha256": "3c42cfa99ee4603e4d62dfe6fd2b6d32dd080d30d5890818279b7e27fc70497f"
+    },
+    "cpu_lock": {
+      "path": "uv.lock",
+      "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    }
+  },
+  "resources": {
+    "budget_id": "cuda-installation-readiness",
+    "gpu_limit_seconds": 60,
+    "charged_gpu_seconds": 21.727909,
+    "remaining_gpu_seconds": 38.272091,
+    "budget_breached": false,
+    "allocation_start_utc": "2026-11-14T01:26:21.269833+00:00",
+    "allocation_stop_utc": "2026-11-14T01:26:42.997742+00:00",
+    "scope": "Conservatively charge the full wrapper interval, including host discovery, imports and process shutdown. The inner CUDA probe timing is separately reported.",
+    "child_cpu_seconds": 4.078699,
+    "wall_seconds": 21.727901256999758,
+    "prior_failed_check_gpu_seconds": 0,
+    "new_package_downloads": 0,
+    "training_runs": 0,
+    "kgs_requests": 0
+  },
+  "validation": {
+    "host_and_loaded_on_disk_versions_match": true,
+    "synchronized_cuda_autograd_passed": true,
+    "cpu_tests_passed": 211,
+    "cuda_environment_cpu_tests_passed": 211,
+    "native_reference_enabled": true,
+    "tests_skipped": 0,
+    "cpu_checks": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cpu-tests.log",
+      "sha256": "ddf2a403a95dbac978958c0af676a87d5ae33d3a411b5a2cf06ee33585230850"
+    },
+    "cuda_environment_cpu_checks": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cuda-environment-tests.log",
+      "sha256": "46d0e47094d3eff2adae887e1db5e0168176ca6ebf62b253eba963b32069c201"
+    },
+    "cuda_package_consistency_passed": true,
+    "original_cuda_versions_preserved": 32,
+    "tracking_dependencies_added": 32,
+    "independent_review": "Final scope/verdict recorded in Beads; the prior clean review covered preparation only."
+  }
+}

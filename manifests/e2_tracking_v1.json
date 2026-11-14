@@ -1,0 +1,144 @@
+{
+  "version": "e2_tracking_evidence_v1",
+  "date": "2026-11-13",
+  "bead": "kenggo-ydo.1",
+  "review_base": "29bf4599d0385b5c7b42fca5945b305e530fab7f",
+  "scope": "Experiment tracking, checkpoint continuation and GPU budget accounting; no Go baseline, throughput or GPU-readiness claim.",
+  "destination": {
+    "entity": "bjlkeng",
+    "project": "kenggo",
+    "access_verified": "PRIVATE",
+    "api_host": "https://api.wandb.ai",
+    "credentials_in_artifacts": false
+  },
+  "config": {
+    "path": "configs/e2_tracking_smoke_v1.json",
+    "sha256": "276c2fcc9898e733fd6a6a875e788bd25be2f88d11492ff568484b3e0274e970"
+  },
+  "accepted_run": {
+    "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/2e02b3a00c1e4003903a24897568d0ab",
+    "artifact": "bjlkeng/kenggo/2e02b3a00c1e4003903a24897568d0ab-step-2-6f02cfba:v0",
+    "summary": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/summary.json",
+      "sha256": "8bdad6f8f352668afc2bebc0a7eeb1a56ceb8465c01e4d4e92980236b9d4eec9"
+    },
+    "run_manifest": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/run/run.json",
+      "sha256": "60bdbfa07e2be3a2b8a826ff1397e512d08c6b9953e56ca861dd9e0ab5fa4052"
+    },
+    "provenance": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/run/provenance.json",
+      "sha256": "803be4049a83f76b58e69700af956dc9166a0289d27ee35c4956925aa301d703"
+    },
+    "source_patch": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/run/source.patch",
+      "sha256": "1aecbc73732d420b0acf1e1bbb5da8e076600575ea62cd53fd941bb6ae5355c9"
+    },
+    "ledger": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/resources.json",
+      "sha256": "841953619491f5fd2c1d195034b0e9dfd746374185a3fe7e497a920c7b65ae15"
+    },
+    "checkpoint": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/run/checkpoints/step-0000000002-bba4ce9da4ea4f088e2cccb56f02cfba/manifest.json",
+      "sha256": "64dbe5a73b09426caa6e2cfd1c968c5918830a3fff94537aca48ba8b44a6f69b"
+    },
+    "downloaded_manifest": {
+      "path": "runs/e2-tracking-smoke-2026-11-13-v3/downloaded-checkpoint/manifest.json",
+      "sha256": "64dbe5a73b09426caa6e2cfd1c968c5918830a3fff94537aca48ba8b44a6f69b"
+    }
+  },
+  "prior_runs": [
+    {
+      "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/430587a44bba48dd91b05bbc990f2d27",
+      "summary": {
+        "path": "runs/e2-tracking-smoke-2026-11-13/summary.json",
+        "sha256": "8183eea20d5cbba37f183efb44ed24f6eaf8adf4296733a809ca0c62f8afc12e"
+      },
+      "followup": {
+        "path": "runs/e2-tracking-smoke-2026-11-13/verification_followup.json",
+        "sha256": "63ab9ed523b112392affc7a3f9169f760326907abe0e2a8549d9ed8acd84cc5a"
+      },
+      "disposition": "Checkpoint/continuation round trip passed; later remote readback found stale nested attempt-cost fields. Superseded by flat per-attempt summaries and explicit remote assertions; costs retained."
+    },
+    {
+      "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/41ddae8300fc47dda59f7fc543b76784",
+      "summary": {
+        "path": "runs/e2-tracking-smoke-2026-11-13-v2/summary.json",
+        "sha256": "7d7b5472d940b55739006fa41a7dd5fdecc23056355357d48c4b914ebc5f4894"
+      },
+      "disposition": "Original online continuation, costs and download check passed. Superseded by v3 after independent review fixed mixed module modes and interrupted tracking shutdown. Costs retained; historical checkpoint format v1 remains bound to its archived source."
+    }
+  ],
+  "validation": {
+    "cpu_tests": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cpu-tests.log",
+      "sha256": "ddf2a403a95dbac978958c0af676a87d5ae33d3a411b5a2cf06ee33585230850"
+    },
+    "cuda_environment_cpu_tests": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cuda-environment-tests.log",
+      "sha256": "46d0e47094d3eff2adae887e1db5e0168176ca6ebf62b253eba963b32069c201"
+    },
+    "tests_passed_per_environment": 211,
+    "tests_skipped": 0,
+    "cuda_execution_tested": false,
+    "exact_next_stochastic_update": true,
+    "remote_attempt_statuses_and_costs_verified": true,
+    "remote_checkpoint_download_and_hash_verified": true,
+    "original_cuda_package_versions_preserved": 32,
+    "tracking_packages_added_to_cuda": 32,
+    "root_environment_checks": [
+      "uv lock --check",
+      "uv sync --locked --check",
+      "uv run --locked python -m kenggo.smoke",
+      "uv build --no-sources"
+    ],
+    "independent_review": "Recorded in Beads; source/manifest creation alone is not a clean review verdict.",
+    "mixed_module_modes_preserved": true,
+    "interrupted_shutdown_recovery_verified": true,
+    "cpu_spawn_regression": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cpu-tracking-spawn.log",
+      "sha256": "26d0770dac403088cd28a404ba76bc9a37febd131e3c6e81f1c2421d289d4c71"
+    },
+    "cuda_environment_spawn_regression": {
+      "path": "runs/e2-tracking-validation-2026-11-13-v3/cuda-tracking-spawn.log",
+      "sha256": "28ec6562c6dd6eaf7c8da42521280a50e42d32091cc9fa13a02a61ba89aa9c55"
+    }
+  },
+  "code": {
+    "src/kenggo/checkpoints.py": "d375157698a6531435ca600dab8aff268200a646f8aee56f26a7d1598fde5b83",
+    "src/kenggo/tracking.py": "d2d437f853c9956b2b7bcff92df49794b7bf1e24e1edf4ae2bf3b682e4c4d098",
+    "src/kenggo/tracking_smoke.py": "c1b8c9912f517c458977968b554b948b2b36ffe46cbecc1dda6d6f6e012b2508",
+    "src/kenggo/resource_ledger.py": "5118b30b418b19bcf41a7fd8677b7b4dc9cfab29714667169a5518de3fce1a2d",
+    "pyproject.toml": "3c42cfa99ee4603e4d62dfe6fd2b6d32dd080d30d5890818279b7e27fc70497f",
+    "uv.lock": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1",
+    "environments/cuda/requirements.lock": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+  },
+  "smoke_costs": {
+    "runs": 3,
+    "attempts": 6,
+    "calling_process_cpu_seconds": 4.769954249,
+    "wall_seconds": 45.539681344317614,
+    "attempted_artifact_bytes": 1433132,
+    "gpu_seconds": 0,
+    "limits": {
+      "calling_process_cpu_seconds": 120,
+      "wall_seconds": 180,
+      "attempted_artifact_bytes": 10485760
+    },
+    "scope": "Smoke bodies after imports; no complete setup/background-service CPU total or performance comparison."
+  },
+  "preparation_budget": {
+    "new_package_payload_allowance_mib": 256,
+    "unexpected_torch_download_mib_reported_by_uv": 514.2,
+    "budget_breached": true,
+    "resolution": "Stopped further package downloads. Rejected the direct-wheel source prototype; final locks and CUDA install completed offline using cached registry artifacts. Preserved all original CUDA versions; new tracking packages match CPU.",
+    "full_setup_cpu_and_network_totals_measured": false
+  },
+  "remaining_e2_work": [
+    "compact population learner",
+    "independent match runner",
+    "Human SL reference",
+    "bounded throughput/BASE pilot and readiness",
+    "bounded corpus expansion with existing exclusions preserved"
+  ]
+}

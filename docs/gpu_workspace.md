@@ -1,14 +1,33 @@
 # CUDA workspace and driver recovery
 
 The CUDA environment is prepared separately from the existing CPU environment.
-GPU readiness remains unverified until the host restart and the synchronized
-CUDA check below pass. Bead `kenggo-ydo.7` stays open until then.
+The 13 November host and synchronized CUDA check passed after the owner
+restarted Ubuntu. The [readiness evidence](../manifests/gpu_workspace_2026-11-13.json)
+records the matching 595.99.02 loaded/on-disk driver, RTX 3090, Python 3.12.13
+and Torch 2.15.0+cu132. This verifies installation readiness on this workstation,
+not model throughput or quality.
 
 The [preparation manifest](../manifests/gpu_workspace_2026-11-11.json) records the
-installed environment and failed host check. All 170 tests passed in both the
+11 November environment and failed host check. All 170 tests passed in both the
 CPU and CUDA Python environments, with the native rules reference enabled and
 zero skips. Those tests and the CPU smoke do not establish GPU execution: the
 CUDA-specific check stopped at the host mismatch before allocating GPU work.
+
+The 13 November [experiment-tracking update](experiments.md) adds W&B 0.31.0
+and its dependencies to both Python environments. All 32 original CUDA package
+versions, including Torch, are preserved. The historical preparation manifest's
+dependency hash describes commit `5151045`; the current lock includes tracking.
+The dependency update alone did not establish GPU execution; the subsequent
+readiness check did. All 211 tests also pass in both environments with the pinned
+native rules reference enabled and zero skips. The test suites run on CPU; the
+separate CUDA check verifies tensor values, backward gradients and synchronization.
+
+The inner CUDA allocation lasted 3.5339 seconds. The readiness budget
+conservatively charges the entire 21.7279-second wrapper interval, including
+host discovery, imports and shutdown, against its existing 60-second allowance.
+The wrapper measured 4.0787 child-process CPU seconds. Historical failures remain
+in the preparation evidence, with zero GPU allocation. No new package download,
+Go data access or training was part of the successful check.
 
 ## Host diagnosis on 11 November 2026
 
@@ -49,7 +68,8 @@ export UV_CACHE_DIR="$PWD/.cache/uv"
 export UV_PYTHON_INSTALL_DIR="$PWD/.cache/python"
 uv venv --python 3.12.13 .cache/venvs/cuda
 UV_CONCURRENT_DOWNLOADS=2 UV_HTTP_RETRIES=0 timeout 900s uv pip sync \
-  --python .cache/venvs/cuda/bin/python --require-hashes \
+  --python .cache/venvs/cuda/bin/python --no-sources --require-hashes \
+  --index-strategy unsafe-best-match \
   environments/cuda/requirements.lock
 uv pip install --python .cache/venvs/cuda/bin/python --no-deps --no-sources -e .
 uv pip check --python .cache/venvs/cuda/bin/python
@@ -65,15 +85,21 @@ To regenerate the CUDA lock after a deliberate dependency revision:
 
 ```bash
 uv pip compile pyproject.toml --no-sources \
+  --constraint environments/cuda/requirements.lock \
   --index https://download.pytorch.org/whl/cu132 \
+  --index-strategy unsafe-best-match \
   --python-version 3.12 --python-platform x86_64-unknown-linux-gnu \
   --generate-hashes --emit-index-url \
   --output-file environments/cuda/requirements.lock
 ```
 
-The explicit index selects the available CUDA 13.2 wheel. The pinned uv version's
-`--torch-backend` shortcut does not recognize `cu132`. `--no-sources` prevents the
-CPU-specific source setting from overriding this separate dependency lock.
+The existing lock constrains all versions, including the CUDA 13.2 Torch build.
+The index strategy allows the CUDA index and PyPI to supply the exact pinned
+versions; installation still requires the recorded artifact hashes. This avoids
+selecting older HTTP/tracking dependencies merely because the CUDA index lists
+them first. Change pins deliberately when revising the environment. The pinned
+uv version's `--torch-backend` shortcut does not recognize `cu132`.
+`--no-sources` prevents the CPU source setting from overriding the CUDA lock.
 
 ## Check actual CUDA execution
 
