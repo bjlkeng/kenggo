@@ -1,0 +1,97 @@
+{
+  "version": "e2_learner_evidence_v1",
+  "bead": "kenggo-ydo.2",
+  "purpose": "CPU implementation validation, not BASE selection or qualification",
+  "source": {
+    "commit": "70380102a359bcf85ec42900335b469508a4cf7a",
+    "patch_sha256": "692e79e5c778902c69fa58461abce0f92e7dfaf9e297196dfa50e01d2f0eb69f"
+  },
+  "summary": {
+    "actual_examples_processed": 136,
+    "actual_updates_including_control": 17,
+    "artifact": "bjlkeng/kenggo/8b5c91d3fca64e7b9d9880fe77a23b98-step-16-5e4b074c:v0",
+    "artifact_bytes_attempted": 653373,
+    "checkpoint": {
+      "path": "run/checkpoints/step-0000000016-9d1761d9840b4e978c2f40315e4b074c/manifest.json",
+      "sha256": "1819dcb00f5efb94485dfadfc0ace738950d14e016cb4252c1bb7408c904bc0e"
+    },
+    "config_sha256": "56160d7f0879808bad67a603324d27b05493757d4ddde844ea522de8fd730545",
+    "costs": {
+      "cpu_seconds": 1.6832442400000003,
+      "wall_seconds": 11.862086305999583
+    },
+    "distinct_updates": 16,
+    "downloaded_checkpoint_verified": true,
+    "gpu_seconds": 0,
+    "ledger_sha256": "086abcde057c8780c8f2af33fc6cd96d203bfcb1a34693edb1594f4c96f2e2a3",
+    "provenance_sha256": "a7bb312d1c781356644df9dc63b59458c3ab95200185740db1f20022c907db6b",
+    "resume_exact": true,
+    "run_manifest_sha256": "4fcfddf35e677c679807ced0e762f1deec53a88b01cd1229c52175b3d4667b49",
+    "scope": "Fixed training-prefix CPU debug check; no held-out evaluation or playing-strength claim.",
+    "status": "completed",
+    "training_row_keys_sha256": "5e0faa6a02b3e759a5ebb6e2e613541eb0712eaa417cdd053be7f16e1818297c",
+    "training_rows": 64,
+    "version": "learner_smoke_v1",
+    "wandb_url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/8b5c91d3fca64e7b9d9880fe77a23b98"
+  },
+  "config": {
+    "path": "configs/e2_learner_smoke_v1.json",
+    "sha256": "56160d7f0879808bad67a603324d27b05493757d4ddde844ea522de8fd730545"
+  },
+  "outputs": [
+    {
+      "path": "runs/e2-learner-smoke-2026-11-13/summary.json",
+      "sha256": "6f00b5de618fb162f48c8f3374758982aac76085ff1b2a8f4e38068666aea770"
+    },
+    {
+      "path": "runs/e2-learner-smoke-2026-11-13/run/run.json",
+      "sha256": "4fcfddf35e677c679807ced0e762f1deec53a88b01cd1229c52175b3d4667b49"
+    },
+    {
+      "path": "runs/e2-learner-smoke-2026-11-13/run/provenance.json",
+      "sha256": "a7bb312d1c781356644df9dc63b59458c3ab95200185740db1f20022c907db6b"
+    },
+    {
+      "path": "runs/e2-learner-smoke-2026-11-13/run/source.patch",
+      "sha256": "692e79e5c778902c69fa58461abce0f92e7dfaf9e297196dfa50e01d2f0eb69f"
+    },
+    {
+      "path": "runs/e2-learner-smoke-2026-11-13/resources.json",
+      "sha256": "086abcde057c8780c8f2af33fc6cd96d203bfcb1a34693edb1594f4c96f2e2a3"
+    }
+  ],
+  "validation": {
+    "tests_per_environment": 276,
+    "skipped": 0,
+    "native_reference_enabled": true,
+    "gpu_allocation_seconds": 0,
+    "files": [
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-checks.json",
+        "sha256": "c915878e73e71b4d54d87ba97bae2046c092d9a2c3a7ced72ebc587afb0288df"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-tests.log",
+        "sha256": "5a70b23c30034c9d8eae05472d1b9243c80fdc79041686f41032e3dd5a7cfb53"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cuda-tests.log",
+        "sha256": "8d8ec4e39d9674f85363e0e1655b3ba0d5284228c7db37f4889edd64ed7198d5"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/learner-smoke.log",
+        "sha256": "4fbe2adc18a643354e9c08582d981a034553dd450627b8b24b9895709dd2ae4b"
+      }
+    ]
+  },
+  "limits": {
+    "training_rows": 64,
+    "distinct_updates": 16,
+    "actual_updates_including_control": 17,
+    "cpu_seconds": 180,
+    "wall_seconds": 300,
+    "checkpoint_upload_bytes": 10485760,
+    "gpu_seconds": 0
+  },
+  "cost_scope": "Calling-process CPU and elapsed time include partial/control and resumed work and artifact download; W&B service CPU is not included."
+}

@@ -10,3 +10,9 @@ See the [project plan](plan/go_project_plan_v0.5.md) for scope and experiments, 
 
 The [experiment-tracking guide](docs/experiments.md) covers W&B runs, pinned
 checkpoints, exact continuation checks and resource accounting.
+
+The [compact learner](docs/learner.md) provides masked policy/value training and
+a bounded CPU integration check; held-out baseline comparisons remain E2 work.
+
+The [match runner](docs/matches.md) records scheduled games, failures, replayable
+SGFs and paired uncertainty, with weak policies for panel setup.

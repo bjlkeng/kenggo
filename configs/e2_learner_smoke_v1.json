@@ -1,0 +1,66 @@
+{
+  "version": "experiment_config_v1",
+  "entity": "bjlkeng",
+  "project": "kenggo",
+  "base_url": "https://api.wandb.ai",
+  "comparison": "e2-learner-implementation",
+  "arm": "conditioned-debug",
+  "purpose": "learner-smoke",
+  "seed": 20261113,
+  "budget_id": "e2-learner-implementation",
+  "parameters": {
+    "model": {
+      "blocks": 1,
+      "channels": 16,
+      "rank_conditioned": true
+    },
+    "training_rows": 64,
+    "updates": 16,
+    "batch_size": 8,
+    "clock_dropout": 0.1,
+    "learning_rate": 0.003,
+    "device": "cpu",
+    "torch_threads": 1,
+    "cpu_seconds": 180,
+    "wall_seconds": 300,
+    "max_artifact_bytes": 10485760
+  },
+  "inputs": {
+    "data": {
+      "path": "manifests/e1_population_v3.json",
+      "sha256": "bca2a7ae24e94e2b107ed7f3a893e7a841c5d13711ee410f505a7c14c71d1f9d"
+    },
+    "split": {
+      "path": "runs/e1-manual-filter-2026-11-13/splits/manifest.json",
+      "sha256": "858bf34e2767d724853286a136f2c3a0f14af0d3f5a881c83a7894192465a6f4"
+    },
+    "examples": {
+      "path": "runs/e1-manual-filter-2026-11-13/examples/manifest.json",
+      "sha256": "3ba84e660df1e50478994ec98c8c4b25132559034328f3de21a6ac2e527cd4c4"
+    },
+    "normalizer": {
+      "path": "runs/e1-manual-filter-2026-11-13/normalizer.json",
+      "sha256": "90edb1b0d2b0e5ae8ca4eb8946d09877e097960b57da3e07109ad373acf09c6a"
+    },
+    "profile": {
+      "path": "manifests/e1_population_example_profile_v3.json",
+      "sha256": "3093ee6cb6ea0355ab2314884bce588dbd7f018ea7e809dd63ab1f7be7ea3036"
+    },
+    "rules": {
+      "path": "plan/e1_empirical_endgame_contract_v2.md",
+      "sha256": "9b973fbcdc60ccca39464e75259b4f259b319ad0ac37226371f0e672ad33c1ae"
+    },
+    "referee_profile": {
+      "path": "manifests/e1_katago_referee_profile_v2.json",
+      "sha256": "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4"
+    },
+    "cpu_environment": {
+      "path": "uv.lock",
+      "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    },
+    "cuda_environment": {
+      "path": "environments/cuda/requirements.lock",
+      "sha256": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+    }
+  }
+}

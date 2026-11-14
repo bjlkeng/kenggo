@@ -1,0 +1,411 @@
+{
+  "version": "e2_match_evidence_v1",
+  "bead": "kenggo-ydo.3",
+  "purpose": "Weak-only setup and scheduled-denominator implementation validation; no strength or qualification claim",
+  "source": {
+    "commit": "70380102a359bcf85ec42900335b469508a4cf7a",
+    "patch_sha256": "692e79e5c778902c69fa58461abce0f92e7dfaf9e297196dfa50e01d2f0eb69f"
+  },
+  "summary": {
+    "all_saved_replays_verified": true,
+    "config_sha256": "366113d6fb4f0e436263a6c12a5f1756fde445d3df605e63f20c9ae96e0d3597",
+    "costs": {
+      "cpu_seconds": 271.65023536900003,
+      "wall_seconds": 258.39323441799934
+    },
+    "counts": {
+      "D": 0,
+      "L": 0,
+      "N": 4,
+      "U": 4,
+      "W": 0,
+      "missing": 0
+    },
+    "cpu_scope": "Known wrapper/child CPU and conservative runner charge; tracking service CPU is not fully measured.",
+    "gpu_seconds": 0,
+    "ledger_sha256": "1782bd96b364e94ac127f26ebeed4283688f06c6caf68eccd984c1fdd2175a99",
+    "matches_run_sha256": "0aa3357729860206f653a117acefa8ca0f9d3f27e9aa9847a11eec20105c0db1",
+    "provenance_sha256": "a7bb312d1c781356644df9dc63b59458c3ab95200185740db1f20022c907db6b",
+    "qualification_claim": false,
+    "recorded_games": 4,
+    "run_manifest_sha256": "d4ec6510732ea2141b2fa97d4f7ce8e7ec155cd3a623bf29f2b0aff8d7c03660",
+    "schedule_sha256": "eafa3be957ccb1efc7d71ef1806da2507a0d2d3e23bf5945847f01c437c9b8cd",
+    "scheduled_games": 4,
+    "scope": "Four fixed unranked weak-policy games, including caps/unresolved outcomes; no BASE or full-panel result.",
+    "scores_sha256": "02a48939262f6a51ab9f7c9617c96270533e34001be0b166042a2c36ed03eb6e",
+    "status": "completed",
+    "version": "match_smoke_v1",
+    "wandb_url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/1c73fa50f9984f7d9d0b56a33eb9596d"
+  },
+  "config": {
+    "path": "configs/e2_match_smoke_v1.json",
+    "sha256": "366113d6fb4f0e436263a6c12a5f1756fde445d3df605e63f20c9ae96e0d3597"
+  },
+  "records": [
+    {
+      "slot": {
+        "arm": "uniform-candidate",
+        "block_id": "p000-b000000",
+        "candidate_color": "B",
+        "candidate_seed": 336588732259638391,
+        "id": "s00000000",
+        "opponent_seed": 2409587501154181921,
+        "profile_id": "uniform-opponent"
+      },
+      "result": "U",
+      "status": "truncated",
+      "reason": "action_limit",
+      "actual_actions": 800,
+      "behavior": {
+        "cap": true,
+        "dispute": false,
+        "length_tail": true,
+        "premature_pass": null,
+        "runtime_failure": false,
+        "unresolved": true
+      },
+      "cost": {
+        "agent_network_calls": 0,
+        "conservative_shutdown_cpu_seconds": 0.0,
+        "cpu_sampling_limit": "20ms polling; killed descendants retain observed CPU and conservative shutdown charge",
+        "cpu_scope": "parent_and_reaped_children_plus_retained_sampled_descendants",
+        "cpu_seconds": 66.32632100000001,
+        "gpu_scope": "cpu_only_profiles",
+        "gpu_seconds": 0.0,
+        "memory_scope": "sampled_parent_and_live_descendant_rss",
+        "peak_memory_bytes": 454103040,
+        "referee_network_calls": 0,
+        "reported_agent_gpu_seconds": 0.0,
+        "wall_seconds": 62.48887473499963
+      }
+    },
+    {
+      "slot": {
+        "arm": "uniform-candidate",
+        "block_id": "p000-b000000",
+        "candidate_color": "W",
+        "candidate_seed": 336588732259638391,
+        "id": "s00000001",
+        "opponent_seed": 2409587501154181921,
+        "profile_id": "uniform-opponent"
+      },
+      "result": "U",
+      "status": "truncated",
+      "reason": "action_limit",
+      "actual_actions": 801,
+      "behavior": {
+        "cap": true,
+        "dispute": false,
+        "length_tail": true,
+        "premature_pass": null,
+        "runtime_failure": false,
+        "unresolved": true
+      },
+      "cost": {
+        "agent_network_calls": 0,
+        "conservative_shutdown_cpu_seconds": 0.0,
+        "cpu_sampling_limit": "20ms polling; killed descendants retain observed CPU and conservative shutdown charge",
+        "cpu_scope": "parent_and_reaped_children_plus_retained_sampled_descendants",
+        "cpu_seconds": 66.779235,
+        "gpu_scope": "cpu_only_profiles",
+        "gpu_seconds": 0.0,
+        "memory_scope": "sampled_parent_and_live_descendant_rss",
+        "peak_memory_bytes": 471019520,
+        "referee_network_calls": 0,
+        "reported_agent_gpu_seconds": 0.0,
+        "wall_seconds": 62.96618267000031
+      }
+    },
+    {
+      "slot": {
+        "arm": "uniform-candidate",
+        "block_id": "p001-b000000",
+        "candidate_color": "B",
+        "candidate_seed": 8447433126257792666,
+        "id": "s00000002",
+        "opponent_seed": 1753064939077757499,
+        "profile_id": "capture-opponent"
+      },
+      "result": "U",
+      "status": "truncated",
+      "reason": "action_limit",
+      "actual_actions": 800,
+      "behavior": {
+        "cap": true,
+        "dispute": false,
+        "length_tail": true,
+        "premature_pass": false,
+        "runtime_failure": false,
+        "unresolved": true
+      },
+      "cost": {
+        "agent_network_calls": 0,
+        "conservative_shutdown_cpu_seconds": 0.0,
+        "cpu_sampling_limit": "20ms polling; killed descendants retain observed CPU and conservative shutdown charge",
+        "cpu_scope": "parent_and_reaped_children_plus_retained_sampled_descendants",
+        "cpu_seconds": 62.835848999999996,
+        "gpu_scope": "cpu_only_profiles",
+        "gpu_seconds": 0.0,
+        "memory_scope": "sampled_parent_and_live_descendant_rss",
+        "peak_memory_bytes": 471019520,
+        "referee_network_calls": 0,
+        "reported_agent_gpu_seconds": 0.0,
+        "wall_seconds": 59.349327918999734
+      }
+    },
+    {
+      "slot": {
+        "arm": "uniform-candidate",
+        "block_id": "p001-b000000",
+        "candidate_color": "W",
+        "candidate_seed": 8447433126257792666,
+        "id": "s00000003",
+        "opponent_seed": 1753064939077757499,
+        "profile_id": "capture-opponent"
+      },
+      "result": "U",
+      "status": "truncated",
+      "reason": "action_limit",
+      "actual_actions": 801,
+      "behavior": {
+        "cap": true,
+        "dispute": false,
+        "length_tail": true,
+        "premature_pass": false,
+        "runtime_failure": false,
+        "unresolved": true
+      },
+      "cost": {
+        "agent_network_calls": 0,
+        "conservative_shutdown_cpu_seconds": 0.0,
+        "cpu_sampling_limit": "20ms polling; killed descendants retain observed CPU and conservative shutdown charge",
+        "cpu_scope": "parent_and_reaped_children_plus_retained_sampled_descendants",
+        "cpu_seconds": 70.80910700000004,
+        "gpu_scope": "cpu_only_profiles",
+        "gpu_seconds": 0.0,
+        "memory_scope": "sampled_parent_and_live_descendant_rss",
+        "peak_memory_bytes": 471019520,
+        "referee_network_calls": 0,
+        "reported_agent_gpu_seconds": 0.0,
+        "wall_seconds": 66.64789888799987
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/summary.json",
+      "sha256": "0f769450065aba8d11aa652bd846c2f9a8d6c9919f4b6967763cba270d5a2cf8"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/run/run.json",
+      "sha256": "d4ec6510732ea2141b2fa97d4f7ce8e7ec155cd3a623bf29f2b0aff8d7c03660"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/run/provenance.json",
+      "sha256": "a7bb312d1c781356644df9dc63b59458c3ab95200185740db1f20022c907db6b"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/run/source.patch",
+      "sha256": "692e79e5c778902c69fa58461abce0f92e7dfaf9e297196dfa50e01d2f0eb69f"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/resources.json",
+      "sha256": "1782bd96b364e94ac127f26ebeed4283688f06c6caf68eccd984c1fdd2175a99"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/scores.json",
+      "sha256": "02a48939262f6a51ab9f7c9617c96270533e34001be0b166042a2c36ed03eb6e"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/schedule.json",
+      "sha256": "eafa3be957ccb1efc7d71ef1806da2507a0d2d3e23bf5945847f01c437c9b8cd"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/budget.json",
+      "sha256": "f38fdae6e4d3e6e768283b495c2cd554491d656c240ee5086a2e3f2f1ea90b2f"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/run.json",
+      "sha256": "0aa3357729860206f653a117acefa8ca0f9d3f27e9aa9847a11eec20105c0db1"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000000.json",
+      "sha256": "ab49fea91abd92efdf6308b755c0ba16a660492410aa94acbb3ae7afe98cabb5"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000001.json",
+      "sha256": "9bb8bbcf5d54454e4fb167745ae172a637613435ad58ca4f473eb1497b988940"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000002.json",
+      "sha256": "05d8e791df094cda47ee26dee845f49f5422e1a6be920418047b90745858f022"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000003.json",
+      "sha256": "a9fb4a6da8eaa0ee8ce868fe76d59abaf4147fb0739aae4197c4c9898cc32656"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000000.sgf",
+      "sha256": "f409bfba30ac72fa2a7ce85990462c45472e01183fb46da0192c5bb327c0206a"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000001.sgf",
+      "sha256": "51fea035a82723699259ae02abe40263241db80e16ebaa03ddbcf42475b9e690"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000002.sgf",
+      "sha256": "d71539c24d37e4da8246a3328af01f6344783d0c6d0cc67d39a3648519e433ea"
+    },
+    {
+      "path": "runs/e2-match-smoke-2026-11-13/matches/s00000003.sgf",
+      "sha256": "8874388cb78d5599c27a0bed68a1894fad6ac22e9eb067bdee6df3a644c4eabf"
+    }
+  ],
+  "validation": {
+    "tests_per_environment": 276,
+    "focused_match_tests": 50,
+    "skipped": 0,
+    "native_reference_enabled": true,
+    "files": [
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-checks.json",
+        "sha256": "c915878e73e71b4d54d87ba97bae2046c092d9a2c3a7ced72ebc587afb0288df"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-tests.log",
+        "sha256": "5a70b23c30034c9d8eae05472d1b9243c80fdc79041686f41032e3dd5a7cfb53"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cuda-tests.log",
+        "sha256": "8d8ec4e39d9674f85363e0e1655b3ba0d5284228c7db37f4889edd64ed7198d5"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/match-smoke.log",
+        "sha256": "286a37420e3982fbe9d2a6bf30715a1574d62b2998ca959363b6903dd878d01e"
+      }
+    ]
+  },
+  "limits": {
+    "scheduled_games": 4,
+    "cpu_seconds": 600,
+    "wall_seconds": 900,
+    "match_output_bytes": 134217728,
+    "gpu_seconds": 0
+  },
+  "qualification_dispute_mapping": "Same-winner margin spread remains unknown/adverse until a policy is frozen before qualification.",
+  "post_run_repairs": {
+    "scope": [
+      "malformed agent metadata",
+      "agent initialization fault attribution",
+      "saved behavior and observation integrity",
+      "scheduled empirical replay referee pin",
+      "atomic output publication and partial-write recovery",
+      "startup phase attribution for abrupt agent exits and timeouts"
+    ],
+    "original_actual_games_retained": true,
+    "actual_games_rerun": false,
+    "focused_match_tests": 59,
+    "archived_replay": {
+      "records": 4,
+      "outcomes": [
+        "U",
+        "U",
+        "U",
+        "U"
+      ],
+      "cpu_seconds": 4.182228332999999,
+      "wall_seconds": 4.182383612000194
+    },
+    "files": [
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-before.log",
+        "sha256": "dce1d62b49aa6f6587298fd2ba7e9591b39bde317cb31e2688181bccad1b0b78"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-before-fixed-fixtures.log",
+        "sha256": "9903aa1ccc2b69c05ca8e37c1f49a33232988b84e25b76f7925c6ad888e28e51"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-after.log",
+        "sha256": "e718628230b720580cb3f937074095fc4bad0b3c94e5cd528012ab6f9d7c21ca"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-after-final.log",
+        "sha256": "66793b4be3a88771ff09bcafaad7bd6c70f3b6a8165dd2dbfbc1cee63717edec"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-archived-replay.log",
+        "sha256": "aedf9725834edcafd2baf490b4a4eabd434b58a5a544e5e450fa8ca554eff90e"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review1-final-pin.log",
+        "sha256": "32a852e60a8a91f98ed8d8ffafd67af395689ac3b15e0464bdee27421a72d155"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-tests-review1-final.log",
+        "sha256": "55dcfff1301a693cb9758d580b8805008e2cdee0d64d5e34236d7c43c83d83a1"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cuda-tests-review1-final.log",
+        "sha256": "6d24cf35ae7187fd986b9b1873a63a811b4b1e16ea9961017e5f1af15496c652"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/build-review1-final.log",
+        "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review2-before.log",
+        "sha256": "b700344979b81f1b50331ba90a35add340cb686db6f95ad23854525ddcbdd430"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review2-after.log",
+        "sha256": "e932a1f8ba16e0094da3b11e606c1b17f4def36c5738b7484d299890c83f32ab"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-tests-review2.log",
+        "sha256": "424680e04ee41d7760560034c99407f96ab4adc3b1271ddfae283dde0514144f"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cuda-tests-review2.log",
+        "sha256": "860afd1d33ddc886b9353ab3e6debf8a1e497dd47e9f10895c1ecb47125d6b1c"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/build-review2.log",
+        "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review3-before.log",
+        "sha256": "fa9f30b0872f849ada434906a7f47caec120533c497adf394c9426535736f73c"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/runner-review3-after.log",
+        "sha256": "e65a4fc7be9b827c35b5d117c30387a149a2a1d7b8c908f8ad9b69c30738f8ce"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cpu-tests-review3.log",
+        "sha256": "6bc3b3252ee22d23e6e3baa9901ff530af5b9c683fed500176c950ac9923fd89"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/cuda-tests-review3.log",
+        "sha256": "3ef17bcb1e6fa9c80153e74167be323790b05cf7b7a28dc2c555d0bc0ca6b871"
+      },
+      {
+        "path": "runs/e2-integration-validation-2026-11-13/build-review3.log",
+        "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1"
+      }
+    ],
+    "source_files": [
+      {
+        "path": "src/kenggo/matches.py",
+        "sha256": "db6fc181fa8ede7be942e2353f1ec306245186191c8a38e71048af00fe4b9ec6"
+      },
+      {
+        "path": "tests/test_matches.py",
+        "sha256": "4f3420faf6d33e804bdd7f43214114b8ae76db91b9ded63be4b1a797fe9bfa15"
+      }
+    ],
+    "tests_per_environment": 285,
+    "skipped": 0,
+    "native_reference_enabled": true
+  }
+}
