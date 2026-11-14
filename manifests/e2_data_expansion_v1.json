@@ -1,0 +1,363 @@
+{
+  "schema": "e2_data_expansion_evidence_v1",
+  "bead": "kenggo-ydo.8",
+  "status": "completed_cached_expansion",
+  "runtime_source": {
+    "starting_commit": "409085aa18eb8a22ac7325ccef0bf552b7cfb316",
+    "patch": {
+      "path": "runs/e2-data-expansion-inputs-2026-11-14/runtime-source.patch",
+      "sha256": "99e18273805e8dbbd6dfd8f48ab4ba6170ddd74a3509bb9acfca933a4de748ef"
+    },
+    "code_sha256": {
+      "src/kenggo/adjudication.py": "175c2bdc3b3ac3f570cf056b7bb10eeea87d2e1d9d8ca8996be62f14ba256992",
+      "src/kenggo/cached_coverage_audit.py": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+      "src/kenggo/canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "src/kenggo/data_expansion.py": "cdb250b65afb8ad6581bf31a03f7aedac09fca49f211dd214dd359b9ee8d6bad",
+      "src/kenggo/data_splits.py": "cacd8e08e23959067798346b4a0f66a9a7f557cbe837ac402f840bf9285f9cdf",
+      "src/kenggo/e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+      "src/kenggo/encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+      "src/kenggo/examples.py": "0dc26e1e284f5ef48865504669c2a2ed0b2780136e13673930b4ac6b35123da3",
+      "src/kenggo/examples_audit.py": "dc981c2accd46b9d80cec489a830518dc85366f757d4e6baccc51c37f253a665",
+      "src/kenggo/go.py": "36026290afb03626616522c4ec20d1208a473d8824cb438adda2ec3034dab752",
+      "src/kenggo/kgs_admission.py": "8439a5f87cc603691306b862985735f6b39bbbdb21b71695e662803ce18cc9e9",
+      "src/kenggo/kgs_eligibility.py": "beae05f73846882f37dc30050aef799d4895e278f1e25fe60d90e2b018c6fd1b",
+      "src/kenggo/kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "src/kenggo/population_audit.py": "3c6861f528a19614a919575a5e22a97996994d9b46c778b088f2b64b8d25ec12",
+      "src/kenggo/rules_replay.py": "d5b096698d26a7f8054c2f002569a8fa0db32462de5424d0ac44be7c61ac84fe",
+      "src/kenggo/sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d",
+      "uv.lock": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    }
+  },
+  "plan": {
+    "path": "plan/e2_data_expansion_v1.md",
+    "sha256": "214375b9c3f5bf9cf891616d5d188bae38c49766367913d3a3e400c7ce96367e"
+  },
+  "inputs": {
+    "collection_request": {
+      "path": "configs/e2_data_collection_v1.json",
+      "sha256": "73f9adc8eece60d252a4ff6b9a81f821c48df4d184dce56a9f9da61898e7a303"
+    },
+    "queries": {
+      "path": "runs/e2-data-expansion-inputs-2026-11-14/queries-v2.json",
+      "sha256": "0ed3bac8aacb08841a7c29e84c1ef67e69001e051e8cd07261f320df794494f3"
+    },
+    "sources": {
+      "path": "runs/e2-data-collection-2026-11-14/sources.json",
+      "sha256": "0458ee28bab5269a1c85ff3960562ac605149211805ef40b662e23e76a328cd2"
+    },
+    "build_request": {
+      "path": "configs/e2_data_build_v1.json",
+      "sha256": "0f4b91a8a5ede111a7eddd10f8458385bc7c2fb21a174721589bdd7038038835"
+    },
+    "prior_exposure": {
+      "path": "runs/e2-data-expansion-inputs-2026-11-14/prior_exposure.json",
+      "sha256": "175d2bb544ada7aedf6660d679f77a36d5dd8d2cedcce02b3094e0b508cb0940"
+    },
+    "preparation": {
+      "path": "runs/e2-data-expansion-inputs-2026-11-14/input-preparation.json",
+      "sha256": "fbd9b3aa483b138024cd9a905123699f73a38c92a0956b18775403dde67741ec"
+    }
+  },
+  "summary": {
+    "path": "runs/e2-data-expansion-2026-11-14/summary.json",
+    "sha256": "f09665ba5e834e0ae563e807bcdf612ec9aabee329d4c0ded8bce5cbee0f8fb2"
+  },
+  "artifacts": {
+    "canonical": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/canonical.parquet",
+      "sha256": "9b812ef4fe0efae19c2f0ae5d428879c1110cf038728d1befa7a03fc1e0ecec7"
+    },
+    "coverage": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/support.json",
+      "sha256": "dbe6540889549d1a619d57c08bce3e7badc0f5a99e1dc9276a4ca5126b748302"
+    },
+    "diagnostics": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/diagnostics.json",
+      "sha256": "c5abf1515e7728f222f14ba39ab13ed2d3de0f72e5417fa038f6876e152e57ee"
+    },
+    "examples_manifest": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/examples/manifest.json",
+      "sha256": "47300a80fab6f1aeef5fb8ef9014a9cee37a38eae1dedac66292957492406dc8"
+    },
+    "exposure": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/exposure.json",
+      "sha256": "16ea6fc989cb5702f11839654c1f3841b802a656cbcff60e8886d49ff3df2a51"
+    },
+    "groups": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/groups.json",
+      "sha256": "5b6b2ba28934cd38fbc86e7ac9503e410e59070299738f6ffb20d2276db9e618"
+    },
+    "normalizer": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/normalizer.json",
+      "sha256": "ef403a6c65ad56a57b229295009fe57d77f42d0bd4d3212d8a81b8ae7245c19f"
+    },
+    "profile": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/profile.json",
+      "sha256": "6dc5905597b8113cd309c218e7259c85c38b84cb155211bc1fb4b9a56aefff99"
+    },
+    "split_manifest": {
+      "path": "runs/e2-data-expansion-2026-11-14/dataset/splits/manifest.json",
+      "sha256": "97c6e738747d44d6f0d94708a48362599e6a01229bee19a23635e5e653fdc1fe"
+    }
+  },
+  "counts": {
+    "combined": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 44204,
+        "games": 206,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 283,
+        "value_valid": 41661
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 167851,
+        "games": 757,
+        "hidden_mover_rank": 16881,
+        "hidden_opponent_rank": 33795,
+        "passes": 971,
+        "value_valid": 158505
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 11800,
+        "games": 50,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 79,
+        "value_valid": 10675
+      }
+    },
+    "new": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 40841,
+        "games": 192,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 263,
+        "value_valid": 38298
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 144935,
+        "games": 651,
+        "hidden_mover_rank": 14514,
+        "hidden_opponent_rank": 29102,
+        "passes": 874,
+        "value_valid": 137617
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 9237,
+        "games": 40,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 65,
+        "value_valid": 8112
+      }
+    },
+    "old": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 3363,
+        "games": 14,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 20,
+        "value_valid": 3363
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 22916,
+        "games": 106,
+        "hidden_mover_rank": 2367,
+        "hidden_opponent_rank": 4693,
+        "passes": 97,
+        "value_valid": 20888
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 2563,
+        "games": 10,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 14,
+        "value_valid": 2563
+      }
+    }
+  },
+  "checks": {
+    "complete_games": true,
+    "final_and_confirmation_targets_decoded": false,
+    "legal_policy_labels": true,
+    "normalizer_reproduced": true,
+    "train_development_rows_checked": 223855,
+    "unchanged_old_files": 446,
+    "unchanged_old_memberships": 1200,
+    "value_masks_and_perspective": true
+  },
+  "support": {
+    "population_development": {
+      "game_sides": 412,
+      "mover_accounts": 145,
+      "supported_cells": 4,
+      "total_cells": 96,
+      "endings": {
+        "forfeit": 15,
+        "resignation": 96,
+        "scored": 93,
+        "timeout": 2,
+        "two_explicit_pass_endings": 99
+      }
+    },
+    "train": {
+      "game_sides": 1513,
+      "mover_accounts": 399,
+      "supported_cells": 11,
+      "total_cells": 96,
+      "endings": {
+        "forfeit": 19,
+        "incomplete_or_unknown": 7,
+        "resignation": 381,
+        "scored": 324,
+        "timeout": 26,
+        "two_explicit_pass_endings": 362
+      }
+    },
+    "validation_development": {
+      "game_sides": 100,
+      "mover_accounts": 31,
+      "supported_cells": 0,
+      "total_cells": 96,
+      "endings": {
+        "forfeit": 5,
+        "resignation": 20,
+        "scored": 24,
+        "timeout": 1,
+        "two_explicit_pass_endings": 28
+      }
+    }
+  },
+  "collection": {
+    "status": "authentication_blocked",
+    "stop_reason": "archive_authentication_required",
+    "counts": {
+      "accessible_candidates": 4269,
+      "candidate_roles": {
+        "population_development": 986,
+        "train": 3044,
+        "validation_development": 252
+      },
+      "expanded_zip_bytes": 37464515,
+      "frozen_candidates": 4282,
+      "query_statuses": {
+        "failed": 1,
+        "unattempted": 285
+      }
+    },
+    "costs": {
+      "cpu_seconds": 2.5867453960000004,
+      "gpu_seconds": 0,
+      "requests": 1,
+      "response_bytes": 1291,
+      "wall_seconds": 7.373809656994126,
+      "workers": 1
+    }
+  },
+  "costs": {
+    "build_reported": {
+      "cpu_seconds": 8541.682026859,
+      "gpu_seconds": 0,
+      "http_requests": 0,
+      "scope": "Build entry through input validation, preparation, verification, artifact hashing and final progress write; excludes final summary formatting/write.",
+      "wall_seconds": 9598.669622,
+      "workers": 1
+    },
+    "build_full_process": {
+      "user_cpu_seconds": 8534.22,
+      "system_cpu_seconds": 7.59,
+      "cpu_seconds": 8541.81,
+      "wall_seconds": 9598.83
+    },
+    "source_full_process": {
+      "user_cpu_seconds": 2.55,
+      "system_cpu_seconds": 0.19,
+      "cpu_seconds": 2.74,
+      "wall_seconds": 7.73
+    },
+    "input_freezing": [
+      {
+        "measurement": {
+          "path": "runs/e2-data-expansion-inputs-2026-11-14/freeze-time-v1.txt",
+          "sha256": "2b7575b86cddcbebc9742ee012a1290012ffdc97a85ed813079b0b8cee4a1c21"
+        },
+        "user_cpu_seconds": 0.92,
+        "system_cpu_seconds": 0.03,
+        "cpu_seconds": 0.95,
+        "wall_seconds": 0.14
+      },
+      {
+        "measurement": {
+          "path": "runs/e2-data-expansion-inputs-2026-11-14/freeze-time-v2.txt",
+          "sha256": "ba30179a3648a53acc77d7c76528bebc6678ae4e28e48fe3f55471f6aba90374"
+        },
+        "user_cpu_seconds": 2.57,
+        "system_cpu_seconds": 0.12,
+        "cpu_seconds": 2.69,
+        "wall_seconds": 2.46
+      },
+      {
+        "measurement": {
+          "path": "runs/e2-data-expansion-inputs-2026-11-14/freeze-time-v3.txt",
+          "sha256": "11c0fdfb018f52ee770f8707ae272a08d423b3337d484c0109a881a32db00187"
+        },
+        "user_cpu_seconds": 2.57,
+        "system_cpu_seconds": 0.12,
+        "cpu_seconds": 2.69,
+        "wall_seconds": 1.91
+      }
+    ],
+    "readout_full_process": {
+      "user_cpu_seconds": 5.83,
+      "system_cpu_seconds": 0.21,
+      "cpu_seconds": 6.04,
+      "wall_seconds": 6.04
+    },
+    "readout_reported": {
+      "cpu_seconds": 5.921068315,
+      "gpu_seconds": 0,
+      "network_requests": 0,
+      "wall_seconds": 5.823722932000237
+    },
+    "output_bytes": 139390088,
+    "scope": "Production collection, preparation and readout. Development tests and independent code review are separate."
+  },
+  "manual_review": {
+    "export": {
+      "path": "runs/e2-data-expansion-review-2026-11-14/export.json",
+      "sha256": "83786f6d8e69269f7c03d12f3c82aa051664f521272b6022b953c9ba40c55f00"
+    },
+    "page": {
+      "path": "runs/e2-data-expansion-review-2026-11-14/review.html",
+      "sha256": "cb675beaf7e3ab7cc0ba0bb1f48ed5235bca83192cfa596428f3b4c8bc6a5efd"
+    },
+    "data": {
+      "path": "runs/e2-data-expansion-review-2026-11-14/readout.json",
+      "sha256": "e041d2a61a5f5f41054e254da39d13545e849fd9f6be4b76ea2fcfc57dd9fb99"
+    },
+    "tool": {
+      "path": "tools/review_data_expansion.py",
+      "sha256": "1ee72a243e20088beba76c09f20e9b14a56cf52c31390aa8e5d6c29854cec34e"
+    },
+    "template": {
+      "path": "tools/data_expansion_review.html",
+      "sha256": "f18ca7f2938c0e783af1403344e38f91c35fbe075e16eaa2cd1486a98919f0ca"
+    }
+  },
+  "training_performed": false,
+  "promoted_profiles": [],
+  "decision": "The requested 100,000-move minimum is met: 167,851 training moves in 757 games. Broader archive collection stopped at sign-in. Rank coverage remains uneven, and no unseen-account rank cell meets E0 support minima. Keep exact-rank profile promotions deferred; any new model training needs a separate fixed comparison."
+}
