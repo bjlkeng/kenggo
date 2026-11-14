@@ -14,7 +14,7 @@ import subprocess
 import time
 import uuid
 
-from kenggo.checkpoints import (file_hash, json_bytes, json_hash, load_checkpoint,
+from kenggo.checkpoints import (VERSION as CHECKPOINT_VERSION, file_hash, json_bytes, json_hash, load_checkpoint,
                                 read_json, save_checkpoint, save_json)
 
 
@@ -207,8 +207,33 @@ class Experiment:
         ref = save_checkpoint(self.directory / "checkpoints", model, optimizer, step=step, progress=progress,
             config_sha256=self.config_sha256, provenance_sha256=self.provenance_sha256,
             scheduler=scheduler, scaler=scaler)
-        path = Path(ref["path"])
-        entry = {"path": str(path.relative_to(self.directory)), "sha256": ref["sha256"],
+        return self._publish_checkpoint(ref, step)
+
+    def register_checkpoint(self, ref):
+        """Publish an owned worker's saved checkpoint without restoring training state."""
+        self._require_open()
+        if self.needs_restore:
+            raise ValueError("Restore before registering a resumed checkpoint")
+        path = Path(ref["path"]).resolve()
+        root = self.directory.resolve()
+        blob = (path.parent / "state.pt").resolve()
+        if not path.is_relative_to(root) or not blob.is_relative_to(root):
+            raise ValueError("A worker checkpoint must stay inside its owning run")
+        manifest = read_json(path, ref["sha256"])
+        if (set(manifest) != {"version", "file", "sha256", "step", "config_sha256", "provenance_sha256"}
+                or manifest["version"] != CHECKPOINT_VERSION or manifest["file"] != "state.pt"
+                or type(manifest["step"]) is not int or manifest["step"] < 0
+                or manifest["config_sha256"] != self.config_sha256
+                or manifest["provenance_sha256"] != self.provenance_sha256
+                or file_hash(blob) != manifest["sha256"]):
+            raise ValueError("Worker checkpoint differs from its configuration, provenance or saved state")
+        if any(entry["sha256"] == ref["sha256"] for entry in self.state["checkpoints"]):
+            raise ValueError("Checkpoint is already registered")
+        return self._publish_checkpoint({"path": str(path), "sha256": ref["sha256"]}, manifest["step"])
+
+    def _publish_checkpoint(self, ref, step):
+        path = Path(ref["path"]).resolve()
+        entry = {"path": str(path.relative_to(self.directory.resolve())), "sha256": ref["sha256"],
                  "step": step, "attempt": self.attempt["number"], "wandb": None}
         self.state["checkpoints"].append(entry)
         self._write()

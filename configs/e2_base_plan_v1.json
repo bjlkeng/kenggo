@@ -1,0 +1,257 @@
+{
+  "version": "experiment_config_v1",
+  "entity": "bjlkeng",
+  "project": "kenggo",
+  "base_url": "https://api.wandb.ai",
+  "seed": 20261114,
+  "comparison": "BASE-exploratory-v1",
+  "arm": "shared",
+  "purpose": "baseline-pilot",
+  "budget_id": "e0-sl-pilot-v1",
+  "inputs": {
+    "data": {
+      "path": "manifests/e1_population_v3.json",
+      "sha256": "bca2a7ae24e94e2b107ed7f3a893e7a841c5d13711ee410f505a7c14c71d1f9d"
+    },
+    "split": {
+      "path": "runs/e1-manual-filter-2026-11-13/splits/manifest.json",
+      "sha256": "858bf34e2767d724853286a136f2c3a0f14af0d3f5a881c83a7894192465a6f4"
+    },
+    "examples": {
+      "path": "runs/e1-manual-filter-2026-11-13/examples/manifest.json",
+      "sha256": "3ba84e660df1e50478994ec98c8c4b25132559034328f3de21a6ac2e527cd4c4"
+    },
+    "normalizer": {
+      "path": "runs/e1-manual-filter-2026-11-13/normalizer.json",
+      "sha256": "90edb1b0d2b0e5ae8ca4eb8946d09877e097960b57da3e07109ad373acf09c6a"
+    },
+    "profile": {
+      "path": "manifests/e1_population_example_profile_v3.json",
+      "sha256": "3093ee6cb6ea0355ab2314884bce588dbd7f018ea7e809dd63ab1f7be7ea3036"
+    },
+    "rules": {
+      "path": "plan/e1_empirical_endgame_contract_v2.md",
+      "sha256": "9b973fbcdc60ccca39464e75259b4f259b319ad0ac37226371f0e672ad33c1ae"
+    },
+    "referee_profile": {
+      "path": "manifests/e1_katago_referee_profile_v2.json",
+      "sha256": "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4"
+    },
+    "cpu_environment": {
+      "path": "uv.lock",
+      "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    },
+    "cuda_environment": {
+      "path": "environments/cuda/requirements.lock",
+      "sha256": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+    },
+    "canonical": {
+      "path": "runs/e1-population-2026-11-11/canonical.parquet",
+      "sha256": "b7bf307fbb5ea25b5cf53f1fad6e94780c3b4873a830b07e6f94f61caa5836e0"
+    },
+    "human_profile": {
+      "path": "manifests/katago_human_profile_v1.json",
+      "sha256": "f78423b5ba58485a7ffeee38bb7b39fcb7c797083f69c1389112ed1e04863d5b"
+    },
+    "human_config": {
+      "path": "configs/katago_human_v1.cfg",
+      "sha256": "458d11b4559397e29c2e91503bbfafdcb9f15fe79a8edb11a71ad6d07ce76ecb"
+    },
+    "probe": {
+      "path": "runs/e2-throughput-2026-11-14/summary.json",
+      "sha256": "acf770137451511194b7b31f5a2091711f1082b4619a1ac97648971878325d90"
+    },
+    "human_engine": {
+      "path": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+      "sha256": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308"
+    },
+    "human_main_model": {
+      "path": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+      "sha256": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4"
+    },
+    "human_model": {
+      "path": ".cache/katago-human/b18c384nbt-humanv0.bin.gz",
+      "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
+    },
+    "referee_config": {
+      "path": "configs/katago_referee_v1.cfg",
+      "sha256": "b32ea66000fd5ab90e7a649ab17380472228c4ccee0ccd14433070cc5602d251"
+    },
+    "referee_native": {
+      "path": ".cache/katago-reference/katago-reference",
+      "sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+    },
+    "referee_engine": {
+      "path": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+      "sha256": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308"
+    },
+    "referee_model": {
+      "path": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+      "sha256": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4"
+    }
+  },
+  "parameters": {
+    "common_sets": [
+      {
+        "id": "population_development",
+        "role": "population_development",
+        "source_ids": [
+          "https://files.gokgs.com/games/2025/9/1/rlshutt-tang0.sgf",
+          "https://files.gokgs.com/games/2025/9/1/tang0-JDig-2.sgf",
+          "https://files.gokgs.com/games/2025/9/15/huyc1961-sdo.sgf",
+          "https://files.gokgs.com/games/2025/9/20/Abeille-kejia.sgf",
+          "https://files.gokgs.com/games/2025/9/20/kejia-brigolo.sgf",
+          "https://files.gokgs.com/games/2025/9/21/kejia-Kashesu.sgf",
+          "https://files.gokgs.com/games/2025/10/2/Fart-akasaka39.sgf",
+          "https://files.gokgs.com/games/2025/10/5/ABE3-akasaka39.sgf",
+          "https://files.gokgs.com/games/2025/10/14/chipstar-badog.sgf",
+          "https://files.gokgs.com/games/2025/10/25/minnmann-beak.sgf",
+          "https://files.gokgs.com/games/2025/10/27/chipstar-DNA.sgf",
+          "https://files.gokgs.com/games/2025/10/30/chipstar-ikeikeo.sgf",
+          "https://files.gokgs.com/games/2025/10/31/DNA-chipstar.sgf",
+          "https://files.gokgs.com/games/2025/10/31/chipstar-goinpostal.sgf"
+        ],
+        "aggregate_ranks": [
+          "11k",
+          "7k",
+          "3k",
+          "2k",
+          "1d"
+        ],
+        "expected_rows": 3363
+      },
+      {
+        "id": "validation_development",
+        "role": "validation_development",
+        "source_ids": [
+          "https://files.gokgs.com/games/2025/9/11/huyc1961-ueda9565.sgf",
+          "https://files.gokgs.com/games/2025/9/13/misarin60-zousigaya.sgf",
+          "https://files.gokgs.com/games/2025/9/13/zousigaya-utopia.sgf",
+          "https://files.gokgs.com/games/2025/9/14/Jacobs-zousigaya.sgf",
+          "https://files.gokgs.com/games/2025/9/14/misarin60-zousigaya.sgf",
+          "https://files.gokgs.com/games/2025/9/18/zousigaya-Jacobs.sgf",
+          "https://files.gokgs.com/games/2025/9/27/Olduck-xohoho456.sgf",
+          "https://files.gokgs.com/games/2025/9/30/zousigaya-qingantao.sgf",
+          "https://files.gokgs.com/games/2025/10/2/Santos-yuumsuzuki.sgf",
+          "https://files.gokgs.com/games/2025/10/6/yuumsuzuki-Santos.sgf"
+        ],
+        "aggregate_ranks": [
+          "8k",
+          "4k",
+          "3k",
+          "1k"
+        ],
+        "expected_rows": 2563
+      }
+    ],
+    "training": {
+      "epochs": 20,
+      "batch_size": 128,
+      "learning_rate": 0.001,
+      "clock_dropout": 0.1,
+      "training_rows": 22916,
+      "save_epochs": [
+        0,
+        10,
+        20
+      ],
+      "device": "cuda",
+      "torch_threads": 1
+    },
+    "architecture": {
+      "blocks": 8,
+      "channels": 128
+    },
+    "evaluation_batch_size": 32,
+    "samples_per_position": 32,
+    "unknown_rank_diagnostic": true,
+    "conditioning_rank": "5k",
+    "pairs_per_profile": 1,
+    "opponent_policies": [
+      "uniform",
+      "capture_first"
+    ],
+    "bootstrap_resamples": 10000,
+    "device": "GPU-22498978-f662-7428-0917-71a5906f3bcb",
+    "ledger": "runs/e2-sl-budget-2026-11-14/resources.json",
+    "job_limits": {
+      "preparation": {
+        "wall_seconds": 360,
+        "cpu_seconds": 300,
+        "output_bytes": 33554432,
+        "shutdown_seconds": 10
+      },
+      "training": {
+        "wall_seconds": 1200,
+        "cpu_seconds": 900,
+        "output_bytes": 536870912,
+        "shutdown_seconds": 10
+      },
+      "learned_evaluation": {
+        "wall_seconds": 900,
+        "cpu_seconds": 840,
+        "output_bytes": 536870912,
+        "shutdown_seconds": 10
+      },
+      "human_evaluation": {
+        "wall_seconds": 5400,
+        "cpu_seconds": 5000,
+        "output_bytes": 805306368,
+        "shutdown_seconds": 10
+      },
+      "matches": {
+        "wall_seconds": 5400,
+        "cpu_seconds": 4200,
+        "output_bytes": 805306368,
+        "shutdown_seconds": 10
+      },
+      "analysis": {
+        "wall_seconds": 360,
+        "cpu_seconds": 300,
+        "output_bytes": 33554432,
+        "shutdown_seconds": 10
+      }
+    },
+    "reference_budget": {
+      "queries": 5926,
+      "cpu_seconds": 4600,
+      "wall_seconds": 5000,
+      "request_bytes": 67108864,
+      "response_bytes": 134217728,
+      "stderr_bytes": 1048576,
+      "trace_bytes": 268435456
+    },
+    "human_match_budget": {
+      "queries": 801,
+      "cpu_seconds": 800,
+      "wall_seconds": 900,
+      "request_bytes": 16777216,
+      "response_bytes": 16777216,
+      "stderr_bytes": 1048576,
+      "trace_bytes": 33554432
+    },
+    "match_limits": {
+      "action_limit": 800,
+      "reply_grace_actions": 1,
+      "response_seconds": 60,
+      "game_seconds": 900,
+      "shutdown_seconds": 0.25,
+      "exact_wall_seconds": 10,
+      "exact_cpu_seconds": 2,
+      "empirical_wall_seconds": 180,
+      "empirical_cpu_seconds": 120
+    },
+    "runner_budget": {
+      "cpu_seconds": 3600,
+      "wall_seconds": 4800,
+      "output_bytes": 536870912
+    },
+    "max_artifact_bytes": 268435456,
+    "selection": "Fixed epoch20 checkpoints; no validation-selected early stopping. Any pilot result remains exploratory.",
+    "primary": "Paired rank-balanced NLL, conditioned minus unconditioned; useful reduction0.02nats permove. KataGo is a reference, not a required win.",
+    "regression_contract": "plan/e0_evaluation_protocol.md: NLL0.02,valueMSE0.02,panel0.02,latency25%,failure-rates0.01 plus E1 absolute gates; this limited pilot does not establish promotion or qualification.",
+    "uncertainty": "weighted_intercept_dyadic_cr0_v1; role-specific observed-rank scopes, all16rank aggregate unavailable; all cells unsupported and intervals inconclusive with fewer than30accounts.",
+    "scope": "Single-seed BASE comparison and twelve weak-panel raw games; no confirmation/final access, full-panel qualification or human-rank claim.",
+    "sampling_diagnostics": "32 temperature-1 draws per position; distinct actions, pairwise disagreement and pass mass; sampled versus recorded-human pass/capture/save-atari/give-atari/self-atari/other frequencies and total variation by rank, phase and clock, including joint cells. Fixed equal-rank/game-side/position weights; unsupported cells remain descriptive and inconclusive."
+  }
+}

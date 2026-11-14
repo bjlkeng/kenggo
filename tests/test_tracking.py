@@ -6,10 +6,11 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import torch
 
-from kenggo.checkpoints import file_hash
+from kenggo.checkpoints import file_hash, save_checkpoint, save_json
 from kenggo.tracking import Experiment, capture_provenance
 
 
@@ -53,6 +54,56 @@ def exit_during_finish(root):
 
 
 class TrackingTests(unittest.TestCase):
+    def test_worker_checkpoint_registers_without_restoring_rng_and_remains_restorable(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            with Experiment(Path(temporary) / "run", CONFIG, PROVENANCE, sink_factory=Sink) as run:
+                model, optimizer = components()
+                ref = save_checkpoint(run.directory / "worker/checkpoints", model, optimizer,
+                    step=7, progress={"next_step": 7}, config_sha256=run.config_sha256,
+                    provenance_sha256=run.provenance_sha256)
+                state = torch.get_rng_state().clone()
+                with mock.patch("kenggo.tracking.load_checkpoint", side_effect=AssertionError("No restore during upload")):
+                    registered = run.register_checkpoint(ref)
+                torch.testing.assert_close(state, torch.get_rng_state(), rtol=0, atol=0)
+                self.assertEqual(registered["sha256"], ref["sha256"])
+                self.assertEqual(run.state["checkpoints"][0]["step"], 7)
+                self.assertTrue(run.state["checkpoints"][0]["wandb"])
+                self.assertTrue(run.state["checkpoints"][0]["path"].startswith("worker/checkpoints/"))
+                with self.assertRaisesRegex(ValueError, "already registered"):
+                    run.register_checkpoint(ref)
+                other, other_optimizer = components()
+                restored = run.restore(ref, other, other_optimizer)
+                self.assertEqual(restored, {"step": 7, "progress": {"next_step": 7}})
+                for key, value in model.state_dict().items():
+                    torch.testing.assert_close(value, other.state_dict()[key], rtol=0, atol=0)
+
+    def test_worker_checkpoint_rejects_external_torn_or_wrong_run_files_before_publication(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with Experiment(root / "run", CONFIG, PROVENANCE, sink_factory=Sink) as run:
+                model, optimizer = components()
+                def saved(directory):
+                    return save_checkpoint(directory, model, optimizer, step=0, progress={},
+                        config_sha256=run.config_sha256, provenance_sha256=run.provenance_sha256)
+                external = saved(root / "external")
+                with self.assertRaisesRegex(ValueError, "inside its owning run"):
+                    run.register_checkpoint(external)
+                ref = saved(run.directory / "worker")
+                path = Path(ref["path"])
+                original = json.loads(path.read_text())
+                for field, value in (("config_sha256", "a" * 64), ("provenance_sha256", "b" * 64),
+                                     ("step", True), ("version", "wrong")):
+                    changed = dict(original, **{field: value})
+                    pin = save_json(path, changed, replace=True)
+                    with self.subTest(field=field), self.assertRaises(ValueError):
+                        run.register_checkpoint({"path": str(path), "sha256": pin})
+                pin = save_json(path, original, replace=True)
+                (path.parent / "state.pt").write_bytes(b"partial checkpoint")
+                with self.assertRaises(ValueError):
+                    run.register_checkpoint({"path": str(path), "sha256": pin})
+                self.assertEqual(run.state["checkpoints"], [])
+                self.assertEqual(run.state["artifact_bytes_attempted"], 0)
+
     def test_process_exit_during_finish_leaves_a_recoverable_attempt(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "run"

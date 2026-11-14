@@ -1,0 +1,187 @@
+{
+  "schema": "e2_cached_coverage_evidence_v1",
+  "bead": "kenggo-ydo.8.1",
+  "status": "partial",
+  "reason": "worker_time_reserve",
+  "source": {
+    "commit": "5857e0b044fe53d4c5c6c4b6e7b0736f936e94f4",
+    "patch_sha256": "d1acd7f61b15439d0d2dad118fb6ef3ddd62830a85520acf3300d3b8ece95351"
+  },
+  "source_worker": {
+    "path": "runs/e2-expansion-audit-draft-2026-11-14/cached_coverage_audit.py",
+    "sha256": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+    "bytes": 29614
+  },
+  "tracked_worker_copy": {
+    "path": "src/kenggo/cached_coverage_audit.py",
+    "sha256": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9"
+  },
+  "frozen_inputs": {
+    "path": "runs/e2-expansion-audit-inputs-2026-11-14/frozen.json",
+    "sha256": "51598f12d59ba59703525582599983a51df5cff96987a338906024d3ae1f61f5",
+    "bytes": 1717389
+  },
+  "execution_config": {
+    "path": "runs/e2-expansion-audit-inputs-2026-11-14/execution-reviewed-v3.json",
+    "sha256": "ce75ec8ad71420a11b3a7ace0ad00714bfc2583ac1576d9d45d7d2230ce5d3ca",
+    "bytes": 2141
+  },
+  "source_request": {
+    "path": "runs/e2-expansion-audit-inputs-2026-11-14/request.json",
+    "sha256": "1558c9ba55295552d90ff6fee2593c9e6b1c318f9b80d2af2a97d608d2863433",
+    "bytes": 30086
+  },
+  "tracked_request_copy": {
+    "path": "configs/e2_cached_coverage_v1.json",
+    "sha256": "1558c9ba55295552d90ff6fee2593c9e6b1c318f9b80d2af2a97d608d2863433"
+  },
+  "candidate_ids_sha256": "d7ef1700e26310b5ce51be884156190eeac814ac45364a8de62f7ed476ded636",
+  "candidate_counts": {
+    "population_development": 986,
+    "train": 3031,
+    "validation_development": 252
+  },
+  "execution": {
+    "path": "runs/e2-cached-coverage-2026-11-14/summary.json",
+    "sha256": "6af7724d9619589b77c17938de969546dfb6d003d3ab49668dc6c16ecb68c374",
+    "bytes": 3155
+  },
+  "audit": {
+    "path": "runs/e2-cached-coverage-2026-11-14/job/summary.json",
+    "sha256": "19c4206666891eab4042a89b229a7d1eed10b44372334a08fe1d7082a33a44a5",
+    "bytes": 21712
+  },
+  "verification": {
+    "path": "runs/e2-expansion-audit-analysis-2026-11-14/verification.json",
+    "sha256": "e77393b5ea2a76bdad9b0816f4d7586617fb463c1311b0bab85cf6db268224b5",
+    "bytes": 1295
+  },
+  "artifacts": [
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/config.json",
+      "sha256": "65bd228fd9982688d3a8c043ebb629b55fed41a2f01536b172523587bf63d667",
+      "bytes": 1954
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/exposure.json",
+      "sha256": "f9f4f68c214be5334fd87ff0ed7d831a6368f8b7e6b76f44191489fdf14c3ea6",
+      "bytes": 581861
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/job.json",
+      "sha256": "7ade27b7f532a5499c4654fa9475cad34c493bcc218ffdf084d481122227507d",
+      "bytes": 1111
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/progress.json",
+      "sha256": "024a209380063129896e98e58d7cec1a7a9a1cc73593245f7b1c89ce6e5ce94b",
+      "bytes": 626
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/records.jsonl",
+      "sha256": "5c10167d28807e30f036007552a973cf2c473fe9a37bef67c869f864f2f3211e",
+      "bytes": 6877898
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/stdout.log",
+      "sha256": "ed7306419595a67dcaf5bf3eeed428d77e521b442cf1b421d8e2e299fed5b462",
+      "bytes": 304
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/job/summary.json",
+      "sha256": "19c4206666891eab4042a89b229a7d1eed10b44372334a08fe1d7082a33a44a5",
+      "bytes": 21712
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/resources.json",
+      "sha256": "cb0498bea7d0967ec53b1a038d3bcfad789581fe9fedc3da101134e397eb1244",
+      "bytes": 1822
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/summary.json",
+      "sha256": "6af7724d9619589b77c17938de969546dfb6d003d3ab49668dc6c16ecb68c374",
+      "bytes": 3155
+    },
+    {
+      "path": "runs/e2-cached-coverage-2026-11-14/worker_execution.json",
+      "sha256": "42232cc037c3276e07acb120b5e889dcafdbf109100e943cfd7dc0742dabc627",
+      "bytes": 1584
+    }
+  ],
+  "preparation": [
+    {
+      "path": "runs/e2-expansion-audit-inputs-2026-11-14/scope-decision.json",
+      "sha256": "d26db82b0610554754a379d9d4e1f0f3e233c4ff68d4311e217498100fb9c557",
+      "bytes": 2308
+    },
+    {
+      "path": "runs/e2-expansion-audit-inputs-2026-11-14/request-preparation.json",
+      "sha256": "dd0079014e42cb039f8590364bfe134e8173b232db641b8d31c7a8e4d1def824",
+      "bytes": 835
+    },
+    {
+      "path": "runs/e2-expansion-audit-inputs-2026-11-14/freeze-result.json",
+      "sha256": "0f80cdf5be233719f1631cfd09ad95081edf4277f9e726dbac186f23da3ff5c1",
+      "bytes": 614
+    },
+    {
+      "path": "runs/e2-expansion-audit-inputs-2026-11-14/execution-reviewed-v3.execution-time.json",
+      "sha256": "6477eecb40bf2049cbb3f01ee55e51e6e59457544cc9dc8c4c7df53a8eae6267",
+      "bytes": 89
+    }
+  ],
+  "code": [
+    {
+      "path": "runs/e2-expansion-audit-draft-2026-11-14/cached_coverage_audit.py",
+      "sha256": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+      "bytes": 29614
+    },
+    {
+      "path": "runs/e2-expansion-audit-draft-2026-11-14/execute_audit.py",
+      "sha256": "62edf70e2f2eb4cc9d5cc668b08ebdb5469f202dd7ebbbf95c0f16d5935b63ab",
+      "bytes": 7074
+    },
+    {
+      "path": "runs/e2-expansion-audit-draft-2026-11-14/verify_audit.py",
+      "sha256": "bb01ff7984a34e8fa1cc3107af250b7e21951e45985fa077290db46a7594ffbb",
+      "bytes": 5624
+    }
+  ],
+  "observed": {
+    "expected_records": 4269,
+    "attempted_records": 2134,
+    "recorded_records": 2134,
+    "unattempted_records": 2135,
+    "retrieved_records": 2134,
+    "source_admitted_records": 415
+  },
+  "full_execution_accounting": {
+    "budget_status": "within_limits",
+    "output_bytes": 9245253,
+    "outside_job": {
+      "cpu_seconds": 5.165701240000001,
+      "wall_seconds": 8.31558937800014
+    },
+    "total": {
+      "cpu_seconds": 27.332553321,
+      "wall_seconds": 550.5516475040001
+    }
+  },
+  "gpu_seconds": 0,
+  "network_requests": 0,
+  "screening_only": true,
+  "deduplicated": false,
+  "legal_replay_validated": false,
+  "promoted_profiles": [],
+  "limitations": [
+    "Only the fixed URL prefix was attempted; do not extrapolate its admission rate or rank mix.",
+    "No new canonical records, examples, normalizer or model was built.",
+    "Original and newly conservative exposure registries must be unioned; neither is a replacement.",
+    "Final accounting-file writes are outside the execution timing boundary."
+  ]
+}

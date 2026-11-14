@@ -1,0 +1,68 @@
+{
+  "summary": "Rank conditioning did not improve development NLL in this pilot. Both learned models had unresolved raw endings; data and profile support remain limited. Training had no 8k game sides and only one each at 5k, 13k and 14k.",
+  "prompt": "Inspect a game ending and candidate pass flags for each arm in Games, then choose the next E2 data scope. Record any concerns about replay, scoring, or the proposed next step.",
+  "options": [
+    {
+      "id": "cached_corpus",
+      "label": "Build the cached corpus first (recommended)",
+      "detail": "Finish the fixed remaining 2,135 source candidates, legally replay and deduplicate admitted records, preserve all existing cohorts and owner exclusions, and rebuild nonfinal examples with a train-only normalizer. Proposed ceiling: 6 CPU-hours and 8 elapsed hours, zero downloads or GPU work. Record actual row counts before any later SL recipe. This step does not qualify the rank range."
+    },
+    {
+      "id": "broader_coverage",
+      "label": "Prioritize a broader data proposal",
+      "detail": "Prepare a bounded acquisition and cohort-extension proposal aimed at missing low ranks and held-out account support. Preserve current final reservations and record new request/compute limits before acquisition. No new download or model run follows from this choice alone."
+    },
+    {
+      "id": "defer",
+      "label": "Defer further E2 data and training",
+      "detail": "Retain this pilot as a negative conditioning result and keep the saved models, reference and runner available. Leave baseline-readiness and raw-opponent qualification gates open where their prerequisites remain unmet."
+    }
+  ],
+  "coverage_audit": {
+    "status": "partial",
+    "summary": "A fixed URL prefix was checked before the time reserve stopped the audit: 2,134 attempted, 415 source-admitted, and 2,135 unattempted. Do not extrapolate this prefix to the remaining list.",
+    "gpu_seconds": 0,
+    "network_requests": 0,
+    "roles": [
+      {
+        "label": "Training",
+        "candidates": 3031,
+        "attempted": 1491,
+        "source_admitted": 295,
+        "distinct_handles": 187,
+        "passes": 376
+      },
+      {
+        "label": "Population development",
+        "candidates": 986,
+        "attempted": 583,
+        "source_admitted": 97,
+        "distinct_handles": 61,
+        "passes": 141
+      },
+      {
+        "label": "Unseen-account development",
+        "candidates": 252,
+        "attempted": 60,
+        "source_admitted": 23,
+        "distinct_handles": 6,
+        "passes": 40
+      }
+    ],
+    "scope": "Source-screening counts only: no new legal replay, trajectory deduplication, examples or profile qualification. Handle strings are not verified people. Existing and conservative new exposure registries must both be retained."
+  },
+  "proposed_cached_build": {
+    "status": "proposed_pending_owner_direction",
+    "cpu_seconds": 21600,
+    "wall_seconds": 28800,
+    "gpu_seconds": 0,
+    "new_network_requests": 0,
+    "frozen_candidate_ids_sha256": "d7ef1700e26310b5ce51be884156190eeac814ac45364a8de62f7ed476ded636",
+    "existing_exposure": "preserve_and_union",
+    "new_training": "separate_frozen_recipe_after_data_evidence"
+  },
+  "conditioning_evidence": {
+    "path": "runs/e2-postchecks-2026-11-14/conditioning/summary.json",
+    "sha256": "30a7558a5b596e518c5e658b6b86621ef4273677f1f3775dcd487f0d24a03bd9"
+  }
+}

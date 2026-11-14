@@ -1,0 +1,62 @@
+{
+  "gpu_seconds": 0,
+  "jobs": [
+    {
+      "arguments": [
+        "runs/e2-base-pilot-2026-11-14",
+        "{output}"
+      ],
+      "id": "metrics",
+      "limits": {
+        "cpu_seconds": 120,
+        "output_bytes": 8388608,
+        "shutdown_seconds": 10,
+        "wall_seconds": 180
+      },
+      "script": {
+        "path": "tools/check_e2_metrics.py",
+        "sha256": "afa33c690ee718b7d140db2509b5ac540ec2b25bbc33fee278618c1f393b1e13"
+      }
+    },
+    {
+      "arguments": [
+        "runs/e2-base-pilot-2026-11-14",
+        "{output}"
+      ],
+      "id": "conditioning",
+      "limits": {
+        "cpu_seconds": 30,
+        "output_bytes": 8388608,
+        "shutdown_seconds": 10,
+        "wall_seconds": 60
+      },
+      "script": {
+        "path": "tools/check_e2_conditioning.py",
+        "sha256": "36fd1df84884a368cca4dcd34b340fbdcab9f2d46cb352519dc0fc0c5dce6ffe"
+      }
+    },
+    {
+      "arguments": [
+        "runs/e2-base-pilot-2026-11-14",
+        "{output}/index.json"
+      ],
+      "id": "artifact-index",
+      "limits": {
+        "cpu_seconds": 60,
+        "output_bytes": 16777216,
+        "shutdown_seconds": 10,
+        "wall_seconds": 180
+      },
+      "script": {
+        "path": "tools/index_e2_artifacts.py",
+        "sha256": "d0a37270059e6611eb09c3f6c7107a4f35d68540d0a3ae021aaff5db5afd6024"
+      }
+    }
+  ],
+  "ledger": "runs/e2-sl-budget-2026-11-14/resources.json",
+  "pilot_summary": {
+    "path": "runs/e2-base-pilot-2026-11-14/summary.json",
+    "sha256": "920d776794c77e2b6b95faaf266f4c020a9ab84e0c7ff6650683d5da57210c03"
+  },
+  "schema": "e2_post_pilot_checks_v1"
+}

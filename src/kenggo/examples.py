@@ -13,7 +13,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from kenggo.canonical_data import VERSION as CANONICAL_VERSION, digest, encoded
-from kenggo.data_splits import ROLES, VERSION as SPLIT_VERSION, read_membership
+from kenggo.data_splits import ROLES, VERSION as SPLIT_VERSION, SplitPlan, read_membership
 from kenggo.encoding import (Context, INPUT_KEYS, NORMALIZED, SCALARS, VERSION as ENCODING,
                              array_schema, encode)
 from kenggo.go import Game, RULES
@@ -27,6 +27,7 @@ SPLIT_SHA256 = "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d
 PREFIXES = {"validation_prefix", "test_prefix"}
 UNUSED = {"excluded", "embargo"}
 FINAL_ROLES = {"test_prefix", "final", "embargo"}
+RECORDED_ROLES = frozenset({"train", "population_development", "validation_development"})
 CODE_FILES = ("encoding.py", "examples.py", "examples_audit.py", "go.py", "rules_replay.py",
               "data_splits.py", "canonical_data.py", "kgs_source.py", "sgf_audit.py")
 LABEL_SCHEMA = {"action": ("int16", ()), "policy_valid": ("bool", ()),
@@ -157,7 +158,18 @@ def replay_record(record):
 
 
 def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
-                 profile=None, decode_sealed=True):
+                 profile=None, decode_sealed=True, role=None, source_ids=None):
+    selected = None
+    if role is not None or source_ids is not None:
+        if role not in RECORDED_ROLES:
+            raise ValueError("Recorded selection requires a training-debug or development role")
+        if isinstance(source_ids, (str, bytes)) or source_ids is None:
+            raise ValueError("Recorded selection requires explicit source IDs")
+        source_ids = tuple(source_ids)
+        if (not source_ids or any(not isinstance(key, str) or not key for key in source_ids)
+                or len(set(source_ids)) != len(source_ids)):
+            raise ValueError("Recorded selection requires nonempty, unique source IDs")
+        selected = frozenset(source_ids)
     expected = ((CANONICAL_SHA256, SPLIT_SHA256) if profile is None else
                 (profile.canonical_sha256, profile.split_sha256))
     if fixture_only and profile is not None:
@@ -168,8 +180,11 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
     if canonical_path.stat().st_size > 64 * 1024**2 or file_hash(canonical_path) != canonical_sha256:
         raise ValueError("Canonical file differs from its independent pin")
     manifest, partitions = read_membership(split_dir, split_sha256)
-    if manifest["version"] != SPLIT_VERSION or manifest["fixture_only"] is not fixture_only:
+    if (manifest["version"] != SPLIT_VERSION or manifest["fixture_only"] is not fixture_only
+            or set(manifest["roles"]) != set(ROLES)
+            or digest(manifest["plan"]) != manifest["plan_sha256"]):
         raise ValueError("Split version or fixture scope mismatch")
+    SplitPlan.from_dict(manifest["plan"])
     sealed = sealed_sources(manifest)
     if profile is not None and (digest(sorted(sealed)) != profile.sealed_source_ids_sha256
             or manifest["provenance"].get("population_inputs_sha256") != profile.population_inputs_sha256):
@@ -178,17 +193,62 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
     if headers.num_rows > (1000 if profile is None else profile.max_records):
         raise ValueError("Canonical record budget exceeded")
     hashes = {row["source_url"]: row["canonical_sha256"] for row in headers.to_pylist()}
-    if len(hashes) != headers.num_rows or not sealed <= set(hashes):
+    if (len(hashes) != headers.num_rows or not sealed <= set(hashes)
+            or any(not isinstance(key, str) or not key or not isinstance(value, str)
+                   or re.fullmatch(r"[0-9a-f]{64}", value) is None for key, value in hashes.items())):
         raise ValueError("Canonical IDs are duplicated or omit a sealed source")
-    filters = [("source_url", "not in", sorted(sealed))] if sealed and not decode_sealed else None
-    table = pq.read_table(canonical_path, filters=filters)
+    seen, memberships = set(), {}
+    for partition_role, rows in partitions.items():
+        if len(rows) != manifest["roles"][partition_role]:
+            raise ValueError("Split role count mismatch")
+        for row in rows:
+            key = row["source_url"]
+            if key in seen or key not in hashes or row["role"] != partition_role:
+                raise ValueError("Source IDs must have exactly one matching role")
+            seen.add(key)
+            memberships[key] = row
+            if key in sealed and partition_role not in FINAL_ROLES | {"excluded"}:
+                raise ValueError("Sealed final source entered a development or training role")
+            if not fixture_only and partition_role in FINAL_ROLES and key not in sealed:
+                raise ValueError("Final-role source is absent from the sealed registry")
+            if row["canonical_sha256"] != hashes[key]:
+                raise ValueError("Membership hash differs from its canonical record")
+            if (any(type(row[name]) is not int or row[name] < 0 for name in
+                    ("actions", "policy_actions", "value_actions"))
+                    or not 0 <= row["value_actions"] <= row["policy_actions"] <= row["actions"]
+                    or len(row["groups"]) != 2 or len(row["identity_valid"]) != 2
+                    or any(type(flag) is not bool for flag in row["identity_valid"])
+                    or len(row["actions_by_color"]) != 2
+                    or any(type(count) is not int or count < 0 for count in row["actions_by_color"])
+                    or sum(row["actions_by_color"]) != row["actions"]):
+                raise ValueError("Invalid split membership counts or identities")
+        if (sum(row["policy_actions"] for row in rows) != manifest["policy_actions_by_role"][partition_role]
+                or sum(row["value_actions"] for row in rows) != manifest["value_actions_by_role"][partition_role]):
+            raise ValueError("Split target count mismatch")
+    if seen != set(hashes):
+        raise ValueError("Canonical games are missing from the split")
+    if selected is not None:
+        if (not selected <= set(hashes) or any(key in sealed or memberships[key]["role"] != role
+                or memberships[key]["exclusions"] for key in selected)):
+            raise ValueError("Selected sources must be unsealed, nonexcluded members of the exact role")
+        if any(row["policy_actions"] != row["actions"] or row["value_actions"] not in (0, row["actions"])
+               or any(not isinstance(group, str) or not group for group in row["groups"])
+               or len(set(row["groups"])) != 2 for row in (memberships[key] for key in selected)):
+            raise ValueError("Selected complete games require full policy counts and distinct account groups")
+        filters = [("source_url", "in", sorted(selected))]
+    else:
+        filters = [("source_url", "not in", sorted(sealed))] if sealed and not decode_sealed else None
+    expected_records = selected if selected is not None else set(hashes) - (sealed if not decode_sealed else set())
+    table = pq.read_table(canonical_path, columns=["source_url", "canonical_sha256", "canonical_json"], filters=filters)
     records, byte_count = {}, 0
     for row in table.to_pylist():
+        key = row["source_url"]
+        if key not in expected_records or row["canonical_sha256"] != hashes[key]:
+            raise ValueError("Canonical payload is outside the authorized headers")
         byte_count += len(row["canonical_json"].encode())
         if byte_count > 256 * 1024**2:
             raise ValueError("Canonical JSON budget exceeded")
         record = json.loads(row["canonical_json"])
-        key = row["source_url"]
         if (key in records or record["source"]["source_url"] != key
                 or digest(record) != row["canonical_sha256"]):
             raise ValueError("Canonical source ID or record digest mismatch")
@@ -196,22 +256,12 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
                 or bool(record.get("sealed_final", False)) != (key in sealed)):
             raise ValueError("Canonical sealing marker differs from the frozen registry")
         records[key] = record
-    seen = set()
-    for role, rows in partitions.items():
-        if len(rows) != manifest["roles"][role]:
-            raise ValueError("Split role count mismatch")
+    if set(records) != expected_records:
+        raise ValueError("Decoded canonical sources differ from the authorized selection")
+    for partition_role, rows in partitions.items():
         for row in rows:
             key = row["source_url"]
-            if key in seen or key not in hashes or row["role"] != role:
-                raise ValueError("Source IDs must have exactly one matching role")
-            seen.add(key)
-            if key in sealed and role not in FINAL_ROLES | {"excluded"}:
-                raise ValueError("Sealed final source entered a development or training role")
-            if not fixture_only and role in FINAL_ROLES and key not in sealed:
-                raise ValueError("Final-role source is absent from the sealed registry")
-            if row["canonical_sha256"] != hashes[key]:
-                raise ValueError("Membership hash differs from its canonical record")
-            if key in sealed and not decode_sealed:
+            if key not in records:
                 continue
             record = records[key]
             gate = record["eligibility"]
@@ -220,18 +270,22 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
                     or row["identity_valid"] != [gate["black_identity_valid"], gate["white_identity_valid"]]
                     or row["actions_by_color"] != [sum(m["color"] == c for m in record["actions"]) for c in ("B", "W")]):
                 raise ValueError("Split membership differs from canonical evidence")
-    if seen != set(hashes):
-        raise ValueError("Canonical games are missing from the split")
+    if selected is not None:
+        partitions = {name: [row for row in rows if row["source_url"] in selected]
+                      for name, rows in partitions.items()}
     return records, manifest, partitions
 
 
 def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
-                profile=None, include_sealed=False, final_release=None):
-    """Return development records unless an independently authorized E7 release is supplied."""
+                profile=None, include_sealed=False, final_release=None, role=None, source_ids=None):
+    """Load unsealed records or an explicit debug/development source selection."""
     if include_sealed:
+        if role is not None or source_ids is not None:
+            raise ValueError("Recorded selections cannot request a final release")
         require_final_release(final_release, canonical_sha256, split_sha256)
     records, manifest, partitions = _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
-                                               fixture_only=fixture_only, profile=profile, decode_sealed=include_sealed)
+                                               fixture_only=fixture_only, profile=profile, decode_sealed=include_sealed,
+                                               role=role, source_ids=source_ids)
     if not include_sealed:
         sealed = sealed_sources(manifest)
         records = {key: record for key, record in records.items() if key not in sealed}

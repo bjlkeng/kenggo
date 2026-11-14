@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>E2 pilot review</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: transparent; }
+    body { color: var(--foreground, #172630); font: 15px/1.5 var(--font-sans, system-ui, sans-serif); }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button, select, textarea, input[type="text"] { border: 1px solid var(--border, #cbd5da); border-radius: var(--radius, 7px); background: var(--card, #fff); }
+    button { padding: 8px 12px; cursor: pointer; min-height: 40px; }
+    button:hover { border-color: var(--primary, #22675d); }
+    button:disabled { cursor: default; opacity: .45; }
+    button.primary { color: var(--primary-foreground, #fff); background: var(--primary, #22675d); border-color: var(--primary, #22675d); }
+    select { padding: 8px 28px 8px 10px; min-height: 42px; width: 100%; }
+    textarea { padding: 10px; width: 100%; min-height: 108px; resize: vertical; }
+    input[type="range"] { accent-color: var(--primary, #22675d); width: 100%; min-height: 34px; margin: 0; }
+    input[type="radio"] { accent-color: var(--primary, #22675d); margin: 5px 10px 0 0; flex: 0 0 auto; }
+    :focus-visible { outline: 3px solid var(--primary, #22675d); outline-offset: 3px; }
+    h1 { margin: 0; font-size: clamp(23px, 4vw, 31px); line-height: 1.2; letter-spacing: -.025em; }
+    h2 { margin: 0 0 10px; font-size: 20px; line-height: 1.3; }
+    h3 { margin: 0 0 8px; font-size: 16px; line-height: 1.4; }
+    p { margin: 0 0 12px; }
+    ul { margin: 0; padding-left: 22px; }
+    [hidden] { display: none !important; }
+    header, main, footer, section, article, div, fieldset { min-width: 0; }
+    header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 0 0 16px; }
+    header .intro { max-width: 80ch; margin: 8px 0 0; }
+    .muted, small { color: var(--muted-foreground, #536874); }
+    .small { font-size: 13px; }
+    .actions, .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .actions > button { white-space: nowrap; }
+    .status-line { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; font-size: 13px; }
+    nav { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--border, #cbd5da); }
+    nav button { background: transparent; border-color: transparent; }
+    nav button[aria-pressed="true"] { color: var(--primary, #22675d); border-color: var(--primary, #22675d); font-weight: 650; }
+    .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; margin: 0 0 20px; }
+    label.field { display: block; font-size: 13px; font-weight: 600; }
+    label.field > span { display: block; margin-bottom: 5px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; margin: 16px 0; }
+    .card { border: 1px solid var(--border, #cbd5da); border-radius: var(--radius, 7px); padding: 16px; background: var(--card, #fff); }
+    .metric-card svg { display: block; width: 100%; height: 62px; overflow: visible; }
+    svg text { font-family: var(--font-sans, system-ui, sans-serif); fill: var(--foreground, #172630); }
+    .metric-card .scale { border-top: 1px solid var(--border, #cbd5da); padding-top: 6px; margin: 5px 0 0; font-size: 12px; }
+    .section { margin-top: 24px; }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin: 24px 0 12px; }
+    .section-head h2, .section-head h3 { margin-bottom: 4px; }
+    .section-head label { min-width: 190px; max-width: 100%; }
+    .table-wrap { max-width: 100%; overflow-x: auto; border: 1px solid var(--border, #cbd5da); border-radius: var(--radius, 7px); }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; text-align: left; }
+    th, td { padding: 10px 12px; vertical-align: top; border-bottom: 1px solid var(--border, #cbd5da); }
+    th { font-weight: 650; color: var(--muted-foreground, #536874); }
+    tbody tr:last-child td { border-bottom: 0; }
+    td.number { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .category-table td:first-child { min-width: 135px; }
+    .category-table td:not(:first-child) { white-space: nowrap; }
+    details { margin-top: 14px; }
+    summary { cursor: pointer; color: var(--primary, #22675d); padding: 6px 0; font-weight: 600; }
+    pre { font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow-y: auto; padding: 12px; margin: 8px 0; border: 1px solid var(--border, #cbd5da); border-radius: var(--radius, 7px); }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px 20px; margin: 12px 0 16px; }
+    .fact dt { color: var(--muted-foreground, #536874); font-size: 12px; margin-bottom: 3px; }
+    .fact dd { margin: 0; font-size: 15px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .notice { border-left: 3px solid var(--primary, #22675d); padding: 2px 0 2px 12px; margin: 12px 0 16px; }
+    .tag { display: inline-flex; padding: 3px 8px; border: 1px solid var(--border, #cbd5da); border-radius: 5px; font-size: 12px; }
+    .game-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(270px, 1fr); gap: 24px; align-items: start; }
+    .board svg { display: block; width: 100%; max-width: 580px; aspect-ratio: 1; }
+    .board { margin: 0 auto 12px; max-width: 580px; }
+    .board svg text { fill: #54492e; font-family: var(--font-sans, system-ui, sans-serif); }
+    .replay-status { font-weight: 600; margin: 8px 0; min-height: 24px; }
+    .playback { display: flex; gap: 8px; margin: 8px 0; }
+    .playback button { flex: 1; padding: 7px 5px; }
+    .pass-list { max-height: 330px; overflow-y: auto; }
+    .pass-list .actions { flex-wrap: nowrap; }
+    .pass-list button { padding: 5px 8px; min-height: 34px; }
+    .game-info { overflow-wrap: anywhere; }
+    .notes { margin-top: 18px; }
+    .notes .field { margin-bottom: 10px; }
+    .notes select { max-width: 260px; }
+    .loss-chart { display: block; width: 100%; height: 195px; }
+    .calibration-figure { margin: 0; max-width: 700px; }
+    .calibration-chart { display: block; width: 100%; height: 300px; }
+    .calibration-table td:not(:last-child) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .calibration-table th:last-child, .calibration-table td:last-child { min-width: 260px; }
+    .epoch-table { max-height: 440px; overflow-y: auto; }
+    fieldset { border: 0; margin: 0; padding: 0; }
+    legend { font-weight: 650; padding: 0; margin-bottom: 12px; }
+    .decision-option { display: flex; align-items: flex-start; gap: 0; margin: 8px 0; border: 1px solid var(--border, #cbd5da); border-radius: var(--radius, 7px); padding: 12px; cursor: pointer; }
+    .decision-option strong, .decision-option small { display: block; }
+    .decision-option:has(input:checked) { border-color: var(--primary, #22675d); }
+    .decision-content { max-width: 850px; }
+    .evidence-path { overflow-wrap: anywhere; font: 12px/1.5 ui-monospace, monospace; }
+    footer { margin-top: 26px; padding: 14px 0 0; border-top: 1px solid var(--border, #cbd5da); color: var(--muted-foreground, #536874); font-size: 12px; }
+    @media (max-width: 700px) {
+      header { flex-direction: column; gap: 12px; }
+      .game-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+      .filters { grid-template-columns: minmax(0, 1fr); }
+      .cards { grid-template-columns: minmax(0, 1fr); }
+      nav { gap: 2px; }
+      nav button { padding: 7px 9px; font-size: 14px; }
+      .card { padding: 13px; }
+      th, td { padding: 9px; }
+      .section-head label { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1 id="title">E2 pilot review</h1><p id="summary" class="intro muted"></p></div>
+    <div class="actions"><button id="export-notes" class="primary" type="button">Export review notes</button></div>
+  </header>
+  <div class="status-line"><span id="storage-status" role="status" aria-live="polite"></span><span id="review-progress" class="muted"></span></div>
+  <nav id="navigation" aria-label="Review sections"></nav>
+  <main id="content"></main>
+  <footer id="footer">Review notes stay in this browser unless exported. They do not change the evidence, model qualification, or project decisions.</footer>
+  <script id="pilot-data" type="application/json">__PILOT_DATA_JSON__</script>
+  <script id="review-script">
+  "use strict";
+  (() => {
+    const byId = id => document.getElementById(id);
+    const finite = value => typeof value === "number" && Number.isFinite(value);
+    const own = (value, key) => value != null && Object.prototype.hasOwnProperty.call(value, key);
+    const array = value => Array.isArray(value) ? value : [];
+    const object = value => value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    const entryText = value => value === null || value === undefined ? "Not reported" : typeof value === "object" ? JSON.stringify(value) : String(value);
+    const words = value => String(value).replaceAll("_", " ");
+    const colors = ["var(--chart-1, #287f74)", "var(--chart-2, #6d78b2)", "var(--chart-3, #be8541)", "var(--chart-4, #9a668e)", "var(--chart-5, #5e8f51)", "var(--chart-6, #a8685a)"];
+    let data;
+    try {
+      data = JSON.parse(byId("pilot-data").textContent);
+      if (!data || Array.isArray(data) || typeof data !== "object" || typeof data.bundle_id !== "string" || !data.bundle_id) throw Error("A bundle identifier is required.");
+    } catch (error) {
+      byId("summary").textContent = "Evidence is not available in this page. The review bundle must be embedded before use.";
+      byId("storage-status").textContent = "No review data loaded.";
+      byId("export-notes").disabled = true;
+      byId("content").append(el("p", `Unable to load the evidence: ${error.message}`, {class: "notice"}));
+      return;
+    }
+
+    const evaluations = object(data.evaluations);
+    const games = array(data.games);
+    const roles = uniqueOptions(array(data.roles), Object.keys(evaluations));
+    const arms = uniqueOptions(array(data.arms), [...new Set(Object.values(evaluations).flatMap(role => Object.keys(object(role))))]);
+    const armLabels = new Map(arms.map(arm => [arm.id, arm.label]));
+    const statuses = {pending: "Not reviewed", checked: "Checked", followup: "Needs follow-up", na: "Not applicable"};
+    const noteKeys = new Set(["overall", ...games.map(game => `game:${game.id}`)]);
+    const decisionOptions = array(data.decision?.options);
+    const decisionIds = new Set(decisionOptions.map(option => option.id));
+    const storagePrefix = `kenggo:e2:review:${data.bundle_id}:`;
+    const frameCache = new WeakMap();
+    let notes = {}, decision = {choice: "", text: "", updated: null}, storageOK = true;
+    let currentView = "compare";
+    const viewState = {role: roles.find(role => role.id === "validation_development")?.id || roles[0]?.id || "", dimension: "overall", group: "", samplingArm: arms[0]?.id || "", calibrationArm: arms[0]?.id || "", trainingArm: Object.keys(object(data.training))[0] || "", gameArm: "all", gameId: games[0]?.id || "", ply: 0};
+
+    function el(tag, text, attrs = {}) {
+      const element = document.createElement(tag);
+      if (text !== null && text !== undefined) element.textContent = String(text);
+      for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, String(value));
+      return element;
+    }
+    function add(parent, ...children) { parent.append(...children); return parent; }
+    function svgEl(tag, attrs = {}, text) {
+      const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, String(value));
+      if (text !== undefined) element.textContent = String(text);
+      return element;
+    }
+    function button(label, action, attrs = {}) {
+      const result = el("button", label, {type: "button", ...attrs});
+      result.addEventListener("click", action);
+      return result;
+    }
+    function uniqueOptions(declared, inferred) {
+      const result = [], seen = new Set();
+      for (const option of [...declared, ...inferred.map(id => ({id, label: words(id)}))]) {
+        if (typeof option?.id !== "string" || seen.has(option.id)) continue;
+        seen.add(option.id); result.push({id: option.id, label: String(option.label || words(option.id))});
+      }
+      return result;
+    }
+    function select(id, label, options, value) {
+      const input = el("select", null, {id});
+      for (const option of options) input.append(el("option", option.label, {value: option.id}));
+      input.value = value;
+      return {input, field: add(el("label", null, {class: "field", for: id}), el("span", label), input)};
+    }
+    function table(headers, rows, attrs = {}) {
+      const head = el("tr"), body = el("tbody");
+      for (const header of headers) head.append(el("th", header, {scope: "col"}));
+      for (const values of rows) {
+        const row = el("tr");
+        for (const value of values) row.append(typeof value === "object" && value?.nodeType ? add(el("td"), value) : el("td", value));
+        body.append(row);
+      }
+      return add(el("div", null, {class: "table-wrap"}), add(el("table", null, attrs), add(el("thead"), head), body));
+    }
+    function rawDetails(label, value) {
+      const details = add(el("details"), el("summary", label));
+      details.addEventListener("toggle", () => {
+        if (details.open && details.childElementCount === 1) details.append(el("pre", JSON.stringify(value, null, 2)));
+      });
+      return details;
+    }
+    function facts(items) {
+      const result = el("dl", null, {class: "facts"});
+      for (const [label, value] of items) result.append(add(el("div", null, {class: "fact"}), el("dt", label), el("dd", value)));
+      return result;
+    }
+    function number(value, digits = 4) {
+      if (value && typeof value === "object") {
+        if (value.status === "positive_infinity") return "+∞ (positive infinity)";
+        if (value.status === "negative_infinity") return "−∞ (negative infinity)";
+        if (value.status === "undefined") return "Undefined";
+        if (value.status !== "finite") return "Not available";
+        return number(value.value, digits);
+      }
+      if (!finite(value)) return "Not available";
+      return value.toLocaleString("en-US", {maximumFractionDigits: digits});
+    }
+    function percent(value) { return finite(value) ? `${number(value * 100, 2)}%` : "Not available"; }
+    function estimateValue(metric) {
+      return metric?.status !== "unavailable" && metric?.estimate?.status === "finite" && finite(metric.estimate.value) ? metric.estimate.value : null;
+    }
+    function metricText(metric, name) {
+      if (!metric) return "Not reported";
+      if (metric.status === "unavailable") return "Unavailable";
+      if (metric.estimate?.status === "finite" && name === "top1") return percent(metric.estimate.value);
+      return number(metric.estimate);
+    }
+    function intervalText(uncertainty, percentScale = false) {
+      const interval = uncertainty?.interval95;
+      const formatter = percentScale ? percent : number;
+      if (Array.isArray(interval) && interval.length === 2 && interval.every(finite)) return `[${formatter(interval[0])}, ${formatter(interval[1])}] · ${entryText(uncertainty.status)}`;
+      return `Not available · ${entryText(uncertainty?.status)}`;
+    }
+    function countText(counts) {
+      return `${number(counts?.moves, 0)} moves · ${number(counts?.games, 0)} games · ${number(counts?.game_sides, 0)} sides · ${number(counts?.accounts, 0)} accounts`;
+    }
+    function costFacts(costs) {
+      return facts([["GPU time", seconds(costs?.gpu_seconds)], ["CPU time", seconds(costs?.cpu_seconds)], ["Wall time", seconds(costs?.wall_seconds)]]);
+    }
+    function seconds(value) { return finite(value) ? `${number(value, 2)} s` : "Not reported"; }
+    function labelArm(id) { return armLabels.get(id) || words(id); }
+    function selectedGroup(report) {
+      if (viewState.dimension === "overall") return report?.overall;
+      return report?.[`by_${viewState.dimension}`]?.[viewState.group];
+    }
+    function groupLabel() { return viewState.dimension === "overall" ? "All recorded groups" : `${words(viewState.dimension)}: ${viewState.group}`; }
+    function boolText(value) { return value === true ? "Yes" : value === false ? "No" : "Unknown / not reported"; }
+    function coordinate(action) {
+      if (action === 361) return "pass";
+      if (!Number.isInteger(action) || action < 0 || action > 360) return "unknown action";
+      return `${"ABCDEFGHJKLMNOPQRST"[action % 19]}${19 - Math.floor(action / 19)}`;
+    }
+    function colorName(value) { return value === "B" ? "Black" : value === "W" ? "White" : "Not reported"; }
+    function resultText(value) {
+      return value === "W" ? "W · candidate win" : value === "L" ? "L · candidate loss" : value === "U" ? "U · unresolved" : entryText(value);
+    }
+
+    function validateNote(value) {
+      if (!value || !own(statuses, value.status) || typeof value.text !== "string" || value.text.length > 20000) throw Error("Invalid saved note");
+      return {status: value.status, text: value.text, updated: typeof value.updated === "string" ? value.updated : null};
+    }
+    function validateDecision(value) {
+      if (!value || !(value.choice === "" || decisionIds.has(value.choice)) || typeof value.text !== "string" || value.text.length > 20000) throw Error("Invalid saved decision");
+      return {choice: value.choice, text: value.text, updated: typeof value.updated === "string" ? value.updated : null};
+    }
+    function readSaved() {
+      for (const key of noteKeys) {
+        const value = localStorage.getItem(`${storagePrefix}note:${key}`);
+        if (value !== null) notes[key] = validateNote(JSON.parse(value));
+      }
+      const value = localStorage.getItem(`${storagePrefix}decision`);
+      if (value !== null) decision = validateDecision(JSON.parse(value));
+    }
+    try {
+      readSaved();
+      localStorage.setItem(`${storagePrefix}probe`, "1");
+      localStorage.removeItem(`${storagePrefix}probe`);
+    } catch { storageOK = false; }
+    function storageStatus(message = "Notes save in this browser. Export a copy to share or keep them.") {
+      byId("storage-status").textContent = storageOK ? message : "Browser storage could not be used. Changes are in memory only; export before closing.";
+      const reviewed = games.filter(game => notes[`game:${game.id}`]?.status === "checked").length;
+      const followups = games.filter(game => notes[`game:${game.id}`]?.status === "followup").length;
+      byId("review-progress").textContent = `${reviewed} of ${games.length} games checked · ${followups} follow-ups`;
+    }
+    function persist(key, value) {
+      if (storageOK) {
+        try { localStorage.setItem(storagePrefix + key, JSON.stringify(value)); } catch { storageOK = false; }
+      }
+      storageStatus("Saved in this browser. Export a copy to share or keep it.");
+    }
+    function noteEditor(key, heading = "Review notes") {
+      const wrapper = el("section", null, {class: "notes", "aria-label": heading});
+      const selector = select(`note-status-${key}`, "Review status", Object.entries(statuses).map(([id, label]) => ({id, label})), notes[key]?.status || "pending");
+      const input = el("textarea", null, {id: `note-text-${key}`, maxlength: 20000, placeholder: "Record the finding, move number or board coordinate, and any follow-up."});
+      input.value = notes[key]?.text || "";
+      const save = () => {
+        notes[key] = {status: selector.input.value, text: input.value, updated: new Date().toISOString()};
+        persist(`note:${key}`, notes[key]);
+      };
+      selector.input.addEventListener("change", save); input.addEventListener("input", save);
+      return add(wrapper, el("h3", heading), selector.field, add(el("label", null, {class: "field", for: input.id}), el("span", "Notes"), input));
+    }
+    function download(filename, content, mime) {
+      const url = URL.createObjectURL(new Blob([content], {type: mime}));
+      const anchor = el("a", null, {href: url, download: filename});
+      document.body.append(anchor); anchor.click(); anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function exportNotes() {
+      if (storageOK) { try { readSaved(); } catch { storageOK = false; storageStatus(); } }
+      download("kenggo-e2-review-notes.json", JSON.stringify({version: "e2_manual_notes_v1", bundle_id: data.bundle_id, exported_at: new Date().toISOString(), notes, decision}, null, 2), "application/json");
+    }
+    byId("export-notes").addEventListener("click", exportNotes);
+
+    function metricChart(name, title, direction, roleData) {
+      const wrapper = add(el("article", null, {class: "card metric-card"}), el("h3", title), el("p", direction, {class: "small muted"}));
+      const rows = arms.map(arm => ({arm, metric: selectedGroup(roleData[arm.id]?.metrics)?.metrics?.[name]}));
+      const values = rows.map(row => estimateValue(row.metric)).filter(finite);
+      const low = Math.min(0, ...values), high = Math.max(0, ...values);
+      const span = high - low || 1, origin = (0 - low) / span * 100;
+      for (const {arm, metric} of rows) {
+        const value = estimateValue(metric), text = metricText(metric, name), index = arms.findIndex(item => item.id === arm.id);
+        const svg = svgEl("svg", {width: "100%", height: 62, role: "img", "aria-label": `${arm.label}: ${text}`});
+        svg.append(svgEl("title", {}, `${arm.label}: ${title} ${text}`), svgEl("text", {x: 0, y: 15, "font-size": 12}, arm.label));
+        if (finite(value)) {
+          const position = (value - low) / span * 100;
+          svg.append(svgEl("rect", {x: 0, y: 24, width: "100%", height: 10, rx: 2, fill: "var(--border, #dce4e8)", opacity: .45}));
+          svg.append(svgEl("rect", {x: `${Math.min(origin, position)}%`, y: 24, width: `${Math.abs(position - origin)}%`, height: 10, rx: 2, fill: colors[index % colors.length]}));
+        } else {
+          svg.append(svgEl("line", {x1: 0, y1: 29, x2: "100%", y2: 29, stroke: "var(--border, #cbd5da)", "stroke-dasharray": "3 4"}));
+        }
+        svg.append(svgEl("text", {x: 0, y: 53, "font-size": 12, "font-weight": 600}, text));
+        wrapper.append(svg);
+      }
+      wrapper.append(el("p", values.length ? `Bar scale: ${name === "top1" ? percent(low) : number(low)} to ${name === "top1" ? percent(high) : number(high)}` : "No finite estimates available.", {class: "scale muted"}));
+      return wrapper;
+    }
+
+    function renderCompare(panel) {
+      panel.append(el("h2", "Recorded-position comparison"), el("p", "Inspect each metric with its reported coverage and uncertainty. Move prediction and value error do not establish playing strength or a human rank.", {class: "muted"}));
+      const role = select("role-filter", "Evaluation population", roles, viewState.role);
+      const dimension = select("dimension-filter", "Breakdown", [{id: "overall", label: "Overall"}, {id: "rank", label: "Mover rank"}, {id: "phase", label: "Game phase"}, {id: "clock", label: "Nominal clock"}], viewState.dimension);
+      const group = select("group-filter", "Group", [], viewState.group);
+      const result = el("div", null, {id: "comparison-result"});
+      panel.append(add(el("div", null, {class: "filters"}), role.field, dimension.field, group.field), result);
+      function refreshGroups() {
+        const roleData = object(evaluations[viewState.role]);
+        const keys = [...new Set(Object.values(roleData).flatMap(arm => Object.keys(object(arm?.metrics?.[`by_${viewState.dimension}`]))))];
+        if (!keys.includes(viewState.group)) viewState.group = keys[0] || "";
+        group.input.replaceChildren(...keys.map(key => el("option", key, {value: key})));
+        group.input.value = viewState.group; group.field.hidden = viewState.dimension === "overall";
+      }
+      function refresh() {
+        result.replaceChildren();
+        const roleData = object(evaluations[viewState.role]);
+        if (!Object.keys(roleData).length) { result.append(el("p", "No evaluation report is available for this population.", {class: "notice"})); return; }
+        result.append(el("p", groupLabel(), {class: "small muted"}));
+        result.append(add(el("div", null, {class: "cards"}), metricChart("nll", "Move NLL", "Lower is better · natural log units", roleData), metricChart("top1", "Top-1 match", "Higher is better · recorded move matched", roleData), metricChart("value_mse", "Value MSE", "Lower is better · valid outcome labels only", roleData)));
+        if (arms.some(arm => arm.id.includes("unknown"))) result.append(el("p", "The unknown-rank arm is a fallback diagnostic. It is not a separate calibrated opponent profile.", {class: "small muted"}));
+        renderPaired(result);
+        const rows = [];
+        for (const arm of arms) for (const [name, label] of [["nll", "NLL"], ["top1", "Top-1"], ["value_mse", "Value MSE"]]) {
+          const metric = selectedGroup(roleData[arm.id]?.metrics)?.metrics?.[name];
+          rows.push([arm.label, label, metricText(metric, name), `${countText(metric?.counts)}; ${number(metric?.masked_moves, 0)} masked`, intervalText(metric?.uncertainty, name === "top1"), [...array(metric?.missing_ranks).map(rank => `Missing rank: ${rank}`), ...array(metric?.uncertainty?.reasons).map(words)].join("; ") || "None reported"]);
+        }
+        result.append(add(el("details"), el("summary", "Estimates, coverage, and 95% intervals"), table(["Arm", "Metric", "Estimate", "Eligible coverage", "Interval / status", "Limits"], rows)));
+        renderCalibration(result, roleData);
+        renderSampling(result, roleData);
+        result.append(rawDetails("Full recorded-position reports", roleData));
+      }
+      role.input.addEventListener("change", () => { viewState.role = role.input.value; refreshGroups(); refresh(); });
+      dimension.input.addEventListener("change", () => { viewState.dimension = dimension.input.value; refreshGroups(); refresh(); });
+      group.input.addEventListener("change", () => { viewState.group = group.input.value; refresh(); });
+      refreshGroups(); refresh();
+    }
+
+    function renderPaired(parent) {
+      const comparisons = object(data.paired?.[viewState.role]);
+      if (!Object.keys(comparisons).length) return;
+      const section = add(el("section", null, {class: "section", id: "paired-result"}), el("h3", "Paired NLL differences · overall"), el("p", "These differences use the overall population, regardless of the selected breakdown. Negative means lower NLL for the first arm. Check the interval status before drawing a conclusion.", {class: "small muted"}));
+      const rows = Object.entries(comparisons).map(([key, report]) => {
+        const metric = report?.overall?.metrics?.nll, value = estimateValue(metric);
+        const label = key.split("_minus_").map(labelArm).join(" − ");
+        const delta = finite(value) && value > 0 ? `+${number(value)}` : metricText(metric, "nll");
+        return [label, delta, intervalText(metric?.uncertainty), array(metric?.uncertainty?.reasons).map(words).join("; ") || "None reported"];
+      });
+      parent.append(add(section, table(["First arm − second arm", "Δ NLL", "95% interval / status", "Limits"], rows), rawDetails("Full paired reports", comparisons)));
+    }
+
+    function preciseNumber(value) {
+      if (finite(value)) return String(value);
+      if (value?.status === "finite" && finite(value.value)) return String(value.value);
+      return number(value);
+    }
+    function calibrationBinLabel(bin) {
+      if (!finite(bin.lower) || !finite(bin.upper) || typeof bin.upper_inclusive !== "boolean") return "Not reported";
+      return `[${preciseNumber(bin.lower)}, ${preciseNumber(bin.upper)}${bin.upper_inclusive ? "]" : ")"}`;
+    }
+    function calibrationPlot(report, armLabel, color) {
+      const bins = array(report.bins);
+      const validMean = mean => mean?.status === "finite" && finite(mean.value) && mean.value >= -1 && mean.value <= 1;
+      const points = report.status === "available" ? bins.filter(bin => finite(bin.raw_count) && bin.raw_count > 0 && finite(bin.weighted_mass) && bin.weighted_mass > 0 && validMean(bin.mean_prediction) && validMean(bin.mean_result)) : [];
+      const x = value => 15 + (value + 1) / 2 * 81;
+      const y = value => 36 + (1 - value) / 2 * 204;
+      const svg = svgEl("svg", {id: "calibration-chart", width: "100%", height: 300, class: "calibration-chart", role: "img", "aria-label": `${armLabel} value calibration: mean predicted value on the horizontal axis, mean recorded outcome on the vertical axis; both from minus one to one. ${points.length} supplied bins plotted. Exact values are in the table.`});
+      svg.append(svgEl("title", {}, `${armLabel}: predicted and recorded mover-perspective means`));
+      for (const tick of [-1, -.5, 0, .5, 1]) {
+        svg.append(svgEl("line", {x1: `${x(tick)}%`, x2: `${x(tick)}%`, y1: 36, y2: 240, stroke: "var(--border, #cbd5da)", "stroke-width": tick === 0 ? 1.2 : .7}));
+        svg.append(svgEl("line", {x1: "15%", x2: "96%", y1: y(tick), y2: y(tick), stroke: "var(--border, #cbd5da)", "stroke-width": tick === 0 ? 1.2 : .7}));
+        svg.append(svgEl("text", {x: `${x(tick)}%`, y: 258, "text-anchor": "middle", "font-size": 11}, tick));
+        svg.append(svgEl("text", {x: "11%", y: y(tick) + 4, "text-anchor": "end", "font-size": 11}, tick));
+      }
+      svg.append(svgEl("line", {id: "calibration-identity", x1: "15%", y1: 240, x2: "96%", y2: 36, stroke: "var(--muted-foreground, #536874)", "stroke-width": 1.5, "stroke-dasharray": "5 5"}));
+      svg.append(svgEl("text", {x: 0, y: 16, "font-size": 12}, "Mean recorded outcome"), svgEl("text", {x: "55.5%", y: 285, "text-anchor": "middle", "font-size": 12}, "Mean predicted value"));
+      for (const bin of points) {
+        svg.append(add(svgEl("circle", {cx: `${x(bin.mean_prediction.value)}%`, cy: y(bin.mean_result.value), r: 5, fill: color, stroke: "var(--card, #fff)", "stroke-width": 1.3}), svgEl("title", {}, `Prediction bin ${calibrationBinLabel(bin)}: mean prediction ${preciseNumber(bin.mean_prediction)}, mean recorded outcome ${preciseNumber(bin.mean_result)}, eligible moves ${preciseNumber(bin.raw_count)}, weighted mass ${preciseNumber(bin.weighted_mass)}`)));
+      }
+      const figure = add(el("figure", null, {class: "calibration-figure"}), svg, el("figcaption", "Dashed line: equal predicted and recorded means. Only finite means in [−1, 1] with positive eligible count and weight are plotted; every supplied bin remains in the table.", {class: "small muted"}));
+      if (!points.length) figure.append(el("p", report.status === "available" ? "No eligible bins have a finite pair of means to plot." : "Calibration is unavailable for this selection; no points are plotted.", {class: "notice", id: "calibration-empty"}));
+      return figure;
+    }
+    function renderCalibration(parent, roleData) {
+      const availableArms = arms.filter(arm => own(roleData, arm.id));
+      if (!availableArms.some(arm => arm.id === viewState.calibrationArm)) viewState.calibrationArm = availableArms[0]?.id || "";
+      const arm = select("calibration-arm", "Value-calibration arm", availableArms, viewState.calibrationArm);
+      const heading = add(el("div"), el("h2", "Value calibration"), el("p", groupLabel(), {class: "small muted"}));
+      const body = el("div", null, {id: "calibration-result"});
+      parent.append(add(el("div", null, {class: "section-head"}), heading, arm.field), body);
+      function refresh() {
+        body.replaceChildren();
+        const report = selectedGroup(roleData[viewState.calibrationArm]?.metrics)?.value_calibration?.model;
+        if (!report) { body.append(el("p", "No value-calibration report was supplied for this selection.", {class: "notice"})); return; }
+        body.append(el("p", "Values and recorded outcomes use the mover's perspective on [−1, 1], with eligible outcome labels only. These means are not raw win probabilities. Samples are small; the bin means are descriptive and carry no confidence claim.", {class: "small muted"}));
+        body.append(facts([["Availability", entryText(report.status)], ["Aggregate ranks", array(report.aggregate_ranks).join(", ") || "Not reported"], ["Weighting", report.weighting ? words(report.weighting) : "Not reported"]]));
+        if (array(report.missing_ranks).length) body.append(el("p", `Missing aggregate ranks: ${report.missing_ranks.join(", ")}.`, {class: "notice"}));
+        const armIndex = arms.findIndex(item => item.id === viewState.calibrationArm);
+        body.append(calibrationPlot(report, labelArm(viewState.calibrationArm), colors[Math.max(0, armIndex) % colors.length]));
+        const bins = array(report.bins);
+        if (!bins.length) body.append(el("p", "No calibration bins were supplied.", {class: "small muted section"}));
+        else if (bins.length !== 10) body.append(el("p", `${bins.length} bins were supplied; the expected report contains 10.`, {class: "notice"}));
+        const rows = bins.map(bin => [calibrationBinLabel(bin), preciseNumber(bin.raw_count), preciseNumber(bin.weighted_mass), preciseNumber(bin.mean_prediction), preciseNumber(bin.mean_result), `${number(bin.counts?.games, 0)} games · ${number(bin.counts?.game_sides, 0)} sides · ${number(bin.counts?.mover_accounts, 0)} mover accounts · ${number(bin.counts?.accounts, 0)} all accounts; support flags: ${entryText(bin.counts?.insufficient)}`]);
+        body.append(add(el("div", null, {class: "section"}), table(["Prediction bin", "Eligible moves", "Weighted mass", "Mean prediction", "Mean recorded outcome", "Coverage"], rows, {class: "calibration-table", id: "calibration-table"})), rawDetails("Full value-calibration report", report));
+      }
+      arm.input.addEventListener("change", () => { viewState.calibrationArm = arm.input.value; refresh(); }); refresh();
+    }
+
+    function renderSampling(parent, roleData) {
+      const availableArms = arms.filter(arm => own(roleData, arm.id));
+      if (!availableArms.some(arm => arm.id === viewState.samplingArm)) viewState.samplingArm = availableArms[0]?.id || "";
+      const arm = select("sampling-arm", "Sampling arm", availableArms, viewState.samplingArm);
+      const heading = add(el("div"), el("h2", "Sampled and recorded move categories"), el("p", groupLabel(), {class: "small muted"}));
+      const body = el("div", null, {id: "sampling-result"});
+      parent.append(add(el("div", null, {class: "section-head"}), heading, arm.field), body);
+      function refresh() {
+        body.replaceChildren();
+        const report = roleData[viewState.samplingArm]?.sampling;
+        const group = selectedGroup(report?.move_categories);
+        if (!report || !group) { body.append(el("p", "Move-category evidence is not reported for this selection.", {class: "notice"})); return; }
+        const categories = array(report.move_categories.categories);
+        const rows = categories.map(category => {
+          const recorded = group.recorded?.[category], model = group.model?.[category];
+          const difference = finite(recorded) && finite(model) ? model - recorded : null;
+          return [words(category), percent(recorded), percent(model), finite(difference) ? `${difference > 0 ? "+" : ""}${number(difference * 100, 2)} pp` : "Not available"];
+        });
+        body.append(facts([["Total variation", number(group.total_variation)], ["Availability", entryText(group.status)], ["Draws per position", number(report.draws_per_position, 0)], ["Sampling temperature", number(report.temperature, 2)]]));
+        body.append(table(["Category", "Recorded", "Sampled", "Sampled − recorded"], rows, {class: "category-table"}));
+        body.append(el("p", `${countText(group.counts)}. Uncertainty: ${entryText(group.uncertainty?.status)}. ${array(group.uncertainty?.reasons).map(words).join("; ")}.`, {class: "small muted section"}));
+        if (array(group.missing_ranks).length) body.append(el("p", `Missing aggregate ranks: ${group.missing_ranks.join(", ")}.`, {class: "notice"}));
+        const diversity = viewState.dimension === "overall" ? report.overall : viewState.dimension === "rank" ? report.by_rank?.[viewState.group] : null;
+        if (diversity) body.append(facts([["Unique legal actions", number(diversity.unique_legal_actions, 2)], ["Pairwise disagreement", percent(diversity.pairwise_disagreement)], ["Raw pass mass", percent(diversity.raw_pass_mass)], ["Sampled pass fraction", percent(diversity.sampled_pass_fraction)]]));
+        else body.append(el("p", "Sampling diversity diagnostics have no reported breakdown for this selection.", {class: "small muted"}));
+        if (report.scope) body.append(el("p", report.scope, {class: "small muted"}));
+        body.append(rawDetails("Full sampling report, including joint cells", report));
+      }
+      arm.input.addEventListener("change", () => { viewState.samplingArm = arm.input.value; refresh(); }); refresh();
+    }
+
+    function lossChart(epochs, key, title, color) {
+      const wrapper = add(el("article", null, {class: "card"}), el("h3", title));
+      const rows = epochs.map((row, index) => ({epoch: finite(row.epoch) ? row.epoch : null, value: finite(row[key]) ? row[key] : null, index}));
+      const present = rows.filter(row => row.epoch !== null && row.value !== null);
+      if (!present.length) return add(wrapper, el("p", "No finite epoch losses are reported.", {class: "muted"}));
+      const xMin = Math.min(...present.map(row => row.epoch)), xMax = Math.max(...present.map(row => row.epoch));
+      const yMin = Math.min(0, ...present.map(row => row.value)), yMax = Math.max(0, ...present.map(row => row.value));
+      const x = value => xMax === xMin ? 55 : 15 + (value - xMin) / (xMax - xMin) * 81;
+      const y = value => 154 - (value - yMin) / (yMax - yMin || 1) * 130;
+      const svg = svgEl("svg", {width: "100%", height: 195, role: "img", class: "loss-chart", "aria-label": `${title} by epoch. Exact values are in the epoch table.`});
+      for (const [value, position] of [[yMax, 24], [yMin, 154]]) svg.append(svgEl("line", {x1: "15%", x2: "96%", y1: position, y2: position, stroke: "var(--border, #cbd5da)"}), svgEl("text", {x: 0, y: position + 4, "font-size": 11}, number(value, 2)));
+      let previous = null;
+      for (const row of rows) {
+        if (row.epoch === null || row.value === null) { previous = null; continue; }
+        if (previous) svg.append(svgEl("line", {x1: `${x(previous.epoch)}%`, y1: y(previous.value), x2: `${x(row.epoch)}%`, y2: y(row.value), stroke: color, "stroke-width": 2}));
+        svg.append(add(svgEl("circle", {cx: `${x(row.epoch)}%`, cy: y(row.value), r: 3.5, fill: color}), svgEl("title", {}, `Epoch ${row.epoch}: ${number(row.value)}`)));
+        previous = row;
+      }
+      svg.append(svgEl("text", {x: "15%", y: 180, "font-size": 11}, `Epoch ${number(xMin, 0)}`));
+      if (xMax !== xMin) svg.append(svgEl("text", {x: "96%", y: 180, "text-anchor": "end", "font-size": 11}, `Epoch ${number(xMax, 0)}`));
+      return add(wrapper, svg);
+    }
+    function renderTraining(panel) {
+      panel.append(el("h2", "Training and compute"), el("p", "Epoch losses describe training behavior. Use the recorded-position comparison to inspect held-out outcomes.", {class: "muted"}));
+      const training = object(data.training), options = Object.keys(training).map(id => ({id, label: labelArm(id)}));
+      panel.append(costFacts(data.costs));
+      if (own(object(data.costs), "remaining_gpu_seconds")) panel.append(el("p", `Reported GPU budget remaining: ${seconds(data.costs.remaining_gpu_seconds)}.`, {class: "small muted"}));
+      if (!options.length) { panel.append(el("p", "No training report is available.", {class: "notice"})); return; }
+      const arm = select("training-arm", "Training arm", options, viewState.trainingArm);
+      const body = el("div", null, {id: "training-result"});
+      panel.append(add(el("div", null, {class: "filters"}), arm.field), body);
+      function refresh() {
+        body.replaceChildren();
+        const report = training[viewState.trainingArm], epochs = array(report?.epoch_metrics);
+        body.append(facts([["Completed updates", number(report?.completed_updates, 0)], ["Presented examples", number(report?.presented_examples, 0)], ["Epoch records", number(epochs.length, 0)]]), costFacts(report?.costs));
+        body.append(add(el("div", null, {class: "cards"}), lossChart(epochs, "policy_loss", "Policy loss", colors[0]), lossChart(epochs, "value_loss", "Value loss", colors[1])));
+        const epochTable = table(["Epoch", "Policy loss", "Value loss"], epochs.map(row => [number(row.epoch, 0), number(row.policy_loss), number(row.value_loss)]));
+        epochTable.className = "table-wrap epoch-table";
+        body.append(epochTable);
+        body.append(rawDetails("Full training report", report));
+      }
+      arm.input.addEventListener("change", () => { viewState.trainingArm = arm.input.value; refresh(); }); refresh();
+    }
+
+    function expandFrames(game) {
+      if (frameCache.has(game)) return frameCache.get(game);
+      const moves = game.moves, frames = game.frames;
+      if (!Array.isArray(moves) || !Array.isArray(frames) || frames.length !== moves.length + 1) throw Error("Frames must include the initial position and exactly one position per recorded action.");
+      if (moves.some(move => !Array.isArray(move) || !["B", "W"].includes(move[0]) || !Number.isInteger(move[1]) || move[1] < 0 || move[1] > 361)) throw Error("The supplied move list has an invalid color or action.");
+      const board = Array(361).fill("."), result = [];
+      for (const frame of frames) {
+        if (!Array.isArray(frame) || !Array.isArray(frame[0]) || frame.length < 5) throw Error("A supplied replay frame is incomplete.");
+        for (const change of frame[0]) {
+          if (!Array.isArray(change) || !Number.isInteger(change[0]) || change[0] < 0 || change[0] > 360 || ![".", "B", "W"].includes(change[1])) throw Error("A supplied board delta is invalid.");
+          board[change[0]] = change[1];
+        }
+        result.push({board: board.join(""), toPlay: frame[1], capturedBlack: frame[2], capturedWhite: frame[3], passStreak: frame[4]});
+      }
+      frameCache.set(game, result); return result;
+    }
+    function drawBoard(frame, move, ply) {
+      const svg = svgEl("svg", {viewBox: "0 0 480 480", role: "img", "aria-label": `19 by 19 Go board after ${ply} recorded actions. A19 is top left; T1 is bottom right.`});
+      svg.append(svgEl("title", {}, `Recorded position after ${ply} actions`), svgEl("rect", {x: 0, y: 0, width: 480, height: 480, rx: 7, fill: "#ead6ad"}));
+      for (let index = 0; index < 19; index++) {
+        const point = 33 + index * 23;
+        svg.append(svgEl("line", {x1: 33, y1: point, x2: 447, y2: point, stroke: "#8d7950", "stroke-width": .8}), svgEl("line", {x1: point, y1: 33, x2: point, y2: 447, stroke: "#8d7950", "stroke-width": .8}));
+        for (const y of [19, 467]) svg.append(svgEl("text", {x: point, y, "font-size": 11, "text-anchor": "middle"}, "ABCDEFGHJKLMNOPQRST"[index]));
+        for (const x of [15, 465]) svg.append(svgEl("text", {x, y: point + 4, "font-size": 11, "text-anchor": "middle"}, 19 - index));
+      }
+      for (const row of [3, 9, 15]) for (const col of [3, 9, 15]) svg.append(svgEl("circle", {cx: 33 + col * 23, cy: 33 + row * 23, r: 2.6, fill: "#665737"}));
+      [...frame.board].forEach((cell, index) => {
+        if (cell === ".") return;
+        const x = 33 + index % 19 * 23, y = 33 + Math.floor(index / 19) * 23;
+        svg.append(add(svgEl("circle", {cx: x, cy: y, r: 10.5, fill: cell === "B" ? "#202721" : "#fffdf6", stroke: cell === "B" ? "#101713" : "#9c9789", "stroke-width": 1}), svgEl("title", {}, `${coordinate(index)}: ${colorName(cell)}`)));
+        if (move?.[1] === index) svg.append(svgEl("circle", {cx: x, cy: y, r: 3.5, fill: cell === "B" ? "#f1cb7c" : "#245950"}));
+      });
+      return svg;
+    }
+    function gameLabel(game) { return `${game.id} · ${labelArm(game.arm)} · candidate ${colorName(game.candidate_color)}`; }
+    function renderGames(panel) {
+      panel.append(el("h2", "Generated raw games"), el("p", "Inspect endings and flagged passes for each arm and color. Record replay, scoring, or behavior concerns in the notes. Capped and unresolved games remain part of the results.", {class: "muted"}));
+      if (!games.length) { panel.append(el("p", "No generated game records are available.", {class: "notice"})); return; }
+      const gameArms = [...new Set(games.map(game => game.arm))];
+      const arm = select("game-arm", "Candidate arm", [{id: "all", label: "All arms"}, ...gameArms.map(id => ({id, label: labelArm(id)}))], viewState.gameArm);
+      const selector = select("game-select", "Game to inspect", [], viewState.gameId);
+      const body = el("div", null, {id: "game-result"});
+      let filtered = [];
+      const previous = button("Previous game", () => choose(-1), {id: "previous-game"});
+      const next = button("Next game", () => choose(1), {id: "next-game"});
+      const count = el("span", null, {class: "small muted", id: "game-count"});
+      panel.append(add(el("div", null, {class: "filters"}), arm.field, selector.field), add(el("div", null, {class: "actions"}), previous, next, count), body);
+      function refreshOptions() {
+        filtered = games.filter(game => viewState.gameArm === "all" || game.arm === viewState.gameArm);
+        if (!filtered.some(game => game.id === viewState.gameId)) viewState.gameId = filtered[0]?.id || "";
+        selector.input.replaceChildren(...filtered.map(game => el("option", gameLabel(game), {value: game.id})));
+        selector.input.value = viewState.gameId;
+      }
+      function choose(delta) {
+        const index = filtered.findIndex(game => game.id === viewState.gameId);
+        const chosen = filtered[index + delta]; if (!chosen) return;
+        viewState.gameId = chosen.id; viewState.ply = 0; selector.input.value = chosen.id; refresh();
+      }
+      function refresh() {
+        body.replaceChildren();
+        const game = filtered.find(game => game.id === viewState.gameId), index = filtered.indexOf(game);
+        previous.disabled = index <= 0; next.disabled = index < 0 || index >= filtered.length - 1;
+        count.textContent = `${index + 1} of ${filtered.length} games in this selection · ${games.length} supplied records`;
+        if (!game) return;
+        body.append(el("h3", gameLabel(game), {class: "section"}));
+        const replay = el("section", null, {"aria-label": "Game replay"}), info = el("section", null, {class: "game-info", "aria-label": "Original game record"});
+        body.append(add(el("div", null, {class: "game-layout"}), replay, info));
+        const player = renderPlayer(replay, game);
+        info.append(facts([["Candidate", colorName(game.candidate_color)], ["Conditioning rank input", own(game, "conditioning_rank") ? game.conditioning_rank === null ? "None" : entryText(game.conditioning_rank) : "Not reported"], ["Opponent", words(entryText(game.opponent))], ["Original result", resultText(game.result)], ["Status", entryText(game.status)], ["Reason", words(entryText(game.reason))], ["Recorded actions", number(game.actual_actions, 0)], ["Censored length", boolText(game.censored)]]));
+        info.append(el("p", "Conditioning rank is an input label, not a calibrated playing strength. W/L outcomes are relative to the candidate.", {class: "small muted"}));
+        const flags = object(game.behavior);
+        info.append(el("h3", "Recorded behavior flags"), table(["Flag", "Value"], ["runtime_failure", "cap", "unresolved", "dispute", "premature_pass", "length_tail"].map(flag => [words(flag), boolText(flags[flag])])));
+        info.append(el("h3", "Candidate passes", {class: "section"}));
+        if (!Array.isArray(game.passes)) info.append(el("p", "Pass evidence is not reported.", {class: "muted"}));
+        else if (!game.passes.length) info.append(el("p", "No candidate passes were recorded.", {class: "muted"}));
+        else {
+          const rows = game.passes.map(pass => {
+            const valid = Number.isInteger(pass.ply) && pass.ply >= 0 && pass.ply < array(game.moves).length;
+            const before = button("Before", () => player?.change(pass.ply), {"aria-label": `Before candidate pass at move ${pass.ply + 1}`});
+            const after = button("After", () => player?.change(pass.ply + 1), {"aria-label": `After candidate pass at move ${pass.ply + 1}`});
+            before.disabled = after.disabled = !valid || !player;
+            return [valid ? `Move ${pass.ply + 1}` : "Unknown move", entryText(pass.verdict), add(el("div", null, {class: "actions"}), before, after)];
+          });
+          const list = table(["Pass", "Verdict", "Replay"], rows); list.className = "table-wrap pass-list"; info.append(list);
+        }
+        const sgf = button("Download original SGF", () => download(`${String(game.id).replace(/[^a-zA-Z0-9_-]/g, "_")}.sgf`, game.sgf, "application/x-go-sgf"), {id: "download-sgf"});
+        sgf.disabled = typeof game.sgf !== "string" || !game.sgf;
+        info.append(add(el("div", null, {class: "actions section"}), sgf), noteEditor(`game:${game.id}`));
+        body.append(rawDetails("Original game data and pass evidence", game));
+      }
+      arm.input.addEventListener("change", () => { viewState.gameArm = arm.input.value; viewState.ply = 0; refreshOptions(); refresh(); });
+      selector.input.addEventListener("change", () => { viewState.gameId = selector.input.value; viewState.ply = 0; refresh(); });
+      refreshOptions(); refresh();
+    }
+    function renderPlayer(parent, game) {
+      let frames;
+      try { frames = expandFrames(game); }
+      catch (error) { parent.append(el("p", `Replay unavailable: ${error.message}`, {class: "notice"})); return null; }
+      const board = el("div", null, {class: "board", id: "board"});
+      const label = el("p", null, {class: "replay-status", id: "replay-status", "aria-live": "polite"});
+      const metadata = el("p", null, {class: "small muted", id: "replay-metadata"});
+      const range = el("input", null, {id: "replay-slider", type: "range", min: 0, max: frames.length - 1, step: 1});
+      const rangeLabel = add(el("label", null, {class: "field", for: "replay-slider"}), el("span", "Recorded action"), range);
+      const start = button("Start", () => change(0), {id: "replay-start"});
+      const previous = button("Previous", () => change(viewState.ply - 1), {id: "replay-previous"});
+      const next = button("Next", () => change(viewState.ply + 1), {id: "replay-next"});
+      const end = button("End", () => change(frames.length - 1), {id: "replay-end"});
+      function change(ply) {
+        viewState.ply = Math.max(0, Math.min(frames.length - 1, Number.isFinite(ply) ? Math.round(ply) : 0));
+        const frame = frames[viewState.ply], move = game.moves[viewState.ply - 1];
+        range.value = viewState.ply;
+        label.textContent = `Move ${viewState.ply} of ${game.moves.length}${move ? ` · ${colorName(move[0])} ${coordinate(move[1])}${move[0] === game.candidate_color ? " · candidate" : ""}` : " · initial position"}`;
+        range.setAttribute("aria-valuetext", label.textContent);
+        board.replaceChildren(drawBoard(frame, move, viewState.ply));
+        metadata.textContent = `Next color: ${colorName(frame.toPlay)} · Captured black stones: ${number(frame.capturedBlack, 0)} · Captured white stones: ${number(frame.capturedWhite, 0)} · Pass streak: ${number(frame.passStreak, 0)}`;
+        start.disabled = previous.disabled = viewState.ply === 0; next.disabled = end.disabled = viewState.ply === frames.length - 1;
+      }
+      range.addEventListener("input", () => change(Number(range.value)));
+      parent.append(board, label, rangeLabel, add(el("div", null, {class: "playback"}), start, previous, next, end), metadata, el("p", "The board uses supplied replay frames. Arrow keys, Home, and End work on the move slider.", {class: "small muted"}));
+      change(viewState.ply); return {change};
+    }
+
+    function renderDecision(panel) {
+      const content = el("div", null, {class: "decision-content"});
+      panel.append(content);
+      content.append(el("h2", "Review and decision"), el("p", data.decision?.prompt || "Record the outcome of your review.", {class: "muted"}));
+      const coverage = data.decision?.coverage_audit;
+      if (coverage) {
+        const section = el("section", null, {id: "coverage-audit", class: "section"});
+        section.append(el("h3", "Cached source coverage"), el("p", entryText(coverage.summary)),
+          facts([["Audit status", entryText(coverage.status)], ["GPU seconds", number(coverage.gpu_seconds, 0)], ["New requests", number(coverage.network_requests, 0)]]),
+          table(["Provisional role", "Fixed candidates", "Attempted", "Source-admitted", "Distinct handles", "Explicit passes"],
+            array(coverage.roles).map(row => [entryText(row.label), number(row.candidates, 0), number(row.attempted, 0),
+              number(row.source_admitted, 0), number(row.distinct_handles, 0), number(row.passes, 0)])),
+          el("p", entryText(coverage.scope), {class: "small muted"}));
+        content.append(section);
+      }
+      const limits = array(data.limitations);
+      if (limits.length) content.append(el("h3", "Evidence limits"), add(el("ul"), ...limits.map(limit => el("li", limit))));
+      const fieldset = add(el("fieldset", null, {class: "section"}), el("legend", "Your decision"));
+      const decisionText = el("textarea", null, {id: "decision-text", maxlength: 20000, placeholder: "Record the reason and any conditions or follow-up."});
+      decisionText.value = decision.text;
+      const save = () => { decision = {...decision, text: decisionText.value, updated: new Date().toISOString()}; persist("decision", decision); };
+      for (const option of decisionOptions) {
+        const radio = el("input", null, {type: "radio", name: "decision", value: option.id, id: `decision-${option.id}`});
+        radio.checked = decision.choice === option.id;
+        radio.addEventListener("change", () => { if (radio.checked) { decision.choice = option.id; save(); } });
+        fieldset.append(add(el("label", null, {class: "decision-option", for: radio.id}), radio, add(el("span"), el("strong", option.label), el("small", option.detail || ""))));
+      }
+      if (!decisionOptions.length) fieldset.append(el("p", "No decision choices were supplied. Use the notes below.", {class: "muted"}));
+      content.append(fieldset, add(el("label", null, {class: "field section", for: "decision-text"}), el("span", "Decision notes"), decisionText));
+      decisionText.addEventListener("input", save);
+      content.append(noteEditor("overall", "Overall review"), el("p", "A choice here is a local annotation. Export it to communicate a decision; this page does not apply approval or change project state.", {class: "small muted section"}), button("Export review notes", exportNotes, {class: "primary"}));
+    }
+    function renderEvidence(panel) {
+      panel.append(el("h2", "Evidence and provenance"), facts([["Bundle", data.bundle_id]]));
+      if (array(data.limitations).length) panel.append(el("h3", "Evidence limits"), add(el("ul"), ...data.limitations.map(limit => el("li", limit))));
+      const rows = array(data.evidence).map(item => [entryText(item.label), el("span", entryText(item.path), {class: "evidence-path"}), el("span", entryText(item.sha256), {class: "evidence-path"}), el("span", item.url || "Not supplied", {class: "evidence-path"})]);
+      panel.append(add(el("div", null, {class: "section"}), table(["Artifact", "Path", "SHA-256", "Reference"], rows)), el("p", "Paths and references identify the supplied artifacts. This offline page makes no requests to retrieve or verify them.", {class: "small muted section"}));
+      panel.append(button("Download embedded evidence JSON", () => download("kenggo-e2-review-evidence.json", JSON.stringify(data, null, 2), "application/json")), rawDetails("Full embedded evidence", data));
+    }
+
+    const views = {compare: ["Compare", renderCompare], training: ["Training", renderTraining], games: ["Games", renderGames], decision: ["Decision", renderDecision], evidence: ["Evidence", renderEvidence]};
+    const navButtons = new Map();
+    function renderView(id) {
+      currentView = id;
+      for (const [key, control] of navButtons) control.setAttribute("aria-pressed", String(key === id));
+      byId("content").replaceChildren();
+      views[id][1](byId("content"));
+    }
+    for (const [id, [label]] of Object.entries(views)) {
+      const control = button(label, () => renderView(id), {id: `view-${id}`, "aria-pressed": String(id === currentView), "aria-controls": "content"});
+      navButtons.set(id, control); byId("navigation").append(control);
+    }
+    byId("title").textContent = data.title || "E2 pilot review";
+    document.title = data.title || "E2 pilot review";
+    byId("summary").textContent = data.summary || "Inspect the recorded comparisons, raw games, and evidence limits.";
+    storageStatus(); renderView(currentView);
+  })();
+  </script>
+</body>
+</html>
