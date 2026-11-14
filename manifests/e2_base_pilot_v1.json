@@ -320,13 +320,13 @@
       "bytes": 10633
     },
     "template": {
-      "path": "tools/e2_review/template.html",
+      "path": "runs/e2-manual-review-2026-11-14/source-v1/template.html",
       "sha256": "df04a4c505e83acdfbace729b20e7e5e23397c13efdaa5db70a621bd070a3c22",
       "bytes": 57886
     },
     "browser_check": {
       "tool": {
-        "path": "tools/e2_review/check_browser.cjs",
+        "path": "runs/e2-manual-review-2026-11-14/source-v1/check_browser.cjs",
         "sha256": "51bdad5e2cd9921e0f389585438bbe956ba9e7216747adec7450a461e0858bf3",
         "bytes": 5349
       },

@@ -1,0 +1,172 @@
+{
+  "schema": "e2_review_readout_v2",
+  "bead": "kenggo-ydo.9",
+  "purpose": "Explain E2 results and review actions in plain language after time away from the project.",
+  "base_commit": "7790da70bfdfc21fb90c6e30632ea501f40295c6",
+  "experiment": {
+    "path": "manifests/e2_base_pilot_v1.json",
+    "sha256": "249d2da93a27bd43d53237737fdc292aecc0289c8f409af322ff74579d3e1e0a",
+    "bytes": 16511
+  },
+  "cached_data_audit": {
+    "path": "manifests/e2_cached_coverage_v1.json",
+    "sha256": "0be0eac802c5d9247aaddbd1f690b10ab90462ed8d0155228a02043ff7f3a71f",
+    "bytes": 6768
+  },
+  "previous_page": {
+    "path": "runs/e2-manual-review-2026-11-14/review-final.html",
+    "sha256": "89636a1b36062a2a8f756adfcd6a19854cc591e437a4734a3a02944d0e697a84",
+    "bytes": 4162253
+  },
+  "manual_review": {
+    "html": {
+      "path": "runs/e2-manual-review-2026-11-14/review-ready.html",
+      "sha256": "f8a75808caa06dcee2ad052ac6430a4b594711cd98bad93f900ec8b6620021be",
+      "bytes": 4171896
+    },
+    "export_manifest": {
+      "path": "runs/e2-manual-review-2026-11-14/review-ready.manifest.json",
+      "sha256": "237b4c95c24393b395caf9e3252d20ed761cb0d4d91cbde90cb9b85fdd9bc06e",
+      "bytes": 651
+    },
+    "decision": {
+      "path": "configs/e2_review_decision_v2.json",
+      "sha256": "de6583fbf034ebb18e54866cb3926e7d77bfdbf8bacb183d98a231e1e62b2e8d",
+      "bytes": 9244
+    },
+    "collector": {
+      "path": "tools/build_e2_review.py",
+      "sha256": "a9413f691820880b1372c31bbb9090e7bee489ca780d4d44f21bf65b0b62d040",
+      "bytes": 10633
+    },
+    "template": {
+      "path": "tools/e2_review/template.html",
+      "sha256": "61170076ec5030b4c1bad98b19038cf6724dda065bb01eaeafb124c5d31f9f05",
+      "bytes": 62536
+    }
+  },
+  "instructions": {
+    "path": "AGENTS.md",
+    "sha256": "fc6fdaa31af62d4d96d885595887672fc3353bd3d3da7bd40dacd7b0fa34cffe",
+    "bytes": 10984
+  },
+  "data_check": {
+    "result": "passed",
+    "comparison": "All embedded fields except summary and decision are identical to the previous page.",
+    "note_bundle_id": "920d776794c77e2b6b95faaf266f4c020a9ab84e0c7ff6650683d5da57210c03",
+    "original_game_replays": 12,
+    "historical_base_pins_verified": 71,
+    "historical_manifest_change": "Only template and browser-check paths moved to unchanged source-v1 snapshots. All recorded hashes and experimental results are preserved.",
+    "new_experiments": 0,
+    "scope_choice": "Still awaiting the owner; this presentation update does not approve the proposed data build."
+  },
+  "validation": {
+    "collector_test": {
+      "command": "uv run --locked python -m unittest discover -s tests -p test_e2_review.py -v",
+      "passed": 1,
+      "seconds": 2.061
+    },
+    "ui_test": {
+      "tool": {
+        "path": "tools/e2_review/test-ui.cjs",
+        "sha256": "69cdd8a60594e560bfd3035c932d99064d4332bc856a379edae594cd4ab87512",
+        "bytes": 25188
+      },
+      "command": "/opt/codex-desktop/resources/node-runtime/bin/node tools/e2_review/test-ui.cjs",
+      "result": "passed"
+    },
+    "browser": {
+      "tool": {
+        "path": "tools/e2_review/check_browser.cjs",
+        "sha256": "0b5e4ed9cb11dc5dbdf03b5fa0b711f90082f4de3549a74c3e871f68a1cdda30",
+        "bytes": 8013
+      },
+      "result": {
+        "path": "runs/e2-readout-validation-2026-11-14/browser-ready.log",
+        "sha256": "c244d6932224c5052d6dfb2aa2730cf23c7256d8d674b0e9f88652df29b4a053",
+        "bytes": 433
+      },
+      "version": "Chromium 140.0.7339.16",
+      "page_errors": 0,
+      "http_requests": 0,
+      "screenshots": [
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/compare-desktop.png",
+          "sha256": "0dab6de660c4c0cdde5d7916bc3c010aa17212bde996c5b844f722180242bd68",
+          "bytes": 422394
+        },
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/compare-mobile.png",
+          "sha256": "f750d518693ab2030dfa76ed7f42c89784fd89326f5601acb541cc98341e4134",
+          "bytes": 398724
+        },
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/decision-mobile.png",
+          "sha256": "771d5fbbb0721febca910c4ab16c9b29825948168f1aaf15bc95575786260933",
+          "bytes": 192638
+        },
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/game-desktop.png",
+          "sha256": "a624c760eac8eb1c535d3486edae20b2f72eeef9c7b6179bb3f3cbe10d0039b0",
+          "bytes": 341859
+        },
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/start-desktop.png",
+          "sha256": "785d9fe36fa2efef27bea4cbe284f649757c3f9bf8f09c6da54c65bff139facc",
+          "bytes": 374550
+        },
+        {
+          "path": "runs/e2-readout-validation-2026-11-14/browser-ready/start-mobile.png",
+          "sha256": "74bde4cfc110baa020402c99fe7cc0952b2ca1043892c1ce0d0257bc04f14943",
+          "bytes": 357704
+        }
+      ]
+    },
+    "built_in_preview": "Both desktop and mobile HTML previews timed out after 20 seconds. Local Chromium checks and screenshot inspection passed.",
+    "navigation_regression": {
+      "before": {
+        "path": "runs/e2-readout-validation-2026-11-14/navigation-before.log",
+        "sha256": "6d87aad17d68f520a72c819241fdcd008f26185e88412cab46ec9e7b10b7eae0",
+        "bytes": 475
+      },
+      "result": "Failed before the fix because the destination heading was above the viewport. Final browser checks pass for scroll position and focus on Metrics, Games and Next step.",
+      "intermediate_check": {
+        "path": "runs/e2-readout-validation-2026-11-14/navigation-subpixel.log",
+        "sha256": "6d87aad17d68f520a72c819241fdcd008f26185e88412cab46ec9e7b10b7eae0",
+        "bytes": 475
+      },
+      "pixel_tolerance": "Chromium rounds scroll position to pixels; the corrected heading measured -0.0625 CSS pixels from the top. The visibility check allows one pixel of rounding, not an off-screen heading."
+    },
+    "desktop_layout_regression": {
+      "before": {
+        "path": "runs/e2-readout-validation-2026-11-14/desktop-overflow-before.log",
+        "sha256": "f09133b63554df04a6b9f95208b9abffaedc4fe0b802c108c8e582da0a12618d",
+        "bytes": 298
+      },
+      "result": "Failed before the fix: export button overflowed the 728px desktop viewport. Keeping its flex container at its natural width fixes the overflow; desktop and mobile browser checks now pass."
+    }
+  },
+  "display_exports": [
+    {
+      "path": "runs/e2-manual-review-2026-11-14/review-v2.manifest.json",
+      "sha256": "f9f69b3b3dcf31429d6d4fd7e8ebad2d63b586c1e1cd31eb4e562aee86f18d0c",
+      "bytes": 648
+    },
+    {
+      "path": "runs/e2-manual-review-2026-11-14/review-v2-final.manifest.json",
+      "sha256": "5e51e82f51c4e12803d7c5c00bb8f6479cb6d8b7a386f16ccde93e77b0e9d23b",
+      "bytes": 653
+    },
+    {
+      "path": "runs/e2-manual-review-2026-11-14/review-ready.manifest.json",
+      "sha256": "237b4c95c24393b395caf9e3252d20ed761cb0d4d91cbde90cb9b85fdd9bc06e",
+      "bytes": 651
+    }
+  ],
+  "display_export_costs": {
+    "cpu_seconds": 6.133461663,
+    "wall_seconds": 6.133609048993094,
+    "gpu_seconds": 0,
+    "scope": "All three page exports in this task; tests and browser checks are outside this display-generation measurement."
+  }
+}

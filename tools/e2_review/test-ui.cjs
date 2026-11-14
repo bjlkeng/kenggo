@@ -31,6 +31,8 @@ class Element {
   set textContent(text) { this._text = String(text); this.children = []; }
   append(...children) { for (const child of children) { child.parent = this; this.children.push(child); } }
   replaceChildren(...children) { for (const child of this.children) child.parent = null; this._text = ""; this.children = []; this.append(...children); }
+  focus() { this.ownerDocument.activeElement = this; }
+  scrollIntoView() {}
   addEventListener(name, callback) { (this.listeners[name] ||= []).push(callback); }
   dispatch(name) { for (const callback of this.listeners[name] || []) callback({target: this}); }
   click() {
@@ -121,6 +123,31 @@ const fixture = {
 };
 
 (async () => {
+  const guidedFixture = structuredClone(fixture);
+  guidedFixture.decision.arm_labels = {conditioned: "With rank input"};
+  guidedFixture.decision.readout = {
+    context: "A small Go experiment.", results: ["No firm conclusion <script>literal</script>"],
+    work_items: [{id: "test.1", name: "Model comparison", status: "Complete", summary: "Matched training."}],
+    review_steps: [{title: "Check the scores", beads: "Model comparison (test.1)", action: "Inspect the scores.", why: "Small samples need care.", view: "compare", button: "Open metrics"},
+      {title: "Inspect a game", beads: "test.1", action: "Check its ending.", why: "Moves alone are not enough.", view: "games", button: "Open games"},
+      {title: "Choose the next step", beads: "test.1", action: "Record a choice.", why: "Work needs direction.", view: "decision", button: "Choose"}]
+  };
+  const guided = launch(guidedFixture);
+  assert.equal(guided.get("view-overview").getAttribute("aria-pressed"), "true");
+  assert.equal(guided.get("work-summary").children.length, 1);
+  assert.equal(guided.get("review-checklist").tagName, "ol");
+  assert.match(guided.text(), /No firm conclusion <script>literal<\/script>/);
+  assert.equal(guided.document.body.all(element => element.tagName === "script").length, 1);
+  assert.equal(guided.document.getElementById("decision-defer"), null);
+  guided.click("review-step-1");
+  guided.change("dimension-filter", "rank"); guided.change("group-filter", "10k");
+  guided.click("view-overview");
+  assert.match(guided.text(), /With rank input: 0%|With rank input0%/, "Summary must retain the overall score after a detail filter changes");
+  guided.click("review-step-2");
+  assert.match(guided.text("replay-status"), /Move 0 of 3/);
+  guided.click("view-overview"); guided.click("review-step-3");
+  assert.equal(guided.get("decision-defer").checked, false, "Navigation must not choose a decision");
+
   const app = launch(fixture);
   assert.equal(app.get("title").textContent, fixture.title);
   assert.equal(app.document.body.all(element => element.tagName === "script").length, 1);

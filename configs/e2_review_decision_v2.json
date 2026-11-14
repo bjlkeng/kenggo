@@ -1,0 +1,165 @@
+{
+  "summary": "E2 tests whether a Go model can learn human moves and use player rank to adjust its play. This small trial did not show a benefit from rank input.",
+  "prompt": "Choose the next step for E2 after inspecting the games. The model comparison is complete; data expansion and the readiness decision are still open.",
+  "options": [
+    {
+      "id": "cached_corpus",
+      "label": "Build a larger dataset from cached games (recommended)",
+      "detail": "Check the remaining 2,135 fixed candidates, replay accepted games to verify legality, remove duplicates, and prepare training and development examples. Keep existing player groups and exclusions; leave final test games untouched. Limit: 6 CPU-hours / 8 elapsed hours, no downloads or GPU work. Report actual coverage before proposing more model training."
+    },
+    {
+      "id": "broader_coverage",
+      "label": "Plan broader data collection first",
+      "detail": "Propose where to find more games for missing ranks and separate test players. Keep the reserved final tests untouched and set download and compute limits before collecting anything. This choice starts planning only."
+    },
+    {
+      "id": "defer",
+      "label": "Defer more data and training",
+      "detail": "Keep the models, comparison and game runner as completed research. Leave readiness open where requirements are unmet. Do not present the models as reliable ranked opponents."
+    }
+  ],
+  "coverage_audit": {
+    "status": "partial",
+    "summary": "The time limit stopped the check partway through the fixed list: 2,134 checked, 415 passed source checks, and 2,135 unattempted. The checked portion is not a random sample; it cannot tell us how many remaining games will pass.",
+    "gpu_seconds": 0,
+    "network_requests": 0,
+    "roles": [
+      {
+        "label": "Training",
+        "candidates": 3031,
+        "attempted": 1491,
+        "source_admitted": 295,
+        "distinct_handles": 187,
+        "passes": 376
+      },
+      {
+        "label": "Later games from the training player pool",
+        "candidates": 986,
+        "attempted": 583,
+        "source_admitted": 97,
+        "distinct_handles": 61,
+        "passes": 141
+      },
+      {
+        "label": "Games from separate players",
+        "candidates": 252,
+        "attempted": 60,
+        "source_admitted": 23,
+        "distinct_handles": 6,
+        "passes": 40
+      }
+    ],
+    "scope": "These games passed source checks only. They still need legal replay and duplicate checks before use. Account names are not verified people. Keep previous data-use records and add these candidates to them."
+  },
+  "proposed_cached_build": {
+    "status": "proposed_pending_owner_direction",
+    "cpu_seconds": 21600,
+    "wall_seconds": 28800,
+    "gpu_seconds": 0,
+    "new_network_requests": 0,
+    "frozen_candidate_ids_sha256": "d7ef1700e26310b5ce51be884156190eeac814ac45364a8de62f7ed476ded636",
+    "existing_exposure": "preserve_and_union",
+    "new_training": "separate_frozen_recipe_after_data_evidence"
+  },
+  "conditioning_evidence": {
+    "path": "runs/e2-postchecks-2026-11-14/conditioning/summary.json",
+    "sha256": "30a7558a5b596e518c5e658b6b86621ef4273677f1f3775dcd487f0d24a03bd9"
+  },
+  "arm_labels": {
+    "conditioned": "With rank input",
+    "unconditioned": "Without rank input",
+    "human-reference": "KataGo Human SL",
+    "conditioned_unknown_ranks": "With rank input hidden"
+  },
+  "role_labels": {
+    "population_development": "Later games from the training player pool",
+    "validation_development": "Games from separate players"
+  },
+  "readout": {
+    "context": "We trained two small Go models on the same 106 human games: one received player ranks and one did not. We compared both with KataGo Human SL, an existing model trained to predict human moves. Both test sets contain games excluded from training; one also uses a separate group of players.",
+    "results": [
+      "Rank input did not improve the main move-prediction score in either test set. KataGo Human SL predicted human moves much better. These small, single-run results do not establish playing strength or human rank.",
+      "All 12 generated games replayed legally, but five endings could not be scored within the set checking budget. The learned models also passed too early in some positions.",
+      "The cached-data check found 295 extra training candidates. They still need legal replay and duplicate checks. Coverage is uneven, so more data may help but is not a promised fix."
+    ],
+    "work_items": [
+      {
+        "id": "kenggo-ydo",
+        "name": "E2: build and compare human-move models",
+        "status": "Open",
+        "summary": "The pilot is complete. We need your review and a decision about the next scope."
+      },
+      {
+        "id": "kenggo-ydo.5",
+        "name": "Model comparison",
+        "status": "Complete",
+        "summary": "Trained the two models under matching conditions, compared them with KataGo, and checked full games. Investigated the poor rank result: the input works, but several ranks have little or no training data."
+      },
+      {
+        "id": "kenggo-ydo.8.1",
+        "name": "Cached-data check",
+        "status": "Complete within its time limit",
+        "summary": "Screened 2,134 of 4,269 fixed candidates without downloading more data. Of these, 415 passed source checks, including 295 training candidates. The other 2,135 remain unchecked."
+      },
+      {
+        "id": "kenggo-ydo.6",
+        "name": "Baseline readiness",
+        "status": "Open",
+        "summary": "The code and comparison work. We have not selected the model and scope to accept next. This task is separate from later checks for a reliable training opponent."
+      },
+      {
+        "id": "kenggo-ydo.8",
+        "name": "Expand the training data",
+        "status": "Open",
+        "summary": "A larger dataset has not been built. The next-step choices below explain the proposed work and limits."
+      },
+      {
+        "id": "kenggo-ydo.9",
+        "name": "Clearer project updates",
+        "status": "Updated for this review",
+        "summary": "Added your communication rules to AGENTS.md and rebuilt this page around context, results and the actions you need to take."
+      }
+    ],
+    "review_steps": [
+      {
+        "title": "Read the short results above",
+        "beads": "Model comparison (.5), cached-data check (.8.1)",
+        "action": "Check that the outcome and its limits are clear. Detailed scores are optional under Metrics; ask about anything unclear in your reply.",
+        "why": "This separates a working experiment from a model that is ready to use.",
+        "view": "compare",
+        "button": "Open detailed metrics"
+      },
+      {
+        "title": "Inspect one game from each model",
+        "beads": "Model comparison (.5), readiness (.6)",
+        "action": "In Games, select each of the three models, click End, then use Before and After beside a pass. Note any odd ending or pass; include the game ID and move number. A spot check is enough for this handoff.",
+        "why": "Move prediction alone does not show whether a model finishes games sensibly.",
+        "view": "games",
+        "button": "Open games"
+      },
+      {
+        "title": "Choose the next E2 step",
+        "beads": "Data expansion (.8), readiness (.6)",
+        "action": "In Next step, choose the cached-data build, broader data planning, or deferral. I recommend the cached-data build, capped at 6 CPU-hours and 8 elapsed hours, with no downloads or GPU work.",
+        "why": "It uses data already on disk to measure whether training coverage can improve before spending more on model training.",
+        "view": "decision",
+        "button": "Choose next step"
+      },
+      {
+        "title": "Send back your choice and any findings",
+        "beads": "E2 and the tasks above",
+        "action": "Reply here, or use Export review notes and attach the saved JSON file. Include game IDs and move numbers for any concerns. Choosing an option in the page alone does not send it.",
+        "why": "Your response records the decision and tells us what to address before continuing."
+      }
+    ]
+  },
+  "limitations": [
+    "Only one training run per model was compared. The two test sets contain 19 and 11 accounts, too few for a firm comparison at each rank.",
+    "Not every planned rank is represented. A rank supplied to the model is an input, not proof that it plays at that strength.",
+    "Only development data was evaluated. Data reserved for confirming results and for the final test stays untouched.",
+    "Each model played four games against simple opponents. This is too little evidence to approve a reliable training opponent or claim broad playing strength.",
+    "KataGo Human SL used its original move probabilities, fixed server-era/time settings, and full rules history. We do not know whether its training data overlaps these games.",
+    "Unknown results and missing judgments stay in the report. Extra moves used by the ending checker are not part of the model game or its training data.",
+    "GPU time includes loading, saving and idle time during each job. Some tracking-service CPU work is outside the measured boundary."
+  ]
+}

@@ -103,12 +103,25 @@ checkpoints, development comparison, raw games, failures and costs. The separate
 [cached-source audit](cached_coverage.md) is provisional data evidence; it does
 not replace the pilot's frozen inputs.
 
-The single-page review export uses saved results and replays original candidate
-moves. It needs no server or external assets. Open the generated HTML directly;
-use its Games section to inspect endings and pass flags, Compare for rank/phase/
-clock scores and value calibration, and Decision for the evidence limits and next
-scope choice. Notes stay in local browser storage when available. Export the
-notes JSON to communicate feedback; choosing an option does not apply approval.
+The latest [review export](../runs/e2-manual-review-2026-11-14/review-ready.html)
+opens locally without a server. Start here explains E2, the main results, and
+which tasks are complete or still open. Its numbered checklist asks you to:
+
+1. Read the results from the model comparison and cached-data check (`.5`, `.8.1`).
+2. Inspect an ending and pass flags for one game from each model (`.5`, `.6`).
+3. Choose whether to build from cached games, plan broader data collection, or
+   defer more work (`.8`, `.6`).
+4. Reply with your choice and findings, or export and share the notes file.
+
+This checks that the experiment is understandable, catches game behavior that
+move scores miss, and sets the next scope before more work starts. Metrics,
+Training and Evidence hold the detailed results. Notes stay in browser storage
+when available; selecting an option does not send feedback or start work.
+The [updated review manifest](../manifests/e2_review_readout_v2.json) records this
+presentation change. The original results and earlier exports are retained.
+The original template and browser-check script were copied unchanged from
+commit `7790da7` into `runs/e2-manual-review-2026-11-14/source-v1/`; their original
+hashes remain in the BASE manifest. The experiment itself was not rerun.
 
 The versioned tooling is `tools/build_e2_review.py` with
 `tools/e2_review/template.html`. Its CLI takes the completed pilot directory,

@@ -10,7 +10,13 @@ Read [plan/go_project_plan_v0.5.md](plan/go_project_plan_v0.5.md) and the releva
 - Preserve the plan's data splits, missing-data masks, full legality history, endgame contract, player/value perspectives, and termination versus truncation semantics.
 - Record experiment decisions, budgets, provenance, and acceptance evidence. A negative result or a decision to defer an extension can complete an experiment.
 
-Use plain language in replies, documentation, and commit messages. Make the smallest change that meets the bead's acceptance criteria.
+Make the smallest change that meets the bead's acceptance criteria.
+
+## Communication and review handoffs
+
+1. Always use plain, simple, concise language in replies and every artifact you create, including documentation and commit messages. Assume the owner has been away from the project for several days. Give enough context to explain what the work is for, what changed, and what matters now; explain necessary technical terms.
+2. Summarize the overall experimental results, when there are any. Put detailed results in the review artifact so the main readout stays short.
+3. After working on beads or epics, give a bullet list summarizing each one you worked on: its purpose, outcome or current status, and how you solved it when the work was nontrivial. Use plain names alongside task IDs. For each artifact the owner must review, give a numbered list of what they need to do, connect each action to the relevant beads or epics, and explain why it makes sense.
 
 ## Start a task
 
