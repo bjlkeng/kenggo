@@ -1,0 +1,69 @@
+{
+  "version": "human_model_acquisition_v1",
+  "budget": {
+    "requests": 8,
+    "response_bytes": 134217728,
+    "cpu_seconds": 30,
+    "wall_seconds": 180,
+    "gpu_seconds": 0
+  },
+  "requests": [
+    {
+      "url": "https://api.github.com/repos/lightvector/KataGo/releases/tags/v1.15.0",
+      "started_utc": "2026-11-14T03:09:00.903257+00:00",
+      "body_bytes": 43971,
+      "status": 200,
+      "content_length": null,
+      "etag": "W/\"b696fc5e827e7874e323ba13446dda75e8963782384737110223584099c9a1de\"",
+      "last_modified": "Tue, 06 Aug 2024 02:01:36 GMT",
+      "sha256": "cd22df61f02fa769f6b00d7b71f5974af12394e438cac3881c80f18f73ae5408"
+    },
+    {
+      "url": "https://github.com/lightvector/KataGo/releases/download/v1.15.0/b18c384nbt-humanv0.bin.gz",
+      "started_utc": "2026-11-14T03:09:01.188121+00:00",
+      "body_bytes": 0,
+      "status": 302,
+      "content_length": "0",
+      "etag": null,
+      "last_modified": null,
+      "redirect": "https://release-assets.githubusercontent.com/github-production-release-asset/172640711/a6267fad-6240-4ba4-bcc7-4daa59e7372b",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://release-assets.githubusercontent.com/github-production-release-asset/172640711/a6267fad-6240-4ba4-bcc7-4daa59e7372b",
+      "started_utc": "2026-11-14T03:09:01.356736+00:00",
+      "body_bytes": 99066230,
+      "status": 200,
+      "content_length": "99066230",
+      "etag": "\"0x8DCA78CA2E3BD45\"",
+      "last_modified": "Fri, 19 Jul 2024 00:49:24 GMT",
+      "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
+    }
+  ],
+  "response_bytes": 99110201,
+  "started_utc": "2026-11-14T03:09:00.903021+00:00",
+  "status": "completed",
+  "asset": {
+    "id": 180481329,
+    "name": "b18c384nbt-humanv0.bin.gz",
+    "size": 99066230,
+    "digest": null,
+    "created_at": "2024-07-19T00:49:22Z",
+    "updated_at": "2024-07-19T00:49:25Z",
+    "browser_download_url": "https://github.com/lightvector/KataGo/releases/download/v1.15.0/b18c384nbt-humanv0.bin.gz"
+  },
+  "artifact": {
+    "path": ".cache/katago-human/b18c384nbt-humanv0.bin.gz",
+    "bytes": 99066230,
+    "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
+  },
+  "release_metadata_sha256": "cd22df61f02fa769f6b00d7b71f5974af12394e438cac3881c80f18f73ae5408",
+  "cpu_seconds": 0.614629196,
+  "wall_seconds": 2.646177448999879,
+  "stopped_utc": "2026-11-14T03:09:03.549100+00:00",
+  "gpu_seconds": 0,
+  "raw_acquisition": {
+    "path": ".cache/katago-human/acquisition-2026-11-13.json",
+    "sha256": "5f41c453f70982b07b9fa1cd44835f25ec072976132784ac22e89655e76a6628"
+  }
+}

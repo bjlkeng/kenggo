@@ -1,0 +1,56 @@
+{
+  "schema": "katago_human_profile_v1",
+  "profile_id": "katago_human_raw_v1",
+  "engine_version": "1.18.1",
+  "engine_revision": "92ee95c0a4b25fec214da00951ab69e97e207729",
+  "main_model_name": "kata1-b10c128-s1141046784-d204142634",
+  "human_model_name": "b18c384nbt-humanv0",
+  "artifacts": {
+    "engine": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308",
+    "main_model": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4",
+    "human_model": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5",
+    "config": "458d11b4559397e29c2e91503bbfafdcb9f15fe79a8edb11a71ad6d07ce76ecb"
+  },
+  "runtime_files": {
+    "usr/lib/libbz2.so.1.0": "5e516f77fc36dd924fdf02c8489a217f55fa1548883d32c3a5e041fb25d47d6e",
+    "usr/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+    "usr/lib/libzip.so.4": "05746c16c79c34f3b408c5a6a5ddf9bd18e61c1cfd35f587e215ea37f23fe4ad"
+  },
+  "library_dirs": [
+    "usr/lib"
+  ],
+  "ranks": [
+    "15k",
+    "14k",
+    "13k",
+    "12k",
+    "11k",
+    "10k",
+    "9k",
+    "8k",
+    "7k",
+    "6k",
+    "5k",
+    "4k",
+    "3k",
+    "2k",
+    "1k",
+    "1d"
+  ],
+  "settings": {
+    "max_visits": 1,
+    "history": "full",
+    "report_view": "WHITE",
+    "temperature": 1,
+    "pass_correction": false,
+    "device": "cpu"
+  },
+  "engine_context": {
+    "source": "KGS",
+    "profile_date": "2020-03-01",
+    "main_time_seconds": 1200,
+    "byoyomi_periods": 5,
+    "byoyomi_period_seconds": 30,
+    "opponent_rank": "same_as_profile"
+  }
+}

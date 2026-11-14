@@ -1,0 +1,666 @@
+{
+  "schema": "e2_human_reference_evidence_v1",
+  "bead": "kenggo-ydo.4",
+  "review_base": "c14262e03d48385cc4aaeed484b8023e5d982ad3",
+  "scope": "Synthetic CPU adapter validation; no BASE, training, complete-game qualification or final evaluation",
+  "summary": {
+    "adapter_cost": {
+      "closed": true,
+      "cpu_seconds": 5.650401497000001,
+      "gpu_seconds": 0.0,
+      "limits": {
+        "cpu_seconds": 138.945777923,
+        "queries": 12,
+        "request_bytes": 1048576,
+        "response_bytes": 4194304,
+        "stderr_bytes": 1048576,
+        "trace_bytes": 8388608,
+        "wall_seconds": 213.39611564400002
+      },
+      "network_calls": null,
+      "queries": 12,
+      "request_bytes": 5627,
+      "requests": 13,
+      "response_bytes": 137081,
+      "stderr_bytes": 2230,
+      "trace_bytes": 181078,
+      "wall_seconds": 9.107541067000057
+    },
+    "all_sampled_actions_legal": true,
+    "config_sha256": "4194886877da7220eca46db17d02717dad0a66673382b7c6c913d32a27593f56",
+    "costs": {
+      "cpu_seconds": 7.8459505620000005,
+      "wall_seconds": 12.46796030799851
+    },
+    "costs_including_preflight": {
+      "cpu_seconds": 16.715284181999998,
+      "wall_seconds": 21.49824791699939
+    },
+    "cpu_scope": "Calling process and reaped children; tracking service CPU is not fully measured",
+    "engine_version": {
+      "action": "query_version",
+      "git_hash": "92ee95c0a4b25fec214da00951ab69e97e207729",
+      "id": "version:1",
+      "version": "1.18.1"
+    },
+    "gpu_seconds": 0,
+    "ledger_sha256": "62d677dd66f433a96d78bcfdc0df807fe783f1028274851c54fe753e38ccc919",
+    "network_calls": null,
+    "network_calls_note": "Native cache hides actual neural forward counts",
+    "pass_mass_preserved": true,
+    "prior_analysis_queries": 0,
+    "prior_metadata_requests": 2,
+    "provenance_sha256": "491841cd39978db2528d948ba6ca70bc63660ab18c36c896c1dfb48598905e3c",
+    "queries_completed": 12,
+    "repeat_pairs_exact": 5,
+    "results": [
+      {
+        "legal_count": 362,
+        "pass_probability": 1.91109166e-06,
+        "query": {
+          "case": "opening_black",
+          "rank": "5k",
+          "repeat": 0
+        },
+        "snapshot": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5",
+        "value_mover": 0.001246391999999985
+      },
+      {
+        "legal_count": 361,
+        "pass_probability": 5.25024177e-07,
+        "query": {
+          "case": "opening_white",
+          "rank": "5k",
+          "repeat": 0
+        },
+        "snapshot": "8942f5899a994ed33ae57d856575dcc95ae53e3dfaf5e359b1e8db25dd2d96af",
+        "value_mover": 0.0001935660000000894
+      },
+      {
+        "legal_count": 360,
+        "pass_probability": 3.68408706e-07,
+        "query": {
+          "case": "single_pass",
+          "rank": "5k",
+          "repeat": 0
+        },
+        "snapshot": "0fc5f65a159925cf4ef759d5bac018143e6afdb0d4078a440ee69f7f82ce1dcb",
+        "value_mover": 0.12286916399999992
+      },
+      {
+        "legal_count": 354,
+        "pass_probability": 3.17397712e-06,
+        "query": {
+          "case": "simple_ko",
+          "rank": "5k",
+          "repeat": 0
+        },
+        "snapshot": "0389322391774728227e648de586fc9129c1ffea45b8af93f27048666ff232bf",
+        "value_mover": 0.007465599999999961
+      },
+      {
+        "legal_count": 354,
+        "pass_probability": 2.04432308e-06,
+        "query": {
+          "case": "ko_after_pass",
+          "rank": "5k",
+          "repeat": 0
+        },
+        "snapshot": "0ee1c680cab459531049db95067b67050793c3ef4b04e28e814dfe6280a42263",
+        "value_mover": -0.17723235400000004
+      },
+      {
+        "legal_count": 362,
+        "pass_probability": 1.91109166e-06,
+        "query": {
+          "case": "opening_black",
+          "rank": "5k",
+          "repeat": 1
+        },
+        "snapshot": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5",
+        "value_mover": 0.001246391999999985
+      },
+      {
+        "legal_count": 361,
+        "pass_probability": 5.25024177e-07,
+        "query": {
+          "case": "opening_white",
+          "rank": "5k",
+          "repeat": 1
+        },
+        "snapshot": "8942f5899a994ed33ae57d856575dcc95ae53e3dfaf5e359b1e8db25dd2d96af",
+        "value_mover": 0.0001935660000000894
+      },
+      {
+        "legal_count": 360,
+        "pass_probability": 3.68408706e-07,
+        "query": {
+          "case": "single_pass",
+          "rank": "5k",
+          "repeat": 1
+        },
+        "snapshot": "0fc5f65a159925cf4ef759d5bac018143e6afdb0d4078a440ee69f7f82ce1dcb",
+        "value_mover": 0.12286916399999992
+      },
+      {
+        "legal_count": 354,
+        "pass_probability": 3.17397712e-06,
+        "query": {
+          "case": "simple_ko",
+          "rank": "5k",
+          "repeat": 1
+        },
+        "snapshot": "0389322391774728227e648de586fc9129c1ffea45b8af93f27048666ff232bf",
+        "value_mover": 0.007465599999999961
+      },
+      {
+        "legal_count": 354,
+        "pass_probability": 2.04432308e-06,
+        "query": {
+          "case": "ko_after_pass",
+          "rank": "5k",
+          "repeat": 1
+        },
+        "snapshot": "0ee1c680cab459531049db95067b67050793c3ef4b04e28e814dfe6280a42263",
+        "value_mover": -0.17723235400000004
+      },
+      {
+        "legal_count": 362,
+        "pass_probability": 3.61460843e-06,
+        "query": {
+          "case": "opening_black",
+          "rank": "15k",
+          "repeat": 0
+        },
+        "snapshot": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5",
+        "value_mover": 0.03505939199999997
+      },
+      {
+        "legal_count": 362,
+        "pass_probability": 2.36648862e-06,
+        "query": {
+          "case": "opening_black",
+          "rank": "1d",
+          "repeat": 0
+        },
+        "snapshot": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5",
+        "value_mover": 0.032174378000000003
+      }
+    ],
+    "run_manifest_sha256": "5ad0d4de906b622265874b0daae40dd5eef4f3348c8959063d2cfa36f26ac6aa",
+    "scope": "Twelve fixed synthetic queries; no source game labels, strength or BASE result",
+    "status": "completed",
+    "version": "human_reference_smoke_v1",
+    "wandb_url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/b41712010ab248caa2f12698690ddc37"
+  },
+  "validation": {
+    "cpu_tests": 315,
+    "cuda_environment_tests": 315,
+    "skipped": 0,
+    "native_reference_enabled": true,
+    "adapter_tests": 30,
+    "cpu_smoke": "pass",
+    "build": "pass",
+    "lock_and_sync_check": "pass"
+  },
+  "artifacts": [
+    {
+      "path": "src/kenggo/katago_human.py",
+      "sha256": "3e6931977ee3016570084cb14551167b7e5fb99b0af1336ca5cded8a92b8fed4",
+      "bytes": 28607
+    },
+    {
+      "path": "src/kenggo/human_reference_smoke.py",
+      "sha256": "eb49c0c79b6d3705dcb99f9f23b428b630025029bc9c052df3f52011a031bf9b",
+      "bytes": 10557
+    },
+    {
+      "path": "tests/test_katago_human.py",
+      "sha256": "a5a121d49fdf46ed29004d6ebcf1ea690b17879351557a8186f2882c697cdf41",
+      "bytes": 33687
+    },
+    {
+      "path": "configs/katago_human_v1.cfg",
+      "sha256": "458d11b4559397e29c2e91503bbfafdcb9f15fe79a8edb11a71ad6d07ce76ecb",
+      "bytes": 713
+    },
+    {
+      "path": "configs/e2_human_queries_v1.json",
+      "sha256": "3c4641b35097f46a13766abba5562b4cc0dc9e9a3b8a4d65c188dac7ae2fa194",
+      "bytes": 7970
+    },
+    {
+      "path": "configs/e2_human_smoke_v1.json",
+      "sha256": "4194886877da7220eca46db17d02717dad0a66673382b7c6c913d32a27593f56",
+      "bytes": 1952
+    },
+    {
+      "path": "manifests/katago_human_profile_v1.json",
+      "sha256": "f78423b5ba58485a7ffeee38bb7b39fcb7c797083f69c1389112ed1e04863d5b",
+      "bytes": 1548
+    },
+    {
+      "path": "manifests/e2_human_acquisition_v1.json",
+      "sha256": "df07855f18cc139e6a49bf00b9e9231e4fc18f4b916aef7938a3f418bcb47c0a",
+      "bytes": 2697
+    },
+    {
+      "path": "manifests/e2_human_preflight_v1.json",
+      "sha256": "5f320013659a5e3a051625eb7166211a158861e3258466679b0a81466c0f6d23",
+      "bytes": 2323
+    },
+    {
+      "path": "docs/human_reference.md",
+      "sha256": "e93b53b7fbcf9ac2477c24672ec6161227c687d36b5dc8668fb554518461d7a0",
+      "bytes": 8663
+    },
+    {
+      "path": "reports/e2_human_reference_2026-11-13.md",
+      "sha256": "e97304ac1440590bfaab68d98c6771b7169d2dd44b6b79db9b3bdb19d3429e33",
+      "bytes": 6331
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/adapter-cost.json",
+      "sha256": "96968d9cb75b09d87002bc8458860a6f8efc7ed0bc919d39c3e459c702918ae9",
+      "bytes": 413
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/engine-version.json",
+      "sha256": "bdffe2f37b1b1f14d96abb82afbe912d46d51b18f20fe5a6382f888c5bdb50a0",
+      "bytes": 117
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-001.json",
+      "sha256": "35e12dd38312e2c307310ef69dd289d16a81fec670c8ce21feac45ca118a4c42",
+      "bytes": 11509
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-002.json",
+      "sha256": "e4613745cde28e5a2c9c20a466d38d7ce7c8df9565e4fbfb313b43d07fbab7df",
+      "bytes": 11451
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-003.json",
+      "sha256": "53c49aaff0653cf70ed6424a8c03cead1057311d80f60109c95e15137672116a",
+      "bytes": 11476
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-004.json",
+      "sha256": "f17d0dceec3589bdb4575fa71d0ea72c9f27c9162cb4a4b7502744bb04bbe0ac",
+      "bytes": 11263
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-005.json",
+      "sha256": "96729536e16e64aa9f94228855d57436e0b16f22fc11efae602eb14ff00f2bd8",
+      "bytes": 11278
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-006.json",
+      "sha256": "70d0cd68abdc02ccf0c3e7ccdc1da3a22b14b412df5d1bf37e3937b2e4c11ffd",
+      "bytes": 11508
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-007.json",
+      "sha256": "8de2a229f2179f6b84b1567d28043d444391ae2494da42175603e62bfa7c7110",
+      "bytes": 11450
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-008.json",
+      "sha256": "2294ca78f61396de24495783b2868e8688a17c8c4a96abd5621cfe5b54f14cb5",
+      "bytes": 11475
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-009.json",
+      "sha256": "56310ab7b8ba3df31bbad07ba6250630791690c5b79d8c3fbb9d0162fa633514",
+      "bytes": 11262
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-010.json",
+      "sha256": "3ab3ef458380a011d51adf0e151b4ed5553dd306a510817979de09fd8cb5ed4e",
+      "bytes": 11277
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-011.json",
+      "sha256": "8362ef459aac9feec12c297ce2f4abd2a3abd7e44c4a2b973b3452f9a4bc9809",
+      "bytes": 11470
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/prediction-012.json",
+      "sha256": "6db286e13a9ed199a6a59c6e4e99b23f6af45d194a85a037fef5c7da00e4ce4f",
+      "bytes": 11483
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/resources.json",
+      "sha256": "62d677dd66f433a96d78bcfdc0df807fe783f1028274851c54fe753e38ccc919",
+      "bytes": 770
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/summary.json",
+      "sha256": "3197df671e0bfcba57073e4172a88c65a01ea1e888a2ea52a830f8dccf6e9ae4",
+      "bytes": 4365
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-001.json",
+      "sha256": "450c163f8516cc3a82f41934aab1452a88d23b1e632ce9a37162d7e44dc8c3b3",
+      "bytes": 3102
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-002.json",
+      "sha256": "3d8de48b27bc37255d6182dbe0787b4f651311cfbdaa9a409f038c740e173325",
+      "bytes": 14844
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-003.json",
+      "sha256": "73b1c30d2f62f0cda7901b2f63fc7edca5325a776c7ee822843bf33b77fe9623",
+      "bytes": 14876
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-004.json",
+      "sha256": "8ee1af8e0865e5f0912dcff7a7efdfea7a617a7d906307639892016ef26d0623",
+      "bytes": 14864
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-005.json",
+      "sha256": "e5d8e12738d3d552332f9b0b2c4e9badb38526c5817659fafeb7f729f02ccbcd",
+      "bytes": 14749
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-006.json",
+      "sha256": "6f6eed08bf3d77ed2dfd5f214c4c600a4db926645610c1e9379ceb289333c23e",
+      "bytes": 14814
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-007.json",
+      "sha256": "6cfdc59d5ea31d8f0bd48bc395be9657b02a76aaf012dfba2c4e64f502b2bb4f",
+      "bytes": 14845
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-008.json",
+      "sha256": "a9d3bf6e4be7106bd3fd697120908c850522300d6b35c7dc9739d72c0d65ab8e",
+      "bytes": 14870
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-009.json",
+      "sha256": "c4836bd97c3f622bdd6b207c7aedc6ce382e9a3f5b4f584dbabb2d99f9aa3ab5",
+      "bytes": 14864
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-010.json",
+      "sha256": "200f04f7d97e37f56f83c934e2d4250c94601f4a0808f84489fe253378322125",
+      "bytes": 14760
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-011.json",
+      "sha256": "a4312b551a4bf7185c9472ebd633735b5c756f095c54494db063eca2ac84116e",
+      "bytes": 14820
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-012.json",
+      "sha256": "6f7c6c613c6bce544c6d580792679028d2eaaff965e47b889b964abb2968b7b6",
+      "bytes": 14843
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/trace-013.json",
+      "sha256": "7af97a29e21acf0ad865e5859efcd84276904d1747e0bf2b1224d45f7a97cf5c",
+      "bytes": 14840
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/run/run.json",
+      "sha256": "5ad0d4de906b622265874b0daae40dd5eef4f3348c8959063d2cfa36f26ac6aa",
+      "bytes": 1318
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/run/config.json",
+      "sha256": "8963b029192e7c091975ae1470253c7d17a4048c3846fc5d8f574fcc4ceda4c0",
+      "bytes": 1622
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/run/provenance.json",
+      "sha256": "491841cd39978db2528d948ba6ca70bc63660ab18c36c896c1dfb48598905e3c",
+      "bytes": 2598
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/run/source.patch",
+      "sha256": "d8297cc87728c5998388030bc7e65a3e0d22207f0e8c811ce396f2ce466a8221",
+      "bytes": 96748
+    },
+    {
+      "path": "runs/e2-human-reference-fixed-2026-11-13/run/metrics.jsonl",
+      "sha256": "233893a1a5edf9d24e21aa26091573cb238ddab23ffffa1481bec1043db3e5ee",
+      "bytes": 2225
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/adapter-after-startup-fix.log",
+      "sha256": "eec8ef8cbead33393414d15f494df8f0cd5654c6108af01bc2e96f040c727cbf",
+      "bytes": 3599
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/build.log",
+      "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+      "bytes": 211
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cpu-tests.log",
+      "sha256": "22ca459364a1d4d572e394e863c92801194444666365b4da9ab8e0ef5fa18561",
+      "bytes": 48045
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cuda-tests.log",
+      "sha256": "50ac798e5a19b1d7e01eb8a29422f17a29a374f288302fea4d693c3afb3f156c",
+      "bytes": 48045
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/probe-fixed.log",
+      "sha256": "69ff47776cbc398ce246e165086ccd6ce5df3eaacb81866702e3a55eda78a024",
+      "bytes": 7888
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/probe.log",
+      "sha256": "aae7db00eed648d4376e350da896291daf905337c75df7abfc15fce264ba65f6",
+      "bytes": 3134
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/smoke.log",
+      "sha256": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde",
+      "bytes": 236
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/startup-after.log",
+      "sha256": "ffd6be933cbe36989641a5673f5c7770923cb2c080dfeabf597d435639a7701c",
+      "bytes": 261
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/startup-before.log",
+      "sha256": "12944f09aee42b721aff7f2f0d26ba2de713465e4c780f3e596dd399870607cf",
+      "bytes": 863
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/stderr-after.log",
+      "sha256": "0bfae881d3f0b157417aaeb442081a0f7995b59f137e68decd51605e86c30020",
+      "bytes": 279
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/stderr-before.log",
+      "sha256": "ef73e4a43487a60c4583e694f8d8d28e7c93b7a9e7439930618c1c0f94f08d5b",
+      "bytes": 1224
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/failure.json",
+      "sha256": "2b9bd0608bc850dc0b21bd259f3a7293a4779e22365c2623e8f7c3743a561c58",
+      "bytes": 595
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/trace-001.json",
+      "sha256": "96ac5a283868847d37fd05f6bfc2805d8e1b36f3c023b61dc8ec0a50d898d831",
+      "bytes": 705
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/resources.json",
+      "sha256": "f7e7ad33a42d2600707aba31ab29ed18590eba6b3598db022567960d2ea28307",
+      "bytes": 772
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/run/run.json",
+      "sha256": "efdeeb86237ccb3e163742f245df2a293ebbc4cec3eb80e7b5921e383c9acf4e",
+      "bytes": 1131
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/run/config.json",
+      "sha256": "0b9c7dfbab9eaead2aa61433c9bd20098d86bc39cebddac09aeba6259717e546",
+      "bytes": 1486
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/run/provenance.json",
+      "sha256": "8a3416346dcbe233dcccfd7103f7078de9a3f224b52644e9ac65fd9456ea1afd",
+      "bytes": 2462
+    },
+    {
+      "path": "runs/e2-human-reference-2026-11-13/run/source.patch",
+      "sha256": "0149401dccdba0b41204ee9ea5cf13f361320276793001374798dd874c53a34b",
+      "bytes": 91643
+    },
+    {
+      "path": "runs/e2-human-startup-diagnostic-2026-11-13/summary.json",
+      "sha256": "05b11b150f1df958e1a374afa89562ad5e8a630088754077c9d9faa964fa3717",
+      "bytes": 850
+    },
+    {
+      "path": "runs/e2-human-startup-diagnostic-2026-11-13/trace.json",
+      "sha256": "147aa1a17370f36b64234c5e020a6d417a1d5983f0d47a04bfb9fce2fc74f2e3",
+      "bytes": 2987
+    },
+    {
+      "path": "runs/e2-human-startup-diagnostic-2026-11-13/adapter.py",
+      "sha256": "3a9bbfca8c6a9ac2a369cd08c92a90835555780193857742326b552c97cadb51",
+      "bytes": 28601
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/diagnose_startup.py",
+      "sha256": "55baa4dfb881738b3add96896ad35832bb0b24ff0aa48c0c4f6b1f4aa7e34d1b",
+      "bytes": 1718
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/setup-classification-before.log",
+      "sha256": "562522a6179cfa13397fb7565cb5cb1a67afc6551e4bba5ceef2b54d3ec90853",
+      "bytes": 2019
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/setup-classification-test-draft.log",
+      "sha256": "af0f83c520a0f80639fa654ff5d2447d21bf9b912b89aa98007d7ac4e131a23a",
+      "bytes": 2597
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/setup-classification-after.log",
+      "sha256": "80a112992a8fd4e7e1fb521399c5d494591660c45030ea2afcdd10f30b6f4b5c",
+      "bytes": 416
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cpu-tests-review1.log",
+      "sha256": "7746a553588812f0f9edd39ea6c44ffee45b03ad0a689c56b7044dc0d7f5cda5",
+      "bytes": 48363
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cuda-tests-review1.log",
+      "sha256": "d04ebbcf4b91c4c9361ffa1da667e7c5c3586a9ef71f07dfe1fd2ef0673998c6",
+      "bytes": 48363
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/launch-classification-before.log",
+      "sha256": "a998deb637c21888f8d86bfc47963e06c3f360681330e4e30d648d28bfcd6dfd",
+      "bytes": 985
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cuda-tests-review2.log",
+      "sha256": "35f4f269939f7ff210c77d266956dcd313baf894202a377b18892115337dbca6",
+      "bytes": 48525
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/launch-classification-after.log",
+      "sha256": "47aeb254f142ad2e76a54c231b3e1042d2d44e9c65176eba10b69086a6dcda35",
+      "bytes": 404
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/build-review2.log",
+      "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+      "bytes": 211
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cpu-tests-review2.log",
+      "sha256": "0db64cb86a0f20f383822d83174120d9720c1835a92fe1e2ded36b8136bad5fb",
+      "bytes": 48525
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/path-preparation-after.log",
+      "sha256": "d738a5663e49d1ec0851199984baab181c504d9024dc5f1600f1433215daeebb",
+      "bytes": 550
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/build-review3.log",
+      "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+      "bytes": 211
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cpu-tests-review3.log",
+      "sha256": "092fc4adab83f7c40bbf9064b998aea85e0b2a9fdb099c6d4bd5bb7712540b0c",
+      "bytes": 48833
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/path-preparation-before.log",
+      "sha256": "0ffd7851bdbfb731c5bc7bf5ea9610c91ed6e1129e3a3414a622f90d68f32584",
+      "bytes": 4011
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cuda-tests-review3.log",
+      "sha256": "f99563d9f10e2ccbe2a185365f9c5a8a145e618e24bb3013e83df449cd75a6a3",
+      "bytes": 48833
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/build-review4.log",
+      "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1",
+      "bytes": 211
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/overflow-test-draft-after.log",
+      "sha256": "65538315426d459f755a3de14324205205269f30af6869c01480b2876da221ab",
+      "bytes": 1568
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/overflow-after.log",
+      "sha256": "093b26bbc05bdc816eca25f10bb100025ce706e477844ea950b164e6ed94aceb",
+      "bytes": 392
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cuda-tests-review4.log",
+      "sha256": "08993a2db4eac925e1027ddf86de40d0ca128a65cf5bd3e1722bfa6121dc720e",
+      "bytes": 49127
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/overflow-before.log",
+      "sha256": "9fbd5d33f19ecd182ca3adfd93870812c299e4290b7eb474c4111724e3121767",
+      "bytes": 8870
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/overflow-test-draft-before.log",
+      "sha256": "65538315426d459f755a3de14324205205269f30af6869c01480b2876da221ab",
+      "bytes": 1568
+    },
+    {
+      "path": "runs/e2-human-validation-2026-11-13/cpu-tests-review4.log",
+      "sha256": "ec4bd3625f6b49eeba9b25212f01195a3037f2565dc5a911b8d95920972b577b",
+      "bytes": 49127
+    }
+  ],
+  "post_run_repairs": {
+    "reason": "Independent reviews1-4: complete setup/preparation failures now retain costs and remain infrastructure U, with native version readiness before play. Protocol validation catches all ordinary exceptions including numeric overflow, retaining replies/costs and closing the process without retry. Invalid running-agent replies remain attributable.",
+    "actual_inference_repeated": false,
+    "prediction_path_changed": false,
+    "successful_inference_path_changed": false,
+    "full_tests_after_repair": 315,
+    "regressions": [
+      "setup-classification-before.log / setup-classification-after.log",
+      "launch-classification-before.log / launch-classification-after.log",
+      "path-preparation-before.log / path-preparation-after.log",
+      "overflow-before.log / overflow-after.log"
+    ]
+  }
+}

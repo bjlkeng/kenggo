@@ -1,0 +1,321 @@
+{
+  "schema": "human_reference_queries_v1",
+  "scope": "Synthetic adapter check; no source games or held-out targets",
+  "cases": [
+    {
+      "id": "opening_black",
+      "game": {
+        "candidate_color": null,
+        "ending": {
+          "outcome": null,
+          "pending_cap": null,
+          "status": "playing"
+        },
+        "initial": {
+          "board": [
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "..................."
+          ],
+          "captured_black": 0,
+          "captured_white": 0,
+          "to_play": "B"
+        },
+        "moves": [],
+        "origin": "empty",
+        "rules": "kgs_japanese_certified_v1"
+      },
+      "snapshot": "44eea4bf72c9797415716a867864000c08853d1dc9a16ca0650dc9b0aa369fe5",
+      "legal_count": 362,
+      "ko": null
+    },
+    {
+      "id": "opening_white",
+      "game": {
+        "candidate_color": null,
+        "ending": {
+          "outcome": null,
+          "pending_cap": null,
+          "status": "playing"
+        },
+        "initial": {
+          "board": [
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "..................."
+          ],
+          "captured_black": 0,
+          "captured_white": 0,
+          "to_play": "B"
+        },
+        "moves": [
+          [
+            "B",
+            288
+          ]
+        ],
+        "origin": "empty",
+        "rules": "kgs_japanese_certified_v1"
+      },
+      "snapshot": "8942f5899a994ed33ae57d856575dcc95ae53e3dfaf5e359b1e8db25dd2d96af",
+      "legal_count": 361,
+      "ko": null
+    },
+    {
+      "id": "single_pass",
+      "game": {
+        "candidate_color": null,
+        "ending": {
+          "outcome": null,
+          "pending_cap": null,
+          "status": "playing"
+        },
+        "initial": {
+          "board": [
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "..................."
+          ],
+          "captured_black": 0,
+          "captured_white": 0,
+          "to_play": "B"
+        },
+        "moves": [
+          [
+            "B",
+            288
+          ],
+          [
+            "W",
+            72
+          ],
+          [
+            "B",
+            361
+          ]
+        ],
+        "origin": "empty",
+        "rules": "kgs_japanese_certified_v1"
+      },
+      "snapshot": "0fc5f65a159925cf4ef759d5bac018143e6afdb0d4078a440ee69f7f82ce1dcb",
+      "legal_count": 360,
+      "ko": null
+    },
+    {
+      "id": "simple_ko",
+      "game": {
+        "candidate_color": null,
+        "ending": {
+          "outcome": null,
+          "pending_cap": null,
+          "status": "playing"
+        },
+        "initial": {
+          "board": [
+            "...................",
+            "...................",
+            "...BW..............",
+            "..BW.W.............",
+            "...BW..............",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "..................."
+          ],
+          "captured_black": 0,
+          "captured_white": 0,
+          "to_play": "B"
+        },
+        "moves": [
+          [
+            "B",
+            61
+          ]
+        ],
+        "origin": "fixture",
+        "rules": "kgs_japanese_certified_v1"
+      },
+      "snapshot": "0389322391774728227e648de586fc9129c1ffea45b8af93f27048666ff232bf",
+      "legal_count": 354,
+      "ko": 60
+    },
+    {
+      "id": "ko_after_pass",
+      "game": {
+        "candidate_color": null,
+        "ending": {
+          "outcome": null,
+          "pending_cap": null,
+          "status": "playing"
+        },
+        "initial": {
+          "board": [
+            "...................",
+            "...................",
+            "...BW..............",
+            "..BW.W.............",
+            "...BW..............",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "...................",
+            "..................."
+          ],
+          "captured_black": 0,
+          "captured_white": 0,
+          "to_play": "B"
+        },
+        "moves": [
+          [
+            "B",
+            61
+          ],
+          [
+            "W",
+            361
+          ],
+          [
+            "B",
+            319
+          ]
+        ],
+        "origin": "fixture",
+        "rules": "kgs_japanese_certified_v1"
+      },
+      "snapshot": "0ee1c680cab459531049db95067b67050793c3ef4b04e28e814dfe6280a42263",
+      "legal_count": 354,
+      "ko": null
+    }
+  ],
+  "queries": [
+    {
+      "case": "opening_black",
+      "rank": "5k",
+      "repeat": 0
+    },
+    {
+      "case": "opening_white",
+      "rank": "5k",
+      "repeat": 0
+    },
+    {
+      "case": "single_pass",
+      "rank": "5k",
+      "repeat": 0
+    },
+    {
+      "case": "simple_ko",
+      "rank": "5k",
+      "repeat": 0
+    },
+    {
+      "case": "ko_after_pass",
+      "rank": "5k",
+      "repeat": 0
+    },
+    {
+      "case": "opening_black",
+      "rank": "5k",
+      "repeat": 1
+    },
+    {
+      "case": "opening_white",
+      "rank": "5k",
+      "repeat": 1
+    },
+    {
+      "case": "single_pass",
+      "rank": "5k",
+      "repeat": 1
+    },
+    {
+      "case": "simple_ko",
+      "rank": "5k",
+      "repeat": 1
+    },
+    {
+      "case": "ko_after_pass",
+      "rank": "5k",
+      "repeat": 1
+    },
+    {
+      "case": "opening_black",
+      "rank": "15k",
+      "repeat": 0
+    },
+    {
+      "case": "opening_black",
+      "rank": "1d",
+      "repeat": 0
+    }
+  ],
+  "sampling_draws_per_query": 128,
+  "repeat_tolerance": 0.0
+}

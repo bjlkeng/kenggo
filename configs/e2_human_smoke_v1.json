@@ -1,0 +1,57 @@
+{
+  "version": "experiment_config_v1",
+  "entity": "bjlkeng",
+  "project": "kenggo",
+  "base_url": "https://api.wandb.ai",
+  "comparison": "e2-human-reference-implementation",
+  "arm": "raw-human-cpu",
+  "purpose": "human-reference-smoke",
+  "seed": 20261113,
+  "budget_id": "e2-human-reference-implementation",
+  "parameters": {
+    "queries": 12,
+    "cpu_seconds": 180,
+    "wall_seconds": 300,
+    "output_bytes": 16777216,
+    "device": "cpu",
+    "max_artifact_bytes": 1048576
+  },
+  "inputs": {
+    "data": {
+      "path": "manifests/e1_population_v3.json",
+      "sha256": "bca2a7ae24e94e2b107ed7f3a893e7a841c5d13711ee410f505a7c14c71d1f9d"
+    },
+    "split": {
+      "path": "runs/e1-manual-filter-2026-11-13/splits/manifest.json",
+      "sha256": "858bf34e2767d724853286a136f2c3a0f14af0d3f5a881c83a7894192465a6f4"
+    },
+    "rules": {
+      "path": "plan/e1_empirical_endgame_contract_v2.md",
+      "sha256": "9b973fbcdc60ccca39464e75259b4f259b319ad0ac37226371f0e672ad33c1ae"
+    },
+    "cpu_environment": {
+      "path": "uv.lock",
+      "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    },
+    "human_profile": {
+      "path": "manifests/katago_human_profile_v1.json",
+      "sha256": "f78423b5ba58485a7ffeee38bb7b39fcb7c797083f69c1389112ed1e04863d5b"
+    },
+    "human_config": {
+      "path": "configs/katago_human_v1.cfg",
+      "sha256": "458d11b4559397e29c2e91503bbfafdcb9f15fe79a8edb11a71ad6d07ce76ecb"
+    },
+    "queries": {
+      "path": "configs/e2_human_queries_v1.json",
+      "sha256": "3c4641b35097f46a13766abba5562b4cc0dc9e9a3b8a4d65c188dac7ae2fa194"
+    },
+    "acquisition": {
+      "path": "manifests/e2_human_acquisition_v1.json",
+      "sha256": "df07855f18cc139e6a49bf00b9e9231e4fc18f4b916aef7938a3f418bcb47c0a"
+    },
+    "preflight": {
+      "path": "manifests/e2_human_preflight_v1.json",
+      "sha256": "5f320013659a5e3a051625eb7166211a158861e3258466679b0a81466c0f6d23"
+    }
+  }
+}

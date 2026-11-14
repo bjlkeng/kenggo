@@ -1,0 +1,62 @@
+{
+  "schema": "human_reference_preflight_v1",
+  "budget_id": "e2-human-reference-implementation",
+  "budget": {
+    "cpu_seconds": 180,
+    "wall_seconds": 300,
+    "analysis_queries": 12,
+    "output_bytes": 16777216,
+    "gpu_seconds": 0
+  },
+  "attempts": [
+    {
+      "directory": "runs/e2-human-reference-2026-11-13",
+      "summary": {
+        "path": "runs/e2-human-reference-2026-11-13/failure.json",
+        "sha256": "2b9bd0608bc850dc0b21bd259f3a7293a4779e22365c2623e8f7c3743a561c58"
+      },
+      "status": "failed",
+      "reason": "process_warning",
+      "costs": {
+        "cpu_seconds": 4.744346723,
+        "wall_seconds": 5.726440680000451
+      },
+      "analysis_queries": 0,
+      "metadata_requests": 1,
+      "output_bytes": 134170,
+      "wandb_url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/46e2f6e763004af68569b3fd48587688"
+    },
+    {
+      "directory": "runs/e2-human-startup-diagnostic-2026-11-13",
+      "summary": {
+        "path": "runs/e2-human-startup-diagnostic-2026-11-13/summary.json",
+        "sha256": "05b11b150f1df958e1a374afa89562ad5e8a630088754077c9d9faa964fa3717"
+      },
+      "status": "failed",
+      "reason": "process_warning",
+      "costs": {
+        "cpu_seconds": 4.124986896999999,
+        "wall_seconds": 3.3038469290004286
+      },
+      "analysis_queries": 0,
+      "metadata_requests": 1,
+      "output_bytes": 32438
+    }
+  ],
+  "prior_costs": {
+    "cpu_seconds": 8.869333619999999,
+    "wall_seconds": 9.03028760900088
+  },
+  "analysis_queries": 0,
+  "metadata_requests": 2,
+  "output_bytes": 169742,
+  "finding": "The native engine warns when an auxiliary human model has no startup profile, although per-query rank overrides are supplied. Set an explicit startup profile and still require an explicit overriding rank on every analysis query. Preserve all other warning rejection. Missing stderr in failed traces was fixed first; both failed metadata attempts remain charged.",
+  "diagnostic_script": {
+    "path": "runs/e2-human-validation-2026-11-13/diagnose_startup.py",
+    "sha256": "55baa4dfb881738b3add96896ad35832bb0b24ff0aa48c0c4f6b1f4aa7e34d1b"
+  },
+  "diagnostic_adapter": {
+    "path": "runs/e2-human-startup-diagnostic-2026-11-13/adapter.py",
+    "sha256": "3a9bbfca8c6a9ac2a369cd08c92a90835555780193857742326b552c97cadb51"
+  }
+}
