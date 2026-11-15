@@ -1,0 +1,856 @@
+{
+  "allowance": {
+    "build_limits": {
+      "canonical_file_bytes": 67108864,
+      "cpu_seconds": 68000,
+      "expanded_zip_bytes": 4294967296,
+      "max_development_examples": 250000,
+      "max_records": 50000,
+      "max_train_examples": 1000000,
+      "member_bytes": 1048576,
+      "output_bytes": 17179869184,
+      "selected_sgf_bytes": 268435456
+    },
+    "gpu_seconds": 0,
+    "overall_deadline_utc": "2026-11-16T00:05:23+00:00",
+    "preparation_cutoff_utc": "2026-11-15T23:05:23+00:00",
+    "source_limits": {
+      "bundle_bytes": 8388608,
+      "cpu_seconds": 780,
+      "expanded_zip_bytes": 4294967296,
+      "html_bytes": 2097152,
+      "max_population_development_candidates": 5000,
+      "max_train_candidates": 25000,
+      "max_validation_development_candidates": 5000,
+      "min_interval_seconds": 5,
+      "requests": 2396,
+      "response_bytes": 1073731673,
+      "retries": 2,
+      "wall_seconds": 21600
+    },
+    "started_utc": "2026-11-15T00:05:23+00:00",
+    "training_performed": false,
+    "verification_finished_utc": "2026-11-15T22:05:23.278031+00:00"
+  },
+  "analysis": {
+    "archive_filter_counts": {
+      "path": "runs/e2-rank-inputs-2026-11-15/weak-rank-metadata.json",
+      "sha256": "999cb267c0b2983ae60ef155cb507945a2514ac66df1e957108ebb761ec30f88"
+    },
+    "canonical_size_preflight": {
+      "path": "runs/e2-rank-inputs-2026-11-15/canonical-size-check.json",
+      "sha256": "fb6d38244563c5d55edb61edfb2e25825e29cc50749eaccd74a71c6ccfef2632"
+    },
+    "network_accounting": {
+      "path": "runs/e2-rank-inputs-2026-11-15/collection-verification.json",
+      "sha256": "993639339edff0c1228e0fa329cc743ee305616a7ebd82120efff98164ce660c"
+    },
+    "preserved_base": {
+      "path": "runs/e2-rank-inputs-2026-11-15/base-verification.json",
+      "sha256": "290a6a2848f376a5ae566d3f36cb27f98a725f93d7e907989edf15e9c47c9eb1"
+    },
+    "root_metadata": {
+      "path": "runs/e2-rank-inputs-2026-11-15/sgf-scope-audit.json",
+      "sha256": "126de24cbd290a81b1b39040d047d595200998c3d93de21e12c624a74e990844"
+    },
+    "root_metadata_reproducer": {
+      "path": "runs/e2-rank-inputs-2026-11-15/sgf-scope-audit.py",
+      "sha256": "60dfc085ded2e210b589b4a428c4b611e46441f1d079e10e228dc555b8f479db"
+    }
+  },
+  "artifacts": {
+    "base_index": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/base_index.json",
+      "sha256": "a525ab05efdc486170cc53339085e70e057ceb4215ada71944091d79f66b34d8"
+    },
+    "canonical": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/canonical.parquet",
+      "sha256": "7e3bc947053bde06f67c8e7706f043a405160b1be1a634f1d174833694a1ea27"
+    },
+    "coverage": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/support.json",
+      "sha256": "2bac31fbc7285be6047ba8c9c52b3586b20e8683e2302f1b69a4350ca04a4cc1"
+    },
+    "diagnostics": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/diagnostics.json",
+      "sha256": "84a9db646d01ffe39aa15a5f49d36d8c1b2bcc81377b090e00438cc19aea0315"
+    },
+    "examples_manifest": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/examples/manifest.json",
+      "sha256": "791187f75dbf26d1d4459db18c1a1d26d860a6ed669594fb2bb4e7fcd7eb9b21"
+    },
+    "exposure": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/exposure.json",
+      "sha256": "76d3a4f462ee1d4eea0f4cfe4f92f1bdcabd4bc3c9c67ae72b92464787ad1687"
+    },
+    "groups": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/groups.json",
+      "sha256": "3eebc135d4f99a8b67cc55002148f27eacac7fd887de8d3e18ce765bab16a4b2"
+    },
+    "normalizer": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/normalizer.json",
+      "sha256": "f65746f94831e9684af467380c73aaf681bb5983551d6c4ca3800c78c0605e6e"
+    },
+    "profile": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/profile.json",
+      "sha256": "51b7e9d038e0c3b87147cb8294bb2e8aa7d7f5a5a9c4e79f94065ebda501cee7"
+    },
+    "split_manifest": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/splits/manifest.json",
+      "sha256": "e6c699255242c3c59bb3cc224ac07085ccb747dbc61e80211b35193c7446cef0"
+    }
+  },
+  "bead": "kenggo-ydo.10",
+  "build_status": "budget_stopped",
+  "checks": {
+    "complete_games": true,
+    "final_and_confirmation_targets_decoded": false,
+    "legal_policy_labels": true,
+    "normalizer_reproduced": true,
+    "train_development_rows_checked": 1499980,
+    "unchanged_old_files": 2800,
+    "unchanged_old_memberships": 2083,
+    "value_masks_and_perspective": true
+  },
+  "costs": {
+    "browser_outer": {
+      "cpu_seconds": 2.21,
+      "exit_code": 0,
+      "system_seconds": 0.51,
+      "user_seconds": 1.7,
+      "wall_seconds": 5.18
+    },
+    "build_internal": {
+      "cpu_seconds": 57089.675574813,
+      "gpu_seconds": 0,
+      "http_requests": 0,
+      "scope": "Build entry through input validation, preparation, verification, artifact hashing and final progress write; excludes final summary formatting/write.",
+      "wall_seconds": 64249.140469,
+      "workers": 1
+    },
+    "build_outer": {
+      "cpu_seconds": 57089.899999999994,
+      "exit_code": 0,
+      "system_seconds": 72.77,
+      "user_seconds": 57017.13,
+      "wall_seconds": 64249.0
+    },
+    "canonical_size_preflight": {
+      "cpu_seconds": 2.684522233,
+      "wall_seconds": 2.6843228509969776
+    },
+    "export_internal": {
+      "cpu_seconds": 41.509047002,
+      "gpu_seconds": 0,
+      "network_requests": 0,
+      "wall_seconds": 40.835450435988605
+    },
+    "export_outer": {
+      "cpu_seconds": 41.67,
+      "exit_code": 0,
+      "system_seconds": 1.32,
+      "user_seconds": 40.35,
+      "wall_seconds": 41.12
+    },
+    "root_metadata_audit": {
+      "archive_file_bytes_read": 273319682,
+      "byte_accounting": "Logical bytes returned by file reads; archive bytes include verification and ZIP reads. Selected member bytes are decompressed bytes and are reported separately.",
+      "cpu_seconds": 10.811153517,
+      "input_file_bytes_read": 461394767,
+      "root_prefix_bytes_parsed": 7421097,
+      "selected_member_bytes_read": 152345127,
+      "wall_seconds": 10.890184745992883,
+      "workers": 1
+    },
+    "scope": "Production collection/build and local evidence checks are recorded separately. Development tests and independent code review are excluded from production costs."
+  },
+  "counts": {
+    "combined": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 249987,
+        "games": 1117,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1574,
+        "value_valid": 237239
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 1000000,
+        "games": 4561,
+        "hidden_mover_rank": 100473,
+        "hidden_opponent_rank": 200267,
+        "passes": 6251,
+        "value_valid": 947128
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 249993,
+        "games": 1138,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1452,
+        "value_valid": 238932
+      }
+    },
+    "new": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 205783,
+        "games": 911,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1291,
+        "value_valid": 195578
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 832149,
+        "games": 3804,
+        "hidden_mover_rank": 83592,
+        "hidden_opponent_rank": 166472,
+        "passes": 5280,
+        "value_valid": 788623
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 238193,
+        "games": 1088,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1373,
+        "value_valid": 228257
+      }
+    },
+    "old": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 44204,
+        "games": 206,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 283,
+        "value_valid": 41661
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 167851,
+        "games": 757,
+        "hidden_mover_rank": 16881,
+        "hidden_opponent_rank": 33795,
+        "passes": 971,
+        "value_valid": 158505
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 11800,
+        "games": 50,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 79,
+        "value_valid": 10675
+      }
+    }
+  },
+  "coverage_target": {
+    "definition": "A game counts once at a rank if a player at that rank made a recorded move. Different-rank games count for both ranks.",
+    "distinct_training_games_per_rank": 200,
+    "ranks_below_target": [
+      "15k",
+      "14k",
+      "13k",
+      "11k"
+    ],
+    "ranks_met": 12,
+    "ranks_total": 16
+  },
+  "data_status": "prepared_and_verified_at_fixed_move_limits",
+  "inputs": {
+    "access_probe": {
+      "path": "runs/e2-rank-inputs-2026-11-15/access-probe.json",
+      "sha256": "10a20ffec63eb69d099c01f900bb56f0950ad9bab4e48e1a9285b10e88b74d54"
+    },
+    "base_index": {
+      "path": "runs/e2-rank-inputs-2026-11-15/base-index.json",
+      "sha256": "25b6f66970e6b9f39389baceac0145e05116ee1b50e95473a6f7dfe2a4d14221"
+    },
+    "baseline_rank_counts": {
+      "path": "runs/e2-rank-inputs-2026-11-15/baseline-rank-counts.json",
+      "sha256": "8ee706ae3052f797e9ce0070f2d32be0b34b98213f8e463c65bd7ddbecfd198a"
+    },
+    "build_request": {
+      "path": "configs/e2_rank_build_v2.json",
+      "sha256": "763840e5c1fda5e27cb80d497608b68fed495dc3850a84bbfd02693aaa085836"
+    },
+    "combined_candidates": {
+      "path": "runs/e2-rank-continuation-2026-11-15/frozen_candidates.json",
+      "sha256": "3f80d8dbb5f8e427c3f670cc2eba57066aefe460b7b6c7f784b27fd4f5c0e67f"
+    },
+    "combined_costs": {
+      "path": "runs/e2-rank-continuation-2026-11-15/costs.json",
+      "sha256": "0bf3fefbdd5ad94da5d0ea6cc7598d897b0cb2527f141a5fe5f3ba75fd428a8a"
+    },
+    "combined_discovery": {
+      "path": "runs/e2-rank-continuation-2026-11-15/discovery.json",
+      "sha256": "3925385815e50829921c44433635f4fc7e933667014c50c726af006ef95acca0"
+    },
+    "combined_requests": {
+      "path": "runs/e2-rank-continuation-2026-11-15/requests.jsonl",
+      "sha256": "d61f3c1f5b1839b57f84e2bf004cbffce9038240ba35df7660ba5389befe29e0"
+    },
+    "combined_sources": {
+      "path": "runs/e2-rank-continuation-2026-11-15/sources.json",
+      "sha256": "0fe528cd35e00a402aa1a8617243ea58df618bcd7a3c3e9a9b8cd763ac54c8bc"
+    },
+    "continuation_execution_marker": {
+      "path": "runs/e2-rank-inputs-2026-11-15/continuation-queries-v1.json.execution.json",
+      "sha256": "6844307fda27d3df0cb5d63feb0ea9194306138c68ffff9598c719988382ea9c"
+    },
+    "continuation_queries": {
+      "path": "runs/e2-rank-inputs-2026-11-15/continuation-queries-v1.json",
+      "sha256": "abaf50d58806193c804b12240b6dc17aed82b39bcd5b7115fb38a8816d647ad9"
+    },
+    "continuation_request": {
+      "path": "configs/e2_rank_continuation_v1.json",
+      "sha256": "aae1b6b3a44f00a651972c4ab33f4bec7bcff25437472c6f2d814217b3f2236b"
+    },
+    "first_candidates": {
+      "path": "runs/e2-rank-collection-2026-11-15/frozen_candidates.json",
+      "sha256": "68547931122d13b9f5f56443e22aca6a0a077d766ae60e5678b9961fcdf93f07"
+    },
+    "first_costs": {
+      "path": "runs/e2-rank-collection-2026-11-15/costs.json",
+      "sha256": "b1c21c36259d58aaf676f7d3631c16345d3baf821bd5bacb75e1bbb49f8020a8"
+    },
+    "first_discovery": {
+      "path": "runs/e2-rank-collection-2026-11-15/discovery.json",
+      "sha256": "be3a01ca533a78f580173686247d088332d6b19c14944a73c49285adf2ce9485"
+    },
+    "first_execution_marker": {
+      "path": "runs/e2-rank-inputs-2026-11-15/queries-v2.json.execution.json",
+      "sha256": "b0838bb84c370d055d816731bcf8b59e8f069d1cd9be263c15cd78c1fd4a0a6f"
+    },
+    "first_queries": {
+      "path": "runs/e2-rank-inputs-2026-11-15/queries-v2.json",
+      "sha256": "3e318d28da77a1b80f79d11347847ba104c5e5da2b08bbbd9258eab065c9cc54"
+    },
+    "first_request": {
+      "path": "configs/e2_rank_collection_v1.json",
+      "sha256": "02e05734143c50a2c195203caae77ed02259072d3109d0ab9ec5019f0dfb0ae5"
+    },
+    "first_requests": {
+      "path": "runs/e2-rank-collection-2026-11-15/requests.jsonl",
+      "sha256": "e5504a35264dc3aeae08040b11a087b27437409b92945e6dc1ef6286bea6d8bb"
+    },
+    "first_sources": {
+      "path": "runs/e2-rank-collection-2026-11-15/sources.json",
+      "sha256": "e10abfb87dba8f6c90a85565600d80d671f7cbc7fd82a880e51a011093e24352"
+    },
+    "previous_summary": {
+      "path": "runs/e2-data-expansion-2026-11-14/summary.json",
+      "sha256": "f09665ba5e834e0ae563e807bcdf612ec9aabee329d4c0ded8bce5cbee0f8fb2"
+    }
+  },
+  "limitations": [
+    "No model was trained on these new data.",
+    "The account survey is a selected sample; it does not represent every KGS player.",
+    "Accounts passed bot screening; human control was not independently verified.",
+    "Data support does not establish playing strength or a calibrated human rank.",
+    "Move durations, dynamic clocks and personalization inputs remain masked.",
+    "One monthly ZIP left 1360 selected development records unavailable.",
+    "Four training ranks remain below the 200-game target.",
+    "No new model result or human-rank qualification follows from data growth.",
+    "The proposed 0.5-komi group remains excluded from this dataset."
+  ],
+  "open_decisions": {
+    "kenggo-kv3.1": "Compare 0, 8, 32 and 64 previous individual moves, including passes.",
+    "kenggo-ydo.11": "Choose whether to study Japanese 0.5-komi games with current clocks and quality checks. Candidate counts are not usable yield; no scope or extra budget has been approved.",
+    "kenggo-ydo.6": "A new fixed model comparison and complete-game checks remain required."
+  },
+  "plan": {
+    "path": "plan/e2_rank_collection_v1.md",
+    "sha256": "6ec87a32dcee89ab5e5003eba0e338e898ffc5799efb29f63893cfbc2b5ce5a6"
+  },
+  "preparation": {
+    "new_deduplicated_games": 8899,
+    "new_encoded_games": 5803,
+    "new_replay_validated": 8949,
+    "new_source_admitted": 8949,
+    "new_split_exclusions": {
+      "ambiguous_duplicate_component": 49,
+      "duplicate_copy": 39,
+      "duplicate_of_frozen_corpus": 19,
+      "duplicate_of_rejected_source": 28,
+      "expansion_example_row_limit": 3096
+    },
+    "output_bytes": 1043486424,
+    "source_attempted": 33817,
+    "source_candidates": 33817,
+    "source_completed": 33817,
+    "source_exclusion_reasons": {
+      "metadata:archive_sgf_result_mismatch": 206,
+      "metadata:missing_moves_or_turn_order": 466,
+      "metadata:played_variation_unverified": 1773,
+      "metadata:rules_or_komi_out_of_scope": 20386,
+      "metadata:time_control_unknown_or_out_of_scope": 9620
+    },
+    "source_exclusions": {
+      "source_policy": 24868
+    },
+    "source_unattempted": 0
+  },
+  "readout": {
+    "artifacts": {
+      "browser-checks.json": {
+        "bytes": 753,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/browser-checks.json",
+        "sha256": "f6ee2b984fa89e15fc6463a7be96b09b1e24e1bc5b37e8086455814613fa18ed"
+      },
+      "export.json": {
+        "bytes": 900,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/export.json",
+        "sha256": "49857bf0f6d264079d0af6c842afd62cd955ea9377fa0b99a27c1269874dc0e9"
+      },
+      "readout.json": {
+        "bytes": 653347,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/readout.json",
+        "sha256": "51bb19784c58566a08952b387c19d1e998f074b7400b19f5574c329aa63fecf4"
+      },
+      "review-1000.png": {
+        "bytes": 1040416,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/review-1000.png",
+        "sha256": "af22877b46bf0cd998f2dde9583d439ee4700295c893b9f6088654e40f1c8dbf"
+      },
+      "review-390.png": {
+        "bytes": 931722,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/review-390.png",
+        "sha256": "b01a8bb56b9d1c878b2f322201c464aeee898ecfdd53d48820e8d1043b0bdfcd"
+      },
+      "review.html": {
+        "bytes": 684970,
+        "path": "runs/e2-rank-expansion-review-2026-11-15/review.html",
+        "sha256": "47b773c63536606982b96a56632b1d48ff512c729a2a090ccc467722e5e0821c"
+      }
+    },
+    "browser_checker": {
+      "path": "runs/e2-rank-inputs-2026-11-15/check-review.cjs",
+      "sha256": "674e89e036aa177eab66f12589eec483086d0e4466e2e1b837002ac947c1d08a"
+    },
+    "browser_result": {
+      "results": [
+        {
+          "coverage_controls": true,
+          "masked": 0,
+          "masked_display_with_browser_only_fixture": true,
+          "no_horizontal_overflow": true,
+          "no_network_requests": true,
+          "no_script_errors": true,
+          "notes_saved_and_downloaded": true,
+          "passes": 8,
+          "positions": 20,
+          "sample_games": 4,
+          "width": 1000
+        },
+        {
+          "coverage_controls": true,
+          "masked": 0,
+          "masked_display_with_browser_only_fixture": true,
+          "no_horizontal_overflow": true,
+          "no_network_requests": true,
+          "no_script_errors": true,
+          "notes_saved_and_downloaded": true,
+          "passes": 8,
+          "positions": 20,
+          "sample_games": 4,
+          "width": 390
+        }
+      ],
+      "status": "passed"
+    },
+    "exporter": {
+      "path": "tools/review_data_expansion.py",
+      "sha256": "10e9ea8ab5567019de8f153339a771c00d710d09c271b1a2e9c9fe5738b865fa"
+    },
+    "template": {
+      "path": "tools/data_expansion_review.html",
+      "sha256": "d6c0757c023a43d6cddaa485a5f54465c956105e01cf55dc4349a2115dd8d3fb"
+    }
+  },
+  "report": {
+    "path": "reports/e2_rank_collection_2026-11-15.md",
+    "sha256": "314dc4ab4310d4e6bd8d59fca39b1c7412908dc9f5f9067ae5e0421a9fc2e1ab"
+  },
+  "run_logs": {
+    "build-launch.json": {
+      "path": "runs/e2-rank-inputs-2026-11-15/build-launch.json",
+      "sha256": "ba590ca85a95407cafbabe568ef8ff9bb3f8c34fd32f4da0c0274db7e8a68481"
+    },
+    "build-stderr.log": {
+      "path": "runs/e2-rank-inputs-2026-11-15/build-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-stdout.log": {
+      "path": "runs/e2-rank-inputs-2026-11-15/build-stdout.log",
+      "sha256": "2443aa99216819f141f64f488b83331bcadc2cc990db8e816d840ed8606cda18"
+    },
+    "build-time.txt": {
+      "path": "runs/e2-rank-inputs-2026-11-15/build-time.txt",
+      "sha256": "4c94e45fedea861c17e70d9f7024d8a0483a367bc6dd8725f55a85619a682dbc"
+    },
+    "continuation-launch.json": {
+      "path": "runs/e2-rank-inputs-2026-11-15/continuation-launch.json",
+      "sha256": "1bef95ab912deec6800190861f91aca17ed9fc584a8b53b24d21e909f1905a98"
+    },
+    "continuation-time.txt": {
+      "path": "runs/e2-rank-inputs-2026-11-15/continuation-time.txt",
+      "sha256": "56e5f1560899af3b237819ec509da76164d7e823f1ed1be3e15c9410fc7bc159"
+    },
+    "source-time.txt": {
+      "path": "runs/e2-rank-inputs-2026-11-15/source-time.txt",
+      "sha256": "f86dc6276ccf145aa3d972c6284f88b38dd10e846cd4636ba6446c621fa34863"
+    }
+  },
+  "runtime_source": {
+    "code_sha256": {
+      "src/kenggo/adjudication.py": "175c2bdc3b3ac3f570cf056b7bb10eeea87d2e1d9d8ca8996be62f14ba256992",
+      "src/kenggo/cached_coverage_audit.py": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+      "src/kenggo/canonical_data.py": "4584f0620b120430e8898d473bb4ccb95da25ef6ca5d5b2da67b19ae24bcf666",
+      "src/kenggo/data_expansion.py": "c91ce2fa7300b4acea7c3b2de973746bdb3cfff369cc80aae35e7ef5958d9ac7",
+      "src/kenggo/data_splits.py": "cacd8e08e23959067798346b4a0f66a9a7f557cbe837ac402f840bf9285f9cdf",
+      "src/kenggo/e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+      "src/kenggo/encoding.py": "c1dca882ca959874d44a7cedadcb42d7e4e355d5005e2b87a8fe08633b51097a",
+      "src/kenggo/examples.py": "0dc26e1e284f5ef48865504669c2a2ed0b2780136e13673930b4ac6b35123da3",
+      "src/kenggo/examples_audit.py": "dc981c2accd46b9d80cec489a830518dc85366f757d4e6baccc51c37f253a665",
+      "src/kenggo/expansion_source.py": "ea8c74a37239131f0244a44779bd1975052c7e20ab78aee6dcfb93c1d3e0f6aa",
+      "src/kenggo/go.py": "36026290afb03626616522c4ec20d1208a473d8824cb438adda2ec3034dab752",
+      "src/kenggo/kgs_admission.py": "8439a5f87cc603691306b862985735f6b39bbbdb21b71695e662803ce18cc9e9",
+      "src/kenggo/kgs_eligibility.py": "beae05f73846882f37dc30050aef799d4895e278f1e25fe60d90e2b018c6fd1b",
+      "src/kenggo/kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+      "src/kenggo/population_audit.py": "3c6861f528a19614a919575a5e22a97996994d9b46c778b088f2b64b8d25ec12",
+      "src/kenggo/rank_continuation.py": "07c4a0c44d5640dafe957b19f6331345255331571a0ae19b7d3cb931fb8f97ef",
+      "src/kenggo/rank_discovery.py": "c733b8ba2ed5e5040fe7ea6436e0f0b793dbbe3366b32d55ba840c4bd2a1eda1",
+      "src/kenggo/rules_replay.py": "d5b096698d26a7f8054c2f002569a8fa0db32462de5424d0ac44be7c61ac84fe",
+      "src/kenggo/sgf_audit.py": "f88142f50a4e0102d3f3064b79761cfc45db8405b653fdc54608a064e507177d",
+      "uv.lock": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+    },
+    "patch": {
+      "path": "runs/e2-rank-inputs-2026-11-15/production-runtime.patch",
+      "sha256": "29397788811efbfc75868e33371eb536a488445d62f0d58b2192aaf56106137d"
+    },
+    "starting_commit": "1229a483e157b13ccfa8facce572dc6ed53bc610"
+  },
+  "schema": "e2_rank_collection_evidence_v1",
+  "sealed_final": {
+    "examples": 15223,
+    "games": 70
+  },
+  "source_collection": {
+    "costs": {
+      "access_probe_requests": 4,
+      "collection_requests": 2090,
+      "collection_response_bytes": 269925331,
+      "cpu_charged_seconds": 194.89557816800001,
+      "cpu_seconds": 74.895578168,
+      "gpu_seconds": 0,
+      "requests": 2094,
+      "response_bytes": 269935482,
+      "wall_seconds": 13310.732583,
+      "workers": 1
+    },
+    "counts": {
+      "accessible_candidates": 33817,
+      "additional_accessible_candidates": 177,
+      "additional_frozen_candidates": 177,
+      "candidate_roles": {
+        "population_development": 5000,
+        "train": 25177,
+        "validation_development": 5000
+      },
+      "expanded_zip_bytes": 459949545,
+      "frozen_candidates": 35177,
+      "previous_unavailable_candidates": 1360,
+      "query_statuses": {
+        "retrieved": 200
+      }
+    },
+    "failed_candidates_replaced": false,
+    "failure_counts": {
+      "failed_bundle": 1,
+      "unavailable_candidate": 1360
+    },
+    "metadata_pages_retrieved": 1200,
+    "round_costs": {
+      "cpu_seconds": 26.53748268,
+      "gpu_seconds": 0,
+      "requests": 269,
+      "response_bytes": 13926839,
+      "wall_seconds": 1408.8100412679923,
+      "workers": 1
+    },
+    "unavailable_records_by_role": {
+      "population_development": 1351,
+      "train": 0,
+      "validation_development": 9
+    }
+  },
+  "source_status": "partial",
+  "stop_reason": "example_row_limit",
+  "summary": {
+    "path": "runs/e2-rank-expansion-2026-11-15/summary.json",
+    "sha256": "f3209a278e9ab3ff7074913ca7f4e30377f60148f8b3ebd56c54fd5e53f2b136"
+  },
+  "support": {
+    "population_development": {
+      "endings": {
+        "forfeit": 49,
+        "incomplete_or_unknown": 2,
+        "resignation": 557,
+        "scored": 485,
+        "timeout": 24,
+        "two_explicit_pass_endings": 584
+      },
+      "game_sides": 2234,
+      "mover_accounts": 644,
+      "supported_cells": 19,
+      "total_cells": 96
+    },
+    "train": {
+      "endings": {
+        "forfeit": 121,
+        "incomplete_or_unknown": 37,
+        "resignation": 2264,
+        "scored": 2005,
+        "timeout": 134,
+        "two_explicit_pass_endings": 2262
+      },
+      "game_sides": 9118,
+      "mover_accounts": 1805,
+      "supported_cells": 79,
+      "total_cells": 96
+    },
+    "validation_development": {
+      "endings": {
+        "forfeit": 42,
+        "incomplete_or_unknown": 8,
+        "resignation": 581,
+        "scored": 482,
+        "timeout": 25,
+        "two_explicit_pass_endings": 574
+      },
+      "game_sides": 2275,
+      "mover_accounts": 644,
+      "supported_cells": 21,
+      "total_cells": 96
+    }
+  },
+  "training_rank_coverage": {
+    "10k": {
+      "accounts": 111,
+      "game_sides": 468,
+      "games": 245,
+      "moves": 53938,
+      "passes": 420
+    },
+    "11k": {
+      "accounts": 91,
+      "game_sides": 332,
+      "games": 182,
+      "moves": 35398,
+      "passes": 279
+    },
+    "12k": {
+      "accounts": 88,
+      "game_sides": 673,
+      "games": 350,
+      "moves": 73679,
+      "passes": 532
+    },
+    "13k": {
+      "accounts": 51,
+      "game_sides": 146,
+      "games": 90,
+      "moves": 15628,
+      "passes": 119
+    },
+    "14k": {
+      "accounts": 30,
+      "game_sides": 63,
+      "games": 41,
+      "moves": 6965,
+      "passes": 40
+    },
+    "15k": {
+      "accounts": 38,
+      "game_sides": 121,
+      "games": 66,
+      "moves": 12677,
+      "passes": 100
+    },
+    "1d": {
+      "accounts": 179,
+      "game_sides": 1028,
+      "games": 515,
+      "moves": 102750,
+      "passes": 320
+    },
+    "1k": {
+      "accounts": 211,
+      "game_sides": 811,
+      "games": 407,
+      "moves": 86525,
+      "passes": 377
+    },
+    "2k": {
+      "accounts": 187,
+      "game_sides": 615,
+      "games": 309,
+      "moves": 65065,
+      "passes": 271
+    },
+    "3k": {
+      "accounts": 163,
+      "game_sides": 577,
+      "games": 290,
+      "moves": 60672,
+      "passes": 267
+    },
+    "4k": {
+      "accounts": 146,
+      "game_sides": 758,
+      "games": 384,
+      "moves": 87502,
+      "passes": 555
+    },
+    "5k": {
+      "accounts": 242,
+      "game_sides": 857,
+      "games": 441,
+      "moves": 99366,
+      "passes": 760
+    },
+    "6k": {
+      "accounts": 225,
+      "game_sides": 815,
+      "games": 431,
+      "moves": 88234,
+      "passes": 617
+    },
+    "7k": {
+      "accounts": 182,
+      "game_sides": 670,
+      "games": 352,
+      "moves": 75862,
+      "passes": 542
+    },
+    "8k": {
+      "accounts": 146,
+      "game_sides": 543,
+      "games": 292,
+      "moves": 62885,
+      "passes": 496
+    },
+    "9k": {
+      "accounts": 121,
+      "game_sides": 641,
+      "games": 349,
+      "moves": 72854,
+      "passes": 556
+    }
+  },
+  "unused_prelaunch_build_request": {
+    "executed": false,
+    "reason": "Preserved first-round request; the combined source was prepared with build v2.",
+    "reference": {
+      "path": "configs/e2_rank_build_v1.json",
+      "sha256": "abceaf897e3d84f4942ccceb036cacefe4f21319690789b5eb4ea83ac7c354c0"
+    }
+  },
+  "verification": {
+    "affected_tests_after_scope_readout": {
+      "log": {
+        "path": "runs/e2-rank-inputs-2026-11-15/tests-readout-scope.log",
+        "sha256": "a74f230024fc4e2a81ad48108de145ca8a99c4a4b8404c53a648126f23c52dbc"
+      },
+      "result": "passed",
+      "tests": 4,
+      "wall_seconds": 4.112
+    },
+    "canonical_matches_preflight": true,
+    "completion_review_record": "Beads kenggo-ydo.10; a fresh independent GPT-6-Astra/max review is required before closure and delivery.",
+    "evidence": {
+      "path": "runs/e2-rank-inputs-2026-11-15/verification-final.json",
+      "sha256": "2e7681d8408372dba31bcfb00f4f63649e6d81db98b51609565f6bbec39c7ebd"
+    },
+    "failed_checks": [],
+    "last_full_suite": {
+      "log": {
+        "path": "runs/e2-rank-inputs-2026-11-15/tests-final-code.log",
+        "sha256": "6ebea4c65e76bf30296e435437d47d0f24f30aa12cb7f5940d62fa9082802c43"
+      },
+      "native_reference_enabled": true,
+      "skips": 0,
+      "tests": 503,
+      "wall_seconds": 310.63
+    },
+    "logs": {
+      "background-verifier-initial-pins.json": {
+        "bytes": 5823,
+        "path": "runs/e2-rank-inputs-2026-11-15/background-verifier-initial-pins.json",
+        "sha256": "76524e816656adadd70465f06127c5a0d30868d20c996a78f9acfdc63314fb7f"
+      },
+      "background-verifier-monitor.jsonl": {
+        "bytes": 297165,
+        "path": "runs/e2-rank-inputs-2026-11-15/background-verifier-monitor.jsonl",
+        "sha256": "e5e7c723cade9d19c54171957bcbf2d032d5a281328ebd070f3431b196006e7b"
+      },
+      "verification-browser-stderr.log": {
+        "bytes": 0,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-browser-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "verification-browser-time.txt": {
+        "bytes": 949,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-browser-time.txt",
+        "sha256": "173c5732ec880a2375e4297796706ad4e23ba49baa0d81a3c298695d4db94d39"
+      },
+      "verification-export-launch.json": {
+        "bytes": 1211,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-export-launch.json",
+        "sha256": "faba09b590827bbee7054100eb76782d2fcabb5d8eb7b800cbcee3829379d8c0"
+      },
+      "verification-export-result.json": {
+        "bytes": 75,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-export-result.json",
+        "sha256": "c21b898c6246e0a15caea5a712f1988280593a78607fc5075e28bccdf1b1b3ac"
+      },
+      "verification-export-stderr.log": {
+        "bytes": 0,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-export-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "verification-export-stdout.log": {
+        "bytes": 1032,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-export-stdout.log",
+        "sha256": "54d9ddc5563825158b337ae36ff9145121ab1b0fed8acb876f37fbaac57688aa"
+      },
+      "verification-export-time.txt": {
+        "bytes": 1415,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-export-time.txt",
+        "sha256": "0afb59c0eb52054410183436a3f655143039641446ebaabe9fe32fc84f33a701"
+      },
+      "verification-pre-export.json": {
+        "bytes": 9442,
+        "path": "runs/e2-rank-inputs-2026-11-15/verification-pre-export.json",
+        "sha256": "8b2457d8fd35381a867bf0e1e3387a582ac802fff518d0d87fd0467febe3f8cd"
+      }
+    },
+    "other_passed_checks": [
+      "uv lock --check",
+      "uv sync --locked --check",
+      "uv run --locked python -m kenggo.smoke",
+      "uv build --no-sources",
+      "git diff --check"
+    ]
+  }
+}

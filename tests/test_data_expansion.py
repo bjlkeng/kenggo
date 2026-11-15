@@ -15,7 +15,8 @@ import pyarrow.parquet as pq
 
 from kenggo.canonical_data import digest, encoded
 from kenggo.data_expansion import (ALLOWED, CEILINGS, CODE_PATHS, REQUEST_VERSION, BudgetStop,
-                                  base_fingerprints, build, file_hash, reference)
+                                  base_endings, base_fingerprints, build, file_hash,
+                                  prepare_base_index, reference)
 from kenggo.data_splits import ROLES, read_membership
 from kenggo.examples import build_examples, load_corpus, load_dataset_profile, read_shards
 from kenggo.kgs_admission import DECISION_PATH, DECISION_SHA256
@@ -89,6 +90,175 @@ def run(root, request_ref, sources_ref):
 
 
 class DataExpansionTests(unittest.TestCase):
+    def test_bootstrap_index_keeps_allowed_endings_and_rejects_missing_evidence(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            request, req, sources, _ = fixture(root)
+            bundle = Path(sources["candidates"][0]["source"]["archive_path"])
+            with zipfile.ZipFile(bundle) as archive:
+                payloads = {name: archive.read(name) for name in archive.namelist()}
+            with zipfile.ZipFile(bundle, "w") as archive:
+                for name, data in payloads.items():
+                    archive.writestr(name, data.replace(b"TM[1200]", b"TM[30]") if "newtrain" in name else data)
+            for item in sources["candidates"]:
+                item["source"]["archive_sha256"] = file_hash(bundle)
+            summary = run(root, req, write_json(root / "sources.json", sources))
+            _, parts = read_membership(Path(summary["artifacts"]["split_manifest"]["path"]).parent,
+                                      summary["artifacts"]["split_manifest"]["sha256"])
+            rows = [row for part in parts.values() for row in part]
+            loads = json.loads
+
+            def no_canonical_targets(value, *args, **kwargs):
+                if isinstance(value, str) and value.startswith('{"actions":'):
+                    raise AssertionError("A canonical target was decoded")
+                return loads(value, *args, **kwargs)
+
+            with mock.patch("kenggo.data_expansion.json.loads", side_effect=no_canonical_targets):
+                pinned = prepare_base_index(reference(root / "out/summary.json"), req, root / "index.json")
+                base_request = {**request, "refs": {**request["refs"], **summary["artifacts"], "base_index": pinned}}
+                endings = base_endings(base_request, rows)
+            self.assertEqual(set(endings), {row["source_url"] for row in rows if row["role"] in ALLOWED})
+            self.assertEqual(endings[sources["candidates"][2]["source"]["source_url"]]["result_kind"], "timeout")
+            index = loads((root / "index.json").read_text())
+            self.assertEqual(len(index["rejected"]), 1)
+            self.assertEqual(len(index["records"]), len(rows))
+            for case in ("missing_membership", "wrong_fingerprint", "missing_ending", "sealed_ending", "missing_rejection"):
+                with self.subTest(case=case):
+                    changed = deepcopy(index)
+                    if case == "missing_membership":
+                        changed["records"].pop()
+                    elif case == "wrong_fingerprint":
+                        changed["records"][0]["sgf_sha256"] = "0" * 64
+                    elif case == "missing_ending":
+                        next(row for row in changed["records"] if row["ending"] is not None)["ending"] = None
+                    elif case == "sealed_ending":
+                        next(row for row in changed["records"] if row["ending"] is None)["ending"] = next(iter(endings.values()))
+                    else:
+                        changed["rejected"] = []
+                    broken = {**base_request, "refs": {**base_request["refs"],
+                              "base_index": write_json(root / "broken-index.json", changed)}}
+                    with self.assertRaises(ValueError):
+                        base_endings(broken, rows)
+            changed_summary = {**summary, "source_completed": summary["source_completed"] - 1}
+            with self.assertRaisesRegex(ValueError, "Previous work omits"):
+                prepare_base_index(write_json(root / "out/broken-summary.json", changed_summary), req,
+                                   root / "broken-bootstrap.json")
+
+    def test_second_expansion_preserves_the_expanded_base_and_prior_rejections(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            first_root = root / "first"
+            first_root.mkdir()
+            request, req, sources, _ = fixture(first_root, [
+                ("accepted", "alice", "bob", "2025-07-03", "kk", "ll", "B+R", "train"),
+                ("rejected", "alice", "bob", "2025-07-04", "mm", "nn", "B+R", "train")])
+            prior = json.loads(Path(request["refs"]["prior_exposure"]["path"]).read_text())
+            prior["sgf_hashes"].append(digest("inspected but unused bytes"))
+            prior["account_months"].append(["unused", "2025-03"])
+            request["refs"]["prior_exposure"] = write_json(first_root / "prior.json", prior)
+            req = write_json(first_root / "request.json", request)
+            sources["groups"] = {**sources["groups"], "newalias": "kgs-handle:newalias"}
+            bundle = Path(sources["candidates"][0]["source"]["archive_path"])
+            with zipfile.ZipFile(bundle) as archive:
+                payloads = {name: archive.read(name) for name in archive.namelist()}
+            with zipfile.ZipFile(bundle, "w") as archive:
+                for name, data in payloads.items():
+                    if "rejected" in name:
+                        data = data[:-1].replace(b"TM[1200]", b"TM[30]") + b";B[tt];W[tt])"
+                    archive.writestr(name, data)
+            for item in sources["candidates"]:
+                item["source"]["archive_sha256"] = file_hash(bundle)
+            first = run(first_root, req, write_json(first_root / "sources.json", sources))
+            self.assertEqual(first["new_encoded_games"], 1)
+            first_index = json.loads(Path(first["artifacts"]["base_index"]["path"]).read_text())
+            self.assertEqual(len(first_index["rejected"]), 1)
+
+            second_root = root / "second"
+            second_root.mkdir()
+            second_request, _, second_sources, _ = fixture(second_root, [
+                ("oldcopy", "alice", "bob", "2025-07-05", "kk", "ll", "B+R", "train"),
+                ("rejectedcopy", "alice", "bob", "2025-07-06", "mm", "nn", "B+R", "train"),
+                ("fresh", "alice", "bob", "2025-07-07", "oo", "pp", "B+R", "train")])
+            bundle = Path(second_sources["candidates"][0]["source"]["archive_path"])
+            with zipfile.ZipFile(bundle) as archive:
+                payloads = {name: archive.read(name) for name in archive.namelist()}
+            with zipfile.ZipFile(bundle, "w") as archive:
+                for name, data in payloads.items():
+                    archive.writestr(name, data[:-1] + b";B[];W[])" if "rejectedcopy" in name else data)
+            for item in second_sources["candidates"]:
+                item["source"]["archive_sha256"] = file_hash(bundle)
+            for key in ("canonical", "split_manifest", "examples_manifest", "profile", "base_index"):
+                second_request["refs"][key] = first["artifacts"][key]
+            second_request["refs"]["prior_exposure"] = first["artifacts"]["exposure"]
+            second_request["refs"]["original_audit"] = request["refs"]["original_audit"]
+            second_request["base_groups"] = json.loads(Path(first["artifacts"]["groups"]["path"]).read_text())
+            split, first_parts = read_membership(Path(first["artifacts"]["split_manifest"]["path"]).parent,
+                                                first["artifacts"]["split_manifest"]["sha256"])
+            second_request["split_config"] = split["plan"]
+            second_sources["base_grouping_sha256"] = split["plan"]["grouping_sha256"]
+            second_sources["groups"] = dict(second_request["base_groups"])
+            prior_ids = {row["source_url"] for part in first_parts.values() for row in part}
+            loads, np_load = json.loads, np.load
+
+            def no_old_targets(value, *args, **kwargs):
+                if isinstance(value, str) and value.startswith('{"actions":'):
+                    if any('"source_url":' + json.dumps(key) in value for key in prior_ids):
+                        raise AssertionError("An old canonical target was decoded")
+                return loads(value, *args, **kwargs)
+
+            def no_heldout_arrays(path, *args, **kwargs):
+                if any(role in str(path) for role in ("final/", "confirmation/")):
+                    raise AssertionError("A held-out array was decoded")
+                return np_load(path, *args, **kwargs)
+
+            with mock.patch("kenggo.data_expansion.json.loads", side_effect=no_old_targets), \
+                    mock.patch("numpy.load", side_effect=no_heldout_arrays):
+                second = run(second_root, write_json(second_root / "request.json", second_request),
+                             write_json(second_root / "sources.json", second_sources))
+            self.assertEqual(second["new_encoded_games"], 1)
+            self.assertEqual(second["new_split_exclusions"]["duplicate_of_frozen_corpus"], 1)
+            self.assertEqual(second["new_split_exclusions"]["duplicate_of_rejected_source"], 1)
+            second_index = json.loads(Path(second["artifacts"]["base_index"]["path"]).read_text())
+            self.assertEqual(second_index["rejected"], first_index["rejected"])
+            indexed = {row["source_url"]: row for row in second_index["records"]}
+            self.assertTrue(all(indexed[row["source_url"]] == row for row in first_index["records"]))
+            _, second_parts = read_membership(Path(second["artifacts"]["split_manifest"]["path"]).parent,
+                                              second["artifacts"]["split_manifest"]["sha256"])
+            memberships = {row["source_url"]: row for part in second_parts.values() for row in part}
+            self.assertTrue(all(memberships[row["source_url"]] == row for part in first_parts.values() for row in part))
+            for role in ROLES:
+                if role not in ALLOWED + ("excluded",):
+                    self.assertEqual(first_parts[role], second_parts[role])
+            first_examples = loads(Path(first["artifacts"]["examples_manifest"]["path"]).read_text())
+            second_examples = loads(Path(second["artifacts"]["examples_manifest"]["path"]).read_text())
+            directory = Path(second["artifacts"]["examples_manifest"]["path"]).parent
+            for role in ROLES:
+                self.assertEqual(second_examples["artifacts"][role][:len(first_examples["artifacts"][role])],
+                                 first_examples["artifacts"][role])
+                for item in first_examples["artifacts"][role]:
+                    for kind in ("arrays", "metadata"):
+                        self.assertEqual(file_hash(directory / item[kind]), item[kind + "_sha256"])
+            normalizer = loads(Path(second["artifacts"]["normalizer"]["path"]).read_text())
+            self.assertEqual(normalizer["count"][5], second["counts"]["combined"]["train"]["examples"])
+            old_exposure = loads(Path(first["artifacts"]["exposure"]["path"]).read_text())
+            new_exposure = loads(Path(second["artifacts"]["exposure"]["path"]).read_text())
+            self.assertTrue(all(all(item in new_exposure[field] for item in values)
+                                for field, values in old_exposure.items()))
+            for case in ("missing_index", "missing_exposure"):
+                with self.subTest(case=case):
+                    broken = deepcopy(second_request)
+                    if case == "missing_index":
+                        del broken["refs"]["base_index"]
+                    else:
+                        dropped = deepcopy(old_exposure)
+                        dropped["sgf_hashes"].remove(digest("inspected but unused bytes"))
+                        broken["refs"]["prior_exposure"] = write_json(second_root / "dropped-exposure.json", dropped)
+                    with mock.patch("zipfile.ZipFile") as opened:
+                        with self.assertRaisesRegex(ValueError, "pinned metadata|prior inspection evidence"):
+                            run(second_root, write_json(second_root / "broken-request.json", broken),
+                                reference(second_root / "sources.json"))
+                        opened.assert_not_called()
+
     def test_append_preserves_base_and_heldout_payloads_and_learner_reads_train(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

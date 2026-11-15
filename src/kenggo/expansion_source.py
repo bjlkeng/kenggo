@@ -8,7 +8,9 @@ from email.utils import parsedate_to_datetime
 from hashlib import sha256
 import http.client
 import http.cookiejar
+from html.parser import HTMLParser
 import json
+import os
 from pathlib import Path
 import re
 import time
@@ -19,6 +21,7 @@ import zipfile
 
 from kenggo import cached_coverage_audit as cached
 from kenggo import e1_audit, kgs_admission, kgs_eligibility, kgs_source
+from kenggo import rank_discovery
 
 
 MIB = 1024**2
@@ -48,10 +51,10 @@ class Limits:
     max_validation_development_candidates: int = 1500
 
     def __post_init__(self):
-        maxima = dict(requests=900, response_bytes=512 * MIB, html_bytes=2 * MIB,
+        maxima = dict(requests=2400, response_bytes=1024 * MIB, html_bytes=2 * MIB,
             bundle_bytes=8 * MIB, expanded_zip_bytes=4096 * MIB, cpu_seconds=900,
             wall_seconds=21600, retries=2, max_train_candidates=25000,
-            max_population_development_candidates=3000, max_validation_development_candidates=1500)
+            max_population_development_candidates=5000, max_validation_development_candidates=5000)
         for key, maximum in maxima.items():
             value = getattr(self, key)
             if type(value) is not int or value < (0 if key == "retries" else 1) or value > maximum:
@@ -131,17 +134,32 @@ def _context(request_ref, fixture_only=False):
         raise ValueError("The expansion decision is empty")
     limits = Limits(**request["limits"])
     deadline(request["deadline_utc"])
+    if "access_probe" in request:
+        probe = read_ref(request["access_probe"], MIB)
+        if (set(probe) != {"requests", "response_bytes", "cpu_charged_seconds", "records"}
+                or any(type(probe[key]) is not int or probe[key] < 0
+                       for key in ("requests", "response_bytes", "cpu_charged_seconds"))
+                or probe["requests"] != len(probe["records"])
+                or probe["response_bytes"] != sum(row["bytes"] for row in probe["records"])
+                or probe["requests"] + limits.requests > 2400
+                or probe["response_bytes"] + limits.response_bytes > 1024 * MIB
+                or probe["cpu_charged_seconds"] + limits.cpu_seconds > 900):
+            raise ValueError("The access probe and collection must share the frozen limits")
     refs = request["refs"]
     names = {"frame", "original_sample", "discovery_config", "split_config", "owner_exclusions",
              "source_policy", "old_coverage_frozen", "prior_exposure"}
-    if set(refs) != names:
+    continuation = {"current_base", "base_index"}
+    if set(refs) not in (names, names | continuation):
         raise ValueError("Unexpected expansion input references")
+    if (set(refs) == names | continuation) != ("discovery_policy" in request):
+        raise ValueError("Expanded account discovery requires the preserved current dataset")
     if not fixture_only:
         for name in names & cached.PRODUCTION_INPUTS.keys():
             if refs[name]["sha256"] != cached.PRODUCTION_INPUTS[name]:
                 raise ValueError("The historical source contract changed: " + name)
         code = request["source_revision"]["code_sha256"]
-        if not CODE_PATHS <= code.keys() or any(file_hash(path) != pin for path, pin in code.items()):
+        required_code = CODE_PATHS | ({"src/kenggo/rank_discovery.py"} if "discovery_policy" in request else set())
+        if not required_code <= code.keys() or any(file_hash(path) != pin for path, pin in code.items()):
             raise ValueError("The expansion source code differs from its frozen revision")
     objects = {name: read_ref(ref) for name, ref in refs.items()}
     groups = request["base_groups"]
@@ -183,6 +201,27 @@ def _context(request_ref, fixture_only=False):
         raise ValueError("The old cached candidate list changed")
     if not fixture_only and (len(expected) != 4269 or digest(sorted(old_ids)) != cached.EXPECTED_IDS):
         raise ValueError("Wrong historical coverage candidate list")
+    if "current_base" in objects:
+        base, index = objects["current_base"], objects["base_index"]
+        if base.get("schema") != "e2_data_expansion_v1" or index.get("schema") != "e2_data_index_v1":
+            raise ValueError("Unsupported prior dataset or data index")
+        artifacts = base["artifacts"]
+        counts = read_ref(request["discovery_policy"]["baseline_counts_ref"])
+        if counts.get("provenance") != {"current_base": refs["current_base"],
+                "examples_manifest": artifacts["examples_manifest"],
+                "split_manifest": artifacts["split_manifest"]}:
+            raise ValueError("Rank sampling counts belong to another base dataset")
+        current_groups = read_ref(artifacts["groups"])
+        current_plan = read_ref(artifacts["split_manifest"])["plan"]
+        if (any(current_groups.get(key) != value for key, value in groups.items())
+                or any(current_plan[key] != split[key] for key in split if key != "grouping_sha256")
+                or current_plan["grouping_sha256"] != kgs_eligibility.grouping_digest(current_groups)
+                or index["canonical_sha256"] != artifacts["canonical"]["sha256"]
+                or index["split_sha256"] != artifacts["split_manifest"]["sha256"]
+                or refs["prior_exposure"] != artifacts["exposure"]):
+            raise ValueError("The continuation changed its base dataset, groups, splits or exposure")
+        objects["current_groups"] = current_groups
+        objects["completed_ids"] = {row["source_url"] for row in index["records"] + index["rejected"]}
     return request, objects, limits, cache
 
 
@@ -207,7 +246,7 @@ def _unique(rows):
 
 def _query_contents(request_ref, fixture_only=False):
     request, objects, limits, cache = _context(request_ref, fixture_only)
-    groups, split = request["base_groups"], objects["split_config"]
+    groups, split = objects.get("current_groups", request["base_groups"]), objects["split_config"]
     discovery = objects["discovery_config"]
     if discovery.get("seed") != kgs_source.SEED:
         raise ValueError("Use the original discovery accounts")
@@ -227,10 +266,14 @@ def _query_contents(request_ref, fixture_only=False):
             queries.append({"key": key, "user": account["user"], "month": month,
                             "url": "https://www.gokgs.com/gameArchives.jsp?" + query})
     queries.sort(key=lambda item: (item["month"], item["user"].lower()))
-    if len({item["key"] for item in queries}) != len(queries) or not fixture_only and len(queries) != 286:
+    if "discovery_policy" in request:
+        queries = rank_discovery.queries(objects["frame"], groups, split, cache, request["discovery_policy"])
+    if (len({item["key"].lower() for item in queries}) != len(queries)
+            or not fixture_only and "discovery_policy" not in request and len(queries) != 286):
         raise ValueError("Unexpected or duplicate archive queries")
     original_ids = {row["url"] for row in objects["original_sample"]["candidates"]}
     excluded = original_ids | {row["source_url"] for row in objects["owner_exclusions"]["excluded_games"]}
+    excluded.update(objects.get("completed_ids", ()))
     rows = _unique(objects["frame"]["rows"])
     old_candidates = [{"archive_row": row, "provisional_role": role} for row in rows.values()
                       if (role := _eligible(row, groups, split, excluded)) is not None]
@@ -302,11 +345,11 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def http_response(url, timeout, maximum, *, opener=None):
+def http_response(url, timeout, maximum, *, opener=None, data=None):
     request_deadline = time.monotonic() + timeout
     if opener is None:
         opener = urllib.request.build_opener(NoRedirect())
-    request = urllib.request.Request(url, headers={
+    request = urllib.request.Request(url, data=data, headers={
         "User-Agent": "kenggo-source-expansion/1.0 (serial; 5s minimum interval)", "Accept": "*/*"})
     try:
         response = opener.open(request, timeout=timeout)
@@ -345,7 +388,8 @@ class Client:
         if transport is None:
             opener = urllib.request.build_opener(NoRedirect(),
                 urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
-            transport = lambda url, timeout, maximum: http_response(url, timeout, maximum, opener=opener)
+            transport = lambda url, timeout, maximum, **kwargs: http_response(
+                url, timeout, maximum, opener=opener, **kwargs)
         self.transport, self.now = transport, now
         self.monotonic, self.cpu, self.sleep = monotonic, cpu, sleep
         self.started, self.cpu_started, self.last_start = monotonic(), cpu(), None
@@ -370,15 +414,55 @@ class Client:
         self.check()
 
     def get(self, url, maximum, *, bundle=False):
+        return self._fetch(url, maximum, bundle=bundle)
+
+    def authenticate(self, credentials_file, query):
+        path = Path(credentials_file).resolve()
+        repository = Path(__file__).resolve().parents[2]
+        if (path.is_relative_to(repository) or not path.is_file()
+                or path.stat().st_uid != os.getuid() or path.stat().st_mode & 0o077
+                or path.stat().st_size > 4096):
+            raise ValueError("Use an owner-only credential file outside the repository")
+        try:
+            credentials = json.loads(path.read_bytes())
+        except (ValueError, OSError):
+            raise ValueError("Cannot read the local credential file") from None
+        if (not isinstance(credentials, dict) or set(credentials) != {"username", "password"}
+                or any(not isinstance(value, str) or not value or len(value) > 256
+                       for value in credentials.values())):
+            raise ValueError("Invalid local credential fields")
+        body = self._fetch(query["url"], self.limits.html_bytes, allow_login=True)
+        form = LoginForm()
+        form.feed(body.decode("utf-8", errors="strict"))
+        if form.password_forms:
+            if form.password_forms != [{"action": "login.jsp", "method": "post",
+                                        "fields": {"user", "password"}}]:
+                raise AuthenticationRequired("unsupported_archive_login_form")
+            payload = urllib.parse.urlencode({"user": credentials["username"],
+                                              "password": credentials["password"]}).encode()
+            self._fetch("https://www.gokgs.com/login.jsp", self.limits.html_bytes,
+                        allow_login=True, data=payload)
+            body = self.get(query["url"], self.limits.html_bytes)
+        parse_page(body, query)
+        return body
+
+    def _fetch(self, url, maximum, *, bundle=False, allow_login=False, data=None):
         retries, redirects = 0, 0
         while True:
             allowed_url(url)
             path = urllib.parse.urlsplit(url).path
-            if path == "/login.jsp":
+            if path == "/login.jsp" and not allow_login:
                 raise AuthenticationRequired("archive_authentication_required")
-            if (bundle and not path.endswith(".zip") or not bundle and path not in
-                    ("/gameArchives.jsp", "/archives.jsp")):
+            allowed_paths = ("/gameArchives.jsp", "/archives.jsp") + (("/login.jsp",) if allow_login else ())
+            if (bundle and not path.endswith(".zip") or not bundle and path not in allowed_paths):
                 raise ValueError("Redirect leaves the frozen archive request type")
+            if data is not None and url != "https://www.gokgs.com/login.jsp":
+                raise ValueError("Credentials may only be posted to the official HTTPS login")
+            if path == "/login.jsp" and url != "https://www.gokgs.com/login.jsp":
+                raise ValueError("Unexpected archive login address")
+            if not bundle and set(urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)) - {
+                    "user", "year", "month", "oldAccounts"}:
+                raise ValueError("Unexpected archive query fields")
             if self.last_start is not None:
                 self.wait(max(0, self.limits.min_interval_seconds - (self.monotonic() - self.last_start)))
             self.check()
@@ -386,14 +470,15 @@ class Client:
                 raise SourceStop("request_or_response_limit")
             self.requests += 1
             self.last_start = self.monotonic()
-            record = {"sequence": self.requests, "method": "GET", "url": url,
+            record = {"sequence": self.requests, "method": "POST" if data is not None else "GET", "url": url,
                       "started_utc": self.now().isoformat(), "start_offset_seconds": self.last_start - self.started}
             maximum = min(maximum, self.limits.response_bytes - self.response_bytes)
             timeout = min(30, (self.deadline - self.now()).total_seconds(),
                           self.limits.wall_seconds - (self.monotonic() - self.started))
             status, headers, body, retryable = None, {}, b"", False
             try:
-                status, headers, body = self.transport(url, timeout, maximum)
+                status, headers, body = (self.transport(url, timeout, maximum) if data is None
+                                        else self.transport(url, timeout, maximum, data=data))
                 self.response_bytes += len(body)
                 headers = {key.lower(): value for key, value in headers.items()}
                 record.update(status=status, bytes=len(body), sha256=sha256(body).hexdigest())
@@ -435,9 +520,12 @@ class Client:
                 target = headers.get("location")
                 if not target or redirects >= 5:
                     raise RequestFailure("invalid_or_excessive_redirects")
+                if data is not None and status in (307, 308):
+                    raise AuthenticationRequired("login_post_redirect_refused")
                 url = urllib.parse.urljoin(url, target)
                 allowed_url(url)
-                if urllib.parse.urlsplit(url).path == "/login.jsp":
+                data = None
+                if urllib.parse.urlsplit(url).path == "/login.jsp" and not allow_login:
                     raise AuthenticationRequired("archive_authentication_required")
                 redirects += 1
                 continue
@@ -449,6 +537,27 @@ class Client:
         return {"requests": self.requests, "response_bytes": self.response_bytes,
                 "wall_seconds": self.monotonic() - self.started,
                 "cpu_seconds": self.cpu() - self.cpu_started, "gpu_seconds": 0, "workers": 1}
+
+
+class LoginForm(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.current = None
+        self.password_forms = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "form":
+            self.current = {"action": attrs.get("action"), "method": attrs.get("method", "get").lower(),
+                            "fields": set()}
+        elif tag == "input" and self.current is not None and attrs.get("name"):
+            self.current["fields"].add(attrs["name"])
+
+    def handle_endtag(self, tag):
+        if tag == "form" and self.current is not None:
+            if "password" in self.current["fields"]:
+                self.password_forms.append(self.current)
+            self.current = None
 
 
 def parse_page(body, query):
@@ -476,7 +585,7 @@ def parse_page(body, query):
     return [{**row, "page_key": query["key"], "bundle_url": bundle_url} for row in page.rows]
 
 
-def balanced(rows, maximum):
+def balanced(rows, maximum, *, seed=SEED):
     strata = defaultdict(lambda: defaultdict(list))
     for item in rows:
         row = item["archive_row"]
@@ -488,8 +597,8 @@ def balanced(rows, maximum):
     queues = {}
     for key, accounts in sorted(strata.items()):
         queues[key] = deque((account, deque(sorted(items, key=lambda item: digest(
-            [SEED, "game", item["archive_row"]["url"]])))) for account, items in sorted(
-                accounts.items(), key=lambda pair: digest([SEED, "account", pair[0]])))
+            [seed, "game", item["archive_row"]["url"]])))) for account, items in sorted(
+                accounts.items(), key=lambda pair: digest([seed, "account", pair[0]])))
     result = []
     while queues and len(result) < maximum:
         for key in list(queues):
@@ -505,11 +614,15 @@ def balanced(rows, maximum):
 
 
 def freeze_candidates(frozen, request, objects, rows):
-    groups, split = dict(objects["old_coverage_frozen"]["groups"]), objects["split_config"]
+    groups = dict(objects.get("current_groups", objects["old_coverage_frozen"]["groups"]))
+    split = objects["split_config"]
+    seed = request.get("discovery_policy", {}).get("seed", SEED)
     old_items = objects["old_coverage_frozen"]["candidates"]
-    mandatory = {item["archive_row"]["url"]: item for item in old_items}
+    mandatory = {item["archive_row"]["url"]: item for item in old_items
+                 if item["archive_row"]["url"] not in objects.get("completed_ids", ())}
     excluded = {row["url"] for row in objects["original_sample"]["candidates"]}
     excluded.update(row["source_url"] for row in objects["owner_exclusions"]["excluded_games"])
+    excluded.update(objects.get("completed_ids", ()))
     unique = _unique([item["archive_row"] for item in frozen["old_candidates"]] + rows)
     by_role = defaultdict(list)
     for row in unique.values():
@@ -524,8 +637,8 @@ def freeze_candidates(frozen, request, objects, rows):
         maximum = request["limits"]["max_" + role + "_candidates"]
         if counts[role] > maximum:
             raise ValueError("Candidate cap would remove already inspected IDs")
-        selected.extend(balanced(by_role[role], maximum - counts[role]))
-    role_queues = [deque(balanced([item for item in selected if item["provisional_role"] == role], len(selected)))
+        selected.extend(balanced(by_role[role], maximum - counts[role], seed=seed))
+    role_queues = [deque(balanced([item for item in selected if item["provisional_role"] == role], len(selected), seed=seed))
                    for role in cached.ROLES]
     selected = []
     while any(role_queues):
@@ -539,7 +652,8 @@ def freeze_candidates(frozen, request, objects, rows):
             "groups": groups, "candidates": selected,
             "candidate_ids_sha256": digest([item["archive_row"]["url"] for item in selected]),
             "counts": dict(Counter(item["provisional_role"] for item in selected)),
-            "selection_seed": SEED, "selection": "Keep the old cached IDs; balance rank, month and archive account; interleave the three allowed roles before reading SGFs."}
+            "selection_seed": seed, "selection": "Preserve the base dataset; skip previously completed records; balance rank, month and archive account; interleave the three allowed roles before reading SGFs."
+            if "completed_ids" in objects else "Keep the old cached IDs; balance rank, month and archive account; interleave the three allowed roles before reading SGFs."}
 
 
 def _index_bundle(bundle, limits, expanded):
@@ -559,7 +673,8 @@ def _index_bundle(bundle, limits, expanded):
     return index, expanded + size
 
 
-def acquire(queries_path, queries_sha256, output_directory, *, fixture_only=False, transport=None,
+def acquire(queries_path, queries_sha256, output_directory, *, credentials_file=None,
+            fixture_only=False, transport=None,
             now=utc_now, monotonic=time.monotonic, cpu=time.process_time, sleep=time.sleep):
     started, cpu_started = monotonic(), cpu()
     if transport is not None and not fixture_only:
@@ -585,6 +700,19 @@ def acquire(queries_path, queries_sha256, output_directory, *, fixture_only=Fals
     bundles = dict(frozen["old_bundles"])
     needed, indexes, expanded, candidate_manifest = {}, {}, 0, None
     outcome = "failed"
+    authentication = "not_requested"
+    first_body = None
+    probe = read_ref(request["access_probe"]) if "access_probe" in request else {}
+
+    def accounted_costs():
+        costs = client.costs()
+        costs["collection_requests"] = costs["requests"]
+        costs["collection_response_bytes"] = costs["response_bytes"]
+        costs["requests"] += probe.get("requests", 0)
+        costs["response_bytes"] += probe.get("response_bytes", 0)
+        costs["access_probe_requests"] = probe.get("requests", 0)
+        costs["cpu_charged_seconds"] = costs["cpu_seconds"] + probe.get("cpu_charged_seconds", 0)
+        return costs
 
     def progress(phase):
         cached.save_json(output / "progress.json", {
@@ -594,16 +722,26 @@ def acquire(queries_path, queries_sha256, output_directory, *, fixture_only=Fals
             "frozen_candidates": 0 if candidate_manifest is None else len(candidate_manifest["candidates"]),
             "bundles_needed": len(needed), "bundles_available": len(bundles),
             "bundles_indexed": len(indexes), "expanded_zip_bytes": expanded,
-            "diagnostic_count": len(diagnostics), "costs": client.costs()}, replace=True)
+            "diagnostic_count": len(diagnostics), "costs": accounted_costs()}, replace=True)
 
     try:
+        if credentials_file is not None and frozen["queries"]:
+            progress("authentication")
+            try:
+                first_body = client.authenticate(credentials_file, frozen["queries"][0])
+                authentication = "verified"
+            except (SourceStop, RequestFailure, ValueError, OSError, UnicodeError) as error:
+                stopped = str(error) if isinstance(error, SourceStop) else "authentication_failed"
+                authentication = "failed"
+                diagnostics.append({"status": "authentication_failed", "reason": stopped})
         progress("archive_metadata")
-        for query in frozen["queries"]:
+        for query_index, query in enumerate(frozen["queries"]):
             if stopped:
                 page_results.append({"key": query["key"], "status": "unattempted", "reason": stopped})
                 continue
             try:
-                body = client.get(query["url"], limits.html_bytes)
+                body = first_body if query_index == 0 and first_body is not None else client.get(
+                    query["url"], limits.html_bytes)
                 parsed = parse_page(body, query)
                 path = output / (query["key"] + ".html")
                 path.write_bytes(body)
@@ -681,7 +819,7 @@ def acquire(queries_path, queries_sha256, output_directory, *, fixture_only=Fals
             exposure["groups"].add(candidate_manifest["groups"].get(handle, "kgs-handle:" + handle))
             exposure["account_months"].add((handle, f"2025-{query['month']:02d}"))
         sources = {"schema": SOURCES_SCHEMA, "request_sha256": frozen["request"]["sha256"],
-            "base_grouping_sha256": objects["split_config"]["grouping_sha256"],
+            "base_grouping_sha256": kgs_eligibility.grouping_digest(objects.get("current_groups", request["base_groups"])),
             "groups": candidate_manifest["groups"], "candidates": candidates,
             "owner_excluded_sgf_sha256": sorted(row["sgf_sha256"] for row in objects["owner_exclusions"]["excluded_games"]),
             "exposure": {key: sorted(value) for key, value in exposure.items()},
@@ -691,16 +829,17 @@ def acquire(queries_path, queries_sha256, output_directory, *, fixture_only=Fals
             "counts": {"frozen_candidates": len(candidate_manifest["candidates"]), "accessible_candidates": len(candidates),
                 "candidate_roles": candidate_manifest["counts"], "expanded_zip_bytes": expanded,
                 "query_statuses": dict(Counter(item["status"] for item in page_results))},
-            "diagnostics": diagnostics, "status": "authentication_blocked" if stopped == "archive_authentication_required"
+            "authentication": authentication,
+            "diagnostics": diagnostics, "status": "authentication_blocked" if authentication == "failed" or stopped == "archive_authentication_required"
                 else "partial" if stopped or diagnostics or any(item["status"] != "retrieved" for item in page_results)
-                else "completed", "stop_reason": stopped, "costs": client.costs()}
+                else "completed", "stop_reason": stopped, "costs": accounted_costs()}
         path = output / "sources.json"
         pin = write_json(path, sources)
         outcome = sources["status"]
         return {"path": str(path), "sha256": pin, "status": sources["status"], "counts": sources["counts"]}
     finally:
         client.log.close()
-        write_json(output / "costs.json", client.costs())
+        write_json(output / "costs.json", accounted_costs())
         progress(outcome)
 
 
@@ -710,9 +849,14 @@ def main():
     parser.add_argument("inputs", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--inputs-sha256", required=True)
+    parser.add_argument("--credentials-file", type=Path,
+                        help="Owner-only username/password JSON outside the repository; never copied to output")
     args = parser.parse_args()
+    if args.operation == "freeze" and args.credentials_file is not None:
+        parser.error("Credentials are used only by acquire")
     result = (freeze_queries if args.operation == "freeze" else acquire)(
-        args.inputs, args.inputs_sha256, args.output)
+        args.inputs, args.inputs_sha256, args.output,
+        **({"credentials_file": args.credentials_file} if args.operation == "acquire" else {}))
     print(json.dumps(result, sort_keys=True))
 
 

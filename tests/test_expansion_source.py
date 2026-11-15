@@ -118,6 +118,61 @@ class RequestTests(unittest.TestCase):
             self.assertEqual([r['status'] for r in records], [503, 429, 200])
             self.assertGreaterEqual(records[1]['start_offset_seconds'] - records[0]['start_offset_seconds'], 5)
 
+    def test_login_uses_private_file_and_charges_every_request_without_logging_secrets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            secret = Path(tmp, 'credentials.json')
+            secret.write_text(json.dumps({'username': 'private-user', 'password': 'private-password'}))
+            secret.chmod(0o600)
+            item = row('new', black='Alice')
+            item.update(page_key='Alice-2025-01', bundle_url='https://www.gokgs.com/servlet/archives/Alice-2025-01.zip')
+            login = b'<form action="login.jsp" method="post"><input name="user"><input name="password" type="password"></form>'
+            calls = []
+            def transport(url, timeout, maximum, **kwargs):
+                calls.append((url, kwargs))
+                if len(calls) == 1:
+                    return 200, {}, login
+                if len(calls) == 2:
+                    return 200, {}, b'logged in'
+                return 200, {}, html_page(item)
+            client, clock = self.client(tmp, transport)
+            query = {'url': 'https://www.gokgs.com/gameArchives.jsp?user=Alice&year=2025&month=1',
+                     'user': 'Alice', 'month': 1, 'key': 'Alice-2025-01'}
+            self.assertEqual(client.authenticate(secret, query), html_page(item))
+            self.assertEqual(client.requests, 3)
+            self.assertEqual(client.response_bytes, len(login) + len(b'logged in') + len(html_page(item)))
+            self.assertEqual(clock.seconds, 10)
+            self.assertEqual(calls[1], ('https://www.gokgs.com/login.jsp',
+                {'data': b'user=private-user&password=private-password'}))
+            ledger = Path(tmp, 'requests.jsonl').read_text()
+            self.assertNotIn('private-user', ledger)
+            self.assertNotIn('private-password', ledger)
+            self.assertEqual([json.loads(line)['method'] for line in ledger.splitlines()], ['GET', 'POST', 'GET'])
+
+    def test_login_never_posts_to_an_untrusted_form_or_forwards_a_post_redirect(self):
+        for attack in ('form', 'redirect'):
+            with self.subTest(attack=attack), tempfile.TemporaryDirectory() as tmp:
+                secret = Path(tmp, 'credentials.json')
+                secret.write_text(json.dumps({'username': 'user', 'password': 'secret'})); secret.chmod(0o600)
+                login = ('<form action="' + ('https://other.example/login' if attack == 'form' else 'login.jsp') +
+                         '" method="post"><input name="user"><input name="password"></form>').encode()
+                calls = []
+                def transport(url, *args, **kwargs):
+                    calls.append(url)
+                    return (200, {}, login) if len(calls) == 1 else (307, {'Location': '/gameArchives.jsp'}, b'')
+                client, _ = self.client(tmp, transport)
+                with self.assertRaises(source.AuthenticationRequired):
+                    client.authenticate(secret, {'url': 'https://www.gokgs.com/gameArchives.jsp'})
+                self.assertEqual(len(calls), 1 if attack == 'form' else 2)
+
+    def test_public_credential_file_is_rejected_before_network_access(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, 'credentials.json'); path.write_text('{}'); path.chmod(0o644)
+            calls = []
+            client, _ = self.client(tmp, lambda *args: calls.append(args))
+            with self.assertRaisesRegex(ValueError, 'owner-only'):
+                client.authenticate(path, {'url': 'https://www.gokgs.com/gameArchives.jsp'})
+            self.assertEqual(calls, [])
+
     def test_timeout_retries_stop_without_replacement(self):
         with tempfile.TemporaryDirectory() as tmp:
             def timeout(*args):
@@ -242,6 +297,21 @@ class RequestTests(unittest.TestCase):
 
 
 class ExpansionTests(unittest.TestCase):
+    def test_continuation_keeps_the_current_groups_and_skips_completed_candidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            f = Fixture(tmp)
+            f.freeze()
+            frozen = json.loads(f.queries_path.read_text())
+            _, objects, _, _ = source._context(frozen['request'], fixture_only=True)
+            old = objects['old_coverage_frozen']['candidates'][0]
+            groups = {**objects['old_coverage_frozen']['groups'], 'newalias': 'kgs-handle:newalias'}
+            objects.update(current_groups=groups, completed_ids={old['archive_row']['url']})
+            fresh = row('fresh', black='Alice')
+            fresh.update(page_key='Alice-2025-01', bundle_url='https://www.gokgs.com/servlet/archives/Alice-2025-01.zip')
+            result = source.freeze_candidates(frozen, f.request, objects, [old['archive_row'], fresh])
+            self.assertEqual(result['groups']['newalias'], 'kgs-handle:newalias')
+            self.assertEqual([item['archive_row']['url'] for item in result['candidates']], [fresh['url']])
+
     def test_freeze_queries_excludes_final_prefix_and_confirmation(self):
         with tempfile.TemporaryDirectory() as tmp:
             fixture = Fixture(tmp)

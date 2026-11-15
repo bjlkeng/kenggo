@@ -13,6 +13,7 @@ import pyarrow.parquet as pq
 from kenggo.cached_coverage_audit import file_hash, read_ref, save_json
 from kenggo.canonical_data import digest
 from kenggo.data_splits import ROLES, read_membership
+from kenggo.data_expansion import base_endings
 from kenggo.encoding import NORMALIZED
 from kenggo.examples import load_corpus, load_dataset_profile, read_shards, replay_record
 from kenggo.go import PASS
@@ -31,6 +32,62 @@ def reference(path):
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def collection_details(source):
+    rounds = [source]
+    previous = source.get("provenance", {}).get("previous")
+    if previous is not None:
+        parent = read_ref(previous["sources"])
+        require(parent.get("schema") == source.get("schema")
+                and not parent.get("provenance", {}).get("previous"),
+                "Unsupported or repeated collection lineage")
+        rounds.insert(0, parent)
+    statuses = Counter()
+    for item in rounds:
+        statuses.update(item.get("counts", {}).get("query_statuses", {}))
+    return {"status": source.get("status", "unreported"), "stop_reason": source.get("stop_reason"),
+            "counts": {**source.get("counts", {}), "query_statuses": dict(statuses)},
+            "diagnostics": [item for run in rounds for item in run.get("diagnostics", [])],
+            "rounds": [{"status": run.get("status"),
+                        "query_statuses": run.get("counts", {}).get("query_statuses", {})}
+                       for run in rounds]}
+
+
+def read_scope_audit(audit_ref, request_ref, source_ref, summary):
+    if audit_ref is None:
+        return None
+    audit = read_ref(audit_ref)
+    require(audit.get("schema") == "e2_sgf_scope_audit_v1"
+            and audit.get("status") == "complete"
+            and audit["inputs"]["build_request"]["sha256"] == request_ref["sha256"]
+            and audit["inputs"]["sources"]["sha256"] == source_ref["sha256"],
+            "Scope audit belongs to another run or is incomplete")
+    total = audit["aggregate"]
+    require(total["records"] == audit["scope"]["processed_records"]
+            == audit["scope"]["expected_records"] == summary["source_completed"]
+            and total["status"].get("canonical", 0) == summary["new_source_admitted"]
+            and total["exclusions"] == summary["source_exclusion_reasons"],
+            "Scope audit and completed source screening disagree")
+
+    def half_komi_only(group):
+        return sum(cell["records"] for cell in group["scope_only_cells"]
+                   if cell["RU"] == "Japanese" and cell["KM"] == .5
+                   and cell["recorded_exclusions"] == "Only rules or komi excluded")
+
+    return {"reference": audit_ref, "records": total["records"],
+            "rules_or_komi_excluded": total["exclusions"].get("metadata:rules_or_komi_out_of_scope", 0),
+            "japanese_half_komi": sum(cell["records"] for cell in total["rules_komi"]
+                                      if cell["RU"] == "Japanese" and cell["KM"] == .5),
+            "missing_rules_or_komi": total["rules_metadata"].get("Missing rules or komi", 0),
+            "clock_metadata": total["clock_metadata"],
+            "training_half_komi_only": half_komi_only(audit["by_role"]["train"]),
+            "training_ranks": [{"rank": rank, "candidates": group["records"],
+                                "passed_source_checks": group["status"].get("canonical", 0),
+                                "half_komi_only": half_komi_only(group),
+                                "clock_only": group["recorded_exclusion_groups"].get("Only clock family excluded", 0)}
+                               for rank in RANKS if (group := audit["training_by_rank"].get(rank)) is not None],
+            "costs": audit["costs"]}
 
 
 def inspect(request, summary, check_budget):
@@ -104,13 +161,9 @@ def inspect(request, summary, check_budget):
                         require(record["source"]["source_url"] == key and record["sealed_final"] is False,
                                 "New ending evidence belongs to a different or sealed game")
                         add_ending(key, record["audit"])
-    audit_path = read_ref(request["refs"]["original_audit"], json_data=False)
-    for batch in pq.ParquetFile(audit_path).iter_batches(batch_size=64, columns=["source_url", "audit_json"]):
+    for key, audit in base_endings(request, list(old_rows.values())).items():
         check_budget()
-        for row in batch.to_pylist():
-            key = row["source_url"]
-            if key in old_rows and old_rows[key]["role"] in ALLOWED:
-                add_ending(key, json.loads(row["audit_json"]))
+        add_ending(key, audit)
     require(ending_ids == {key for key, row in rows.items() if row["role"] in ALLOWED},
             "Ending coverage does not include every allowed game")
     directory = Path(refs["examples_manifest"]["path"]).parent
@@ -211,6 +264,7 @@ def inspect(request, summary, check_budget):
         def cell_counts(cell):
             sides, accounts = len(cell["sides"]), len(cell["accounts"])
             return {"moves": cell["moves"], "passes": cell["passes"], "game_sides": sides,
+                    "games": len({key for key, _ in cell["sides"]}),
                     "accounts": accounts, "enough_data": sides >= 100 and accounts >= 30}
         cell_keys = [(rank, phase, clock) for rank in RANKS
                      for phase in ("1–60", "61–180", "181+") for clock in ("10–<20 min", "20–30 min")]
@@ -267,7 +321,7 @@ def inspect(request, summary, check_budget):
                              "examples": old_examples["counts"]["final"]["examples"]}}
 
 
-def build(request_ref, summary_ref, source_ref, output):
+def build(request_ref, summary_ref, source_ref, output, scope_audit_ref=None):
     started, cpu = time.monotonic(), time.process_time()
     output = Path(output)
     if output.exists():
@@ -280,14 +334,14 @@ def build(request_ref, summary_ref, source_ref, output):
             and summary["sources_sha256"] == source_ref["sha256"]
             and source["request_sha256"] == request["source_request_sha256"],
             "The request, collection and build are from different runs")
+    scope_audit = read_scope_audit(scope_audit_ref, request_ref, source_ref, summary)
     result = inspect(request, summary, check_budget)
-    result.update(schema="e2_data_review_v1", bead="kenggo-ydo.8", request=request_ref,
+    result.update(schema="e2_data_review_v1", bead=request.get("bead", "kenggo-ydo.8"), request=request_ref,
                   build_summary=summary_ref, source_summary=source_ref,
                   status=summary["status"], stop_reason=summary.get("stop_reason"),
                   build_costs=summary["costs"], source_costs=source.get("costs", {}),
-                  collection={"status": source.get("status", "unreported"),
-                              "stop_reason": source.get("stop_reason"), "counts": source.get("counts", {}),
-                              "diagnostics": source.get("diagnostics", [])},
+                  collection=collection_details(source),
+                  scope_audit=scope_audit,
                   preparation={key: summary[key] for key in (
                       "source_candidates", "source_attempted", "source_completed", "source_unattempted",
                       "source_exclusions", "source_exclusion_reasons",
@@ -298,8 +352,9 @@ def build(request_ref, summary_ref, source_ref, output):
                          "development_games": 24, "development_moves": 5926},
                   limitations=["No model was trained on these new data.",
                     "The account survey is a selected sample; it does not represent every KGS player.",
+                    "Accounts passed bot screening; human control was not independently verified.",
                     "Data support does not establish playing strength or a calibrated human rank.",
-                    "Move durations, dynamic clocks and individual identities remain unavailable."])
+                    "Move durations, dynamic clocks and personalization inputs remain masked."])
     check_budget()
     result["verification_costs"] = {"cpu_seconds": time.process_time() - cpu,
                                     "wall_seconds": time.monotonic() - started, "network_requests": 0, "gpu_seconds": 0}
@@ -322,7 +377,12 @@ if __name__ == "__main__":
     for name in ("request", "summary", "source"):
         parser.add_argument("--" + name, required=True)
         parser.add_argument("--" + name + "-sha256", required=True)
+    parser.add_argument("--scope-audit", help="Optional pinned root-metadata analysis for this run")
+    parser.add_argument("--scope-audit-sha256")
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
+    if bool(args.scope_audit) != bool(args.scope_audit_sha256):
+        parser.error("Pass both --scope-audit and --scope-audit-sha256")
     build(*({"path": getattr(args, name), "sha256": getattr(args, name + "_sha256")}
-            for name in ("request", "summary", "source")), args.output)
+            for name in ("request", "summary", "source")), args.output,
+          {"path": args.scope_audit, "sha256": args.scope_audit_sha256} if args.scope_audit else None)

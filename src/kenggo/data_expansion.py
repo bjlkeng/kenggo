@@ -30,12 +30,13 @@ from kenggo.kgs_admission import DECISION_SHA256, classify
 from kenggo.kgs_eligibility import Exposure, HISTORICAL_BOT_HANDLES, grouping_digest, normalize_handle
 from kenggo.kgs_source import candidate_reasons
 from kenggo.population_audit import split_entry
-from kenggo.sgf_audit import inspect_sgf, scalar
+from kenggo.sgf_audit import inspect_sgf, result_signature, scalar
 from kenggo.kgs_source import player
 
 
 VERSION = "e2_data_expansion_v1"
 REQUEST_VERSION = "e2_data_expansion_request_v1"
+INDEX_VERSION = "e2_data_index_v1"
 ALLOWED = ("train", "population_development", "validation_development")
 REFS = {"canonical", "split_manifest", "examples_manifest", "profile", "original_audit",
         "owner_exclusions", "prior_exposure", "source_policy"}
@@ -47,6 +48,9 @@ CEILINGS = {"cpu_seconds": 68000, "selected_sgf_bytes": 256 * MIB, "member_bytes
 # The pinned writer sorts keys; this suffix yields a hash without decoding old targets.
 TRAJECTORY = re.compile(r',"trajectory_sha256":(?:"([0-9a-f]{64})"|null),"version":"canonical_kgs_v1"}$')
 SEQUENCE = re.compile(r'(?<!\\)"sequence_fingerprint"\s*:\s*"([0-9a-f]{64})"')
+SGF_HASH = re.compile(r'(?<!\\)"sgf_sha256"\s*:\s*"([0-9a-f]{64})"')
+AUDIT = re.compile(r'(?<!\\)"audit":')
+FINGERPRINT_FIELDS = ("sgf_sha256", "audit_sequence_sha256", "trajectory_sha256")
 CODE_PATHS = tuple("src/kenggo/" + name for name in (
     "data_expansion.py", "canonical_data.py", "data_splits.py", "encoding.py", "examples.py",
     "examples_audit.py", "go.py", "rules_replay.py", "adjudication.py", "sgf_audit.py",
@@ -200,7 +204,8 @@ def union_exposure(*values):
 
 
 def _inputs(request, sources):
-    if request.get("schema") != REQUEST_VERSION or set(request["refs"]) != REFS:
+    if (request.get("schema") != REQUEST_VERSION
+            or set(request["refs"]) not in (REFS, REFS | {"base_index"})):
         raise ValueError("Unsupported expansion request or missing base references")
     limits = request["limits"]
     if set(limits) != set(CEILINGS):
@@ -221,6 +226,8 @@ def _inputs(request, sources):
     canonical = read_ref(refs["canonical"], json_data=False)
     split_path = read_ref(refs["split_manifest"], json_data=False)
     split, partitions = read_membership(split_path.parent, refs["split_manifest"]["sha256"])
+    if split["provenance"].get("expansion_request_sha256") is not None and "base_index" not in refs:
+        raise ValueError("An expanded base requires its pinned metadata and rejection index")
     examples = read_ref(refs["examples_manifest"])
     if (refs["canonical"]["sha256"] != profile.canonical_sha256
             or refs["split_manifest"]["sha256"] != profile.split_sha256
@@ -272,9 +279,17 @@ def _inputs(request, sources):
     old_groups = {group for row in rows if row["source_url"] not in sealed for group in row["groups"] if group}
     if not old_groups <= exposure["groups"]:
         raise ValueError("The exposure union dropped an old inspected group")
+    base_index = _read_base_index(request, rows)
+    if base_index is not None:
+        previous_exposure = read_ref(base_index["exposure"])
+        if digest(previous_exposure) != split["exposure_sha256"]:
+            raise ValueError("The base index exposure differs from the preserved split")
+        if any(not items <= exposure[field] for field, items in exposure_fields(previous_exposure).items()):
+            raise ValueError("The exposure union dropped prior inspection evidence")
     candidates = sources["candidates"]
     ids = [item["source"]["source_url"] for item in candidates]
-    if len(set(ids)) != len(ids) or set(ids) & set(by_id):
+    rejected_ids = set() if base_index is None else {row["source_url"] for row in base_index["rejected"]}
+    if len(set(ids)) != len(ids) or set(ids) & (set(by_id) | rejected_ids):
         raise ValueError("Source IDs are duplicated or already belong to the base corpus")
     if len(candidates) + len(rows) > limits["max_records"]:
         raise ValueError("Candidate record limit exceeded")
@@ -286,40 +301,233 @@ def _inputs(request, sources):
                 or row["url"] not in exposure["source_ids"]
                 or any(group not in exposure["groups"] for _, group in participants(row, groups))):
             raise ValueError("Candidate identity, cohort or exposure does not agree")
-    return canonical, split, partitions, examples, groups, exposure, owner_hashes
+    return canonical, split, partitions, examples, groups, exposure, owner_hashes, base_index
 
 
-def base_fingerprints(canonical, rows, audit_ref):
-    expected = {row["source_url"]: row["canonical_sha256"] for row in rows}
-    fingerprints = {"sgf_sha256": set(), "audit_sequence_sha256": set(), "trajectory_sha256": set()}
+def _ending(audit):
+    if (not isinstance(audit, dict) or not isinstance(audit.get("metadata"), dict)
+            or "RE" not in audit["metadata"] or "result_kind" not in audit
+            or "final_two_explicit_passes" not in audit):
+        raise ValueError("Allowed ending metadata is missing")
+    result = audit["metadata"]["RE"]
+    kind = audit["result_kind"]
+    passes = audit["final_two_explicit_passes"]
+    if (result is not None and not isinstance(result, str)
+            or result_signature(result)[0] != kind or type(passes) is not bool):
+        raise ValueError("Ending metadata differs from the recorded result")
+    return {"result_kind": kind, "metadata": {"RE": result}, "final_two_explicit_passes": passes}
+
+
+def _canonical_index(canonical, rows, check_budget=lambda: None):
+    expected = {row["source_url"]: row for row in rows}
+    records = []
     seen = set()
     for batch in pq.ParquetFile(canonical).iter_batches(batch_size=64):
+        check_budget()
         for row in batch.to_pylist():
             key, raw = row["source_url"], row["canonical_json"]
-            if (key in seen or expected.get(key) != row["canonical_sha256"]
+            if (key in seen or key not in expected or expected[key]["canonical_sha256"] != row["canonical_sha256"]
                     or sha256(raw.encode()).hexdigest() != row["canonical_sha256"]):
                 raise ValueError("An opaque base canonical record changed")
             tail = TRAJECTORY.search(raw)
-            if tail is None:
-                raise ValueError("Unsupported opaque canonical record format")
-            if tail[1]:
-                fingerprints["trajectory_sha256"].add(tail[1])
+            sgf_hashes, sequences = set(SGF_HASH.findall(raw)), SEQUENCE.findall(raw)
+            if tail is None or len(sgf_hashes) != 1 or len(sequences) > 1:
+                raise ValueError("Unsupported or ambiguous opaque canonical metadata")
+            ending = None
+            if expected[key]["role"] in ALLOWED:
+                matches = list(AUDIT.finditer(raw))
+                if len(matches) != 1:
+                    raise ValueError("Ambiguous permitted audit metadata")
+                # Decode this metadata object only; the surrounding action targets stay opaque.
+                audit, _ = json.JSONDecoder().raw_decode(raw, matches[0].end())
+                ending = _ending(audit)
+            records.append({"source_url": key, "canonical_sha256": row["canonical_sha256"],
+                            "sgf_sha256": next(iter(sgf_hashes)),
+                            "audit_sequence_sha256": sequences[0] if sequences else None,
+                            "trajectory_sha256": tail[1], "ending": ending})
             seen.add(key)
     if seen != set(expected):
         raise ValueError("Base canonical IDs differ from the base memberships")
-    audit_path = read_ref(audit_ref, json_data=False)
-    for batch in pq.ParquetFile(audit_path).iter_batches(batch_size=128,
-            columns=["source_url", "sgf_sha256", "audit_json"]):
-        for row in batch.to_pylist():
-            if row["source_url"] not in expected:
-                raise ValueError("Original audit contains a source outside the base")
-            if row["sgf_sha256"]:
-                fingerprints["sgf_sha256"].add(row["sgf_sha256"])
-            matches = SEQUENCE.findall(row["audit_json"])
-            if len(matches) > 1:
-                raise ValueError("Ambiguous original sequence fingerprint")
-            fingerprints["audit_sequence_sha256"].update(matches)
-    return fingerprints
+    return sorted(records, key=lambda row: row["source_url"])
+
+
+def _fingerprints(records):
+    return {field: {row[field] for row in records if row.get(field)} for field in FINGERPRINT_FIELDS}
+
+
+def base_fingerprints(canonical, rows, audit_ref):
+    read_ref(audit_ref, json_data=False)
+    return _fingerprints(_canonical_index(canonical, rows))
+
+
+def _read_base_index(request, rows):
+    ref = request["refs"].get("base_index")
+    if ref is None:
+        return None
+    index = read_ref(ref)
+    if (set(index) != {"schema", "canonical_sha256", "split_sha256", "exposure", "records", "rejected", "provenance"}
+            or index["schema"] != INDEX_VERSION
+            or index["canonical_sha256"] != request["refs"]["canonical"]["sha256"]
+            or index["split_sha256"] != request["refs"]["split_manifest"]["sha256"]):
+        raise ValueError("The base metadata index belongs to another dataset")
+    memberships = {row["source_url"]: row for row in rows}
+    seen = set()
+    for record in index["records"]:
+        key = record["source_url"]
+        if (set(record) != {"source_url", "canonical_sha256", "ending", *FINGERPRINT_FIELDS}
+                or key in seen or key not in memberships
+                or record["canonical_sha256"] != memberships[key]["canonical_sha256"]
+                or not record["sgf_sha256"]):
+            raise ValueError("Base metadata does not cover each frozen membership once")
+        for field in FINGERPRINT_FIELDS:
+            if record[field] is not None and (not isinstance(record[field], str)
+                    or re.fullmatch(r"[0-9a-f]{64}", record[field]) is None):
+                raise ValueError("Invalid base fingerprint")
+        if memberships[key]["role"] in ALLOWED:
+            if record["ending"] != _ending(record["ending"]):
+                raise ValueError("Unexpected allowed ending metadata")
+            if memberships[key]["value_actions"] and record["ending"]["result_kind"] not in {"scored", "resignation"}:
+                raise ValueError("An unsupported ending supplies old value labels")
+        elif record["ending"] is not None:
+            raise ValueError("A sealed or unused game exposes ending metadata")
+        seen.add(key)
+    if seen != set(memberships):
+        raise ValueError("Base metadata omits a frozen membership")
+    rejected = set()
+    for record in index["rejected"]:
+        key = record["source_url"]
+        if (set(record) != {"source_url", "reason", *FINGERPRINT_FIELDS}
+                or key in rejected or key in seen or not isinstance(key, str) or not key
+                or not isinstance(record["reason"], str) or not record["reason"]):
+            raise ValueError("Invalid or duplicated prior rejected source")
+        for field in FINGERPRINT_FIELDS:
+            if record[field] is not None and (not isinstance(record[field], str)
+                    or re.fullmatch(r"[0-9a-f]{64}", record[field]) is None):
+                raise ValueError("Invalid prior rejected fingerprint")
+        rejected.add(key)
+    provenance = index["provenance"]
+    parent_ref = provenance["parent_index"]
+    parent = read_ref(parent_ref) if parent_ref is not None else None
+    records = {record["source_url"]: record for record in index["records"]}
+    if parent is not None and (parent["schema"] != INDEX_VERSION
+            or any(records.get(row["source_url"]) != row for row in parent["records"])):
+        raise ValueError("The metadata index changed a parent record")
+    units, seen_units = [], set()
+    for pinned in provenance["work_units"]:
+        unit = read_ref(pinned, maximum=256 * MIB)
+        key = unit["source_url"]
+        if key in seen_units or unit["status"] not in {"canonical", "source_excluded"}:
+            raise ValueError("Invalid or duplicate indexed work unit")
+        if unit["status"] == "canonical":
+            record = records.get(key)
+            if (record is None or sha256(unit["canonical_json"].encode()).hexdigest() != record["canonical_sha256"]
+                    or unit.get("sgf_sha256") != record["sgf_sha256"]
+                    or unit.get("sequence_fingerprint") != record["audit_sequence_sha256"]
+                    or unit.get("trajectory_sha256") != record["trajectory_sha256"]):
+                raise ValueError("Indexed work differs from the published canonical metadata")
+        elif key in records:
+            raise ValueError("A rejected work unit became a base member")
+        units.append(unit)
+        seen_units.add(key)
+    if index["rejected"] != _rejections(units, () if parent is None else parent["rejected"]):
+        raise ValueError("The metadata index dropped or changed a prior rejection")
+    if "summary" in provenance:
+        summary, previous_request = read_ref(provenance["summary"]), read_ref(provenance["request"])
+        if (summary["request_sha256"] != provenance["request"]["sha256"]
+                or summary["artifacts"]["canonical"]["sha256"] != index["canonical_sha256"]
+                or summary["artifacts"]["split_manifest"]["sha256"] != index["split_sha256"]
+                or summary["artifacts"]["exposure"] != index["exposure"]
+                or previous_request["refs"].get("base_index") != parent_ref
+                or summary["source_completed"] != len(units)
+                or summary["new_canonical_games"] != sum(unit["status"] == "canonical" for unit in units)
+                or summary["source_exclusions"] != Counter(unit["reason"] for unit in units if unit["status"] != "canonical")):
+            raise ValueError("The metadata index differs from its pinned build evidence")
+    return index
+
+
+def base_endings(request, rows):
+    """Return allowed ending evidence without decoding old canonical action targets."""
+    index = _read_base_index(request, rows)
+    canonical = read_ref(request["refs"]["canonical"], json_data=False)
+    records = _canonical_index(canonical, rows)
+    if index is not None and index["records"] != records:
+        raise ValueError("The base index differs from canonical metadata")
+    return {row["source_url"]: row["ending"] for row in records if row["ending"] is not None}
+
+
+def _rejections(units, previous=()):
+    records = {row["source_url"]: dict(row) for row in previous}
+    for unit in units:
+        if unit["status"] == "canonical":
+            continue
+        row = {"source_url": unit["source_url"], "reason": unit["reason"],
+               "sgf_sha256": unit.get("sgf_sha256"), "audit_sequence_sha256": unit.get("sequence_fingerprint"),
+               "trajectory_sha256": unit.get("trajectory_sha256")}
+        if row["source_url"] in records and records[row["source_url"]] != row:
+            raise ValueError("A previous rejection changed")
+        records[row["source_url"]] = row
+    return sorted(records.values(), key=lambda row: row["source_url"])
+
+
+def prepare_base_index(summary_ref, request_ref, output_path):
+    """Pin the metadata and saved rejections from a completed pre-index build."""
+    summary, request = read_ref(summary_ref), read_ref(request_ref)
+    if summary["request_sha256"] != request_ref["sha256"] or summary["status"] not in {"completed", "budget_stopped"}:
+        raise ValueError("The previous summary does not match its completed request")
+    refs = summary["artifacts"]
+    canonical = read_ref(refs["canonical"], json_data=False)
+    _, parts = read_membership(Path(refs["split_manifest"]["path"]).parent, refs["split_manifest"]["sha256"])
+    rows = [row for part in parts.values() for row in part]
+    records = _canonical_index(canonical, rows)
+    _, old_parts = read_membership(Path(request["refs"]["split_manifest"]["path"]).parent,
+                                   request["refs"]["split_manifest"]["sha256"])
+    old_rows = [row for part in old_parts.values() for row in part]
+    old_index = _read_base_index(request, old_rows)
+    by_id = {row["source_url"]: row for row in rows}
+    if any(by_id.get(row["source_url"]) != row for row in old_rows):
+        raise ValueError("The previous build changed its own base memberships")
+    old_ids = {row["source_url"] for row in old_rows}
+    new_records = {row["source_url"]: row for row in records if row["source_url"] not in old_ids}
+    exposure = read_ref(refs["exposure"])
+    units, seen = [], set()
+    work = Path(summary_ref["path"]).parent / "work/canonical"
+    for number in range(summary["source_completed"]):
+        path = work / f"{number:06d}.json"
+        pinned = json.loads(path.with_suffix(".ref.json").read_text())
+        if Path(pinned["path"]).resolve() != path.resolve():
+            raise ValueError("Previous work reference points outside its expected path")
+        unit = read_ref(pinned, maximum=256 * MIB)
+        key = unit["source_url"]
+        if key in seen or key in old_ids or key not in exposure["source_ids"]:
+            raise ValueError("Previous work source IDs disagree with the preserved base or exposure")
+        if unit["status"] == "canonical":
+            record = new_records.get(key)
+            if (record is None or sha256(unit["canonical_json"].encode()).hexdigest() != record["canonical_sha256"]
+                    or unit.get("sgf_sha256") != record["sgf_sha256"]
+                    or unit.get("sequence_fingerprint") != record["audit_sequence_sha256"]
+                    or unit.get("trajectory_sha256") != record["trajectory_sha256"]):
+                raise ValueError("Previous work differs from the published canonical metadata")
+        elif unit["status"] != "source_excluded" or key in by_id:
+            raise ValueError("Unexpected previous work status or rejected membership")
+        for field, exposed in (("sgf_sha256", "sgf_hashes"), ("sequence_fingerprint", "sequence_hashes")):
+            if unit.get(field) and unit[field] not in exposure[exposed]:
+                raise ValueError("Previous work fingerprint is absent from preserved exposure")
+        units.append({**unit, "unit_ref": pinned})
+        seen.add(key)
+    if ({unit["source_url"] for unit in units if unit["status"] == "canonical"} != set(new_records)
+            or len(new_records) != summary["new_canonical_games"]
+            or Counter(unit["reason"] for unit in units if unit["status"] != "canonical") != summary["source_exclusions"]):
+        raise ValueError("Previous work omits published records or source rejections")
+    index = {"schema": INDEX_VERSION, "canonical_sha256": refs["canonical"]["sha256"],
+             "split_sha256": refs["split_manifest"]["sha256"], "exposure": refs["exposure"], "records": records,
+             "rejected": _rejections(units, () if old_index is None else old_index["rejected"]),
+             "provenance": {"summary": summary_ref, "request": request_ref,
+                            "parent_index": request["refs"].get("base_index"),
+                            "work_units": [unit["unit_ref"] for unit in units]}}
+    save_json(output_path, index)
+    pinned = reference(output_path)
+    _read_base_index({"refs": {**refs, "base_index": pinned}}, rows)
+    return pinned
 
 
 def _header_for_fingerprints(data, row, groups, reserved):
@@ -486,13 +694,9 @@ def _canonical_phase(output, candidates, groups, exposure, owner_hashes, request
     return units, stop
 
 
-def _new_memberships(units, fingerprints, groups, split, exposure):
+def _new_memberships(units, fingerprints, groups, split, exposure, prior_rejected=()):
     entries = [unit["entry"] for unit in units if unit["status"] == "canonical"]
-    rejected = {"sgf_sha256": {unit["sgf_sha256"] for unit in units if unit["status"] != "canonical" and unit.get("sgf_sha256")},
-                "audit_sequence_sha256": {unit["sequence_fingerprint"] for unit in units
-                                          if unit["status"] != "canonical" and unit.get("sequence_fingerprint")},
-                "trajectory_sha256": {unit["trajectory_sha256"] for unit in units
-                                      if unit["status"] != "canonical" and unit.get("trajectory_sha256")}}
+    rejected = _fingerprints(_rejections(units, prior_rejected))
     for component in duplicate_components(entries):
         reasons = []
         if any(entry.get(field) in values for entry in component for field, values in fingerprints.items()):
@@ -623,7 +827,7 @@ def _make_canonical(output, canonical, units, request, budget):
 
 
 def _publish(output, canonical, split, old_rows, examples, new_rows, units, games, plan,
-             groups, exposure, request, request_pin, sources_pin, budget):
+             groups, exposure, request, request_pin, sources_pin, budget, base_index):
     published = output / "dataset"
     if published.exists():
         budget.remove_tree(published)
@@ -705,6 +909,14 @@ def _publish(output, canonical, split, old_rows, examples, new_rows, units, game
     budget.save(published / "normalizer.json", normalizer)
     budget.save(published / "groups.json", groups)
     budget.save(published / "exposure.json", {key: sorted(value) for key, value in exposure.items()})
+    budget.save(published / "base_index.json", {
+        "schema": INDEX_VERSION, "canonical_sha256": canonical_pin, "split_sha256": split_pin,
+        "exposure": reference(published / "exposure.json"),
+        "records": _canonical_index(published / "canonical.parquet", rows, lambda: budget.check(finishing=True)),
+        "rejected": _rejections(units, () if base_index is None else base_index["rejected"]),
+        "provenance": {"request_sha256": request_pin, "sources_sha256": sources_pin,
+                       "parent_index": request["refs"].get("base_index"),
+                       "work_units": [unit["unit_ref"] for unit in units]}})
     return published, manifest, examples_pin
 
 
@@ -736,7 +948,7 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
     started, started_utc = time.process_time(), datetime.now(timezone.utc)
     request = read_ref({"path": str(request_path), "sha256": request_sha256})
     sources = read_ref({"path": str(sources_path), "sha256": sources_sha256}, maximum=128 * MIB)
-    canonical, split, partitions, examples, groups, exposure, owner_hashes = _inputs(request, sources)
+    canonical, split, partitions, examples, groups, exposure, owner_hashes, base_index = _inputs(request, sources)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()) and not (output / "progress.json").exists():
@@ -746,11 +958,16 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
     budget.state["test_groups"] = split["plan"]["test_groups"]
     try:
         old_rows = [row for role in ROLES for row in partitions[role]]
-        fingerprints = base_fingerprints(canonical, old_rows, request["refs"]["original_audit"])
+        read_ref(request["refs"]["original_audit"], json_data=False)
+        records = _canonical_index(canonical, old_rows, lambda: budget.check(finishing=True))
+        if base_index is not None and base_index["records"] != records:
+            raise ValueError("The base index differs from canonical metadata")
+        fingerprints = _fingerprints(records)
         fingerprints["sgf_sha256"].update(owner_hashes)
         units, canonical_stop = _canonical_phase(output, sources["candidates"], groups, exposure,
                                                 owner_hashes, request, budget)
-        _, new_rows, plan = _new_memberships(units, fingerprints, groups, split, exposure)
+        _, new_rows, plan = _new_memberships(units, fingerprints, groups, split, exposure,
+                                            () if base_index is None else base_index["rejected"])
         deduplicated = sum(row["role"] in ALLOWED for row in new_rows)
         prepared_canonical = _make_canonical(output, canonical, units, request, budget)
         games, example_stop = _example_phase(output, units, new_rows, plan, examples, request, budget)
@@ -760,7 +977,7 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
             if unit.get("sequence_fingerprint"):
                 exposure["sequence_hashes"].add(unit["sequence_fingerprint"])
         published, manifest, example_pin = _publish(output, prepared_canonical, split, old_rows, examples,
-            new_rows, units, games, plan, groups, exposure, request, request_sha256, sources_sha256, budget)
+            new_rows, units, games, plan, groups, exposure, request, request_sha256, sources_sha256, budget, base_index)
         budget.write(phase="verification")
         support = support_counts(published / "examples", example_pin, lambda: budget.check(finishing=True))
         budget.save(published / "support.json", support)
@@ -783,7 +1000,8 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
         artifact_names = {"canonical": "canonical.parquet", "split_manifest": "splits/manifest.json",
                           "examples_manifest": "examples/manifest.json", "profile": "profile.json",
                           "normalizer": "normalizer.json", "coverage": "support.json",
-                          "groups": "groups.json", "exposure": "exposure.json", "diagnostics": "diagnostics.json"}
+                          "groups": "groups.json", "exposure": "exposure.json", "diagnostics": "diagnostics.json",
+                          "base_index": "base_index.json"}
         summary = {"schema": VERSION, "status": "budget_stopped" if canonical_stop or example_stop else "completed",
             "request_sha256": request_sha256, "sources_sha256": sources_sha256,
             "source_revision": request["source_revision"], "builder_sha256": file_hash(__file__),
