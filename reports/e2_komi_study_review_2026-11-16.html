@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E2: the 0.5-komi study and proposed budget</title>
+<style>
+:root{font-family:var(--font-sans,system-ui,sans-serif);color:var(--foreground,#202b36);line-height:1.5}
+html,body{margin:0;background:transparent}main{max-width:960px;margin:auto;min-width:0}
+h1{font-size:1.65rem;line-height:1.2}h2{font-size:1.2rem;margin-top:1.6rem}p{max-width:78ch}
+.box{padding:16px;background:var(--card,#f6f8fa);border:1px solid var(--border,#cbd3dc);border-radius:var(--radius,8px);margin:1rem 0}
+.muted{color:var(--muted-foreground,#536373)}a{color:var(--primary,#175ca2)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}th,td{padding:8px 5px;border-bottom:1px solid var(--border,#cbd3dc);text-align:left;vertical-align:top}
+th:not(:first-child),td:not(:first-child){text-align:right}caption{text-align:left;margin-bottom:.5rem}
+.chart{height:256px;display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px 8px;align-items:center;font-variant-numeric:tabular-nums}
+.pair{display:grid;gap:4px}.track{position:relative;height:23px;background:var(--secondary,#edf0f4);border-radius:3px;overflow:hidden}
+.bar{height:23px;background:var(--chart-1,#367caf);min-width:2px}.possible{background:var(--chart-2,#8b5fae)}
+.number{position:absolute;right:7px;top:0;color:var(--foreground,#202b36);background:var(--card,#fff);padding:0 3px;border-radius:3px}
+.key{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem}.swatch{display:inline-block;width:12px;height:12px;background:var(--chart-1,#367caf);margin-right:5px}.swatch.possible{background:var(--chart-2,#8b5fae)}
+textarea{box-sizing:border-box;width:100%;min-height:85px;font:inherit;padding:8px;color:inherit;background:var(--card,#fff);border:1px solid var(--border,#aeb9c7);border-radius:4px}
+button{font:inherit;padding:8px 12px;margin-top:8px;cursor:pointer;color:inherit;background:var(--secondary,#edf0f4);border:1px solid var(--border,#aeb9c7);border-radius:4px}
+li{margin-bottom:.5rem}code{overflow-wrap:anywhere}summary{cursor:pointer;font-weight:600}
+@media(max-width:440px){h1{font-size:1.35rem}th,td{padding:6px 3px;font-size:.9rem}.box{padding:12px}}
+</style>
+<main>
+<h1>E2: study 0.5-komi games</h1>
+<p>You chose to test Japanese 0.5-komi games alongside the current 6.5-komi baseline. Komi is White’s point bonus. The existing dataset stays unchanged.</p>
+<div class="box"><strong>Scope approved. New run budget pending.</strong><br>The previous 24-hour allowance has ended. The proposed next step uses cached files, with <strong>no downloads, GPU work or model training</strong>.</div>
+
+<h2>Why this study is useful</h2>
+<p>The baseline has <strong>1 million training moves from 4,561 games</strong>. Four ranks still have fewer than 200 games. The cached headers identify <strong>9,525 possible 0.5-komi training games</strong> and 3,522 development games. They still need full checks.</p>
+<div class="key"><span><i class="swatch"></i>Current usable training games</span><span><i class="swatch possible"></i>Possible 0.5-komi games</span></div>
+<div class="chart" role="img" aria-label="Current usable games versus possible 0.5-komi games: 15k, 66 versus 138; 14k, 41 versus 191; 13k, 90 versus 457; 11k, 182 versus 830. Candidates are not usable yield.">
+<strong>15k</strong><div class="pair"><div class="track"><div class="bar" style="width:7.95%"></div><span class="number">66</span></div><div class="track"><div class="bar possible" style="width:16.63%"></div><span class="number">138</span></div></div>
+<strong>14k</strong><div class="pair"><div class="track"><div class="bar" style="width:4.94%"></div><span class="number">41</span></div><div class="track"><div class="bar possible" style="width:23.01%"></div><span class="number">191</span></div></div>
+<strong>13k</strong><div class="pair"><div class="track"><div class="bar" style="width:10.84%"></div><span class="number">90</span></div><div class="track"><div class="bar possible" style="width:55.06%"></div><span class="number">457</span></div></div>
+<strong>11k</strong><div class="pair"><div class="track"><div class="bar" style="width:21.93%"></div><span class="number">182</span></div><div class="track"><div class="bar possible" style="width:100%"></div><span class="number">830</span></div></div>
+</div>
+<p class="muted">Candidate bars are not extra usable games. Replay, duplicate and split checks may remove records. Different-rank games appear in both rank rows. This study measures data coverage; it cannot establish stronger play.</p>
+
+<h2>Proposed run: cached data only</h2>
+<table>
+<caption>Follow-up task: <code>kenggo-ydo.12</code></caption>
+<thead><tr><th>Limit</th><th>Maximum</th></tr></thead>
+<tbody>
+<tr><td>Total production CPU, including checks and failures</td><td>20 hours</td></tr>
+<tr><td>Elapsed production time</td><td>24 hours</td></tr>
+<tr><td>Replay and encoding stop</td><td>19 CPU hours or 22 elapsed hours</td></tr>
+<tr><td>New training moves</td><td>1,000,000</td></tr>
+<tr><td>New moves in each development group</td><td>250,000</td></tr>
+<tr><td>New output on disk</td><td>32 GiB</td></tr>
+<tr><td>Downloads, GPU time and model training</td><td>None</td></tr>
+</tbody></table>
+<p>The last build used about 16 CPU hours and 18 elapsed hours to add 1.28 million rows. This cap allows a similar run and reserves time for verification. It is a limit, not a promise to reach every rank target. Production starts only after implementation and independent prelaunch review; development tests and code review are recorded separately.</p>
+
+<h2>What must change before a run</h2>
+<p>The current pipeline assumes 6.5 komi in several places. The follow-up must carry the actual komi through replay, saved game state, model inputs and scoring, with checks at both values. It will reconsider only the old 0.5-komi scope exclusion; other exclusions and duplicate restrictions still apply.</p>
+<p>The old data, held-out account groups, two owner exclusions and sealed final set stay intact. New output will be stored separately. Results will show 6.5-only, 0.5-only and combined coverage.</p>
+
+<h2>Your next action</h2>
+<ol>
+<li><strong>Review the time and storage caps above (<code>kenggo-ydo.12</code>).</strong> They bound the next machine run while leaving time to check the resulting data.</li>
+<li><strong>Reply in the conversation to approve this budget or defer the run.</strong> Your scope choice is already recorded in <code>kenggo-ydo.11</code>; no need to choose the komi scope again.</li>
+</ol>
+<p>The new budget needs approval because the scope-selection question explicitly kept it separate, and the earlier 24-hour allowance has expired. No new production run has started.</p>
+
+<details><summary>Evidence and detailed plan</summary>
+<p><a href="../plan/e2_komi_study_v1.md">Study plan and required checks</a><br>
+<a href="e2_rank_collection_2026-11-15.md">Completed data report</a><br>
+<a href="../runs/e2-rank-expansion-review-2026-11-15/review.html">Earlier game-review page</a></p>
+<p>The pinned audit contains 13,047 possible records: 9,525 training, 1,502 population development and 2,020 unseen-account development. All other source requirements remain the same. E2 readiness and a later matched model comparison remain open.</p>
+</details>
+<h2>Optional review notes</h2>
+<label for="notes">Save questions or changes to the proposed budget.</label>
+<textarea id="notes" placeholder="Your notes…"></textarea>
+<button id="download" type="button">Download notes</button>
+<p class="muted">This page sends nothing and does not record approval. Reply in the conversation with your decision.</p>
+</main>
+<script>
+document.getElementById('download').addEventListener('click',()=>{
+  const text='E2 0.5-komi budget review — kenggo-ydo.12\nScope approved; production budget pending.\n\n'+document.getElementById('notes').value;
+  const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download='e2-komi-budget-notes.txt';link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+</script>
+</html>
