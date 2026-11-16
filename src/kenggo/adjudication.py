@@ -5,7 +5,7 @@ import json
 import math
 import time
 
-from kenggo.go import (RULES, PASS, IllegalMove, Outcome, canonical, components, digest,
+from kenggo.go import (PASS, IllegalMove, Outcome, canonical, components, digest,
                        liberties, neighbors, opponent)
 
 
@@ -94,8 +94,9 @@ def _points(value):
     return frozenset(value)
 
 
-def score_map(position, mapping, meter):
+def score_map(game, mapping, meter):
     """Check complete geometry and exact arithmetic; status truth needs authority."""
+    position = game.position
     if not isinstance(mapping, dict) or set(mapping) != {
             "alive", "dead", "seki", "territory_black", "territory_white", "neutral"}:
         raise ValueError("Incomplete classification")
@@ -138,7 +139,8 @@ def score_map(position, mapping, meter):
             if any(statuses[p] == "seki" for p in boundary):
                 raise ValueError("Seki-adjacent points cannot count as territory")
     return (2 * (len(mapping["territory_white"]) + position.captured_black + dead_black
-                 - len(mapping["territory_black"]) - position.captured_white - dead_white) + 13)
+                 - len(mapping["territory_black"]) - position.captured_white - dead_white)
+            + game.komi_halfpoints)
 
 
 def _neutral_payload(game, payload, authorized_hashes):
@@ -147,7 +149,7 @@ def _neutral_payload(game, payload, authorized_hashes):
     if digest(payload) not in authorized_hashes:
         raise ValueError("Neutral decision is not independently authorized")
     if (set(payload) != {"method", "rules", "snapshot", "referee", "provenance", "budget", "map"}
-            or payload["method"] != "neutral_map_v1" or payload["rules"] != RULES
+            or payload["method"] != "neutral_map_v1" or payload["rules"] != game.rules
             or payload["snapshot"] != game.snapshot
             or not isinstance(payload["referee"], str) or not payload["referee"]
             or not isinstance(payload["provenance"], str) or not payload["provenance"]):
@@ -179,7 +181,7 @@ def adjudicate(game, *, neutral=None, authorized_hashes=frozenset(), limits=Limi
         else:
             mapping = _neutral_payload(game, neutral, authorized_hashes)
         if mapping is not None:
-            score = score_map(game.position, mapping, meter)
+            score = score_map(game, mapping, meter)
             meter.tick()
             payload = canonical(neutral if neutral is not None else mapping)
             reason = "exact_score"
@@ -195,6 +197,8 @@ def adjudicate(game, *, neutral=None, authorized_hashes=frozenset(), limits=Limi
 
 def adjudicate_empirical(game, referee):
     """Resolve a frozen ending under an explicitly configured empirical referee."""
+    if game.komi_halfpoints != 13:
+        raise ValueError("Empirical adjudication supports only 6.5-point komi")
     if game.status != "pending_adjudication":
         raise ValueError("Only a frozen two-pass ending can be adjudicated")
     decision = referee.adjudicate(game)
@@ -225,7 +229,7 @@ def _settled_score(game, meter):
     if game.status != "playing" or game.pending_cap:
         return None
     mapping = singleton_eyes(game.position, meter)
-    return None if mapping is None else score_map(game.position, mapping, meter)
+    return None if mapping is None else score_map(game, mapping, meter)
 
 
 def _atari_liberties(position, color):

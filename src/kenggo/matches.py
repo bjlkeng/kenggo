@@ -778,6 +778,8 @@ def run_game(slot, candidate_profile, opponent_profile, *, budget, limits=MatchL
     if initial is not None and not allow_fixture:
         raise ValueError("Production matches start empty; fixtures need explicit authorization")
     game = initial if initial is not None else Game.new(candidate_color=color)
+    if game.komi_halfpoints != 13:
+        raise ValueError("Match profiles support only 6.5-point komi")
     if game.candidate_color != color:
         raise ValueError("Game must preserve its configured candidate color")
     if (referee_factory is None) != (referee_profile is None):

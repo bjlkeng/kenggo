@@ -12,6 +12,13 @@ from test_matches import FakeReferee
 
 
 class MatchSgfTests(unittest.TestCase):
+    def test_existing_match_format_rejects_new_komi(self):
+        with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+            export_match_sgf(Game.new(komi_halfpoints=1))
+        altered = export_match_sgf(Game.new()).replace(b"KM[6.5]", b"KM[0.5]")
+        with self.assertRaisesRegex(ValueError, "rules"):
+            replay_match_sgf(altered)
+
     def test_coordinates_passes_and_untimed_metadata(self):
         game = Game.new(candidate_color="W")
         for color, action in (("B", 0), ("W", 342), ("B", 18), ("W", 360), ("B", PASS), ("W", PASS)):

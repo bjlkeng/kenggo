@@ -20,6 +20,8 @@ def _result(game):
 
 
 def export_match_sgf(game, *, metadata=None):
+    if game.komi_halfpoints != 13:
+        raise ValueError("Match SGF v1 supports only 6.5-point komi")
     tree = sgf.Sgf_game(size=19, encoding="UTF-8")
     root = tree.get_root()
     root.set("AP", ("kenggo", "match_v1"))

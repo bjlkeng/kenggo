@@ -37,14 +37,14 @@ class ReferenceTests(unittest.TestCase):
             self.assertEqual(game.legal_mask(), tuple(state["legal_mask"]))
 
     def test_ordinary_states_and_all_362_legal_actions(self):
-        fixtures = ordinary_cases()
-        cases = [{"board": c["board"], "include_legal_mask": True,
+        fixtures = [(fixture, komi) for komi in (13, 1) for fixture in ordinary_cases()]
+        cases = [{"board": c["board"], "komi_halfpoints": komi, "include_legal_mask": True,
                   "moves": [{"color": color, "action": action} for color, action in c["moves"]]}
-                 for c in fixtures]
-        for fixture, output in zip(fixtures, self.oracle(cases)):
-            with self.subTest(name=fixture["name"]):
+                 for c, komi in fixtures]
+        for (fixture, komi), output in zip(fixtures, self.oracle(cases)):
+            with self.subTest(name=fixture["name"], komi_halfpoints=komi):
                 self.assertTrue(output["ok"])
-                game = Game.from_fixture(fixture["board"])
+                game = Game.from_fixture(fixture["board"], komi_halfpoints=komi)
                 self.assert_position(game, output["initial"])
                 for (color, action), native in zip(fixture["moves"], output["steps"]):
                     accepted = True
@@ -54,6 +54,32 @@ class ReferenceTests(unittest.TestCase):
                         accepted = False
                     self.assertEqual(accepted, native["accepted"])
                     self.assert_position(game, native["state"])
+
+    def test_komi_halfpoints_scoring_winner_reversal_and_clones(self):
+        cases = [{"board": dense(), "captures": {"B": 0, "W": 3}, "mode": "history",
+                  "komi_halfpoints": komi, "branches": [[
+                      {"color": "B" if i % 2 == 0 else "W", "action": PASS} for i in range(6)]]}
+                 for komi in (1, 13)]
+        for komi, result in zip((1, 13), self.oracle(cases)):
+            with self.subTest(komi_halfpoints=komi):
+                self.assertTrue(result["ok"])
+                self.assertFalse(result["final"]["finished"])
+                terminal = result["branches"][0]["final"]
+                game = two_passes(Game.from_fixture(dense(), captured_white=3, komi_halfpoints=komi))
+                ended, _ = adjudicate(game)
+                self.assertTrue(terminal["scored"])
+                self.assertEqual(terminal["white_minus_black_halfpoints"], komi - 6)
+                self.assertEqual(terminal["white_minus_black_halfpoints"],
+                                 ended.outcome.white_minus_black_halfpoints)
+                self.assertEqual(terminal["winner"], ended.outcome.winner)
+
+    def test_komi_halfpoints_rejects_unknown_values_and_preserves_default(self):
+        cases = [{"komi_halfpoints": value} for value in (True, False, 1.0, 13.0, 0, 2, 15, "1", None)]
+        for case, result in zip(cases, self.oracle(cases)):
+            with self.subTest(case=case):
+                self.assertFalse(result["ok"])
+        default, explicit = self.oracle([{}, {"komi_halfpoints": 13}])
+        self.assertEqual(default, explicit)
 
     def test_native_cleanup_is_diagnostic_and_scores_settled_fixture(self):
         for captured in ({"B": 0, "W": 0}, {"B": 3, "W": 1}, {"B": 0, "W": 8}):
@@ -114,11 +140,12 @@ class ReferenceTests(unittest.TestCase):
             {"board": dense("seki"), "mode": "history", "moves": [
                 {"color": "B" if i % 2 == 0 else "W", "action": PASS} for i in range(6)]},
         ]
-        dead, seki = self.oracle(cases)
-        self.assertEqual(dead["final"]["captures"]["W"], 2)
-        # Playing the capture during ordinary play consumes a territory point.
-        self.assertEqual(dead["final"]["white_minus_black_halfpoints"], 5)
-        self.assertEqual(seki["final"]["white_minus_black_halfpoints"], 13)
+        for komi in (1, 13):
+            dead, seki = self.oracle([{**case, "komi_halfpoints": komi} for case in cases])
+            self.assertEqual(dead["final"]["captures"]["W"], 2)
+            # Playing the capture during ordinary play consumes a territory point.
+            self.assertEqual(dead["final"]["white_minus_black_halfpoints"], komi - 8)
+            self.assertEqual(seki["final"]["white_minus_black_halfpoints"], komi)
 
 
 if __name__ == "__main__":

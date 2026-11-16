@@ -97,7 +97,7 @@ class BudgetStop(RuntimeError):
 
 
 class Budget:
-    def __init__(self, output, request, request_pin, sources_pin, started, started_utc):
+    def __init__(self, output, request, request_pin, sources_pin, started, started_utc, *, version=VERSION, initial_cpu=0):
         self.output, self.limits = output, request["limits"]
         self.deadline = datetime.fromisoformat(request["deadline_utc"].replace("Z", "+00:00"))
         if self.deadline.tzinfo is None:
@@ -109,11 +109,11 @@ class Budget:
         if path.exists():
             self.state = json.loads(path.read_text())
             if (self.state["request_sha256"] != request_pin or self.state["sources_sha256"] != sources_pin
-                    or self.state["schema"] != VERSION):
+                    or self.state["schema"] != version):
                 raise ValueError("Resume inputs differ from the saved build")
         else:
-            self.state = {"schema": VERSION, "request_sha256": request_pin, "sources_sha256": sources_pin,
-                          "started_utc": started_utc.isoformat(), "cpu_charged_seconds": 0,
+            self.state = {"schema": version, "request_sha256": request_pin, "sources_sha256": sources_pin,
+                          "started_utc": started_utc.isoformat(), "cpu_charged_seconds": initial_cpu,
                           "phase": "inputs", "canonical_completed": 0, "games_encoded": 0,
                           "selected_sgf_bytes": 0, "expanded_zip_bytes": 0}
         self.prior_cpu = self.state["cpu_charged_seconds"]
@@ -203,17 +203,22 @@ def union_exposure(*values):
     return result
 
 
-def _inputs(request, sources):
-    if (request.get("schema") != REQUEST_VERSION
+def _inputs(request, sources, *, komi_study=False, reconsidered_sources=()):
+    if komi_study:
+        from kenggo.komi_expansion import CEILINGS as ceilings, REQUEST_VERSION as request_version, SOURCES_VERSION
+        source_version = SOURCES_VERSION
+    else:
+        ceilings, request_version, source_version = CEILINGS, REQUEST_VERSION, "e2_expansion_sources_v1"
+    if (request.get("schema") != request_version
             or set(request["refs"]) not in (REFS, REFS | {"base_index"})):
         raise ValueError("Unsupported expansion request or missing base references")
     limits = request["limits"]
-    if set(limits) != set(CEILINGS):
+    if set(limits) != set(ceilings):
         raise ValueError("Every build limit must be explicit")
-    for name, ceiling in CEILINGS.items():
+    for name, ceiling in ceilings.items():
         if type(limits[name]) is not int or not 0 < limits[name] <= ceiling:
             raise ValueError("Invalid or enlarged build limit: " + name)
-    if (sources.get("schema") != "e2_expansion_sources_v1"
+    if (sources.get("schema") != source_version
             or sources["request_sha256"] != request["source_request_sha256"]):
         raise ValueError("The source collection does not match the build request")
     code = request["source_revision"].get("code_sha256", {})
@@ -223,7 +228,8 @@ def _inputs(request, sources):
         read_ref({"path": path, "sha256": pin}, json_data=False, maximum=16 * MIB)
     refs = request["refs"]
     profile = load_dataset_profile(refs["profile"]["path"], refs["profile"]["sha256"])
-    canonical = read_ref(refs["canonical"], json_data=False)
+    canonical = read_ref(refs["canonical"], json_data=False,
+                         maximum=limits["canonical_file_bytes"] if komi_study else 64 * MIB)
     split_path = read_ref(refs["split_manifest"], json_data=False)
     split, partitions = read_membership(split_path.parent, refs["split_manifest"]["sha256"])
     if split["provenance"].get("expansion_request_sha256") is not None and "base_index" not in refs:
@@ -247,7 +253,7 @@ def _inputs(request, sources):
                 or examples["counts"][role]["value_valid"] != split["value_actions_by_role"][role]):
             raise ValueError("Base example and split counts differ")
     for role in ALLOWED:
-        cap = limits["max_train_examples" if role == "train" else "max_development_examples"]
+        cap = _row_cap(request, role, komi_study=komi_study)
         if examples["counts"][role]["examples"] > cap:
             raise ValueError("The requested row cap is smaller than the preserved base")
     groups = sources["groups"]
@@ -289,7 +295,9 @@ def _inputs(request, sources):
     candidates = sources["candidates"]
     ids = [item["source"]["source_url"] for item in candidates]
     rejected_ids = set() if base_index is None else {row["source_url"] for row in base_index["rejected"]}
-    if len(set(ids)) != len(ids) or set(ids) & (set(by_id) | rejected_ids):
+    if (not komi_study and reconsidered_sources
+            or len(set(ids)) != len(ids) or set(ids) & set(by_id)
+            or set(ids) & (rejected_ids - set(reconsidered_sources))):
         raise ValueError("Source IDs are duplicated or already belong to the base corpus")
     if len(candidates) + len(rows) > limits["max_records"]:
         raise ValueError("Candidate record limit exceeded")
@@ -302,6 +310,12 @@ def _inputs(request, sources):
                 or any(group not in exposure["groups"] for _, group in participants(row, groups))):
             raise ValueError("Candidate identity, cohort or exposure does not agree")
     return canonical, split, partitions, examples, groups, exposure, owner_hashes, base_index
+
+
+def _row_cap(request, role, *, komi_study=False):
+    if komi_study:
+        return request["combined_example_caps"][role]
+    return request["limits"]["max_train_examples" if role == "train" else "max_development_examples"]
 
 
 def _ending(audit):
@@ -567,7 +581,7 @@ def _header_for_fingerprints(data, row, groups, reserved):
     return rank_conflict
 
 
-def _canonical_unit(item, groups, exposure, owner_hashes, limits, budget, archives):
+def _canonical_unit(item, groups, exposure, owner_hashes, limits, budget, archives, *, komi_study=False):
     row, source = item["archive_row"], dict(item["source"])
     key = source["archive_path"]
     if key not in archives:
@@ -609,6 +623,8 @@ def _canonical_unit(item, groups, exposure, owner_hashes, limits, budget, archiv
     if len(data) != info.file_size or len(data) > limits["member_bytes"]:
         raise ValueError("Selected SGF size differs from its ZIP directory")
     source["sgf_sha256"] = sha256(data).hexdigest()
+    if komi_study and source["sgf_sha256"] != item["reconsideration"]["sgf_sha256"]:
+        raise ValueError("A reconsidered SGF differs from its frozen member hash")
     result = {"sgf_sha256": source["sgf_sha256"], "selected_bytes": len(data)}
     if source["sgf_sha256"] in owner_hashes:
         return {**result, "status": "source_excluded", "reason": "owner_excluded_sgf_bytes"}
@@ -616,12 +632,20 @@ def _canonical_unit(item, groups, exposure, owner_hashes, limits, budget, archiv
         rank_conflict = _header_for_fingerprints(data, row, groups, set(budget.state["test_groups"]))
     except (ValueError, TypeError, KeyError, UnicodeError, LookupError):
         return {**result, "status": "source_excluded", "reason": "source_header_rejected"}
-    audit = inspect_sgf(data, row, HISTORICAL_BOT_HANDLES)
+    audit = inspect_sgf(data, row, HISTORICAL_BOT_HANDLES, **({"komi_study": True} if komi_study else {}))
     audit["source_url"] = row["url"]
     gate = classify(audit, row, groups, Exposure(grouping_digest(groups), **{
-        name: frozenset(items) for name, items in exposure.items()}))
+        name: frozenset(items) for name, items in exposure.items()}),
+        **({"komi_study": True} if komi_study else {}))
     result["sequence_fingerprint"] = audit.get("sequence_fingerprint")
-    record, cost = canonicalize(data, source, row)
+    record, cost = canonicalize(data, source, row,
+                                **({"komi_study": True, "check_budget": budget.check} if komi_study else {}))
+    if komi_study:
+        previous = item["reconsideration"]
+        if (audit.get("metadata", {}).get("KM") != 0.5
+                or audit.get("metadata", {}).get("RU") != "Japanese"
+                or audit.get("sequence_fingerprint") != previous["audit_sequence_sha256"]):
+            raise ValueError("Reconsidered source metadata or played sequence changed")
     result.update(trajectory_sha256=record["trajectory_sha256"], adjudication_cost=cost)
     if rank_conflict or not gate["training_eligible"]:
         return {**result, "status": "source_excluded",
@@ -657,7 +681,7 @@ def _canonical_raw(unit):
     return raw
 
 
-def _canonical_phase(output, candidates, groups, exposure, owner_hashes, request, budget):
+def _canonical_phase(output, candidates, groups, exposure, owner_hashes, request, budget, *, komi_study=False):
     work = output / "work/canonical"
     work.mkdir(parents=True, exist_ok=True)
     completed = output / "work/canonical-complete.json"
@@ -677,7 +701,8 @@ def _canonical_phase(output, candidates, groups, exposure, owner_hashes, request
             try:
                 budget.begin(phase="canonical", current_source=item["source"]["source_url"],
                              canonical_attempted=number + 1)
-                unit = _canonical_unit(item, groups, exposure, owner_hashes, request["limits"], budget, archives)
+                unit = _canonical_unit(item, groups, exposure, owner_hashes, request["limits"], budget, archives,
+                                       **({"komi_study": True} if komi_study else {}))
                 unit["source_url"] = item["source"]["source_url"]
                 pin = budget.save(path, unit)
                 budget.save(path.with_suffix(".ref.json"), {"path": str(path), "sha256": pin})
@@ -694,9 +719,15 @@ def _canonical_phase(output, candidates, groups, exposure, owner_hashes, request
     return units, stop
 
 
-def _new_memberships(units, fingerprints, groups, split, exposure, prior_rejected=()):
+def _new_memberships(units, fingerprints, groups, split, exposure, prior_rejected=(), *, reconsidered_sources=()):
     entries = [unit["entry"] for unit in units if unit["status"] == "canonical"]
-    rejected = _fingerprints(_rejections(units, prior_rejected))
+    reconsidered = set(reconsidered_sources) & {entry["source_url"] for entry in entries}
+    if reconsidered_sources:
+        rejected = _fingerprints([row for row in prior_rejected if row["source_url"] not in reconsidered])
+        for field, values in _fingerprints(_rejections(units)).items():
+            rejected[field].update(values)
+    else:
+        rejected = _fingerprints(_rejections(units, prior_rejected))
     for component in duplicate_components(entries):
         reasons = []
         if any(entry.get(field) in values for entry in component for field, values in fingerprints.items()):
@@ -714,7 +745,7 @@ def _new_memberships(units, fingerprints, groups, split, exposure, prior_rejecte
     return entries, sorted(rows, key=lambda row: order[row["source_url"]]), plan
 
 
-def _example_phase(output, units, rows, plan, examples, request, budget):
+def _example_phase(output, units, rows, plan, examples, request, budget, *, komi_study=False):
     config = ExampleConfig(**examples["config"])
     records = {unit["source_url"]: unit for unit in units if unit["status"] == "canonical"}
     counts = {role: examples["counts"][role]["examples"] for role in ALLOWED}
@@ -725,7 +756,7 @@ def _example_phase(output, units, rows, plan, examples, request, budget):
         role = row["role"]
         if role not in ALLOWED:
             continue
-        cap = request["limits"]["max_train_examples" if role == "train" else "max_development_examples"]
+        cap = _row_cap(request, role, komi_study=komi_study)
         reason = "example_row_limit" if counts[role] + row["policy_actions"] > cap else stopped
         capped |= reason == "example_row_limit"
         directory = work / digest(row["source_url"])
@@ -744,7 +775,9 @@ def _example_phase(output, units, rows, plan, examples, request, budget):
                     budget.begin(phase="examples", current_source=row["source_url"])
                     generated = []
                     record = json.loads(_canonical_raw(records[row["source_url"]]))
-                    for example in examples_for_game(record, row, plan, config):
+                    for example in examples_for_game(record, row, plan, config,
+                                                      **({"komi_study": True, "check_budget": budget.check}
+                                                         if komi_study else {})):
                         budget.check()
                         generated.append(example)
                     if directory.exists():
@@ -780,13 +813,16 @@ def _example_phase(output, units, rows, plan, examples, request, budget):
     return games, stopped or ("example_row_limit" if capped else None)
 
 
-def _copy_file(source, target, pin, budget):
+def _copy_file(source, target, pin, budget, *, reference_only=False):
     budget.check(finishing=True)
     if file_hash(source) != pin:
         raise ValueError("A source shard changed")
     target.parent.mkdir(parents=True, exist_ok=True)
     budget.require_bytes(source.stat().st_size - budget.file_sizes.get(str(target), 0))
-    shutil.copyfile(source, target)
+    if reference_only:
+        target.symlink_to(source.resolve())
+    else:
+        shutil.copyfile(source, target)
     budget.account(target)
     if file_hash(target) != pin:
         raise ValueError("A copied shard changed")
@@ -827,7 +863,7 @@ def _make_canonical(output, canonical, units, request, budget):
 
 
 def _publish(output, canonical, split, old_rows, examples, new_rows, units, games, plan,
-             groups, exposure, request, request_pin, sources_pin, budget, base_index):
+             groups, exposure, request, request_pin, sources_pin, budget, base_index, *, komi_study=False):
     published = output / "dataset"
     if published.exists():
         budget.remove_tree(published)
@@ -861,12 +897,11 @@ def _publish(output, canonical, split, old_rows, examples, new_rows, units, game
     for role in ROLES:
         if role not in ALLOWED + ("excluded",) and resulting["membership_sha256"][role + ".parquet"] != split["membership_sha256"][role + ".parquet"]:
             raise ValueError("An untouched membership file changed")
-    profile = {"version": "population_example_profile_v1", "canonical_sha256": canonical_pin,
+    profile = {"version": "komi_study_example_profile_v1" if komi_study else "population_example_profile_v1", "canonical_sha256": canonical_pin,
         "split_sha256": split_pin, "population_inputs_sha256": request_pin,
         "sealed_source_ids_sha256": digest(sorted(split["sealed_source_ids"])),
         "limits": {"max_records": request["limits"]["max_records"],
-                   "max_examples_per_role": max(request["limits"]["max_train_examples"],
-                                                request["limits"]["max_development_examples"]),
+                   "max_examples_per_role": max(_row_cap(request, role, komi_study=komi_study) for role in ALLOWED),
                    "cpu_seconds": request["limits"]["cpu_seconds"], "wall_seconds": 86400}}
     profile_pin = budget.save(published / "profile.json", profile)
     manifest = deepcopy(examples)
@@ -878,7 +913,8 @@ def _publish(output, canonical, split, old_rows, examples, new_rows, units, game
             for kind, suffix in (("arrays", "npz"), ("metadata", "parquet")):
                 if item[kind] != f"{role}/{number:05d}.{suffix}":
                     raise ValueError("Unexpected base shard path")
-                _copy_file(source_dir / item[kind], example_dir / item[kind], item[kind + "_sha256"], budget)
+                _copy_file(source_dir / item[kind], example_dir / item[kind], item[kind + "_sha256"], budget,
+                           reference_only=komi_study)
     for directory, game in games:
         role = game["role"]
         for item in game["artifacts"]:
@@ -901,30 +937,39 @@ def _publish(output, canonical, split, old_rows, examples, new_rows, units, game
                     derivation={"request_sha256": request_pin, "source_collection_sha256": sources_pin,
                                 "parent_examples": request["refs"]["examples_manifest"],
                                 "builder_sha256": file_hash(__file__)})
+    if komi_study:
+        from kenggo.go import KOMI_STUDY_RULES
+        manifest.update(version="supervised_komi_study_examples_v1", rules=KOMI_STUDY_RULES)
     examples_pin = budget.save(example_dir / "manifest.json", manifest)
     budget.write(phase="normalizer", combined_rows={role: manifest["counts"][role]["examples"] for role in ALLOWED})
-    normalizer = fit_normalizer(example_dir, examples_pin)
+    normalizer = fit_normalizer(example_dir, examples_pin,
+        **({"komi_study": True, "check_budget": lambda: budget.check(finishing=True)} if komi_study else {}))
     if normalizer["count"][5] != manifest["counts"]["train"]["examples"]:
         raise ValueError("Combined training normalizer count mismatch")
     budget.save(published / "normalizer.json", normalizer)
     budget.save(published / "groups.json", groups)
     budget.save(published / "exposure.json", {key: sorted(value) for key, value in exposure.items()})
-    budget.save(published / "base_index.json", {
+    index = {
         "schema": INDEX_VERSION, "canonical_sha256": canonical_pin, "split_sha256": split_pin,
         "exposure": reference(published / "exposure.json"),
         "records": _canonical_index(published / "canonical.parquet", rows, lambda: budget.check(finishing=True)),
-        "rejected": _rejections(units, () if base_index is None else base_index["rejected"]),
+        "rejected": base_index["rejected"] if komi_study else _rejections(units, () if base_index is None else base_index["rejected"]),
         "provenance": {"request_sha256": request_pin, "sources_sha256": sources_pin,
                        "parent_index": request["refs"].get("base_index"),
-                       "work_units": [unit["unit_ref"] for unit in units]}})
+                       "work_units": [unit["unit_ref"] for unit in units]}}
+    if komi_study:
+        index.update(schema="e2_komi_data_index_v1", study_rejections=_rejections(units),
+                     reconsideration_sources_sha256=sources_pin)
+    budget.save(published / "base_index.json", index)
     return published, manifest, examples_pin
 
 
-def support_counts(directory, pin, check_budget=lambda: None):
+def support_counts(directory, pin, check_budget=lambda: None, *, komi_study=False):
     result = {}
     for role in ALLOWED:
         cells = defaultdict(lambda: {"rows": 0, "passes": 0, "value_valid": 0, "sides": set(), "accounts": set()})
-        for arrays, metadata in read_shards(directory, pin, role):
+        for arrays, metadata in read_shards(directory, pin, role,
+                                            **({"komi_study": True} if komi_study else {})):
             check_budget()
             for index, row in enumerate(metadata):
                 phase = "1-60" if row["ply"] < 60 else "61-180" if row["ply"] < 180 else "181+"
@@ -954,6 +999,12 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
     if any(output.iterdir()) and not (output / "progress.json").exists():
         raise ValueError("Existing output is not a resumable expansion build")
     budget = Budget(output, request, request_sha256, sources_sha256, started, started_utc)
+    inputs = canonical, split, partitions, examples, groups, exposure, owner_hashes, base_index
+    return _execute_build(output, request, sources, budget, inputs, request_sha256, sources_sha256)
+
+
+def _execute_build(output, request, sources, budget, inputs, request_sha256, sources_sha256, *, komi_study=False):
+    canonical, split, partitions, examples, groups, exposure, owner_hashes, base_index = inputs
     budget.remove_file(output / "summary.json")
     budget.state["test_groups"] = split["plan"]["test_groups"]
     try:
@@ -965,25 +1016,31 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
         fingerprints = _fingerprints(records)
         fingerprints["sgf_sha256"].update(owner_hashes)
         units, canonical_stop = _canonical_phase(output, sources["candidates"], groups, exposure,
-                                                owner_hashes, request, budget)
+                                                owner_hashes, request, budget, komi_study=komi_study)
         _, new_rows, plan = _new_memberships(units, fingerprints, groups, split, exposure,
-                                            () if base_index is None else base_index["rejected"])
+                                            () if base_index is None else base_index["rejected"],
+                                            reconsidered_sources=([item["source"]["source_url"] for item in sources["candidates"]]
+                                                                   if komi_study else ()))
         deduplicated = sum(row["role"] in ALLOWED for row in new_rows)
         prepared_canonical = _make_canonical(output, canonical, units, request, budget)
-        games, example_stop = _example_phase(output, units, new_rows, plan, examples, request, budget)
+        games, example_stop = _example_phase(output, units, new_rows, plan, examples, request, budget,
+                                            komi_study=komi_study)
         for unit in units:
             if unit.get("sgf_sha256"):
                 exposure["sgf_hashes"].add(unit["sgf_sha256"])
             if unit.get("sequence_fingerprint"):
                 exposure["sequence_hashes"].add(unit["sequence_fingerprint"])
         published, manifest, example_pin = _publish(output, prepared_canonical, split, old_rows, examples,
-            new_rows, units, games, plan, groups, exposure, request, request_sha256, sources_sha256, budget, base_index)
+            new_rows, units, games, plan, groups, exposure, request, request_sha256, sources_sha256, budget, base_index,
+            komi_study=komi_study)
         budget.write(phase="verification")
-        support = support_counts(published / "examples", example_pin, lambda: budget.check(finishing=True))
+        support = support_counts(published / "examples", example_pin, lambda: budget.check(finishing=True),
+                                 **({"komi_study": True} if komi_study else {}))
         budget.save(published / "support.json", support)
         selected = {game["source_url"] for _, game in games[:5]}
         records = {unit["source_url"]: json.loads(_canonical_raw(unit)) for unit in units if unit["source_url"] in selected}
-        diagnostics = diagnostic_sample(records, check_budget=lambda: budget.check(finishing=True))
+        diagnostics = diagnostic_sample(records, check_budget=lambda: budget.check(finishing=True),
+                                         **({"komi_study": True} if komi_study else {}))
         budget.save(published / "diagnostics.json", diagnostics)
         total_bytes = sum(path.stat().st_size for path in output.rglob("*") if path.is_file())
         if total_bytes > request["limits"]["output_bytes"]:
@@ -1029,6 +1086,15 @@ def build(request_path, request_sha256, sources_path, sources_sha256, output):
                       "wall_seconds": (datetime.now(timezone.utc) - datetime.fromisoformat(budget.state["started_utc"])).total_seconds(),
                       "scope": "Build entry through input validation, preparation, verification and artifact hashing; final summary/progress writes excluded.",
                       "workers": 1, "http_requests": 0, "gpu_seconds": 0}}
+        if komi_study:
+            summary.update(schema="e2_komi_expansion_v1", reconsideration_sources_sha256=sources_sha256,
+                           baseline_summary=sources["provenance"]["previous_summary"],
+                           prior_decisions_unchanged=True, new_komi_halfpoints=1,
+                           initial_cpu_seconds=request["initial_cpu_seconds"],
+                           preflight=request["preflight"], session_marker=request["session_marker"],
+                           launch_utc=request["launch_utc"], preparation_deadline_utc=request["preparation_deadline_utc"],
+                           deadline_utc=request["deadline_utc"], combined_example_caps=request["combined_example_caps"],
+                           unprocessed_source_ids=[item["source"]["source_url"] for item in sources["candidates"][len(units):]])
         budget.state.pop("error", None)
         budget.state.pop("error_type", None)
         budget.remove_file(output / "failure.json")

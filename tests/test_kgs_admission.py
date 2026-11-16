@@ -12,6 +12,7 @@ from test_kgs_eligibility import archive, game
 class AdmissionTests(unittest.TestCase):
     def setUp(self):
         self.record = game()
+        self.record["metadata"].update(RU="Japanese", KM=6.5)
         self.groups = handle_groups(["Alice", "Bob", "Carol", "cu2", "GnuGo2", "LibertyBot"])
         self.exposure = exposure_registry([self.record], [{"user": "Alice", "months": [1]}], self.groups)
 

@@ -11,7 +11,7 @@ import re
 import torch
 
 from kenggo.checkpoints import VERSION as CHECKPOINT_VERSION, file_hash, json_hash, read_json
-from kenggo.encoding import Context, INPUT_KEYS, apply_normalizer, encode
+from kenggo.encoding import Context, INPUT_KEYS, SCALARS, apply_normalizer, encode
 from kenggo.go import Game, PASS, RULES
 from kenggo.kgs_source import RANKS
 from kenggo.learner import ModelConfig, PopulationModel
@@ -130,6 +130,13 @@ class LearnedPolicy:
                 or any(not isinstance(value, torch.Tensor) or value.device.type != "cpu"
                        for value in inputs.values())):
             raise ValueError("Prediction requires shared CPU inputs with the pinned normalizer")
+        scalars, valid = inputs["scalars"], inputs["scalar_valid"]
+        if (scalars.ndim != 2 or scalars.shape[1] != len(SCALARS)
+                or valid.shape != scalars.shape or valid.dtype != torch.bool
+                or not valid[:, :2].all()
+                or not ((scalars[:, 0] == 0) | (scalars[:, 0] == 1)).all()
+                or not (scalars[:, 1] == (1 - 2 * scalars[:, 0]) * 6.5).all()):
+            raise ValueError("The learned checkpoint supports only signed 6.5-point komi")
         logits, value = self._model(inputs)
         legal = inputs["legal"]
         if (logits.shape != legal.shape or value.shape != legal.shape[:1]
@@ -142,6 +149,8 @@ class LearnedPolicy:
 
     def predict(self, game, context=Context()):
         """Encode a verified full-history position with a zero-length model history."""
+        if isinstance(game, Game) and game.komi_halfpoints != 13:
+            raise ValueError("The learned checkpoint supports only 6.5-point komi")
         if (not isinstance(game, Game) or game.status != "playing"
                 or not isinstance(context, Context) or load_game(dump_game(game)) != game):
             raise ValueError("Prediction requires a playable ordinary game with intact history")

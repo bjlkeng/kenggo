@@ -1,0 +1,134 @@
+{
+  "previous_sources": {
+    "path": "runs/e2-rank-continuation-2026-11-15/sources.json",
+    "sha256": "0fe528cd35e00a402aa1a8617243ea58df618bcd7a3c3e9a9b8cd763ac54c8bc"
+  },
+  "previous_summary": {
+    "path": "runs/e2-rank-expansion-2026-11-15/summary.json",
+    "sha256": "f3209a278e9ab3ff7074913ca7f4e30377f60148f8b3ebd56c54fd5e53f2b136"
+  },
+  "request": {
+    "bead": "kenggo-ydo.12",
+    "combined_example_caps": {
+      "population_development": 499987,
+      "train": 2000000,
+      "validation_development": 499993
+    },
+    "fixture_only": false,
+    "limits": {
+      "canonical_file_bytes": 134217728,
+      "cpu_seconds": 72000,
+      "expanded_zip_bytes": 4294967296,
+      "max_development_examples": 250000,
+      "max_records": 50000,
+      "max_train_examples": 1000000,
+      "member_bytes": 1048576,
+      "output_bytes": 33285996544,
+      "preparation_cpu_seconds": 68400,
+      "preparation_wall_seconds": 79200,
+      "selected_sgf_bytes": 268435456,
+      "wall_seconds": 86400
+    },
+    "refs": {
+      "base_index": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/base_index.json",
+        "sha256": "a525ab05efdc486170cc53339085e70e057ceb4215ada71944091d79f66b34d8"
+      },
+      "canonical": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/canonical.parquet",
+        "sha256": "7e3bc947053bde06f67c8e7706f043a405160b1be1a634f1d174833694a1ea27"
+      },
+      "examples_manifest": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/examples/manifest.json",
+        "sha256": "791187f75dbf26d1d4459db18c1a1d26d860a6ed669594fb2bb4e7fcd7eb9b21"
+      },
+      "original_audit": {
+        "path": "manifests/e1_kgs_audit_games_2026-11-10.parquet",
+        "sha256": "958147c8cd9a05e1db35553c1c8a7a789ec4fa1393c7b60d232047ffb066f30a"
+      },
+      "owner_exclusions": {
+        "path": "manifests/e1_manual_review_v1.json",
+        "sha256": "44fc41edd839f53745bf28a8c315ef94b2e78e5ee3f049bcda491b9903b9b5dd"
+      },
+      "prior_exposure": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/exposure.json",
+        "sha256": "76d3a4f462ee1d4eea0f4cfe4f92f1bdcabd4bc3c9c67ae72b92464787ad1687"
+      },
+      "profile": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/profile.json",
+        "sha256": "51b7e9d038e0c3b87147cb8294bb2e8aa7d7f5a5a9c4e79f94065ebda501cee7"
+      },
+      "source_policy": {
+        "path": "manifests/e1_kgs_admission_policy_v2.json",
+        "sha256": "461a7fed1ea637d8d39cfa1437a06f6d4e198a59af9bf1cabd6c245ef444c4bc"
+      },
+      "split_manifest": {
+        "path": "runs/e2-rank-expansion-2026-11-15/dataset/splits/manifest.json",
+        "sha256": "e6c699255242c3c59bb3cc224ac07085ccb747dbc61e80211b35193c7446cef0"
+      }
+    },
+    "schema": "e2_komi_expansion_request_v1",
+    "source_revision": {
+      "code_sha256": {
+        "src/kenggo/__init__.py": "5cd1f4fcadf93eeb1d8399db364efe7f68fbcb7b8723b3a1726d9f7a0445877f",
+        "src/kenggo/adjudication.py": "1ae8f8519a5905ad3e7a9d22da8961baf57ac264d8fc1adc84e087e2b24dc5f7",
+        "src/kenggo/base_pilot.py": "7cd3e7af79e89ba7da0fe032d0277ce2202884d886c0db272915068adc8be572",
+        "src/kenggo/baseline_evaluation.py": "fecb38a4b856f50df6c718b7f65a8da008acdc7eaf524f67c08b620f66263638",
+        "src/kenggo/baseline_matches.py": "15741844945ab6fd42162303da9acd59b282c9a49c539968bd1c32840468dce4",
+        "src/kenggo/baseline_training.py": "c53fb88a761521727a1aa2d3f22ab87e161a4416595061fdfb931e11eca73b01",
+        "src/kenggo/cached_coverage_audit.py": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+        "src/kenggo/canonical_audit.py": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+        "src/kenggo/canonical_data.py": "88918f308e232fedfbaff4e77906db8b0a41384372c3d2202d1e636fa80a87d4",
+        "src/kenggo/checkpoints.py": "d375157698a6531435ca600dab8aff268200a646f8aee56f26a7d1598fde5b83",
+        "src/kenggo/cuda_smoke.py": "cc7e20e3c2d1446c2d25ffc4531fc835c8f11346dd6b92abd81c4fa0d13dd990",
+        "src/kenggo/data_expansion.py": "20439a856a3ce0a6dedcaa2c9c50b7d9dae9d16de954a5e093ceba0ad8ab9fc3",
+        "src/kenggo/data_splits.py": "cacd8e08e23959067798346b4a0f66a9a7f557cbe837ac402f840bf9285f9cdf",
+        "src/kenggo/e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+        "src/kenggo/encoding.py": "d0f336bf06dfea5820bda7064fd49d6c07a9baf09ccac919362b3cfabd5c4e46",
+        "src/kenggo/examples.py": "ac0c6ccc58710823c05cb8c31a42730b54148d8bd4cac74ca41b03409ef05ac6",
+        "src/kenggo/examples_audit.py": "0db86aaf8ac272263262aaa7c67a37d02c2fe57a9e705293c01e6e54b9f34f42",
+        "src/kenggo/expansion_source.py": "ea8c74a37239131f0244a44779bd1975052c7e20ab78aee6dcfb93c1d3e0f6aa",
+        "src/kenggo/go.py": "98e6ac605f4295a2c96a4153d4fd41aa5f6a26fee9ce25da6dd02473a70dec6b",
+        "src/kenggo/human_reference_smoke.py": "eb49c0c79b6d3705dcb99f9f23b428b630025029bc9c052df3f52011a031bf9b",
+        "src/kenggo/katago_human.py": "c7382ae591714e6a692c4dd9582aa96b4f59f547bfa13a429e6500ceceed6692",
+        "src/kenggo/katago_referee.py": "59f327f5eacb7a9309459a7ff98b918cac4e27954c840cf02039e6e659f67f3b",
+        "src/kenggo/kgs_acquire.py": "6a3ef4366d38b75e1d1cdd080a23d9e05ed46bf94084ba19c607c9c38b07e911",
+        "src/kenggo/kgs_admission.py": "229936bb97076abb4e66b4b81e805fdc327b154bbbbb5eb9feb6230197838da2",
+        "src/kenggo/kgs_eligibility.py": "beae05f73846882f37dc30050aef799d4895e278f1e25fe60d90e2b018c6fd1b",
+        "src/kenggo/kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "src/kenggo/komi_expansion.py": "1598281f793f235d65ff7c938954cfbd170aceca31d804346a8c50226a9d5bdf",
+        "src/kenggo/learned_agent.py": "edb6855ccc547a958945276db52938ea53e66dd1a69e6253d0c73aa30fec7164",
+        "src/kenggo/learner.py": "9f9da7de350d3046943c88c712d01caf96c3694c98816f5455ff86d10f85a328",
+        "src/kenggo/learner_smoke.py": "db281dd765932eff20b9e6a280db014a8116b2f70753d5bf00cf10f01c5d6dcd",
+        "src/kenggo/match_sgf.py": "86afe9dee97507db8d539a408fe582251067f44579ceb764c6bb36f8a9404cb2",
+        "src/kenggo/match_smoke.py": "137c7851121a3c9920aadedfa1190a540ea1dcbcc683a48daaa6219951a485ab",
+        "src/kenggo/match_statistics.py": "fe776715b2ad5f519580bafb18dc68b04115193136fdc112f815d7c711702d60",
+        "src/kenggo/matches.py": "7347fcc0310c7d785977ac5d4d80d516e7c0c40e5f072fb8546e12412699e7b0",
+        "src/kenggo/pilot_jobs.py": "60786e3ec47444df85af179adda64a30b3964a40851b1f2f013b3ba05467c203",
+        "src/kenggo/population_audit.py": "3c6861f528a19614a919575a5e22a97996994d9b46c778b088f2b64b8d25ec12",
+        "src/kenggo/rank_continuation.py": "07c4a0c44d5640dafe957b19f6331345255331571a0ae19b7d3cb931fb8f97ef",
+        "src/kenggo/rank_discovery.py": "c733b8ba2ed5e5040fe7ea6436e0f0b793dbbe3366b32d55ba840c4bd2a1eda1",
+        "src/kenggo/recorded_data.py": "36b8747fed09efbf6f588335810a71f92d1f134d8aa2b36100cc9c8d2152df2b",
+        "src/kenggo/recorded_statistics.py": "2658f668579d212fe835573e118b54b5be0c697f92382797ff13542a131a3ca4",
+        "src/kenggo/resource_ledger.py": "5118b30b418b19bcf41a7fd8677b7b4dc9cfab29714667169a5518de3fce1a2d",
+        "src/kenggo/rules_replay.py": "37213c99bfe211221222c9d90445e67a7e39d2f8a6b6c2bb523556434702bdac",
+        "src/kenggo/sgf_audit.py": "47574518f9096183a80fdcc0c3fe0446fe02b115594d5be90a78e3f86063426c",
+        "src/kenggo/smoke.py": "99a5321fb70da803cc76b7b5a8745a0e0a800ace8aaf0753e01913acccc7a693",
+        "src/kenggo/supervised.py": "4d9dc35e8ca07ee1e50540386117272483ca6c7c7ce996f74cae211335bb6c3a",
+        "src/kenggo/throughput.py": "4a64be53d0fafa0029761b731454544f09c3adc15eb058ea307dd0c6c5ad9f6f",
+        "src/kenggo/tracking.py": "7c0a7266558a05bf8fb4afb80f8f9acfc142b639e77453e85e2c143447b0ef6f",
+        "src/kenggo/tracking_smoke.py": "c1b8c9912f517c458977968b554b948b2b36ffe46cbecc1dda6d6f6e012b2508",
+        "tools/data_expansion_review.html": "973ea096cb053c4d184513757ba6c63997679a84d87ebbaafbcc57efa60062e8",
+        "tools/prepare_komi_study.py": "e150009e7f66350561aa3d2310db7ab12f6613e17324bdc2f9bc6193e7b91c34",
+        "tools/review_data_expansion.py": "9db8c3f43a0da8216325d633b19bb62fd79805a770a9a05ae1eb182e986f06a0",
+        "uv.lock": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+      },
+      "start_commit": "89c0d9c1134a5dd941b70b11f5e058528b0d4179"
+    }
+  },
+  "schema": "e2_komi_launch_template_v1",
+  "scope_audit": {
+    "path": "runs/e2-rank-inputs-2026-11-15/sgf-scope-audit.json",
+    "sha256": "126de24cbd290a81b1b39040d047d595200998c3d93de21e12c624a74e990844"
+  }
+}

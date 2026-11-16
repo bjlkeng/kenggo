@@ -8,17 +8,24 @@ from kenggo import kgs_eligibility as legacy
 
 
 POLICY = "kgs_eligibility_v2"
+KOMI_STUDY_POLICY = "kgs_eligibility_komi_study_v1"
 DECISION_PATH = Path("manifests/e1_kgs_admission_policy_v2.json")
 DECISION_SHA256 = "461a7fed1ea637d8d39cfa1437a06f6d4e198a59af9bf1cabd6c245ef444c4bc"
 REPLACED_REASONS = frozenset({"black_human_unverified", "white_human_unverified",
                               "ordinary_game_unverified", "training_reuse_basis_unresolved"})
 
 
-def classify(record, archive_row, groups, exposure):
+def classify(record, archive_row, groups, exposure, *, komi_study=False):
     """Screen an audited record; production admission also pins its source inputs."""
+    if type(komi_study) is not bool:
+        raise ValueError("Komi study admission requires an explicit boolean")
     decision = legacy.classify(record, archive_row, groups, exposure)
     reasons = set(decision["eligibility_reasons"]) - REPLACED_REASONS
     metadata = record.get("metadata", {})
+    if (record.get("parse_status") == "parsed" and
+            (metadata.get("RU") != "Japanese" or metadata.get("KM") not in ((0.5, 6.5) if komi_study else (6.5,)))):
+        reasons.add("metadata:rules_or_komi_out_of_scope")
+        decision["metadata_compatible"] = False
     ranked = archive_row is not None and archive_row.get("type") == "Ranked"
     ordinary = ranked and not (metadata.get("EV") or metadata.get("RO"))
     if not ranked:
@@ -31,7 +38,8 @@ def classify(record, archive_row, groups, exposure):
             decision[color + "_human_status"] = "presumed_human"
     admitted = (not reasons and decision["metadata_compatible"] and ordinary
                 and all(decision[c + "_human_status"] == "presumed_human" for c in ("black", "white")))
-    decision.update(policy=POLICY, source_policy_decision_sha256=DECISION_SHA256,
+    policy = KOMI_STUDY_POLICY if komi_study and metadata.get("KM") == 0.5 else POLICY
+    decision.update(policy=policy, source_policy_decision_sha256=DECISION_SHA256,
                     source_use_basis="owner_attested_research_permission",
                     eligibility_status="admitted_presumed_human" if admitted else "excluded",
                     eligibility_reasons=sorted(reasons), training_eligible=admitted,

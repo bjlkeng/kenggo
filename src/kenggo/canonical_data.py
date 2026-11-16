@@ -7,7 +7,7 @@ import json
 from sgfmill import sgf, sgf_grammar
 
 from kenggo.adjudication import adjudicate
-from kenggo.go import PASS, RULES
+from kenggo.go import KOMI_STUDY_RULES, PASS, RULES
 from kenggo.kgs_eligibility import normalize_handle
 from kenggo.kgs_source import player
 from kenggo.rules_replay import replay_sgf
@@ -51,16 +51,19 @@ def adjudication_evidence(game, decision):
     return evidence, cost
 
 
-def canonicalize(data, source_ref, archive_row):
+def canonicalize(data, source_ref, archive_row, *, komi_study=False, check_budget=lambda: None):
     """Return deterministic source evidence and separate adjudication execution costs."""
+    check_budget()
     if len(data) > 1024**2:
         raise ValueError("Selected SGF exceeds 1 MiB")
     if sha256(data).hexdigest() != source_ref["sgf_sha256"]:
         raise ValueError("Source SGF hash changed")
     if source_ref["source_url"] != archive_row["url"]:
         raise ValueError("Archive evidence belongs to another source ID")
-    audit = inspect_sgf(data, archive_row)
-    record = {"version": VERSION, "rules_contract": RULES, "source": dict(source_ref),
+    audit = inspect_sgf(data, archive_row, komi_study=komi_study)
+    check_budget()
+    rules = KOMI_STUDY_RULES if komi_study and audit.get("metadata", {}).get("KM") == 0.5 else RULES
+    record = {"version": VERSION, "rules_contract": rules, "source": dict(source_ref),
               "archive": dict(archive_row), "audit": audit, "metadata": audit.get("metadata", {}),
               "date_precision": "day", "source_timezone": None,
               "actions": [], "clock_nodes": [], "replay_validated": False,
@@ -101,6 +104,7 @@ def canonicalize(data, source_ref, archive_row):
             reasons.add("score_margin_out_of_contract")
     game = sgf.Sgf_game.from_coarse_game_tree(sgf_grammar.parse_sgf_collection(data)[0])
     for index, node in enumerate(game.get_main_sequence()):
+        check_budget()
         values = {}
         for prop in CLOCKS:
             if node.has_property(prop):
@@ -126,7 +130,7 @@ def canonicalize(data, source_ref, archive_row):
                      actions=normalized_actions, clocks=record["clock_nodes"])
     record["semantic_sha256"] = digest(semantics)
     try:
-        replay = replay_sgf(data)
+        replay = replay_sgf(data, komi_study=komi_study, check_budget=check_budget)
         record.update(replay_validated=True, replay_end_status=replay.game.status,
                       replay_pending_cap=replay.game.pending_cap, replay_snapshot=replay.game.snapshot)
         if replay.game.status == "pending_adjudication":

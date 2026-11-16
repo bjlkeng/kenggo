@@ -74,6 +74,87 @@ class DataExpansionReviewTests(unittest.TestCase):
             self.assertEqual(sum(v for k, v in coverage["endings"].items()
                                  if k != "two_explicit_pass_endings"), coverage["games"])
         self.assertTrue((output / "review.html").exists())
+        self.assertFalse(result["komi_study"])
+        for role, coverage in result["coverage"].items():
+            old = result["komi_coverage"]["6.5"][role]
+            new = result["komi_coverage"]["0.5"][role]
+            for key in ("games", "examples", "passes", "value_valid", "accounts", "ranks", "cells", "endings"):
+                self.assertEqual(old[key], coverage[key])
+            self.assertEqual(new["games"], 0)
+        self.assertTrue(result["checks"]["komi_inputs_and_perspective"])
+
+    def test_wrong_komi_inputs_rejected_against_the_source(self):
+        original = review.read_shards
+
+        def changed_komi(*args, **kwargs):
+            for arrays, metadata in original(*args, **kwargs):
+                scalars = arrays["scalars"].copy()
+                scalars[:, 1] = np.sign(scalars[:, 1]) * .5
+                yield {**arrays, "scalars": scalars}, metadata
+
+        with mock.patch.object(review, "read_shards", side_effect=changed_komi):
+            with self.assertRaisesRegex(ValueError, "Komi input differs"):
+                review.inspect(self.request, self.summary, lambda: None)
+
+    def test_verification_failure_cannot_reset_the_shared_study_budget(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            marker = write_json(root / "session.json", {"schema": "fixture"})
+            request = write_json(root / "request.json", {"schema": "e2_komi_expansion_request_v1",
+                "session_marker": marker, "limits": {"cpu_seconds": 72000},
+                "deadline_utc": "2099-01-01T00:00:00+00:00"})
+            summary = write_json(root / "summary.json", {"costs": {"cpu_seconds": 68400}})
+            with mock.patch.object(review, "_build", side_effect=RuntimeError("fixture failure")):
+                with self.assertRaisesRegex(RuntimeError, "fixture failure"):
+                    review.build(request, summary, {}, root / "review")
+            ledger_path = root / "session.json.verification.json"
+            ledger = json.loads(ledger_path.read_text())
+            self.assertEqual(ledger["attempts"][0]["status"], "failed")
+            self.assertGreater(ledger["attempts"][0]["cpu_charged_seconds"], 0)
+            ledger["attempts"].append({"status": "running", "output": "interrupted",
+                                       "cpu_charged_seconds": 3600})
+            ledger_path.write_text(json.dumps(ledger))
+            with mock.patch.object(review, "_build") as execute:
+                with self.assertRaisesRegex(ValueError, "no remaining shared CPU"):
+                    review.build(request, summary, {}, root / "retry")
+                execute.assert_not_called()
+
+    def test_study_review_separates_real_komi_coverage_and_samples(self):
+        from test_komi_expansion import execute, study_fixture
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            request, req, source, pins, counts, base = study_fixture(root)
+            summary = execute(root, req, source, pins, counts)
+            _, parts = read_membership(Path(base["artifacts"]["split_manifest"]["path"]).parent,
+                                       base["artifacts"]["split_manifest"]["sha256"])
+            protected = {row["source_url"] for role in parts if role not in review.ALLOWED
+                         for row in parts[role]}
+            loads = json.loads
+
+            def no_protected_targets(value, *args, **kwargs):
+                if isinstance(value, str) and value.startswith('{"actions":'):
+                    if any('"source_url":' + json.dumps(key) in value for key in protected):
+                        raise AssertionError("A confirmation or final target was decoded")
+                return loads(value, *args, **kwargs)
+
+            with mock.patch.object(review.json, "loads", side_effect=no_protected_targets), \
+                    redirect_stdout(io.StringIO()):
+                review.build(req, reference(root / "study-out/summary.json"), source, root / "review")
+            result = json.loads((root / "review/readout.json").read_text())
+            self.assertTrue(result["komi_study"])
+            self.assertTrue(result["collection"]["cached_only"])
+            self.assertEqual(result["collection"]["counts"]["query_statuses"], {})
+            self.assertEqual({sample["komi"] for sample in result["samples"]}, {0.5, 6.5})
+            for role in review.ALLOWED:
+                before, addition = (result["komi_coverage"][k][role] for k in ("6.5", "0.5"))
+                self.assertEqual(before["examples"], base["counts"]["combined"][role]["examples"])
+                self.assertEqual(addition["examples"], summary["counts"]["new"][role]["examples"])
+                self.assertEqual(before["examples"] + addition["examples"], result["coverage"][role]["examples"])
+                self.assertEqual(before["value_valid"] + addition["value_valid"], result["coverage"][role]["value_valid"])
+            self.assertFalse(result["checks"]["final_and_confirmation_targets_decoded"])
+            self.assertEqual(result["checks"]["recorded_policy_labels_checked"],
+                             result["checks"]["train_development_rows_checked"])
 
     def test_consistent_value_sign_reversal_is_rejected_against_the_source_winner(self):
         original = review.read_shards
@@ -85,6 +166,40 @@ class DataExpansionReviewTests(unittest.TestCase):
         with mock.patch.object(review, "read_shards", side_effect=reversed_values):
             with self.assertRaisesRegex(ValueError, "Value label differs from the recorded winner"):
                 review.inspect(self.request, self.summary, lambda: None)
+
+    def test_study_labels_must_match_old_and_new_canonical_moves_even_with_changed_mask(self):
+        from test_komi_expansion import execute, study_fixture
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            request, req, source, pins, counts, base = study_fixture(root)
+            summary = execute(root, req, source, pins, counts)
+            _, old_parts = read_membership(Path(base["artifacts"]["split_manifest"]["path"]).parent,
+                                            base["artifacts"]["split_manifest"]["sha256"])
+            old = {row["source_url"] for row in old_parts["train"]}
+            read = review.read_shards
+            for change_old in (True, False):
+                with self.subTest(preserved_baseline=change_old):
+                    changed = []
+
+                    def corrupt(*args, **kwargs):
+                        for arrays, metadata in read(*args, **kwargs):
+                            arrays = {**arrays, "action": arrays["action"].copy(),
+                                      "legal": arrays["legal"].copy()}
+                            for index, meta in enumerate(metadata):
+                                if meta["ply"] == 1 and (meta["source_url"] in old) == change_old:
+                                    occupied = np.flatnonzero(arrays["board"][index, :2].any(axis=0))
+                                    if len(occupied):
+                                        action = int(occupied[0])
+                                        arrays["action"][index] = action
+                                        arrays["legal"][index, action] = True
+                                        changed.append((meta["source_url"], index))
+                            yield arrays, metadata
+
+                    with mock.patch.object(review, "read_shards", side_effect=corrupt):
+                        with self.assertRaisesRegex(ValueError, "canonical move"):
+                            review.inspect(request, summary, lambda: None)
+                    self.assertTrue(changed)
 
     def test_continuation_page_counts_include_both_rounds_without_doubling_candidates(self):
         parent = {"schema": "e2_expansion_sources_v1", "status": "completed",

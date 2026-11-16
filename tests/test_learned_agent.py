@@ -247,6 +247,18 @@ class LearnedAgentTests(unittest.TestCase):
         self.assertTrue(torch.isneginf(logits[0]))
         self.assertTrue(torch.isfinite(logits[PASS]))
 
+    def test_old_checkpoint_rejects_new_komi_in_games_and_encoded_batches(self):
+        policy = LearnedPolicy.load(self.artifacts)
+        for game in (Game.new(komi_halfpoints=1), Game.new(komi_halfpoints=1).play("B", 0)):
+            with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+                policy.predict(game)
+            with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+                policy.predict_batch(self.batch([game]), normalizer_sha256=self.artifacts.normalizer_sha256)
+        inputs = self.batch()
+        inputs["scalar_valid"][:, 1] = False
+        with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+            policy.predict_batch(inputs, normalizer_sha256=self.artifacts.normalizer_sha256)
+
     def test_match_inputs_follow_mover_rank_unknown_opponent_and_missing_clocks(self):
         artifacts, _, _ = self.make_artifacts(zero=True)
         agent = LearnedMatchFactory(artifacts, REVISION)(self.profile(artifacts).data, 123)

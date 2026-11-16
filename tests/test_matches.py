@@ -329,6 +329,11 @@ class WeakPolicyTests(unittest.TestCase):
 
 
 class RunnerTests(unittest.TestCase):
+    def test_existing_match_profiles_reject_new_komi(self):
+        with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+            run_game(slot(), profile(), profile("opponent"), budget=BUDGET,
+                     initial=Game.new(candidate_color="B", komi_halfpoints=1), allow_fixture=True)
+
     def run_fixture(self, initial=None, candidate=None, opponent=None, **kwargs):
         return run_game(slot(initial.candidate_color if initial is not None else "B"),
                         candidate or profile(), opponent or profile("opponent"),

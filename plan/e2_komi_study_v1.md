@@ -6,11 +6,11 @@ The owner chose **“Study 0.5-komi alongside the current baseline.”** Keep th
 completed 6.5-komi dataset unchanged and test a separate addition drawn from
 cached Japanese 0.5-komi games. Komi is White's point bonus.
 
-**The scope is approved; the new production budget is not.** The previous
-allowance ended at 16 November 2026, 00:05:23 UTC. This document proposes a
-bounded data-preparation run, with no downloads or model training. Do not
-launch it until the owner approves its budget and the implementation passes
-independent review. Task status and authorization belong in Beads.
+**The owner approved both the scope and the production budget.** The earlier
+allowance ended at 16 November 2026, 00:05:23 UTC. The owner approved the new
+20-CPU-hour, 24-elapsed-hour run on 16 November, with no downloads or model
+training. Launch only after implementation checks and independent review.
+Task status and authorization belong in Beads.
 
 ## Evidence and purpose
 
@@ -135,12 +135,14 @@ stay masked; source result labels never become inputs. Retain all other masks
 and actual pass labels. Do not invent passes or change the network architecture,
 zero-history setting, learned resignation or existing qualification claims.
 
-## Proposed production budget
+## Approved production budget
 
-Ask the owner to authorize the following single run. The timer starts at the
+The owner authorized the following single run. The timer starts at the
 recorded launch after implementation, tests and independent prelaunch review.
-Freeze the code, ordered candidates, profile, request and absolute deadlines
-before launch. Give this study its own one-use marker; preserve all old markers.
+Freeze the code and input pins before the metadata preflight. That preflight
+records the launch and freezes the ordered candidates, profile, request and
+absolute deadlines before move replay. Give this study its own one-use marker;
+preserve all old markers.
 
 | Resource | Maximum |
 | --- | ---: |
@@ -164,6 +166,19 @@ retain partial evidence and costs. A resume uses the same remaining allowance
 and absolute deadline. Development tests and code review are recorded separately
 and do not reset or extend production limits.
 
+The metadata-only launch preflight gets a conservative 300-CPU-second charge
+within those 20 hours and a hard 10-minute elapsed cap. Its one-use marker is
+created before reading production inputs. It freezes headers and candidate
+order before any new move replay. Record measured preflight cost separately;
+an interrupted preflight retains the full charge and its marker. Subtract its
+member and ZIP expansion bytes from the builder's remaining byte limits.
+Reserve 512 MiB each for preflight and readout, leaving at most 31 GiB for the
+build. Verification attempts share the original deadline and retain their
+costs or a conservative interrupted-attempt charge; they cannot reset the budget.
+Builder checkpoints keep an interruption charge during final processing too.
+Once verification starts, the published build cannot be resumed; verification
+retries use its own retained costs and the same deadline.
+
 Budget basis: the previous build added 1,276,125 rows in 15.86 CPU hours and
 17.85 elapsed hours. Scaling that single observation to 1,500,000 new rows gives
 about 18.64 CPU hours and 20.98 elapsed hours. This is a rough planning estimate,
@@ -178,6 +193,9 @@ before/after counts, all failures and actual costs, with each komi setting
 separate. Independently verify every allowed example's legal policy label,
 komi input, value sign and masks, complete-game membership and the new
 training-only normalizer. Rehash every old membership, shard and pinned input.
+Compare every study row's action and mover with its pinned canonical trajectory,
+whose complete legal replay was checked during preparation. This correspondence
+check does not independently recompute every saved board or legal-mask entry.
 Do not count a candidate until it survives the entire pipeline and supplies
 recorded moves for the rank being counted.
 
@@ -196,4 +214,4 @@ allowed regressions, seeds and complete-game checks before training. This plan
 does not fund training or promote an opponent profile.
 
 The [budget review page](../reports/e2_komi_study_review_2026-11-16.html)
-summarizes the remaining owner decision. E2 readiness stays open.
+preserves the proposal the owner approved. E2 readiness stays open.

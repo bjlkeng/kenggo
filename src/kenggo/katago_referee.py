@@ -520,6 +520,8 @@ class KataGoReferee:
     def _begin(self, game, method):
         if not isinstance(game, Game):
             raise ValueError("A shared Game is required")
+        if game.komi_halfpoints != 13:
+            raise ValueError("The referee profile supports only 6.5-point komi")
         budget = _Budget(self.settings["limits"], self._cpu)
         evidence = {"method": method, "claim": "empirical_not_certified", "snapshot": game.snapshot,
                     "original": game.action_record(), "profile_sha256": self.profile.sha256,
@@ -648,6 +650,8 @@ class KataGoReferee:
 
     @_serial
     def verify(self, game, evidence_json, *, authorized_hashes=frozenset()):
+        if game.komi_halfpoints != 13:
+            raise ValueError("The referee profile supports only 6.5-point komi")
         if game.status != "pending_adjudication":
             raise ValueError("Referee verification requires the original frozen ending")
         if all(color == "." for color in game.position.board):

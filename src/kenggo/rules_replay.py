@@ -1,12 +1,13 @@
 """Strict source replay and history-based persistence of the shared engine."""
 
 from dataclasses import dataclass, replace
+from decimal import Decimal
 import json
 
 from sgfmill import sgf, sgf_grammar
 
 from kenggo.adjudication import adjudicate
-from kenggo.go import RULES, PASS, Game, Outcome, canonical, opponent
+from kenggo.go import KOMI_STUDY_RULES, RULES, PASS, Game, Outcome, canonical, opponent
 from kenggo.sgf_audit import check_envelope, inspect_sgf, result_signature
 
 
@@ -22,8 +23,12 @@ class SourceReplay:
     training_ready: bool = False
 
 
-def replay_sgf(data):
-    audit = inspect_sgf(data)
+def replay_sgf(data, *, komi_study=False, check_budget=lambda: None):
+    check_budget()
+    if type(komi_study) is not bool:
+        raise ValueError("Komi-study opt-in must be boolean")
+    audit = inspect_sgf(data, komi_study=komi_study)
+    check_budget()
     strict_flags = {
         "game_or_board_metadata_out_of_scope", "setup_or_handicap",
         "missing_moves_or_turn_order", "played_variation_unverified",
@@ -35,14 +40,17 @@ def replay_sgf(data):
         raise ValueError("SGF outside the strict ordinary-play contract")
     check_envelope(data)
     source = sgf.Sgf_game.from_coarse_game_tree(sgf_grammar.parse_sgf_collection(data)[0])
-    game, raw_moves = Game.new(), []
+    komi_halfpoints = int(2 * Decimal(audit["metadata"]["KM"]))
+    game, raw_moves = Game.new(komi_halfpoints=komi_halfpoints), []
     for node in source.get_main_sequence():
+        check_budget()
         color, point = node.get_move()
         if color is None:
             continue
         raw_moves.append(node.get_raw(color.upper()).decode("ascii"))
         action = PASS if point is None else (18 - point[0]) * 19 + point[1]
         game = game.play(color.upper(), action)
+    check_budget()
     result = audit["metadata"]["RE"]
     kind, winner, margin = result_signature(result)
     return SourceReplay(game, audit["sgf_sha256"], tuple(raw_moves), result, kind,
@@ -61,28 +69,38 @@ def dump_game(game):
 
 
 def load_game(text, *, allow_fixture=False, authorized_hashes=frozenset(),
-              empirical_referee=None):
+              empirical_referee=None, komi_study=False):
     """Recompute board, ko, captures and recurrence; never trust serialized caches."""
     if not isinstance(text, str) or len(text) > 2_000_000:
         raise ValueError("Invalid state record size")
+    if type(komi_study) is not bool:
+        raise ValueError("Komi-study opt-in must be boolean")
     record = json.loads(text)
-    if (not isinstance(record, dict) or set(record) != {
-            "rules", "origin", "initial", "candidate_color", "moves", "ending"}
-            or record["rules"] != RULES):
+    fields = {"rules", "origin", "initial", "candidate_color", "moves", "ending"}
+    if not isinstance(record, dict):
+        raise ValueError("Invalid state record or rules version")
+    if record.get("rules") == KOMI_STUDY_RULES:
+        if (not komi_study or set(record) != fields | {"komi_halfpoints"}
+                or type(record["komi_halfpoints"]) is not int or record["komi_halfpoints"] != 1):
+            raise ValueError("The 0.5-point state requires the explicit komi-study contract")
+        komi_halfpoints = 1
+    elif record.get("rules") == RULES and set(record) == fields:
+        komi_halfpoints = 13
+    else:
         raise ValueError("Invalid state record or rules version")
     initial = record["initial"]
     if not isinstance(initial, dict) or set(initial) != {
             "board", "to_play", "captured_black", "captured_white"}:
         raise ValueError("Invalid initial state")
     if record["origin"] == "empty":
-        game = Game.new(candidate_color=record["candidate_color"])
+        game = Game.new(candidate_color=record["candidate_color"], komi_halfpoints=komi_halfpoints)
         if canonical(initial) != canonical(game.action_record()["initial"]):
             raise ValueError("Ordinary games must start empty with Black")
     elif record["origin"] == "fixture" and allow_fixture:
         game = Game.from_fixture(initial["board"], to_play=initial["to_play"],
                                  captured_black=initial["captured_black"],
                                  captured_white=initial["captured_white"],
-                                 candidate_color=record["candidate_color"])
+                                 candidate_color=record["candidate_color"], komi_halfpoints=komi_halfpoints)
     else:
         raise ValueError("Setup origin is not permitted for ordinary games")
     if not isinstance(record["moves"], list) or len(record["moves"]) > 20_000:
@@ -110,6 +128,8 @@ def load_game(text, *, allow_fixture=False, authorized_hashes=frozenset(),
             game = game.fail(outcome.reason, responsible=(
                 None if outcome.winner is None else opponent(outcome.winner)))
         elif outcome.kind == "empirical_score":
+            if game.komi_halfpoints != 13:
+                raise ValueError("Saved empirical scores support only 6.5-point komi")
             if empirical_referee is None:
                 raise ValueError("An empirical outcome requires an independently configured referee")
             decision = empirical_referee.verify(game, outcome.evidence,

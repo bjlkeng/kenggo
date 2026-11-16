@@ -122,6 +122,17 @@ class RefereeTests(unittest.TestCase):
         self.addCleanup(result.close)
         return result
 
+    def test_existing_profile_rejects_new_komi_before_any_request(self):
+        referee = self.referee()
+        playing = Game.new(komi_halfpoints=1).play("B", 20).play("W", 21)
+        frozen = two_passes(playing)
+        for operation in (lambda: referee.adjudicate(frozen), lambda: referee.judge_pass(playing),
+                          lambda: referee.verify(frozen, "{}")):
+            with self.assertRaisesRegex(ValueError, "6.5-point komi"):
+                operation()
+        self.assertEqual(referee.analysis.requests, [])
+        self.assertEqual(referee.native.requests, [])
+
     def test_cleanup_agreement_preserves_original_and_is_immutable(self):
         game = ending()
         original = game.action_record()

@@ -95,7 +95,9 @@ def scalar(node, name):
     return value
 
 
-def inspect_sgf(data: bytes, archive_row: dict | None = None, bot_handles=()) -> dict:
+def inspect_sgf(data: bytes, archive_row: dict | None = None, bot_handles=(), *, komi_study=False) -> dict:
+    if type(komi_study) is not bool:
+        raise ValueError("Komi study admission requires an explicit boolean")
     record = {"sgf_sha256": hashlib.sha256(data).hexdigest(), "sgf_bytes": len(data),
               "parse_status": "corrupt", "exclusions": [], "training_ready": False}
     try:
@@ -181,7 +183,7 @@ def inspect_sgf(data: bytes, archive_row: dict | None = None, bot_handles=()) ->
             exclusions.append("missing_moves_or_turn_order")
         if variations:
             exclusions.append("played_variation_unverified")
-        if metadata["RU"] != "Japanese" or metadata["KM"] != 6.5:
+        if metadata["RU"] != "Japanese" or metadata["KM"] not in ((0.5, 6.5) if komi_study else (6.5,)):
             exclusions.append("rules_or_komi_out_of_scope")
         if (main_time is None or not 600 <= main_time <= 1800 or not overtime
                 or not 3 <= overtime[0] <= 5 or not 20 <= overtime[1] <= 60):

@@ -476,6 +476,8 @@ class HumanSL:
     def _validate_game(game, allow_fixture):
         if not isinstance(game, Game) or game.status != "playing":
             raise ReferenceError("reference_requires_playing_game")
+        if game.komi_halfpoints != 13:
+            raise ReferenceError("reference_profile_supports_only_6.5_komi")
         initial = game.positions[0]
         if initial.captured_black or initial.captured_white:
             raise ReferenceError("initial_capture_offset_unsupported")

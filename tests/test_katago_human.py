@@ -209,6 +209,13 @@ class HumanTests(unittest.TestCase):
         self.assertEqual(prediction.raw_policy[_action("D4")], -1)
         self.assertEqual(prediction.policy[_action("D4")], 0)
 
+    def test_existing_profile_rejects_new_komi_before_inference(self):
+        client = self.client()
+        before = list(client.analysis.requests)
+        with self.assertRaisesRegex(ReferenceError, "only_6.5_komi"):
+            client.predict(Game.new(komi_halfpoints=1), "5k")
+        self.assertEqual(client.analysis.requests, before)
+
     def test_full_fixture_history_preserves_simple_ko_and_pass_clearing(self):
         client = self.client()
         fixture = Game.from_fixture(ko_patches()).play("B", point(3, 4))

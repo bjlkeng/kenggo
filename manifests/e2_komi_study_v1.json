@@ -1,0 +1,1084 @@
+{
+  "allowance": {
+    "combined_example_caps": {
+      "population_development": 499987,
+      "train": 2000000,
+      "validation_development": 499993
+    },
+    "deadline_utc": "2026-11-17T03:26:30.795131+00:00",
+    "launch_utc": "2026-11-16T03:26:30.795131+00:00",
+    "limits": {
+      "canonical_file_bytes": 134217728,
+      "cpu_seconds": 72000,
+      "expanded_zip_bytes": 3835017751,
+      "max_development_examples": 250000,
+      "max_records": 50000,
+      "max_train_examples": 1000000,
+      "member_bytes": 1048576,
+      "output_bytes": 33285996544,
+      "preparation_cpu_seconds": 68400,
+      "preparation_wall_seconds": 79200,
+      "selected_sgf_bytes": 116090329,
+      "wall_seconds": 86400
+    },
+    "preflight_cpu_charge": 300,
+    "preflight_output_bytes_limit": 536870912,
+    "preparation_deadline_utc": "2026-11-17T01:26:30.795131+00:00",
+    "readout_output_bytes_limit": 536870912,
+    "total_output_bytes_limit": 34359738368
+  },
+  "artifacts": {
+    "base_index": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/base_index.json",
+      "sha256": "a099932e242d8fc5915175207556bbedcc5b584bbe7b3582001ba731d56218b5"
+    },
+    "canonical": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/canonical.parquet",
+      "sha256": "49d0c6fc5a725bc9e452052b4af505fbffd065d949b148d63baa672fe44e2ccb"
+    },
+    "coverage": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/support.json",
+      "sha256": "342578f61685b3db63b41ec6ba4e35f57d4f5a92afd81320166a02e5c665ab6b"
+    },
+    "diagnostics": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/diagnostics.json",
+      "sha256": "55adf45fc689c41419040c80e2c05f89b45a0b911c3ad51aea2f64836d109cad"
+    },
+    "examples_manifest": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/examples/manifest.json",
+      "sha256": "913ed187583778dd5f653992516f637dd6a55935ee136af347da32c0f54a4723"
+    },
+    "exposure": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/exposure.json",
+      "sha256": "76d3a4f462ee1d4eea0f4cfe4f92f1bdcabd4bc3c9c67ae72b92464787ad1687"
+    },
+    "groups": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/groups.json",
+      "sha256": "3eebc135d4f99a8b67cc55002148f27eacac7fd887de8d3e18ce765bab16a4b2"
+    },
+    "normalizer": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/normalizer.json",
+      "sha256": "d37b62b401c6df8c4a8d75a9b581f44052a310c0d7e8af9f773bc2eb800d6754"
+    },
+    "profile": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/profile.json",
+      "sha256": "243dd14047e0021429d8c073ab6f89fc969e199dee09dbadd81b9a9118c34e81"
+    },
+    "split_manifest": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/splits/manifest.json",
+      "sha256": "adcf769f1cf81c7c2a990fba5428ad577852e47e5414de40fcd12619881c82a9"
+    }
+  },
+  "bead": "kenggo-ydo.12",
+  "build_status": "budget_stopped",
+  "build_summary": {
+    "path": "runs/e2-komi-expansion-2026-11-16/summary.json",
+    "sha256": "ced6525591ccb8086d46ba3912ce8c73a3a7388757979849b215c810bc55503a"
+  },
+  "checks": {
+    "complete_games": true,
+    "final_and_confirmation_targets_decoded": false,
+    "komi_inputs_and_perspective": true,
+    "legal_policy_labels": true,
+    "normalizer_reproduced": true,
+    "recorded_policy_labels_checked": 2999936,
+    "train_development_rows_checked": 2999936,
+    "unchanged_old_files": 18226,
+    "unchanged_old_memberships": 11032,
+    "value_masks_and_perspective": true
+  },
+  "costs": {
+    "browser_outer": {
+      "cpu_seconds": 1.51,
+      "exit_code": 0,
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/browser-time.txt",
+      "system_seconds": 0.41,
+      "user_seconds": 1.1,
+      "wall_seconds": 7.17
+    },
+    "build_internal": {
+      "cpu_seconds": 66878.926879969,
+      "gpu_seconds": 0,
+      "http_requests": 0,
+      "scope": "Build entry through input validation, preparation, verification, artifact hashing and final progress write; excludes final summary formatting/write.",
+      "wall_seconds": 70247.633823,
+      "workers": 1
+    },
+    "build_outer": {
+      "cpu_seconds": 66579.21,
+      "exit_code": 0,
+      "system_seconds": 51.9,
+      "user_seconds": 66527.31,
+      "wall_seconds": 70185.08
+    },
+    "conservative_total_with_parent_publication_seconds": 67558.41186445001,
+    "export_internal": {
+      "cpu_seconds": 112.221012309,
+      "gpu_seconds": 0,
+      "network_requests": 0,
+      "wall_seconds": 110.65604196701315
+    },
+    "export_outer": {
+      "cpu_seconds": 112.44999999999999,
+      "exit_code": 0,
+      "system_seconds": 3.82,
+      "user_seconds": 108.63,
+      "wall_seconds": 111.27
+    },
+    "failed_helper_attempts_retained": [
+      {
+        "command": "python3 runs/e2-komi-inputs-2026-11-16/hash-pins.py initial",
+        "reason": "System Python lacks hashlib.file_digest. Retry uses the pinned .venv interpreter; no source changes.",
+        "time_log": "runs/e2-komi-inputs-2026-11-16/pins-initial-time.txt"
+      },
+      {
+        "command": "assemble-verification.py",
+        "reason": "Timing parser did not allow the nonzero-exit prefix in the retained initial failed helper log. Corrected only the local accounting helper, before any final evidence was written.",
+        "stderr_log": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/verification-final-stderr.log",
+        "time_log": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/verification-final-time.txt"
+      }
+    ],
+    "final_verification_seal": {
+      "actual_measured_cpu_seconds_through_assembly_outer_exit": 66725.13190604499,
+      "actual_scope": "Includes full assembly process tree measured by /usr/bin/time. Final sealing and handoff are within the retained 10 CPU-second charge; full seal time is in verification-seal-time.txt. Untimed startup and optional inline display retain separate conservative charges.",
+      "conservative_cpu_charged_seconds": 67258.41186445001,
+      "elapsed_seconds_from_original_launch": 71148.616222,
+      "utc": "2026-11-16T23:12:19.411353+00:00"
+    },
+    "output_accounting_at_verification": {
+      "all_caps_pass": true,
+      "directories": {
+        "builder": {
+          "cap_bytes": 33285996544,
+          "files": 87570,
+          "logical_bytes": 1642192729,
+          "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-2026-11-16"
+        },
+        "preflight": {
+          "cap_bytes": 536870912,
+          "files": 8,
+          "logical_bytes": 50822417,
+          "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16"
+        },
+        "review": {
+          "files": 8,
+          "logical_bytes": 4557113,
+          "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16"
+        },
+        "verification_logs_and_helpers": {
+          "files": 76,
+          "logical_bytes": 61379739,
+          "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16"
+        }
+      },
+      "final_evidence_and_log_reserve_bytes": 1048576,
+      "method": "Logical file sizes, counting every path including hard links. Conservatively includes all input-directory evidence and helpers, including prelaunch files, in the readout allotment. The final JSON and remaining time logs fit in the extra 1 MiB reserve.",
+      "overall_cap_bytes": 34359738368,
+      "readout_bytes_before_final_evidence": 65936852,
+      "readout_cap_bytes": 536870912,
+      "readout_charged_bytes": 66985428,
+      "total_charged_bytes": 1760000574
+    },
+    "parent_publication_allowance": {
+      "basis": "Conservative charge for final report assembly, existing-artifact hash checks and inline display, including failed attempts; no new replay, encoding or export. Independent code review and development tests remain separate under the approved plan.",
+      "cpu_charged_seconds": 300,
+      "original_deadline_utc": "2026-11-17T03:26:30.795131+00:00",
+      "output_reserve_bytes": 2097152,
+      "recorded_utc": "2026-11-16T23:18:50.894091+00:00"
+    },
+    "preflight_measured": {
+      "byte_costs": {
+        "archive_bytes_hashed": 202187858,
+        "archives_verified": 882,
+        "expanded_zip_bytes": 459949545,
+        "records": 33817,
+        "selected_sgf_bytes": 152345127
+      },
+      "cpu_charged_seconds": 300,
+      "cpu_seconds": 16.371906045000003,
+      "wall_seconds": 16.729518619016744
+    },
+    "production_failures": [],
+    "scope": "Production preparation and verification share the owner allowance; development tests and independent code review are recorded separately.",
+    "total_output_charge_with_parent_reserve_bytes": 1762097726
+  },
+  "counts": {
+    "combined": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 499945,
+        "games": 2245,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 3268,
+        "value_valid": 474997
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 2000000,
+        "games": 9135,
+        "hidden_mover_rank": 199842,
+        "hidden_opponent_rank": 399588,
+        "passes": 12700,
+        "value_valid": 1905030
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 499991,
+        "games": 2254,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 3065,
+        "value_valid": 478991
+      }
+    },
+    "new": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 249958,
+        "games": 1128,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1694,
+        "value_valid": 237758
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 1000000,
+        "games": 4574,
+        "hidden_mover_rank": 99369,
+        "hidden_opponent_rank": 199321,
+        "passes": 6449,
+        "value_valid": 957902
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 249998,
+        "games": 1116,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1613,
+        "value_valid": 240059
+      }
+    },
+    "old": {
+      "population_development": {
+        "duration_valid": 0,
+        "examples": 249987,
+        "games": 1117,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1574,
+        "value_valid": 237239
+      },
+      "train": {
+        "duration_valid": 0,
+        "examples": 1000000,
+        "games": 4561,
+        "hidden_mover_rank": 100473,
+        "hidden_opponent_rank": 200267,
+        "passes": 6251,
+        "value_valid": 947128
+      },
+      "validation_development": {
+        "duration_valid": 0,
+        "examples": 249993,
+        "games": 1138,
+        "hidden_mover_rank": 0,
+        "hidden_opponent_rank": 0,
+        "passes": 1452,
+        "value_valid": 238932
+      }
+    }
+  },
+  "coverage": {
+    "cells_per_role": 96,
+    "combined_accounts": {
+      "population_development": 991,
+      "train": 2498,
+      "validation_development": 1027
+    },
+    "rank_count": 16,
+    "supported_cells": {
+      "population_development": 49,
+      "train": 89,
+      "validation_development": 50
+    },
+    "supported_cells_by_komi": {
+      "0.5": {
+        "population_development": 15,
+        "train": 81,
+        "validation_development": 18
+      },
+      "6.5": {
+        "population_development": 19,
+        "train": 79,
+        "validation_development": 21
+      }
+    },
+    "train_ranks": {
+      "10k": {
+        "accounts": 157,
+        "enough_data": true,
+        "game_sides": 1126,
+        "games": 903,
+        "moves": 127912,
+        "passes": 1029
+      },
+      "11k": {
+        "accounts": 145,
+        "enough_data": true,
+        "game_sides": 1152,
+        "games": 1002,
+        "moves": 124570,
+        "passes": 887
+      },
+      "12k": {
+        "accounts": 132,
+        "enough_data": true,
+        "game_sides": 1467,
+        "games": 1144,
+        "moves": 160769,
+        "passes": 1160
+      },
+      "13k": {
+        "accounts": 112,
+        "enough_data": true,
+        "game_sides": 600,
+        "games": 544,
+        "moves": 66177,
+        "passes": 496
+      },
+      "14k": {
+        "accounts": 71,
+        "enough_data": true,
+        "game_sides": 252,
+        "games": 230,
+        "moves": 27284,
+        "passes": 171
+      },
+      "15k": {
+        "accounts": 50,
+        "enough_data": true,
+        "game_sides": 259,
+        "games": 204,
+        "moves": 26678,
+        "passes": 188
+      },
+      "1d": {
+        "accounts": 199,
+        "enough_data": true,
+        "game_sides": 1259,
+        "games": 746,
+        "moves": 126615,
+        "passes": 420
+      },
+      "1k": {
+        "accounts": 284,
+        "enough_data": true,
+        "game_sides": 1366,
+        "games": 962,
+        "moves": 144806,
+        "passes": 632
+      },
+      "2k": {
+        "accounts": 289,
+        "enough_data": true,
+        "game_sides": 1352,
+        "games": 1046,
+        "moves": 143795,
+        "passes": 650
+      },
+      "3k": {
+        "accounts": 303,
+        "enough_data": true,
+        "game_sides": 1211,
+        "games": 924,
+        "moves": 127966,
+        "passes": 552
+      },
+      "4k": {
+        "accounts": 279,
+        "enough_data": true,
+        "game_sides": 1223,
+        "games": 849,
+        "moves": 136796,
+        "passes": 786
+      },
+      "5k": {
+        "accounts": 296,
+        "enough_data": true,
+        "game_sides": 1477,
+        "games": 1060,
+        "moves": 166597,
+        "passes": 1148
+      },
+      "6k": {
+        "accounts": 304,
+        "enough_data": true,
+        "game_sides": 1477,
+        "games": 1092,
+        "moves": 161468,
+        "passes": 1166
+      },
+      "7k": {
+        "accounts": 260,
+        "enough_data": true,
+        "game_sides": 1446,
+        "games": 1124,
+        "moves": 162558,
+        "passes": 1205
+      },
+      "8k": {
+        "accounts": 220,
+        "enough_data": true,
+        "game_sides": 1303,
+        "games": 1051,
+        "moves": 149095,
+        "passes": 1134
+      },
+      "9k": {
+        "accounts": 186,
+        "enough_data": true,
+        "game_sides": 1294,
+        "games": 1002,
+        "moves": 146914,
+        "passes": 1076
+      }
+    },
+    "train_ranks_at_200_games": 16,
+    "train_ranks_by_komi": {
+      "0.5": {
+        "10k": {
+          "accounts": 114,
+          "enough_data": true,
+          "game_sides": 658,
+          "games": 658,
+          "moves": 73974,
+          "passes": 609
+        },
+        "11k": {
+          "accounts": 112,
+          "enough_data": true,
+          "game_sides": 820,
+          "games": 820,
+          "moves": 89172,
+          "passes": 608
+        },
+        "12k": {
+          "accounts": 95,
+          "enough_data": true,
+          "game_sides": 794,
+          "games": 794,
+          "moves": 87090,
+          "passes": 628
+        },
+        "13k": {
+          "accounts": 92,
+          "enough_data": true,
+          "game_sides": 454,
+          "games": 454,
+          "moves": 50549,
+          "passes": 377
+        },
+        "14k": {
+          "accounts": 61,
+          "enough_data": true,
+          "game_sides": 189,
+          "games": 189,
+          "moves": 20319,
+          "passes": 131
+        },
+        "15k": {
+          "accounts": 29,
+          "enough_data": false,
+          "game_sides": 138,
+          "games": 138,
+          "moves": 14001,
+          "passes": 88
+        },
+        "1d": {
+          "accounts": 85,
+          "enough_data": true,
+          "game_sides": 231,
+          "games": 231,
+          "moves": 23865,
+          "passes": 100
+        },
+        "1k": {
+          "accounts": 169,
+          "enough_data": true,
+          "game_sides": 555,
+          "games": 555,
+          "moves": 58281,
+          "passes": 255
+        },
+        "2k": {
+          "accounts": 201,
+          "enough_data": true,
+          "game_sides": 737,
+          "games": 737,
+          "moves": 78730,
+          "passes": 379
+        },
+        "3k": {
+          "accounts": 222,
+          "enough_data": true,
+          "game_sides": 634,
+          "games": 634,
+          "moves": 67294,
+          "passes": 285
+        },
+        "4k": {
+          "accounts": 206,
+          "enough_data": true,
+          "game_sides": 465,
+          "games": 465,
+          "moves": 49294,
+          "passes": 231
+        },
+        "5k": {
+          "accounts": 154,
+          "enough_data": true,
+          "game_sides": 620,
+          "games": 619,
+          "moves": 67231,
+          "passes": 388
+        },
+        "6k": {
+          "accounts": 212,
+          "enough_data": true,
+          "game_sides": 662,
+          "games": 661,
+          "moves": 73234,
+          "passes": 549
+        },
+        "7k": {
+          "accounts": 186,
+          "enough_data": true,
+          "game_sides": 776,
+          "games": 772,
+          "moves": 86696,
+          "passes": 663
+        },
+        "8k": {
+          "accounts": 170,
+          "enough_data": true,
+          "game_sides": 760,
+          "games": 759,
+          "moves": 86210,
+          "passes": 638
+        },
+        "9k": {
+          "accounts": 132,
+          "enough_data": true,
+          "game_sides": 653,
+          "games": 653,
+          "moves": 74060,
+          "passes": 520
+        }
+      },
+      "6.5": {
+        "10k": {
+          "accounts": 111,
+          "enough_data": true,
+          "game_sides": 468,
+          "games": 245,
+          "moves": 53938,
+          "passes": 420
+        },
+        "11k": {
+          "accounts": 91,
+          "enough_data": true,
+          "game_sides": 332,
+          "games": 182,
+          "moves": 35398,
+          "passes": 279
+        },
+        "12k": {
+          "accounts": 88,
+          "enough_data": true,
+          "game_sides": 673,
+          "games": 350,
+          "moves": 73679,
+          "passes": 532
+        },
+        "13k": {
+          "accounts": 51,
+          "enough_data": true,
+          "game_sides": 146,
+          "games": 90,
+          "moves": 15628,
+          "passes": 119
+        },
+        "14k": {
+          "accounts": 30,
+          "enough_data": false,
+          "game_sides": 63,
+          "games": 41,
+          "moves": 6965,
+          "passes": 40
+        },
+        "15k": {
+          "accounts": 38,
+          "enough_data": true,
+          "game_sides": 121,
+          "games": 66,
+          "moves": 12677,
+          "passes": 100
+        },
+        "1d": {
+          "accounts": 179,
+          "enough_data": true,
+          "game_sides": 1028,
+          "games": 515,
+          "moves": 102750,
+          "passes": 320
+        },
+        "1k": {
+          "accounts": 211,
+          "enough_data": true,
+          "game_sides": 811,
+          "games": 407,
+          "moves": 86525,
+          "passes": 377
+        },
+        "2k": {
+          "accounts": 187,
+          "enough_data": true,
+          "game_sides": 615,
+          "games": 309,
+          "moves": 65065,
+          "passes": 271
+        },
+        "3k": {
+          "accounts": 163,
+          "enough_data": true,
+          "game_sides": 577,
+          "games": 290,
+          "moves": 60672,
+          "passes": 267
+        },
+        "4k": {
+          "accounts": 146,
+          "enough_data": true,
+          "game_sides": 758,
+          "games": 384,
+          "moves": 87502,
+          "passes": 555
+        },
+        "5k": {
+          "accounts": 242,
+          "enough_data": true,
+          "game_sides": 857,
+          "games": 441,
+          "moves": 99366,
+          "passes": 760
+        },
+        "6k": {
+          "accounts": 225,
+          "enough_data": true,
+          "game_sides": 815,
+          "games": 431,
+          "moves": 88234,
+          "passes": 617
+        },
+        "7k": {
+          "accounts": 182,
+          "enough_data": true,
+          "game_sides": 670,
+          "games": 352,
+          "moves": 75862,
+          "passes": 542
+        },
+        "8k": {
+          "accounts": 146,
+          "enough_data": true,
+          "game_sides": 543,
+          "games": 292,
+          "moves": 62885,
+          "passes": 496
+        },
+        "9k": {
+          "accounts": 121,
+          "enough_data": true,
+          "game_sides": 641,
+          "games": 349,
+          "moves": 72854,
+          "passes": 556
+        }
+      }
+    }
+  },
+  "epic": "kenggo-ydo",
+  "inputs": {
+    "baseline_summary": {
+      "path": "runs/e2-rank-expansion-2026-11-15/summary.json",
+      "sha256": "f3209a278e9ab3ff7074913ca7f4e30377f60148f8b3ebd56c54fd5e53f2b136"
+    },
+    "launch_template": {
+      "path": "configs/e2_komi_launch_v1.json",
+      "sha256": "ebb1bcc5267d50cb1eb09a528020babae7bdc90df89ba713611b2c4bd1a3d30d"
+    },
+    "preflight": {
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/preflight.json",
+      "sha256": "be0b02acde1694541d76f6dc26a1d3e4d8f0be2f104e8b1e4edfcecc7166bdd2"
+    },
+    "request": {
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/request.json",
+      "sha256": "5f10f7b9c4d9eb66a7005d9a60624f5eaba128a733a6f3590a7ba76166175612"
+    },
+    "scope_audit": {
+      "path": "runs/e2-rank-inputs-2026-11-15/sgf-scope-audit.json",
+      "sha256": "126de24cbd290a81b1b39040d047d595200998c3d93de21e12c624a74e990844"
+    },
+    "scope_plan": {
+      "path": "plan/e2_komi_study_v1.md",
+      "sha256": "50bf9416cf8405cbf51159b27a22564abb69400eecd9a07f102e1c3408e649d8"
+    },
+    "session_marker": {
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/session.json",
+      "sha256": "286b049dd7654ff7d7edfb7d9410d4cb2274a2246360a6871b55647a672a9fd0"
+    },
+    "sources": {
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/sources.json",
+      "sha256": "b2db70285ea18fd3aa34e5b05117776e1a949b9529afd52c0d83668f22b06450"
+    }
+  },
+  "limitations": [
+    "No model was trained or promoted.",
+    "Account screening does not prove human control.",
+    "The original source survey was partial and selected.",
+    "Recent-move history remains zero; dynamic clocks, durations and personalization stay masked.",
+    "The 0.5-komi 15k training group has only 29 mover accounts.",
+    "Seven of 96 combined training rank/phase/clock groups remain below the E0 count threshold.",
+    "The original source population still lacks one monthly ZIP and 1360 development records.",
+    "All-row checks do not independently recompute every stored board or legal mask."
+  ],
+  "owner_review": {
+    "actions": [
+      {
+        "action": "Compare 6.5, 0.5 and combined coverage, especially 15k and 14k.",
+        "bead": "kenggo-ydo.12",
+        "reason": "The game target is met, but small account groups still limit variety."
+      },
+      {
+        "action": "Spot-check sample positions at both komi settings and their move, mover, komi and outcome labels.",
+        "bead": "kenggo-ydo.12",
+        "reason": "Inspect examples of the targets the model would learn."
+      },
+      {
+        "action": "Download notes and send concerns before the next model-comparison plan.",
+        "bead": "kenggo-ydo.6",
+        "reason": "Dataset acceptance alone does not establish better play or fund training."
+      }
+    ],
+    "feedback_received": false
+  },
+  "prelaunch_validation": {
+    "evidence": {
+      "path": "runs/e2-komi-inputs-2026-11-16/prelaunch-final.json",
+      "sha256": "ffd49281dba552e6502f4763f275142eee6d3ebed647cce7b37a764365a68397"
+    },
+    "native_reference_enabled": true,
+    "review_verdict": {
+      "path": "runs/e2-komi-inputs-2026-11-16/prelaunch-verdict.json",
+      "sha256": "53c51e0d84efaff23e511b0065f97b81691dd15dc5ecf1a9ca3e31d5f6b40fd1"
+    },
+    "runtime_code": {
+      "code_sha256": {
+        "src/kenggo/__init__.py": "5cd1f4fcadf93eeb1d8399db364efe7f68fbcb7b8723b3a1726d9f7a0445877f",
+        "src/kenggo/adjudication.py": "1ae8f8519a5905ad3e7a9d22da8961baf57ac264d8fc1adc84e087e2b24dc5f7",
+        "src/kenggo/base_pilot.py": "7cd3e7af79e89ba7da0fe032d0277ce2202884d886c0db272915068adc8be572",
+        "src/kenggo/baseline_evaluation.py": "fecb38a4b856f50df6c718b7f65a8da008acdc7eaf524f67c08b620f66263638",
+        "src/kenggo/baseline_matches.py": "15741844945ab6fd42162303da9acd59b282c9a49c539968bd1c32840468dce4",
+        "src/kenggo/baseline_training.py": "c53fb88a761521727a1aa2d3f22ab87e161a4416595061fdfb931e11eca73b01",
+        "src/kenggo/cached_coverage_audit.py": "d60b61029dd3e34aac4598a6406fe3b388ad6226755b5221a1dba45659b2a1a9",
+        "src/kenggo/canonical_audit.py": "dea8f96c014f742109155f86c2e4b9ebc90ccc2f8a262c321a2b57e8e9a64c6d",
+        "src/kenggo/canonical_data.py": "88918f308e232fedfbaff4e77906db8b0a41384372c3d2202d1e636fa80a87d4",
+        "src/kenggo/checkpoints.py": "d375157698a6531435ca600dab8aff268200a646f8aee56f26a7d1598fde5b83",
+        "src/kenggo/cuda_smoke.py": "cc7e20e3c2d1446c2d25ffc4531fc835c8f11346dd6b92abd81c4fa0d13dd990",
+        "src/kenggo/data_expansion.py": "20439a856a3ce0a6dedcaa2c9c50b7d9dae9d16de954a5e093ceba0ad8ab9fc3",
+        "src/kenggo/data_splits.py": "cacd8e08e23959067798346b4a0f66a9a7f557cbe837ac402f840bf9285f9cdf",
+        "src/kenggo/e1_audit.py": "c814c9ef54091bb007eafe77a041888be1723998fe14353fea11268fa5f069cc",
+        "src/kenggo/encoding.py": "d0f336bf06dfea5820bda7064fd49d6c07a9baf09ccac919362b3cfabd5c4e46",
+        "src/kenggo/examples.py": "ac0c6ccc58710823c05cb8c31a42730b54148d8bd4cac74ca41b03409ef05ac6",
+        "src/kenggo/examples_audit.py": "0db86aaf8ac272263262aaa7c67a37d02c2fe57a9e705293c01e6e54b9f34f42",
+        "src/kenggo/expansion_source.py": "ea8c74a37239131f0244a44779bd1975052c7e20ab78aee6dcfb93c1d3e0f6aa",
+        "src/kenggo/go.py": "98e6ac605f4295a2c96a4153d4fd41aa5f6a26fee9ce25da6dd02473a70dec6b",
+        "src/kenggo/human_reference_smoke.py": "eb49c0c79b6d3705dcb99f9f23b428b630025029bc9c052df3f52011a031bf9b",
+        "src/kenggo/katago_human.py": "c7382ae591714e6a692c4dd9582aa96b4f59f547bfa13a429e6500ceceed6692",
+        "src/kenggo/katago_referee.py": "59f327f5eacb7a9309459a7ff98b918cac4e27954c840cf02039e6e659f67f3b",
+        "src/kenggo/kgs_acquire.py": "6a3ef4366d38b75e1d1cdd080a23d9e05ed46bf94084ba19c607c9c38b07e911",
+        "src/kenggo/kgs_admission.py": "229936bb97076abb4e66b4b81e805fdc327b154bbbbb5eb9feb6230197838da2",
+        "src/kenggo/kgs_eligibility.py": "beae05f73846882f37dc30050aef799d4895e278f1e25fe60d90e2b018c6fd1b",
+        "src/kenggo/kgs_source.py": "67f3a5950b2c83a7eb1045d2a33ecfae5e2ff35e1c50a7bd46035bd72b7b8d9a",
+        "src/kenggo/komi_expansion.py": "1598281f793f235d65ff7c938954cfbd170aceca31d804346a8c50226a9d5bdf",
+        "src/kenggo/learned_agent.py": "edb6855ccc547a958945276db52938ea53e66dd1a69e6253d0c73aa30fec7164",
+        "src/kenggo/learner.py": "9f9da7de350d3046943c88c712d01caf96c3694c98816f5455ff86d10f85a328",
+        "src/kenggo/learner_smoke.py": "db281dd765932eff20b9e6a280db014a8116b2f70753d5bf00cf10f01c5d6dcd",
+        "src/kenggo/match_sgf.py": "86afe9dee97507db8d539a408fe582251067f44579ceb764c6bb36f8a9404cb2",
+        "src/kenggo/match_smoke.py": "137c7851121a3c9920aadedfa1190a540ea1dcbcc683a48daaa6219951a485ab",
+        "src/kenggo/match_statistics.py": "fe776715b2ad5f519580bafb18dc68b04115193136fdc112f815d7c711702d60",
+        "src/kenggo/matches.py": "7347fcc0310c7d785977ac5d4d80d516e7c0c40e5f072fb8546e12412699e7b0",
+        "src/kenggo/pilot_jobs.py": "60786e3ec47444df85af179adda64a30b3964a40851b1f2f013b3ba05467c203",
+        "src/kenggo/population_audit.py": "3c6861f528a19614a919575a5e22a97996994d9b46c778b088f2b64b8d25ec12",
+        "src/kenggo/rank_continuation.py": "07c4a0c44d5640dafe957b19f6331345255331571a0ae19b7d3cb931fb8f97ef",
+        "src/kenggo/rank_discovery.py": "c733b8ba2ed5e5040fe7ea6436e0f0b793dbbe3366b32d55ba840c4bd2a1eda1",
+        "src/kenggo/recorded_data.py": "36b8747fed09efbf6f588335810a71f92d1f134d8aa2b36100cc9c8d2152df2b",
+        "src/kenggo/recorded_statistics.py": "2658f668579d212fe835573e118b54b5be0c697f92382797ff13542a131a3ca4",
+        "src/kenggo/resource_ledger.py": "5118b30b418b19bcf41a7fd8677b7b4dc9cfab29714667169a5518de3fce1a2d",
+        "src/kenggo/rules_replay.py": "37213c99bfe211221222c9d90445e67a7e39d2f8a6b6c2bb523556434702bdac",
+        "src/kenggo/sgf_audit.py": "47574518f9096183a80fdcc0c3fe0446fe02b115594d5be90a78e3f86063426c",
+        "src/kenggo/smoke.py": "99a5321fb70da803cc76b7b5a8745a0e0a800ace8aaf0753e01913acccc7a693",
+        "src/kenggo/supervised.py": "4d9dc35e8ca07ee1e50540386117272483ca6c7c7ce996f74cae211335bb6c3a",
+        "src/kenggo/throughput.py": "4a64be53d0fafa0029761b731454544f09c3adc15eb058ea307dd0c6c5ad9f6f",
+        "src/kenggo/tracking.py": "7c0a7266558a05bf8fb4afb80f8f9acfc142b639e77453e85e2c143447b0ef6f",
+        "src/kenggo/tracking_smoke.py": "c1b8c9912f517c458977968b554b948b2b36ffe46cbecc1dda6d6f6e012b2508",
+        "tools/data_expansion_review.html": "973ea096cb053c4d184513757ba6c63997679a84d87ebbaafbcc57efa60062e8",
+        "tools/prepare_komi_study.py": "e150009e7f66350561aa3d2310db7ab12f6613e17324bdc2f9bc6193e7b91c34",
+        "tools/review_data_expansion.py": "9db8c3f43a0da8216325d633b19bb62fd79805a770a9a05ae1eb182e986f06a0",
+        "uv.lock": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+      },
+      "start_commit": "89c0d9c1134a5dd941b70b11f5e058528b0d4179"
+    },
+    "runtime_patch": {
+      "path": "runs/e2-komi-inputs-2026-11-16/prelaunch-pass3.patch",
+      "sha256": "f40fc9f1deaebe80e794d264bba08c91b157b23a2798092e92aa28e3c6e42e5e"
+    },
+    "test_log": {
+      "path": "runs/e2-komi-inputs-2026-11-16/tests-final-prelaunch.log",
+      "sha256": "bab36bb33bba97a9e49eb6181ce347a1ed718c39c8cd5a7bcb99d2c85f696109"
+    },
+    "test_timing": {
+      "path": "runs/e2-komi-inputs-2026-11-16/tests-final-time.txt",
+      "sha256": "117d7cc671b94fb5318288d0ce38982e20f05e5ff8d7568731cf15a44757979d"
+    },
+    "tests_passed": 555,
+    "tests_skipped": 0
+  },
+  "preserved_baseline_artifacts": {
+    "base_index": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/base_index.json",
+      "sha256": "a525ab05efdc486170cc53339085e70e057ceb4215ada71944091d79f66b34d8"
+    },
+    "canonical": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/canonical.parquet",
+      "sha256": "7e3bc947053bde06f67c8e7706f043a405160b1be1a634f1d174833694a1ea27"
+    },
+    "coverage": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/support.json",
+      "sha256": "2bac31fbc7285be6047ba8c9c52b3586b20e8683e2302f1b69a4350ca04a4cc1"
+    },
+    "diagnostics": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/diagnostics.json",
+      "sha256": "84a9db646d01ffe39aa15a5f49d36d8c1b2bcc81377b090e00438cc19aea0315"
+    },
+    "examples_manifest": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/examples/manifest.json",
+      "sha256": "791187f75dbf26d1d4459db18c1a1d26d860a6ed669594fb2bb4e7fcd7eb9b21"
+    },
+    "exposure": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/exposure.json",
+      "sha256": "76d3a4f462ee1d4eea0f4cfe4f92f1bdcabd4bc3c9c67ae72b92464787ad1687"
+    },
+    "groups": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/groups.json",
+      "sha256": "3eebc135d4f99a8b67cc55002148f27eacac7fd887de8d3e18ce765bab16a4b2"
+    },
+    "normalizer": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/normalizer.json",
+      "sha256": "f65746f94831e9684af467380c73aaf681bb5983551d6c4ca3800c78c0605e6e"
+    },
+    "profile": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/profile.json",
+      "sha256": "51b7e9d038e0c3b87147cb8294bb2e8aa7d7f5a5a9c4e79f94065ebda501cee7"
+    },
+    "split_manifest": {
+      "path": "runs/e2-rank-expansion-2026-11-15/dataset/splits/manifest.json",
+      "sha256": "e6c699255242c3c59bb3cc224ac07085ccb747dbc61e80211b35193c7446cef0"
+    }
+  },
+  "review_base": "89c0d9c1134a5dd941b70b11f5e058528b0d4179",
+  "review_page": {
+    "bytes": 1256992,
+    "path": "runs/e2-komi-expansion-review-2026-11-16/review.html",
+    "sha256": "52b8c443e1107bdac360efdc18bfc8bf3cf62ca63987d1e7c4417937936e1d26"
+  },
+  "review_readout": {
+    "path": "runs/e2-komi-expansion-review-2026-11-16/readout.json",
+    "sha256": "f135b27c108d4035019d2ef4f012be0655060de4916a83fd70c12161326615af"
+  },
+  "schema": "e2_komi_study_manifest_v1",
+  "scope": {
+    "cached_only": true,
+    "candidate_counts": {
+      "population_development": 1502,
+      "train": 9525,
+      "validation_development": 2020
+    },
+    "model_training": false,
+    "preserved_control_komi": 6.5,
+    "prior_unavailable_development_records": 1360,
+    "study_komi": 0.5
+  },
+  "selection": {
+    "new_deduplicated_games": 12940,
+    "new_encoded_games": 6818,
+    "new_replay_validated": 13047,
+    "new_source_admitted": 13047,
+    "new_split_exclusions": {
+      "ambiguous_duplicate_component": 104,
+      "duplicate_copy": 90,
+      "duplicate_of_frozen_corpus": 44,
+      "duplicate_of_rejected_source": 96,
+      "expansion_example_row_limit": 6122
+    },
+    "source_attempted": 13047,
+    "source_candidates": 13047,
+    "source_completed": 13047,
+    "source_exclusion_reasons": {},
+    "source_exclusions": {},
+    "source_unattempted": 0
+  },
+  "status": "data_preparation_and_local_verification_passed",
+  "stop_reasons": [
+    "example_row_limit"
+  ],
+  "verification": {
+    "browser": {
+      "all_controls_stones_mover_outcome_komi_and_notes_download_passed": true,
+      "automated_notes_cleared": true,
+      "display_preview_limitation": "Optional comparison preview timed out after 20 seconds; inline render succeeded. This is separate from the passed local Chromium QA of the actual exported review page.",
+      "evidence": {
+        "bytes": 13412,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/browser-checks.json",
+        "sha256": "3e37abc4c5db6599ad1b28dfcb1eac50c943b15a80db9fdf9146e043ebc4d09b"
+      },
+      "external_requests": 0,
+      "fixed_sample_games_per_width": 7,
+      "horizontal_overflow": false,
+      "inspect_positions_per_width": 24,
+      "javascript_errors": 0,
+      "method": "Installed Chromium and Playwright, direct file URL, fresh offline contexts, no server or package downloads.",
+      "outer_timing": {
+        "cpu_seconds": 1.51,
+        "exit_code": 0,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/browser-time.txt",
+        "system_seconds": 0.41,
+        "user_seconds": 1.1,
+        "wall_seconds": 7.17
+      },
+      "owner_feedback": false,
+      "role_komi_combinations_per_width": 9,
+      "shared_preview_limitation": "Preview automation open failed: Invalid preview URL (unsupported-protocol: file:; input length 83).",
+      "status": "passed",
+      "widths": [
+        1000,
+        390
+      ]
+    },
+    "check_limit": "Recorded actions and movers match the pinned canonical trajectories replayed during preparation; saved board arrays and legal masks were not all recomputed independently.",
+    "completion_review_record": "kenggo-ydo.12 records the fresh independent completion review and delivery; this manifest records the data evidence.",
+    "export_attempts": 1,
+    "export_ledger": {
+      "bytes": 346,
+      "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/session.json.verification.json",
+      "sha256": "ecddf53c28b3aeff9a7f864165dbb65c221770c013c523dac4293f57319e10b1"
+    },
+    "final_evidence": {
+      "bytes": 205162,
+      "path": "runs/e2-komi-inputs-2026-11-16/verification-final.json",
+      "sha256": "1480ddf63c94e7afb8fba7cc934a96ec38bcd231315afa4a2af5d4a334045748"
+    },
+    "important_artifacts": {
+      "artifact-hashes-final.json": {
+        "bytes": 33855967,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/artifact-hashes-final.json",
+        "sha256": "6849e34caad7c367e17c7612c7a6cff04623fac26a49ae9c27697dafd14b52c9"
+      },
+      "browser-checks.json": {
+        "bytes": 13412,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/browser-checks.json",
+        "sha256": "3e37abc4c5db6599ad1b28dfcb1eac50c943b15a80db9fdf9146e043ebc4d09b"
+      },
+      "display-tool-timing.json": {
+        "bytes": 1027,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/display-tool-timing.json",
+        "sha256": "42d767f5a62abc0a4da5211f9a6cbab416b7ee11f83a5044f090326fd17322ae"
+      },
+      "export.json": {
+        "bytes": 1002,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/export.json",
+        "sha256": "65ed9d00551cf7dfa6908df8fb2028f6110b27f1d43d3ef6f4efa785bd3c8c1c"
+      },
+      "prelaunch-final.json": {
+        "bytes": 3101,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/prelaunch-final.json",
+        "sha256": "ffd49281dba552e6502f4763f275142eee6d3ebed647cce7b37a764365a68397"
+      },
+      "prelaunch-verdict.json": {
+        "bytes": 658,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/prelaunch-verdict.json",
+        "sha256": "53c51e0d84efaff23e511b0065f97b81691dd15dc5ecf1a9ca3e31d5f6b40fd1"
+      },
+      "progress.json": {
+        "bytes": 135020,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-2026-11-16/progress.json",
+        "sha256": "d81c919587188d6d79025965445877837fbb06f5af4ee656421993ff6e3ae240"
+      },
+      "rank-count-check.html": {
+        "bytes": 2316,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-inputs-2026-11-16/rank-count-check.html",
+        "sha256": "dd6194c71de22b87677031e7d6992dc17336662f3391e92081d2549354df6971"
+      },
+      "readout.json": {
+        "bytes": 1219972,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/readout.json",
+        "sha256": "f135b27c108d4035019d2ef4f012be0655060de4916a83fd70c12161326615af"
+      },
+      "review-1000.png": {
+        "bytes": 982304,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/review-1000.png",
+        "sha256": "165bd651714b1558bb6aa6600330c1ca551db0c44088104efb664e44156366fc"
+      },
+      "review-390.png": {
+        "bytes": 865827,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/review-390.png",
+        "sha256": "88fa25cc5de006b5778b3a9dbe2278d9fd2fd92f19500c1d61015806fa61c19d"
+      },
+      "review-board-1000.png": {
+        "bytes": 115123,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/review-board-1000.png",
+        "sha256": "5a6bc3d4b3f6a58d657bbfd968d8bba9fd21ec97024b6692bdf4391464a96ddc"
+      },
+      "review-board-390.png": {
+        "bytes": 102481,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/review-board-390.png",
+        "sha256": "d991302bd4597804279fb62b8eae75a690889595183b9d4d360bfdd92469dd54"
+      },
+      "review.html": {
+        "bytes": 1256992,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-review-2026-11-16/review.html",
+        "sha256": "52b8c443e1107bdac360efdc18bfc8bf3cf62ca63987d1e7c4417937936e1d26"
+      },
+      "session.json.verification.json": {
+        "bytes": 346,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-preflight-2026-11-16/session.json.verification.json",
+        "sha256": "ecddf53c28b3aeff9a7f864165dbb65c221770c013c523dac4293f57319e10b1"
+      },
+      "summary.json": {
+        "bytes": 10870,
+        "path": "/home/bojji/code/kenggo/runs/e2-komi-expansion-2026-11-16/summary.json",
+        "sha256": "ced6525591ccb8086d46ba3912ce8c73a3a7388757979849b215c810bc55503a"
+      }
+    },
+    "input_and_code_pins_match": true,
+    "seal": {
+      "bytes": 2169,
+      "path": "runs/e2-komi-inputs-2026-11-16/verification-final-seal.json",
+      "sha256": "63b09a7a22cca89685a427700f372bfec96a625144997a882f75eb1c526f9533"
+    },
+    "status": "passed"
+  }
+}

@@ -9,42 +9,45 @@ import time
 import numpy as np
 
 from kenggo.canonical_data import digest, encoded
+from kenggo.data_splits import read_membership
 from kenggo.encoding import INPUT_KEYS, encode
 from kenggo.examples import (CANONICAL_SHA256, CODE_FILES, FINAL_ROLES, SPLIT_SHA256, ExampleConfig, build_examples,
-                             examples_for_game, file_hash, fit_normalizer, load_corpus, load_dataset_profile,
+                             examples_for_game, file_hash, fit_normalizer, initial_game, load_corpus, load_dataset_profile,
                              replay_record, sealed_sources, source_context)
-from kenggo.go import Game, PASS
+from kenggo.go import PASS
 from kenggo.rules_replay import dump_game, load_game
 
 
 KINDS = ("scored", "resignation", "timeout", "forfeit", "incomplete_or_unknown")
 
 
-def diagnostic_sample(records, *, sealed_source_ids=(), check_budget=lambda: None):
+def diagnostic_sample(records, *, sealed_source_ids=(), check_budget=lambda: None, komi_study=False):
     chosen = []
     for kind in KINDS:
         candidates = sorted((r for r in records.values() if not r["structural_exclusions"]
                              and not r.get("sealed_final", False) and r["source"]["source_url"] not in sealed_source_ids
                              and r["replay_validated"] and r["recorded_result"]["kind"] == kind),
                             key=lambda r: r["source"]["source_url"])
-        if candidates:
-            chosen.append(candidates[0])
+        for komi in ((6.5, 0.5) if komi_study else (6.5,)):
+            eligible = [record for record in candidates if record["metadata"]["KM"] == komi]
+            if eligible:
+                chosen.append(eligible[0])
     evidence = []
     for record in chosen:
         check_budget()
-        final = replay_record(record)
+        final = replay_record(record, komi_study=komi_study, check_budget=check_budget)
         count = len(record["actions"])
         selected = {0, count // 2, count - 1}
         first_pass = next((i for i, m in enumerate(record["actions"]) if m["action"] == PASS), None)
         if first_pass is not None:
             selected.add(first_pass)
-        game, positions = Game.new(), []
+        game, positions = initial_game(record, komi_study=komi_study), []
         for ply, move in enumerate(record["actions"]):
             check_budget()
             if ply in selected:
-                context = source_context(record)
+                context = source_context(record, komi_study=komi_study)
                 encoded_views = {}
-                rebuilt = load_game(dump_game(game))
+                rebuilt = load_game(dump_game(game), komi_study=komi_study)
                 for window in (0, 8, 32, 64):
                     inputs = encode(game, context, history=window)
                     restored = encode(rebuilt, context, history=window)
@@ -65,7 +68,8 @@ def diagnostic_sample(records, *, sealed_source_ids=(), check_budget=lambda: Non
         evidence.append({"source_url": record["source"]["source_url"], "canonical_sha256": digest(record),
                          "result_kind": record["recorded_result"]["kind"], "actions": count,
                          "source_admitted": record["eligibility"]["training_eligible"], "positions": positions})
-    return {"selection": "First source URL per supported result kind; first/middle/last/first-pass indices, deduplicated.",
+    return {"selection": "First source URL per supported result kind" + (" and komi" if komi_study else "")
+                         + "; first/middle/last/first-pass indices, deduplicated.",
             "games": len(evidence), "positions": sum(len(e["positions"]) for e in evidence),
             "history_windows": [0, 8, 32, 64], "source_actions_replayed": sum(e["actions"] for e in evidence),
             "evidence": evidence, "mismatches": 0, "training_examples_emitted": 0,
@@ -91,15 +95,17 @@ def run(source, output, *, config=ExampleConfig(), profile=None):
 
     canonical_sha256 = CANONICAL_SHA256 if profile is None else profile.canonical_sha256
     split_sha256 = SPLIT_SHA256 if profile is None else profile.split_sha256
+    komi_study = bool(profile and profile.komi_study)
     records, split, _ = load_corpus(source / "canonical.parquet", canonical_sha256,
                                    source / "splits", split_sha256, profile=profile)
     output.mkdir(parents=True)
     try:
         key = build_examples(source / "canonical.parquet", canonical_sha256, source / "splits", split_sha256,
                              output / "examples", config=config, profile=profile, check_budget=check_budget)
-        normalizer = fit_normalizer(output / "examples", key)
+        normalizer = fit_normalizer(output / "examples", key, komi_study=komi_study, check_budget=check_budget)
         (output / "normalizer.json").write_text(encoded(normalizer) + "\n")
-        diagnostics = diagnostic_sample(records, sealed_source_ids=sealed_sources(split), check_budget=check_budget)
+        diagnostics = diagnostic_sample(records, sealed_source_ids=sealed_sources(split), check_budget=check_budget,
+                                        komi_study=komi_study)
         (output / "diagnostics.json").write_text(encoded(diagnostics) + "\n")
         check_budget()
     except Exception as error:
@@ -140,13 +146,16 @@ def probe(source, *, profile, games=5, cpu_seconds=120, wall_seconds=180, config
             raise RuntimeError("Positive encoding preflight budget exceeded")
 
     source = Path(source)
-    records, split, partitions = load_corpus(source / "canonical.parquet", profile.canonical_sha256,
-                                            source / "splits", profile.split_sha256, profile=profile)
+    _, partitions = read_membership(source / "splits", profile.split_sha256)
     selected = sorted(partitions["train"], key=lambda row: row["source_url"])[:games]
+    selection = {"role": "train", "source_ids": [row["source_url"] for row in selected]} if profile.komi_study else {}
+    records, split, _ = load_corpus(source / "canonical.parquet", profile.canonical_sha256,
+                                   source / "splits", profile.split_sha256, profile=profile, **selection)
     examples = 0
     for membership in selected:
         check_budget()
-        for _ in examples_for_game(records[membership["source_url"]], membership, split["plan"], config):
+        for _ in examples_for_game(records[membership["source_url"]], membership, split["plan"], config,
+                                    komi_study=profile.komi_study, check_budget=check_budget):
             examples += 1
             check_budget()
     check_budget()

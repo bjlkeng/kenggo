@@ -37,9 +37,9 @@ Loc location(int action, int size) {
   return action == size * size ? Board::PASS_LOC : Location::getLoc(action % size, action / size, size);
 }
 
-Rules japaneseRules() {
+Rules japaneseRules(int komiHalfpoints) {
   return Rules(Rules::KO_SIMPLE, Rules::SCORING_TERRITORY, Rules::TAX_SEKI,
-               false, false, Rules::WHB_ZERO, false, 6.5f);
+               false, false, Rules::WHB_ZERO, false, komiHalfpoints / 2.0f);
 }
 
 struct State {
@@ -50,9 +50,9 @@ struct State {
   int moveCount = 0;
   int passStreak = 0;
 
-  State(const Board& initial, Player nextPlayer, bool historyMode)
+  State(const Board& initial, Player nextPlayer, bool historyMode, int komiHalfpoints)
     : board(initial),
-      history(initial, nextPlayer, japaneseRules(), 0,
+      history(initial, nextPlayer, japaneseRules(komiHalfpoints), 0,
               BoardHistoryModes(/*alwaysComputePassAliveUnderSuicideRules=*/false,
                                 /*excludeTerritoryAdjacentToAtari=*/true)),
       next(nextPlayer), useHistory(historyMode) {}
@@ -157,8 +157,11 @@ Json sequence(State& state, const Json& moves, const Queries& queries) {
 
 Json run(const Json& input) {
   checkKeys(input, {"size", "board", "to_play", "mode", "moves", "include_legal_mask",
-                    "query_actions", "captures", "branches"}, "case");
+                    "query_actions", "captures", "branches", "komi_halfpoints"}, "case");
   int size = boundedInteger(input.value("size", Json(19)), 2, 19, "size");
+  int komiHalfpoints = boundedInteger(input.value("komi_halfpoints", Json(13)), 1, 13, "komi_halfpoints");
+  if(komiHalfpoints != 1 && komiHalfpoints != 13)
+    throw std::invalid_argument("komi_halfpoints must be 1 or 13");
   Player next = player(input.value("to_play", Json("B")));
   std::string mode = input.value("mode", std::string("ordinary"));
   if(mode != "ordinary" && mode != "history") throw std::invalid_argument("mode must be ordinary or history");
@@ -198,7 +201,7 @@ Json run(const Json& input) {
   Json branches = input.value("branches", Json::array());
   if(!branches.is_array() || branches.size() > 16) throw std::invalid_argument("branches must be an array of at most 16 move arrays");
   for(const Json& branch : branches) checkMoves(branch);
-  State state(board, next, mode == "history");
+  State state(board, next, mode == "history", komiHalfpoints);
   Json result = sequence(state, moves, queries);
   result["ok"] = true;
   result["mode"] = mode;

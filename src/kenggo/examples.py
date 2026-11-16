@@ -16,12 +16,15 @@ from kenggo.canonical_data import VERSION as CANONICAL_VERSION, digest, encoded
 from kenggo.data_splits import ROLES, VERSION as SPLIT_VERSION, SplitPlan, read_membership
 from kenggo.encoding import (Context, INPUT_KEYS, NORMALIZED, SCALARS, VERSION as ENCODING,
                              array_schema, encode)
-from kenggo.go import Game, RULES
+from kenggo.go import Game, KOMI_STUDY_RULES, RULES
 from kenggo.kgs_source import RANKS
 from kenggo.sgf_audit import japanese_overtime
 
 
 VERSION = "supervised_examples_v1"
+KOMI_STUDY_VERSION = "supervised_komi_study_examples_v1"
+PROFILE_VERSION = "population_example_profile_v1"
+KOMI_STUDY_PROFILE_VERSION = "komi_study_example_profile_v1"
 CANONICAL_SHA256 = "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0"
 SPLIT_SHA256 = "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d"
 PREFIXES = {"validation_prefix", "test_prefix"}
@@ -84,18 +87,29 @@ class DatasetProfile:
     max_examples_per_role: int
     cpu_seconds: int
     wall_seconds: int
+    version: str = PROFILE_VERSION
+
+    def __post_init__(self):
+        if self.version not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION):
+            raise ValueError("Unsupported dataset profile version")
+
+    @property
+    def komi_study(self):
+        return self.version == KOMI_STUDY_PROFILE_VERSION
 
 
 def load_dataset_profile(path, expected_sha256):
     value = read_pinned_json(path, expected_sha256)
     hashes = {"canonical_sha256", "split_sha256", "population_inputs_sha256", "sealed_source_ids_sha256"}
     limits = {"max_records", "max_examples_per_role", "cpu_seconds", "wall_seconds"}
-    if (set(value) != {"version", "limits"} | hashes or value["version"] != "population_example_profile_v1"
+    if (set(value) != {"version", "limits"} | hashes
+            or value["version"] not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION)
             or set(value["limits"]) != limits
             or any(not isinstance(value[k], str) or re.fullmatch(r"[0-9a-f]{64}", value[k]) is None for k in hashes)
             or any(type(value["limits"][k]) is not int or value["limits"][k] <= 0 for k in limits)):
         raise ValueError("Invalid production dataset profile")
-    return DatasetProfile(expected_sha256, **{k: value[k] for k in hashes}, **value["limits"])
+    return DatasetProfile(expected_sha256, **{k: value[k] for k in hashes}, **value["limits"],
+                          version=value["version"])
 
 
 @dataclass(frozen=True)
@@ -132,25 +146,38 @@ def sealed_sources(manifest):
     return frozenset(sources)
 
 
-def source_context(record):
+def source_context(record, *, komi_study=False):
+    if type(komi_study) is not bool:
+        raise ValueError("Komi study admission requires an explicit boolean")
     metadata = record["metadata"]
     overtime = japanese_overtime(metadata["OT"])
     if (metadata["BR"] not in RANKS or metadata["WR"] not in RANKS
             or overtime is None
-            or metadata["SZ"] != 19 or metadata["RU"] != "Japanese" or metadata["KM"] != 6.5):
-        raise ValueError("Source input context is outside the v1 contract")
+            or metadata["SZ"] != 19 or metadata["RU"] != "Japanese"
+            or metadata["KM"] not in ((0.5, 6.5) if komi_study else (6.5,))):
+        raise ValueError("Source input context is outside the " + ("komi study" if komi_study else "v1") + " contract")
     return Context(metadata["BR"], metadata["WR"], (metadata["TM"], overtime[1], overtime[0]))
 
 
-def replay_record(record):
-    if (record["version"] != CANONICAL_VERSION or record["rules_contract"] != RULES
+def initial_game(record, *, komi_study=False):
+    source_context(record, komi_study=komi_study)
+    game = Game.new(komi_halfpoints=int(record["metadata"]["KM"] * 2))
+    if record["rules_contract"] != game.rules:
+        raise ValueError("Canonical rules contract differs from source komi")
+    return game
+
+
+def replay_record(record, *, komi_study=False, check_budget=lambda: None):
+    check_budget()
+    if (record["version"] != CANONICAL_VERSION
             or record["replay_validated"] is not True or record["structural_exclusions"]
             or record["duration_valid"] is not False or record["dynamic_clock_input_valid"] is not False):
         raise ValueError("Canonical record is not a supported replay under the v1 masks")
-    source_context(record)
-    game = Game.new()
+    game = initial_game(record, komi_study=komi_study)
     for move in record["actions"]:
+        check_budget()
         game = game.play(move["color"], move["action"])
+    check_budget()
     if (game.snapshot != record["replay_snapshot"] or game.status != record["replay_end_status"]
             or game.pending_cap != record["replay_pending_cap"]):
         raise ValueError("Canonical replay evidence changed")
@@ -158,7 +185,10 @@ def replay_record(record):
 
 
 def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
-                 profile=None, decode_sealed=True, role=None, source_ids=None):
+                 profile=None, decode_sealed=True, role=None, source_ids=None, komi_study=False):
+    if type(komi_study) is not bool or komi_study and not fixture_only and not (profile and profile.komi_study):
+        raise ValueError("Production komi study data requires its versioned dataset profile")
+    komi_study = komi_study or bool(profile and profile.komi_study)
     selected = None
     if role is not None or source_ids is not None:
         if role not in RECORDED_ROLES:
@@ -170,6 +200,8 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
                 or len(set(source_ids)) != len(source_ids)):
             raise ValueError("Recorded selection requires nonempty, unique source IDs")
         selected = frozenset(source_ids)
+    if profile is not None and profile.komi_study and selected is None:
+        raise ValueError("Komi study production reads require an explicit allowed role and source IDs")
     expected = ((CANONICAL_SHA256, SPLIT_SHA256) if profile is None else
                 (profile.canonical_sha256, profile.split_sha256))
     if fixture_only and profile is not None:
@@ -177,7 +209,8 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
     if not fixture_only and (canonical_sha256, split_sha256) != expected:
         raise ValueError("Unreviewed production source; revise the source policy before admission")
     canonical_path = Path(canonical_path)
-    if canonical_path.stat().st_size > 64 * 1024**2 or file_hash(canonical_path) != canonical_sha256:
+    if (canonical_path.stat().st_size > (128 if komi_study else 64) * 1024**2
+            or file_hash(canonical_path) != canonical_sha256):
         raise ValueError("Canonical file differs from its independent pin")
     manifest, partitions = read_membership(split_dir, split_sha256)
     if (manifest["version"] != SPLIT_VERSION or manifest["fixture_only"] is not fixture_only
@@ -252,6 +285,8 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
         if (key in records or record["source"]["source_url"] != key
                 or digest(record) != row["canonical_sha256"]):
             raise ValueError("Canonical source ID or record digest mismatch")
+        if record.get("rules_contract") == KOMI_STUDY_RULES and not komi_study:
+            raise ValueError("Komi study records require their versioned dataset profile")
         if (profile is not None and type(record.get("sealed_final")) is not bool
                 or bool(record.get("sealed_final", False)) != (key in sealed)):
             raise ValueError("Canonical sealing marker differs from the frozen registry")
@@ -277,7 +312,8 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
 
 
 def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fixture_only=False,
-                profile=None, include_sealed=False, final_release=None, role=None, source_ids=None):
+                profile=None, include_sealed=False, final_release=None, role=None, source_ids=None,
+                komi_study=False):
     """Load unsealed records or an explicit debug/development source selection."""
     if include_sealed:
         if role is not None or source_ids is not None:
@@ -285,7 +321,7 @@ def load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, fi
         require_final_release(final_release, canonical_sha256, split_sha256)
     records, manifest, partitions = _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
                                                fixture_only=fixture_only, profile=profile, decode_sealed=include_sealed,
-                                               role=role, source_ids=source_ids)
+                                               role=role, source_ids=source_ids, komi_study=komi_study)
     if not include_sealed:
         sealed = sealed_sources(manifest)
         records = {key: record for key, record in records.items() if key not in sealed}
@@ -299,25 +335,31 @@ def rank_hidden(source_url, ply, config):
             for side, probability in enumerate((config.hide_mover_per_mille, config.hide_opponent_per_mille))]
 
 
-def examples_for_game(record, membership, plan, config):
+def examples_for_game(record, membership, plan, config, *, komi_study=False, check_budget=lambda: None):
     if record.get("sealed_final", False):
         raise PermissionError("Sealed records are available only to the mechanical shard builder")
-    yield from _examples_for_game(record, membership, plan, config)
+    yield from _examples_for_game(record, membership, plan, config,
+                                  komi_study=komi_study, check_budget=check_budget)
 
 
-def _examples_for_game(record, membership, plan, config):
+def _examples_for_game(record, membership, plan, config, *, komi_study=False, check_budget=lambda: None):
+    check_budget()
     role = membership["role"]
     if role in UNUSED:
         return
+    if record["metadata"]["KM"] == 0.5 and role not in RECORDED_ROLES:
+        raise ValueError("New komi study examples are limited to training and development roles")
     if (role not in ROLES or record["eligibility"]["training_eligible"] is not True
             or membership["exclusions"] or digest(record) != membership["canonical_sha256"]
             or membership["source_url"] != record["source"]["source_url"]):
         raise ValueError("Example emission requires admitted, hash-bound split membership")
-    replay_record(record)  # Check the suffix before releasing even the first example.
-    context = source_context(record)
-    game = Game.new()
+    # Check the suffix before releasing even the first example.
+    replay_record(record, komi_study=komi_study, check_budget=check_budget)
+    context = source_context(record, komi_study=komi_study)
+    game = initial_game(record, komi_study=komi_study)
     produced = values = 0
     for ply, move in enumerate(record["actions"]):
+        check_budget()
         color, action = move["color"], move["action"]
         if role not in PREFIXES or color in membership["adaptation_colors"]:
             side = 0 if color == "B" else 1
@@ -358,6 +400,7 @@ def _examples_for_game(record, membership, plan, config):
             values += value_valid
             yield inputs, labels, metadata
         game = game.play(color, action)
+    check_budget()
     if produced != membership["policy_actions"] or values != membership["value_actions"]:
         raise ValueError("Emitted targets disagree with frozen per-head counts")
 
@@ -386,12 +429,16 @@ def write_shard(output, role, number, rows, history):
 
 
 def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, output,
-                   *, config=ExampleConfig(), fixture_only=False, profile=None, check_budget=lambda: None):
+                   *, config=ExampleConfig(), fixture_only=False, profile=None, check_budget=lambda: None,
+                   komi_study=False):
     output = Path(output)
+    if profile is not None and profile.komi_study:
+        raise ValueError("Komi study production builds must reuse the unchanged base shards")
     if output.exists():
         raise FileExistsError("Example output already exists")
     records, split, partitions = _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256,
-                                            fixture_only=fixture_only, profile=profile)
+                                            fixture_only=fixture_only, profile=profile, komi_study=komi_study)
+    komi_study = komi_study or bool(profile and profile.komi_study)
     output.mkdir(parents=True)
     artifacts, counts = {}, {}
     for role in ROLES:
@@ -400,7 +447,8 @@ def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, ou
                  "hidden_mover_rank": 0, "hidden_opponent_rank": 0}
         for membership in partitions[role]:
             check_budget()
-            for example in _examples_for_game(records[membership["source_url"]], membership, split["plan"], config):
+            for example in _examples_for_game(records[membership["source_url"]], membership, split["plan"], config,
+                                              komi_study=komi_study, check_budget=check_budget):
                 check_budget()
                 _, labels, metadata = example
                 count["examples"] += 1
@@ -419,7 +467,8 @@ def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, ou
         artifacts[role], counts[role] = shards, count
     schema = {k: {"dtype": d, "shape": list(s)} for k, (d, s) in
               {**array_schema(config.history), **LABEL_SCHEMA}.items()}
-    manifest = {"version": VERSION, "encoding": ENCODING, "rules": RULES, "fixture_only": fixture_only,
+    manifest = {"version": KOMI_STUDY_VERSION if komi_study else VERSION, "encoding": ENCODING,
+                "rules": KOMI_STUDY_RULES if komi_study else RULES, "fixture_only": fixture_only,
                 "canonical_sha256": canonical_sha256, "split_sha256": split_sha256,
                 "config": asdict(config), "schema": schema, "input_keys": list(INPUT_KEYS),
                 "scalars": list(SCALARS), "rank_vocabulary": list(RANKS), "counts": counts,
@@ -434,7 +483,7 @@ def build_examples(canonical_path, canonical_sha256, split_dir, split_sha256, ou
     return file_hash(output / "manifest.json")
 
 
-def read_shards(directory, expected_sha256, role, *, final_release=None):
+def read_shards(directory, expected_sha256, role, *, final_release=None, komi_study=False):
     directory = Path(directory)
     if role not in ROLES or file_hash(directory / "manifest.json") != expected_sha256:
         raise ValueError("Examples require a known role and independently pinned manifest")
@@ -445,8 +494,15 @@ def read_shards(directory, expected_sha256, role, *, final_release=None):
     if not manifest["fixture_only"] and role in FINAL_ROLES and (sealed or manifest["counts"][role]["examples"]):
         require_final_release(final_release, manifest["canonical_sha256"], manifest["split_sha256"], expected_sha256)
     config = ExampleConfig(**manifest["config"])
-    if manifest["version"] != VERSION or manifest["encoding"] != ENCODING or manifest["rules"] != RULES:
+    supported = {(VERSION, RULES)}
+    if type(komi_study) is not bool:
+        raise ValueError("Komi study admission requires an explicit boolean")
+    if komi_study:
+        supported.add((KOMI_STUDY_VERSION, KOMI_STUDY_RULES))
+    if (manifest["version"], manifest["rules"]) not in supported or manifest["encoding"] != ENCODING:
         raise ValueError("Unsupported example contract")
+    if manifest["version"] == KOMI_STUDY_VERSION and not manifest["fixture_only"] and role not in RECORDED_ROLES:
+        raise PermissionError("Komi study examples are limited to training and development roles")
     schema = {**array_schema(config.history), **LABEL_SCHEMA}
     if (manifest["schema"] != {k: {"dtype": d, "shape": list(s)} for k, (d, s) in schema.items()}
             or manifest["input_keys"] != list(INPUT_KEYS) or manifest["scalars"] != list(SCALARS)
@@ -469,15 +525,25 @@ def read_shards(directory, expected_sha256, role, *, final_release=None):
             if (arrays[name].dtype != np.dtype(dtype) or arrays[name].shape != (item["rows"],) + shape
                     or not np.isfinite(arrays[name]).all()):
                 raise ValueError("Example dtype, shape or numerical value mismatch")
+        komi = arrays["scalars"][:, SCALARS.index("mover_komi")]
+        color = arrays["scalars"][:, SCALARS.index("mover_is_black")]
+        allowed = (0.5, 6.5) if manifest["version"] == KOMI_STUDY_VERSION else (6.5,)
+        if (not np.isin(abs(komi), allowed).all() or not np.isin(color, (0, 1)).all()
+                or not np.array_equal(komi < 0, color == 1)
+                or not arrays["scalar_valid"][:, :2].all()):
+            raise ValueError("Example komi differs from its versioned contract or mover color")
         yield arrays, metadata
 
 
-def fit_normalizer(directory, expected_sha256):
+def fit_normalizer(directory, expected_sha256, *, komi_study=False, check_budget=lambda: None):
+    check_budget()
     count = np.zeros(len(SCALARS), dtype=np.int64)
     mean = np.zeros(len(SCALARS), dtype=np.float64)
     squared_deltas = mean.copy()
-    for arrays, _ in read_shards(directory, expected_sha256, "train"):
+    for arrays, _ in read_shards(directory, expected_sha256, "train", komi_study=komi_study):
+        check_budget()
         for index in NORMALIZED:
+            check_budget()
             selected = arrays["scalar_valid"][:, index] & arrays["policy_valid"]
             values = arrays["scalars"][selected, index].astype(np.float64)
             for value in values:
@@ -485,6 +551,7 @@ def fit_normalizer(directory, expected_sha256):
                 delta = value - mean[index]
                 mean[index] += delta / count[index]
                 squared_deltas[index] += delta * (value - mean[index])
+    check_budget()
     scale = np.sqrt(np.maximum(squared_deltas / np.maximum(count, 1), 0))
     scale[scale == 0] = 1
     manifest = json.loads((Path(directory) / "manifest.json").read_text())

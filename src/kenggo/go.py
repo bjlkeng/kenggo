@@ -8,9 +8,16 @@ from sgfmill.boards import Board
 
 
 RULES = "kgs_japanese_certified_v1"
+KOMI_STUDY_RULES = "kgs_japanese_komi_study_v1"
 SIZE = 19
 PASS = SIZE * SIZE
 ACTION_LIMIT = 800
+
+
+def validate_komi_halfpoints(value):
+    if type(value) is not int or value not in (1, 13):
+        raise ValueError("Komi must be integer half-points: 1 or 13")
+    return value
 
 
 def canonical(value):
@@ -157,16 +164,21 @@ class Game:
     pending_cap: str | None = None
     segment_start: int = 0
     outcome: Outcome | None = None
+    komi_halfpoints: int = 13
+
+    def __post_init__(self):
+        validate_komi_halfpoints(self.komi_halfpoints)
 
     @classmethod
-    def new(cls, *, candidate_color=None):
+    def new(cls, *, candidate_color=None, komi_halfpoints=13):
         if candidate_color is not None:
             opponent(candidate_color)
-        return cls((Position((".",) * PASS, "B"),), candidate_color=candidate_color)
+        return cls((Position((".",) * PASS, "B"),), candidate_color=candidate_color,
+                   komi_halfpoints=komi_halfpoints)
 
     @classmethod
     def from_fixture(cls, rows, *, to_play="B", captured_black=0, captured_white=0,
-                     candidate_color=None):
+                     candidate_color=None, komi_halfpoints=13):
         opponent(to_play)
         if candidate_color is not None:
             opponent(candidate_color)
@@ -177,7 +189,12 @@ class Game:
             raise ValueError("Captured counts must be nonnegative integers")
         initial = Position(tuple("".join(rows)), to_play, captured_black, captured_white)
         initial.kernel()
-        return cls((initial,), origin="fixture", candidate_color=candidate_color)
+        return cls((initial,), origin="fixture", candidate_color=candidate_color,
+                   komi_halfpoints=komi_halfpoints)
+
+    @property
+    def rules(self):
+        return RULES if self.komi_halfpoints == 13 else KOMI_STUDY_RULES
 
     @property
     def position(self):
@@ -194,12 +211,16 @@ class Game:
 
     def action_record(self):
         initial = self.positions[0]
-        return {"rules": RULES, "origin": self.origin,
+        record = {"rules": self.rules, "origin": self.origin,
                 "initial": {"board": initial.rows, "to_play": initial.to_play,
                             "captured_black": initial.captured_black,
                             "captured_white": initial.captured_white},
                 "candidate_color": self.candidate_color,
                 "moves": [[m.color, m.action] for m in self.moves]}
+        # Preserve historical 6.5-point snapshot hashes and scoring evidence.
+        if self.komi_halfpoints != 13:
+            record["komi_halfpoints"] = self.komi_halfpoints
+        return record
 
     @property
     def snapshot(self):

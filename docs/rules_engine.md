@@ -232,10 +232,11 @@ odd integer half-points, rejecting booleans and floats even when numerically equ
 From the repository root with the [workspace cache exports](workspace.md):
 
 ```bash
-uv run --locked python -m unittest discover -s tests -v
-python3 tools/build_katago_reference.py --offline
-KENGGO_KATAGO_REFERENCE="$PWD/.cache/katago-reference/katago-reference" \
-  uv run --locked python -m unittest discover -s tests -p test_rules_reference.py -v
+mkdir -p .cache/katago-reference-komi-study
+cp -n .cache/katago-reference/source.tar.gz .cache/katago-reference-komi-study/source.tar.gz
+python3 tools/build_katago_reference.py --offline --cache-dir .cache/katago-reference-komi-study
+KENGGO_KATAGO_REFERENCE="$PWD/.cache/katago-reference-komi-study/katago-reference" \
+  uv run --locked python -m unittest discover -s tests -v
 ```
 
 The ordinary suite explicitly skips native comparisons unless the environment
@@ -245,6 +246,14 @@ KataGo source archive (about 64 MiB). The builder verifies its exact SHA-256, ex
 only needed sources, and uses one `g++` compilation job. No CMake, model weights,
 GPU, KGS login or KGS request is needed. Raw archives, binaries and build ledgers
 stay under ignored `.cache/` and `runs/`.
+
+The separate cache preserves the historical binary hashes used by the existing
+referee profiles. On a fresh machine without the old archive, skip the copy step
+and build into the new cache. The updated reference accepts explicit komi in
+half-points, 1 or 13; omitted komi still means 6.5. Both settings have scoring,
+replay and persistence fixtures for the [komi study](../plan/e2_komi_study_v1.md).
+This does not qualify the old learned, referee or match profiles for 0.5-komi play;
+those paths reject the unsupported setting.
 
 The JSONL oracle supports independent `ordinary` and native `history` cases, explicit
 boards/captures, optional legal masks, and cloned branches. The tests compare every

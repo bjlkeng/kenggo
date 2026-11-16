@@ -61,7 +61,8 @@ def encode(game, context=Context(), *, history=0):
     if position.ko is not None:
         result["board"][2].flat[position.ko] = True
     result["legal"][:] = game.legal_mask()
-    result["scalars"][:9] = [black, -6.5 if black else 6.5,
+    komi = game.komi_halfpoints / 2
+    result["scalars"][:9] = [black, -komi if black else komi,
                              position.captured_white if black else position.captured_black,
                              position.captured_black if black else position.captured_white,
                              position.pass_streak, len(game.moves), game.pending_cap is not None,
