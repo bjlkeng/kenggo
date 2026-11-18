@@ -12,14 +12,15 @@ import numpy as np
 from kenggo.canonical_data import digest, encoded
 from kenggo.encoding import (Context, INPUT_KEYS, SCALARS, VERSION as ENCODING,
                              apply_normalizer, array_schema)
-from kenggo.examples import (DatasetProfile, ExampleConfig, LABEL_SCHEMA, RECORDED_ROLES,
-                             VERSION as EXAMPLES_VERSION, examples_for_game, load_corpus,
-                             read_pinned_json, sealed_sources, source_context)
-from kenggo.go import Game, RULES
+from kenggo.examples import (DatasetProfile, ExampleConfig, KOMI_STUDY_VERSION, LABEL_SCHEMA,
+                             RECORDED_ROLES, VERSION as EXAMPLES_VERSION, examples_for_game,
+                             initial_game, load_corpus, read_pinned_json, sealed_sources, source_context)
+from kenggo.go import Game, KOMI_STUDY_RULES, RULES
 from kenggo.kgs_source import RANKS
 
 
 VERSION = "recorded_common_set_v1"
+RAW_VERSION = "recorded_raw_common_set_v1"
 MOVE_BINS = ("1-60", "61-180", "181+")
 TIME_BINS = ("10-<20", "20-30", "missing")
 
@@ -87,15 +88,18 @@ def _inputs_hash(inputs):
                           "sha256": sha256(value.tobytes()).hexdigest()} for name, value in inputs.items()})
 
 
-def _example_contract(inputs, split, fixture_only):
+def _example_contract(inputs, split, fixture_only, *, komi_study=False):
     manifest = read_pinned_json(Path(inputs.examples_dir) / "manifest.json", inputs.examples_sha256,
                                 max_bytes=16 * 1024**2)
     normalizer = read_pinned_json(inputs.normalizer_path, inputs.normalizer_sha256)
     config = ExampleConfig(**manifest["config"])
     schema = {k: {"dtype": d, "shape": list(s)} for k, (d, s) in
               {**array_schema(config.history), **LABEL_SCHEMA}.items()}
-    if (manifest["version"] != EXAMPLES_VERSION or manifest["encoding"] != ENCODING
-            or manifest["rules"] != RULES or config.history != 0
+    supported = {(EXAMPLES_VERSION, RULES)}
+    if komi_study:
+        supported.add((KOMI_STUDY_VERSION, KOMI_STUDY_RULES))
+    if ((manifest["version"], manifest["rules"]) not in supported or manifest["encoding"] != ENCODING
+            or config.history != 0
             or manifest["fixture_only"] is not fixture_only
             or manifest["canonical_sha256"] != inputs.canonical_sha256
             or manifest["split_sha256"] != inputs.split_sha256
@@ -161,6 +165,8 @@ def _coverage(positions, records, memberships, aggregate_ranks):
         "nominal_clock": sorted({row["nominal_clock"] for row in rows}, key=encoded),
         "nominal_clock_missing": [False, True],
     }
+    if all("komi_halfpoints" in row for row in rows):
+        dimensions["komi_halfpoints"] = [1, 13]
     tables = {name: [{name: value, **_counts([row for row in rows if row[name] == value])}
                      for value in values] for name, values in dimensions.items()}
     joint = defaultdict(list)
@@ -189,15 +195,21 @@ def _coverage(positions, records, memberships, aggregate_ranks):
     }
 
 
-def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_only=False):
+def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_only=False,
+                       raw_inputs=False, komi_study=False):
     """Freeze selected complete games before any observation can reach a predictor.
 
     The pinned split's order determines row order. Aggregate ranks select reporting
     weights; every policy-valid row from the requested games remains in the set.
-    No example arrays, confirmation payloads or final payloads are opened.
+    No example arrays, confirmation payloads or final payloads are opened. Raw
+    sets retain pre-normalization inputs so each model uses its training fit.
     """
     if not isinstance(inputs, CommonInputs) or role not in RECORDED_ROLES:
         raise ValueError("A common set requires pinned inputs and a training-debug or development role")
+    if (type(raw_inputs) is not bool or type(komi_study) is not bool
+            or komi_study and not raw_inputs
+            or inputs.profile and inputs.profile.komi_study and not komi_study):
+        raise ValueError("Komi comparison sets require explicit raw-input and komi-study opt-ins")
     if isinstance(aggregate_ranks, (str, bytes)):
         raise ValueError("Aggregate ranks must be an explicit nonempty unique sequence")
     aggregate_ranks = tuple(aggregate_ranks)
@@ -206,8 +218,9 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
         raise ValueError("Aggregate ranks must be an explicit nonempty unique supported sequence")
     records, split, partitions = load_corpus(
         inputs.canonical_path, inputs.canonical_sha256, inputs.split_dir, inputs.split_sha256,
-        fixture_only=fixture_only, profile=inputs.profile, role=role, source_ids=source_ids)
-    config, normalizer = _example_contract(inputs, split, fixture_only)
+        fixture_only=fixture_only, profile=inputs.profile, role=role, source_ids=source_ids,
+        komi_study=komi_study)
+    config, normalizer = _example_contract(inputs, split, fixture_only, komi_study=komi_study)
     memberships = partitions[role]
     limit = inputs.profile.max_examples_per_role if inputs.profile else 100_000
     if sum(row["policy_actions"] for row in memberships) > limit:
@@ -215,9 +228,10 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
     positions = []
     for membership in memberships:
         record = records[membership["source_url"]]
-        context = source_context(record)
-        game = Game.new()
-        for raw, targets, metadata in examples_for_game(record, membership, split["plan"], config):
+        context = source_context(record, komi_study=komi_study)
+        game = initial_game(record, komi_study=komi_study)
+        for raw, targets, metadata in examples_for_game(record, membership, split["plan"], config,
+                                                       komi_study=komi_study):
             if len(game.moves) != metadata["ply"] or game.snapshot != metadata["state_sha256"]:
                 raise ValueError("Recorded observation diverged from the shared example replay")
             side = 0 if metadata["mover"] == "B" else 1
@@ -226,10 +240,13 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
                 if hidden:
                     ranks[index] = None
             observation = RecordedObservation(metadata["row_key"], game,
-                _immutable_inputs(apply_normalizer(raw, normalizer)), Context(*ranks, context.nominal_clock))
+                _immutable_inputs(raw if raw_inputs else apply_normalizer(raw, normalizer)),
+                Context(*ranks, context.nominal_clock))
             metadata = {**metadata, "rank_hidden": tuple(metadata["rank_hidden"]),
                         "nominal_clock": context.nominal_clock, "nominal_clock_missing": context.nominal_clock is None,
                         "move_bin": move_bin(metadata["ply"]), "main_time_bin": main_time_bin(context.nominal_clock)}
+            if raw_inputs:
+                metadata["komi_halfpoints"] = game.komi_halfpoints
             positions.append(RecordedPosition(observation, MappingProxyType(dict(targets)), MappingProxyType(metadata)))
             game = game.play(metadata["mover"], targets["action"])
     if not positions or len({p.observation.row_key for p in positions}) != len(positions):
@@ -242,11 +259,13 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
             | {"rank_hidden": list(position.metadata["rank_hidden"]),
                "input_masks": {key: position.observation.inputs[key].tolist()
                                for key in ("scalar_valid", "rank_valid", "history_valid")},
-               "inputs_sha256": _inputs_hash(position.observation.inputs)} for position in positions]
+               "inputs_sha256": _inputs_hash(position.observation.inputs)}
+            | ({"komi_halfpoints": position.metadata["komi_halfpoints"]} if raw_inputs else {})
+            for position in positions]
     manifest = {
-        "version": VERSION, "fixture_only": fixture_only, "role": role,
+        "version": RAW_VERSION if raw_inputs else VERSION, "fixture_only": fixture_only, "role": role,
         "purpose": "training_debug" if role == "train" else "exploratory_development",
-        "encoding": ENCODING, "rules": RULES, "model_history": 0,
+        "encoding": ENCODING, "rules": KOMI_STUDY_RULES if komi_study else RULES, "model_history": 0,
         "inputs": {"canonical_sha256": inputs.canonical_sha256, "split_sha256": inputs.split_sha256,
                    "examples_sha256": inputs.examples_sha256, "normalizer_sha256": inputs.normalizer_sha256,
                    "dataset_profile": asdict(inputs.profile) if inputs.profile else None,
@@ -258,4 +277,6 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
         "targets_sha256": digest([dict(position.targets) for position in positions]),
         "coverage": _coverage(positions, records, memberships, aggregate_ranks),
     }
+    if raw_inputs:
+        manifest["input_normalization"] = "raw_model_applies_own_training_normalizer"
     return CommonSet(encoded(manifest), tuple(positions))

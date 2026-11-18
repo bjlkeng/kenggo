@@ -1,6 +1,6 @@
 """Train-only shard access and deterministic supervised population updates."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import math
 from pathlib import Path
 
@@ -10,7 +10,7 @@ from torch.nn import functional as F
 
 from kenggo.checkpoints import read_json
 from kenggo.encoding import INPUT_KEYS, apply_normalizer
-from kenggo.examples import LABEL_SCHEMA, read_shards
+from kenggo.examples import DatasetProfile, LABEL_SCHEMA, read_shards
 from kenggo.go import PASS
 
 
@@ -22,22 +22,35 @@ class TrainingData:
     examples_sha256: str
     normalizer_sha256: str
     split_sha256: str
+    _permutations: dict = field(default_factory=dict, init=False, repr=False, compare=False)
 
     @classmethod
     def load(cls, examples_dir, examples_sha256, normalizer_path, normalizer_sha256, *, split_sha256,
-             max_rows=None):
+             max_rows=None, profile=None, komi_study=False):
         """Load a pinned train prefix; no evaluation or final role is accepted."""
         if max_rows is not None and (type(max_rows) is not int or max_rows < 1):
             raise ValueError("The training row limit must be a positive integer")
         manifest = read_json(Path(examples_dir) / "manifest.json", examples_sha256)
         normalizer = read_json(normalizer_path, normalizer_sha256)
+        if type(komi_study) is not bool or profile is not None and not isinstance(profile, DatasetProfile):
+            raise ValueError("Training requires an explicit komi study setting and a validated dataset profile")
+        if profile is not None:
+            if (manifest["fixture_only"] is not False
+                    or manifest.get("dataset_profile_sha256") != profile.sha256
+                    or manifest["canonical_sha256"] != profile.canonical_sha256
+                    or manifest["split_sha256"] != profile.split_sha256):
+                raise ValueError("Training profile differs from the pinned production examples")
+            komi_study = komi_study or profile.komi_study
+        if komi_study and not manifest["fixture_only"] and not (profile and profile.komi_study):
+            raise ValueError("Production komi study training requires its explicit dataset profile")
         if (manifest["split_sha256"] != split_sha256 or manifest["config"]["history"] != 0
                 or normalizer["examples_sha256"] != examples_sha256
                 or normalizer["fixture_only"] != manifest["fixture_only"]):
             raise ValueError("Training examples and normalizer must bind the requested split and zero history")
         parts = {key: [] for key in (*INPUT_KEYS, *LABEL_SCHEMA)}
         row_keys = []
-        for arrays, metadata in read_shards(examples_dir, examples_sha256, "train"):
+        options = {"komi_study": True} if komi_study else {}
+        for arrays, metadata in read_shards(examples_dir, examples_sha256, "train", **options):
             take = len(metadata) if max_rows is None else min(len(metadata), max_rows - len(row_keys))
             for key in parts:
                 parts[key].append(arrays[key][:take])
@@ -56,17 +69,39 @@ class TrainingData:
     def __len__(self):
         return len(self.row_keys)
 
-    def indices(self, step, batch_size, seed):
+    def _permutation(self, seed, epoch):
+        key = (seed, epoch)
+        if key not in self._permutations:
+            generator = np.random.default_rng(np.random.SeedSequence(key))
+            order = generator.permutation(len(self))
+            order.flags.writeable = False
+            self._permutations[key] = order
+            if len(self._permutations) > 2:
+                del self._permutations[next(iter(self._permutations))]
+        return self._permutations[key]
+
+    def indices(self, step, batch_size, seed, *, full_batch=False):
         if (type(step) is not int or step < 0 or type(batch_size) is not int or batch_size < 1
-                or type(seed) is not int or not 0 <= seed < 2**32 or len(self) == 0):
+                or type(seed) is not int or not 0 <= seed < 2**32 or len(self) == 0
+                or type(full_batch) is not bool):
             raise ValueError("Batches require a nonnegative step, positive size, seed and nonempty data")
+        if full_batch:
+            epoch, offset = divmod(step * batch_size, len(self))
+            remaining, parts = batch_size, []
+            while remaining:
+                take = min(remaining, len(self) - offset)
+                parts.append(self._permutation(seed, epoch)[offset:offset + take])
+                remaining -= take
+                epoch, offset = epoch + 1, 0
+            result = parts[0] if len(parts) == 1 else np.concatenate(parts)
+            result.flags.writeable = False
+            return result
         batches_per_epoch = (len(self) + batch_size - 1) // batch_size
         epoch, batch = divmod(step, batches_per_epoch)
-        generator = np.random.default_rng(np.random.SeedSequence([seed, epoch]))
-        return generator.permutation(len(self))[batch * batch_size:(batch + 1) * batch_size]
+        return self._permutation(seed, epoch)[batch * batch_size:(batch + 1) * batch_size]
 
-    def batch(self, step, batch_size, seed, device="cpu"):
-        indices = self.indices(step, batch_size, seed)
+    def batch(self, step, batch_size, seed, device="cpu", *, full_batch=False):
+        indices = self.indices(step, batch_size, seed, full_batch=full_batch)
         return tuple({key: torch.from_numpy(array[indices]).to(device) for key, array in group.items()}
                      for group in (self.inputs, self.labels))
 
@@ -132,14 +167,15 @@ def train_step(model, optimizer, inputs, labels, *, clock_dropout=0.1):
             "clock_missing_count": int((~inputs["scalar_valid"][:, 9:].any(dim=1)).sum())}
 
 
-def fit(model, optimizer, data, *, start_step, steps, batch_size, seed, clock_dropout=0.1, on_step=None):
+def fit(model, optimizer, data, *, start_step, steps, batch_size, seed, clock_dropout=0.1, on_step=None,
+        full_batch=False):
     """Return the next-step cursor; callback receives it after each completed update."""
     if type(start_step) is not int or start_step < 0 or type(steps) is not int or steps < 0:
         raise ValueError("Fit requires a nonnegative starting step and update count")
-    data.indices(start_step, batch_size, seed)
+    data.indices(start_step, batch_size, seed, full_batch=full_batch)
     device = next(model.parameters()).device
     for step in range(start_step, start_step + steps):
-        inputs, labels = data.batch(step, batch_size, seed, device=device)
+        inputs, labels = data.batch(step, batch_size, seed, device=device, full_batch=full_batch)
         metrics = train_step(model, optimizer, inputs, labels, clock_dropout=clock_dropout)
         if on_step is not None:
             on_step(step + 1, metrics)

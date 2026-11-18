@@ -64,11 +64,15 @@ def _bind(refs, name, path, pin):
 def _validate(config, provenance, provenance_pin, fixture_only):
     validate_config(config)
     parameters, refs = config["parameters"], config["inputs"]
+    expanded = parameters.get("recipe") == "expanded_e2_matches_v1"
+    seed = 20261118 if expanded else SEED
+    recipe = dict(RECIPE, bootstrap_seed=seed)
     required = set(RECIPE) | {"learned_artifacts", "human_paths", "human_budget", "referee_paths",
                               "match_limits", "runner_budget"}
-    if (config["purpose"] != "baseline-matches" or config["seed"] != SEED
-            or not required <= parameters.keys() or parameters.keys() - required - {"max_artifact_bytes"}
-            or any(parameters.get(key) != value for key, value in RECIPE.items())
+    optional = {"max_artifact_bytes"} | ({"recipe"} if expanded else set())
+    if (config["purpose"] != "baseline-matches" or config["seed"] != seed
+            or not required <= parameters.keys() or parameters.keys() - required - optional
+            or any(parameters.get(key) != value for key, value in recipe.items())
             or type(parameters["pairs_per_profile"]) is not int
             or type(parameters["bootstrap_seed"]) is not int
             or type(parameters["bootstrap_resamples"]) is not int):
@@ -111,6 +115,7 @@ def _validate(config, provenance, provenance_pin, fixture_only):
     if not isinstance(bundles, dict) or set(bundles) != set(ARMS[:2]):
         raise ValueError("Both learned arms require independent artifact bundles")
     learned = {}
+    training_komi = None
     for arm in ARMS[:2]:
         fields = dict(bundles[arm])
         model = ModelConfig(**fields["model_config"])
@@ -128,13 +133,23 @@ def _validate(config, provenance, provenance_pin, fixture_only):
             raise ValueError("Learned example or provenance pin differs from its input binding")
         training = read_json(_path(artifacts.config_path), artifacts.config_sha256)
         training_provenance = read_json(_path(refs[f"{arm}_provenance"]["path"]), artifacts.provenance_sha256)
-        if (training.get("purpose") != "baseline-training" or training.get("seed") != SEED
+        if (training.get("purpose") != "baseline-training" or training.get("seed") != seed
                 or json_hash(training) != artifacts.config_sha256
                 or training.get("parameters", {}).get("model") != asdict(model)
                 or training_provenance.get("version") != "experiment_provenance_v1"
                 or json_hash(training_provenance) != artifacts.provenance_sha256
                 or training_provenance.get("inputs") != training.get("inputs")):
             raise ValueError("Checkpoint training configuration and provenance disagree")
+        if expanded:
+            settings = training["parameters"]
+            komi = settings.get("training_komi_halfpoints")
+            if (settings.get("recipe") != "expanded_e2_training_v1"
+                    or settings.get("inference_contract") != "komi_comparison_v1"
+                    or not isinstance(komi, list) or any(type(value) is not int for value in komi)
+                    or komi not in ([13], [1, 13])
+                    or training_komi is not None and komi != training_komi):
+                raise ValueError("Expanded matches require matching versioned training and komi contracts")
+            training_komi = komi
         for name in ("normalizer", "examples"):
             _bind(training["inputs"], name, refs[name]["path"], refs[name]["sha256"])
         fields.update(checkpoint_manifest=_path(artifacts.checkpoint_manifest),
@@ -206,18 +221,18 @@ def _components(config, provenance, validated):
     factories = {LEARNED_POLICY: LearnedFactories(**learned, source_revision=revision),
                  HUMAN_POLICY: HumanMatchFactory(human, **paths["human"], budget=human_budget,
                                                  source_revision=revision)}
-    schedule = build_schedule(candidates, provenance=provenance, limits=limits,
+    schedule = build_schedule(candidates, provenance=provenance, limits=limits, seed=config["seed"],
                               referee_profile={"sha256": ref["sha256"], "device": "cpu"})
     return schedule, factories, referee_factory, budget
 
 
-def build_schedule(candidates, *, provenance, limits=LIMITS, referee_profile):
+def build_schedule(candidates, *, provenance, limits=LIMITS, referee_profile, seed=SEED):
     """Freeze paired seeds and alternate both candidate and color execution order."""
     if tuple(candidate.id for candidate in candidates) != ARMS:
         raise ValueError("The raw-play pilot requires its three candidates in the declared order")
     opponents = tuple(weak_profile(f"weak_{policy}", policy, source_revision=provenance["source"]["commit"])
                       for policy in RECIPE["opponent_policies"])
-    schedule = make_schedule(arms=candidates, profiles=opponents, pairs=1, seed=SEED,
+    schedule = make_schedule(arms=candidates, profiles=opponents, pairs=1, seed=seed,
         purpose="validation", scope="setup", control_arm="unconditioned", limits=limits,
         referee_profile=referee_profile, provenance=provenance)
     ordered = []
@@ -370,7 +385,8 @@ def run_matches(config_path, config_pin, provenance_path, provenance_pin, output
                       human_rank_claim=False, full_validation_panel=False,
                       evidence_authorization_sha256=authorization_pin, runner_cost=runner_cost)
         if schedule is not None:
-            scores = summarize(schedule, replayed, bootstrap_seed=SEED, resamples=10000)
+            scores = summarize(schedule, replayed, bootstrap_seed=config["parameters"]["bootstrap_seed"],
+                               resamples=config["parameters"]["bootstrap_resamples"])
             save_json(output / "scores.json", scores)
             result.update(counts={arm: scores["arms"][arm]["counts"] for arm in ARMS},
                 paired_conditioned_unconditioned=scores["comparisons"]["conditioned"],
@@ -393,7 +409,7 @@ def run_matches(config_path, config_pin, provenance_path, provenance_pin, output
         config, provenance = read_json(config_path, config_pin), read_json(provenance_path, provenance_pin)
         validated = _validate(config, provenance, provenance_pin, fixture_only)
         schedule, factories, referee_factory, budget = _components(config, provenance, validated)
-        state.update(config_sha256=json_hash(config), source=provenance["source"], seed=SEED,
+        state.update(config_sha256=json_hash(config), source=provenance["source"], seed=config["seed"],
                      parameters=config["parameters"], status="playing")
         save_json(output / "schedule.json", schedule)
         persist()

@@ -153,7 +153,7 @@ def _worker_reports(config, directory, summary):
                     "median_seconds": seconds[math.ceil(len(seconds) * .5) - 1] if seconds else None,
                     "p95_seconds": seconds[math.ceil(len(seconds) * .95) - 1] if seconds else None,
                     "method": "nearest_rank", "scope": timing.get("scope")}}
-    elif config["purpose"] == "baseline-analysis":
+    elif config["purpose"] in {"baseline-analysis", "expanded-analysis"}:
         for role, comparisons in summary["comparisons"].items():
             for name, comparison in comparisons.items():
                 result[role + "/" + name] = read(comparison["report"], repository_relative=True)
@@ -199,7 +199,8 @@ def _settled_job(directory):
 def _log_job(experiment, job, ledger, run_id):
     snapshot = ledger.snapshot()
     entry = next(item for item in snapshot["state"]["entries"] if item["run_id"] == run_id)
-    experiment.log(100, {"job/status": job["status"], "job/cpu_seconds": entry["cpu_seconds"],
+    step = max(100, experiment.attempt["last_step"] or 0)
+    experiment.log(step, {"job/status": job["status"], "job/cpu_seconds": entry["cpu_seconds"],
         "job/wall_seconds": entry["wall_seconds"], "job/gpu_seconds": entry["gpu_seconds"],
         "budget/charged_gpu_seconds": snapshot["charged_gpu_seconds"],
         "budget/remaining_gpu_seconds": snapshot["remaining_gpu_seconds"]})
@@ -240,9 +241,12 @@ def _stage(output, name, config, limits, ledger, *, module, device=None, registe
                 if register:
                     for ref in summary["checkpoints"]:
                         experiment.register_checkpoint({"path": str(directory / "worker" / ref["path"]), "sha256": ref["sha256"]})
-                    for epoch in summary["epoch_metrics"]:
+                    for epoch in summary.get("epoch_metrics", []):
                         experiment.log(epoch["epoch"], {f"training/{key}": value for key, value in epoch.items()
                             if type(value) in (int, float) and key != "epoch"})
+                    for block in summary.get("update_metrics", []):
+                        experiment.log(block["next_step"], {f"training/{key}": value for key, value in block.items()
+                            if type(value) in (int, float) and key != "next_step"})
                 reports = _worker_reports(config, directory / "worker", summary)
                 if reports:
                     experiment.log(100, _report_metrics(reports))

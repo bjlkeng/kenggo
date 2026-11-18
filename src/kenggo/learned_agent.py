@@ -20,6 +20,8 @@ from kenggo.rules_replay import dump_game, load_game
 
 POLICY = "learned_population_raw_v1"
 CPU_THREADS = 1
+EXPANDED_RECIPE = "expanded_e2_training_v1"
+KOMI_INFERENCE_CONTRACT = "komi_comparison_v1"
 
 
 def _hash(value):
@@ -62,7 +64,23 @@ def _normalizer(artifacts):
             or type(normalizer["fixture_only"]) is not bool):
         raise ValueError("Normalizer does not bind the expected training examples")
     apply_normalizer(encode(Game.new()), normalizer)
-    return normalizer
+    parameters = config["parameters"]
+    training_komi = (13,)
+    inference_komi = (13,)
+    if parameters.get("recipe") == EXPANDED_RECIPE:
+        values = parameters.get("training_komi_halfpoints")
+        profile = config["inputs"].get("profile", {})
+        if (parameters.get("inference_contract") != KOMI_INFERENCE_CONTRACT
+                or not isinstance(values, list) or any(type(value) is not int for value in values)
+                or values not in ([13], [1, 13])
+                or not isinstance(profile, dict) or set(profile) != {"path", "sha256"}
+                or not isinstance(profile["path"], str) or not profile["path"]
+                or not _hash(profile["sha256"])):
+            raise ValueError("Expanded inference requires the pinned komi comparison training contract")
+        training_komi, inference_komi = tuple(values), (1, 13)
+    elif "inference_contract" in parameters or "training_komi_halfpoints" in parameters:
+        raise ValueError("Komi comparison inference requires the expanded training recipe")
+    return normalizer, training_komi, inference_komi
 
 
 def _weights(artifacts, model):
@@ -106,7 +124,7 @@ class LearnedPolicy:
     def __init__(self, artifacts):
         if not isinstance(artifacts, LearnedArtifacts):
             raise ValueError("A pinned learned-policy artifact bundle is required")
-        normalizer = _normalizer(artifacts)
+        normalizer, training_komi, inference_komi = _normalizer(artifacts)
         torch.set_num_threads(CPU_THREADS)
         # Construction initializes parameters; preserve the caller's training RNG.
         with torch.random.fork_rng(devices=[], device_type="cpu"), torch.device("cpu"):
@@ -114,6 +132,7 @@ class LearnedPolicy:
         _weights(artifacts, model)
         model.eval().requires_grad_(False)
         self.artifacts, self._model, self._normalizer = artifacts, model, normalizer
+        self.training_komi_halfpoints, self.inference_komi_halfpoints = training_komi, inference_komi
         self._closed = False
 
     @classmethod
@@ -134,9 +153,13 @@ class LearnedPolicy:
         if (scalars.ndim != 2 or scalars.shape[1] != len(SCALARS)
                 or valid.shape != scalars.shape or valid.dtype != torch.bool
                 or not valid[:, :2].all()
-                or not ((scalars[:, 0] == 0) | (scalars[:, 0] == 1)).all()
-                or not (scalars[:, 1] == (1 - 2 * scalars[:, 0]) * 6.5).all()):
-            raise ValueError("The learned checkpoint supports only signed 6.5-point komi")
+                or not ((scalars[:, 0] == 0) | (scalars[:, 0] == 1)).all()):
+            raise ValueError(self._komi_error())
+        supported = torch.zeros_like(scalars[:, 1], dtype=torch.bool)
+        for halfpoints in self.inference_komi_halfpoints:
+            supported |= scalars[:, 1] == (1 - 2 * scalars[:, 0]) * (halfpoints / 2)
+        if not supported.all():
+            raise ValueError(self._komi_error())
         logits, value = self._model(inputs)
         legal = inputs["legal"]
         if (logits.shape != legal.shape or value.shape != legal.shape[:1]
@@ -147,10 +170,30 @@ class LearnedPolicy:
             raise ValueError("Learned policy returned invalid legal logits or mover values")
         return logits, value
 
+    def _komi_error(self):
+        values = " or ".join(str(value / 2) for value in self.inference_komi_halfpoints)
+        return f"The learned checkpoint supports only signed {values}-point komi"
+
+    @torch.inference_mode()
+    def predict_raw_batch(self, inputs, *, unknown_ranks=False):
+        """Normalize shared raw CPU observations with this checkpoint's training fit."""
+        if (type(unknown_ranks) is not bool or not isinstance(inputs, dict)
+                or set(inputs) != set(INPUT_KEYS)
+                or any(not isinstance(value, torch.Tensor) or value.device.type != "cpu"
+                       or value.layout != torch.strided for value in inputs.values())):
+            raise ValueError("Raw prediction requires shared CPU input tensors without labels")
+        normalized = apply_normalizer({key: value.detach().numpy() for key, value in inputs.items()},
+                                      self._normalizer)
+        tensors = {key: torch.from_numpy(value) for key, value in normalized.items()}
+        if unknown_ranks:
+            tensors["ranks"].zero_()
+            tensors["rank_valid"].zero_()
+        return self.predict_batch(tensors, normalizer_sha256=self.artifacts.normalizer_sha256)
+
     def predict(self, game, context=Context()):
         """Encode a verified full-history position with a zero-length model history."""
-        if isinstance(game, Game) and game.komi_halfpoints != 13:
-            raise ValueError("The learned checkpoint supports only 6.5-point komi")
+        if isinstance(game, Game) and game.komi_halfpoints not in self.inference_komi_halfpoints:
+            raise ValueError(self._komi_error())
         if (not isinstance(game, Game) or game.status != "playing"
                 or not isinstance(context, Context) or load_game(dump_game(game)) != game):
             raise ValueError("Prediction requires a playable ordinary game with intact history")

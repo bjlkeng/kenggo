@@ -1,4 +1,4 @@
-"""Finite BASE training worker; the caller owns supervision, tracking and costs."""
+"""Finite, pinned supervised training; the caller owns supervision, tracking and costs."""
 
 import argparse
 from hashlib import sha256
@@ -11,10 +11,13 @@ import re
 import subprocess
 import time
 
+import numpy as np
 import torch
 
 from kenggo.checkpoints import (file_hash, json_bytes, json_hash, read_json, save_checkpoint,
                                 save_json, seed_all)
+from kenggo.examples import (KOMI_STUDY_VERSION, VERSION as EXAMPLES_VERSION, load_dataset_profile)
+from kenggo.go import KOMI_STUDY_RULES, RULES
 from kenggo.learner import ModelConfig, PopulationModel
 from kenggo.supervised import TrainingData, train_step
 from kenggo.tracking import validate_config
@@ -23,8 +26,10 @@ from kenggo.tracking import validate_config
 ROOT = Path(__file__).resolve().parents[2]
 RECIPE = {"epochs": 20, "batch_size": 128, "learning_rate": 0.001, "clock_dropout": 0.1,
           "training_rows": 22916, "save_epochs": [0, 10, 20], "device": "cuda", "torch_threads": 1}
+EXPANDED_RECIPE = "expanded_e2_training_v1"
+INFERENCE_CONTRACT = "komi_comparison_v1"
 OUTPUTS = ("training_progress.json", "training_epochs.json", "training_summary.json",
-           "training_failure.json", "checkpoints")
+           "training_failure.json", "training_updates.json", "checkpoints")
 
 
 def _source_identity():
@@ -36,10 +41,7 @@ def _source_identity():
             "patch_sha256": sha256(git("diff", "--binary", "HEAD")).hexdigest()}
 
 
-def _validate(config, provenance, provenance_pin, fixture_only):
-    validate_config(config)
-    if config["purpose"] != "baseline-training":
-        raise ValueError("The worker requires a baseline-training configuration")
+def _base_parameters(config, fixture_only):
     parameters = config["parameters"]
     if (not (set(RECIPE) | {"model"}) <= parameters.keys()
             or parameters.keys() - (set(RECIPE) | {"model", "max_artifact_bytes"})):
@@ -70,6 +72,54 @@ def _validate(config, provenance, provenance_pin, fixture_only):
           or (model_config.blocks, model_config.channels) != (8, 128)
           or config["seed"] != 20261114):
         raise ValueError("Production training requires the frozen BASE pilot recipe")
+    return model_config
+
+
+def _expanded_parameters(config, fixture_only):
+    parameters = config["parameters"]
+    required = {"recipe", "updates", "batch_size", "learning_rate", "clock_dropout", "training_rows",
+                "save_updates", "device", "torch_threads", "model", "inference_contract",
+                "training_komi_halfpoints"}
+    if not required <= parameters.keys() or parameters.keys() - required - {"max_artifact_bytes"}:
+        raise ValueError("Unexpected expanded training parameters")
+    model_config = ModelConfig(**parameters["model"])
+    if parameters["model"] != model_config.__dict__:
+        raise ValueError("Pin every model parameter explicitly")
+    if any(type(parameters[name]) is not int or parameters[name] < 1
+           for name in ("updates", "batch_size", "training_rows", "torch_threads")):
+        raise ValueError("Expanded training counts must be positive integers")
+    saves, komi = parameters["save_updates"], parameters["training_komi_halfpoints"]
+    if (parameters["recipe"] != EXPANDED_RECIPE
+            or parameters["inference_contract"] != INFERENCE_CONTRACT
+            or not isinstance(komi, list) or any(type(value) is not int for value in komi)
+            or komi not in ([13], [1, 13])
+            or not isinstance(saves, list) or any(type(step) is not int for step in saves)
+            or not saves or saves != sorted(set(saves)) or saves[0] != 0
+            or saves[-1] != parameters["updates"] or parameters["updates"] > 200000
+            or parameters["learning_rate"] != RECIPE["learning_rate"]
+            or parameters["clock_dropout"] != RECIPE["clock_dropout"]
+            or parameters["torch_threads"] != 1 or config["seed"] != 20261118):
+        raise ValueError("Expanded training requires its frozen recipe, seed, inference contract and checkpoints")
+    if fixture_only:
+        if (parameters["device"] != "cpu" or parameters["updates"] > 64
+                or parameters["training_rows"] > 64 or parameters["batch_size"] > 64
+                or (model_config.blocks, model_config.channels) != (1, 16)):
+            raise ValueError("Fixture training requires a tiny, bounded CPU configuration")
+    elif (parameters["device"] != "cuda" or parameters["batch_size"] != 128
+            or parameters["training_rows"] != (1000000 if komi == [13] else 2000000)
+            or (model_config.blocks, model_config.channels) != (8, 128)):
+        raise ValueError("Production expanded training requires its frozen model and full population")
+    return model_config
+
+
+def _validate(config, provenance, provenance_pin, fixture_only):
+    validate_config(config)
+    if config["purpose"] != "baseline-training":
+        raise ValueError("The worker requires a baseline-training configuration")
+    parameters = config["parameters"]
+    expanded = "recipe" in parameters
+    model_config = (_expanded_parameters(config, fixture_only) if expanded
+                    else _base_parameters(config, fixture_only))
     if (not isinstance(provenance, dict) or provenance.get("version") != "experiment_provenance_v1"
             or provenance.get("inputs") != config["inputs"]
             or not isinstance(provenance.get("environment"), dict)
@@ -86,6 +136,8 @@ def _validate(config, provenance, provenance_pin, fixture_only):
     refs = config["inputs"]
     if not {"data", "split", "rules", "examples", "normalizer", "cpu_environment", "cuda_environment"} <= refs.keys():
         raise ValueError("Training requires pinned data, rules, examples, normalizer and environments")
+    if expanded and not fixture_only and "profile" not in refs:
+        raise ValueError("Expanded production training requires its pinned dataset profile")
     for name, ref in refs.items():
         if ("checkpoint" in name.lower() or not isinstance(ref, dict)
                 or set(ref) != {"path", "sha256"} or not isinstance(ref["path"], str)
@@ -100,6 +152,18 @@ def _validate(config, provenance, provenance_pin, fixture_only):
             or type(manifest["counts"]["train"]["examples"]) is not int
             or manifest["counts"]["train"]["examples"] != parameters["training_rows"]):
         raise ValueError("The full training population must match the pinned count and fixture scope")
+    if expanded:
+        study = parameters["training_komi_halfpoints"] == [1, 13]
+        if (manifest["version"], manifest["rules"]) != (
+                (KOMI_STUDY_VERSION, KOMI_STUDY_RULES) if study else (EXAMPLES_VERSION, RULES)):
+            raise ValueError("Declared training komi differs from the versioned examples")
+        if "profile" in refs:
+            profile = load_dataset_profile(ROOT / refs["profile"]["path"], refs["profile"]["sha256"])
+            if (fixture_only or profile.komi_study != study
+                    or profile.sha256 != manifest.get("dataset_profile_sha256")
+                    or profile.canonical_sha256 != manifest["canonical_sha256"]
+                    or profile.split_sha256 != manifest["split_sha256"]):
+                raise ValueError("Training profile differs from the declared population and examples")
     return model_config
 
 
@@ -129,6 +193,63 @@ def _environment(device):
         result.update(cuda_device_name=torch.cuda.get_device_name(device),
                       cudnn_version=torch.backends.cudnn.version())
     return result
+
+
+def _expanded_updates(data, model, optimizer, config, state, output, device, persist, checkpoint):
+    parameters = config["parameters"]
+    blocks, aggregate, policy_sum, value_sum, order = [], None, 0.0, 0.0, None
+    save_json(output / "training_updates.json", {"scope": "training_minibatches", "blocks": []})
+    for step in range(parameters["updates"]):
+        if aggregate is None:
+            aggregate = {"phase": "warmup" if step < 6 else "measured", "start_step": step,
+                         "updates": 0, "presented_examples": 0, "policy_count": 0,
+                         "value_count": 0, "clock_missing_count": 0, "seconds": 0.0}
+            policy_sum, value_sum, order = 0.0, 0.0, sha256()
+        phase = time.monotonic()
+        indices = data.indices(step, parameters["batch_size"], config["seed"], full_batch=True)
+        inputs, labels = data.batch(step, parameters["batch_size"], config["seed"],
+                                    device=device, full_batch=True)
+        state.update(status="training", attempted_updates=step + 1,
+                     attempted_examples=state["attempted_examples"] + len(indices),
+                     uncertain_updates=1, uncertain_examples=len(indices))
+        persist()
+        metrics = train_step(model, optimizer, inputs, labels, clock_dropout=parameters["clock_dropout"])
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+        if (metrics["examples"] != len(indices) or any(not math.isfinite(metrics[key])
+                for key in ("loss", "policy_loss", "value_loss"))):
+            raise ValueError("A training update returned invalid counts or nonfinite losses")
+        presented = state["presented_examples"] + metrics["examples"]
+        epoch, offset = divmod(presented, len(data))
+        state.update(completed_updates=step + 1, next_step=step + 1, presented_examples=presented,
+                     data_epoch=epoch, row_in_epoch=offset, uncertain_updates=0,
+                     uncertain_examples=0, last_loss=metrics)
+        for index in indices:
+            order.update(json_bytes(data.row_keys[index]))
+        persist()
+        elapsed = time.monotonic() - phase
+        state["phase_seconds"]["train"] += elapsed
+        aggregate["seconds"] += elapsed
+        aggregate["updates"] += 1
+        aggregate["presented_examples"] += metrics["examples"]
+        for name in ("policy_count", "value_count", "clock_missing_count"):
+            aggregate[name] += metrics[name]
+        policy_sum += metrics["policy_loss"] * metrics["policy_count"]
+        value_sum += metrics["value_loss"] * metrics["value_count"]
+        if (step + 1 == 6 or step >= 6 and (step + 1 - 6) % 50 == 0
+                or step + 1 == parameters["updates"]):
+            aggregate.update(next_step=step + 1, order_sha256=order.hexdigest(),
+                seconds_per_update=aggregate["seconds"] / aggregate["updates"],
+                policy_loss=policy_sum / aggregate["policy_count"] if aggregate["policy_count"] else None,
+                value_loss=value_sum / aggregate["value_count"] if aggregate["value_count"] else None)
+            blocks.append(aggregate)
+            state["completed_timing_blocks"] = len(blocks)
+            save_json(output / "training_updates.json", {"scope": "training_minibatches", "blocks": blocks},
+                      replace=True)
+            aggregate = None
+        if step + 1 in parameters["save_updates"]:
+            checkpoint(step + 1)
+    return blocks
 
 
 def run_training(config_path, config_pin, provenance_path, provenance_pin, output, *, fixture_only=False):
@@ -167,6 +288,12 @@ def run_training(config_path, config_pin, provenance_path, provenance_pin, outpu
         provenance = read_json(provenance_path, provenance_pin)
         model_config = _validate(config, provenance, provenance_pin, fixture_only)
         parameters, refs = config["parameters"], config["inputs"]
+        expanded = parameters.get("recipe") == EXPANDED_RECIPE
+        if expanded:
+            for name in ("epoch", "batch_in_epoch", "epoch_metrics"):
+                del state[name]
+            state.update(version="expanded_e2_training_progress_v1", data_epoch=0, row_in_epoch=0,
+                         completed_timing_blocks=0, sampler="continuous_shuffled_epochs_v1")
         state.update(config_sha256=json_hash(config), source=provenance["source"],
                      seed=config["seed"], parameters=parameters, status="loading")
         persist()
@@ -187,16 +314,29 @@ def run_training(config_path, config_pin, provenance_path, provenance_pin, outpu
             cuda_ready = True
         state["environment"] = _environment(device)
         phase = time.monotonic()
+        data_options = {}
+        if expanded:
+            data_options = ({"profile": load_dataset_profile(ROOT / refs["profile"]["path"],
+                                                              refs["profile"]["sha256"])}
+                            if "profile" in refs else
+                            {"komi_study": parameters["training_komi_halfpoints"] == [1, 13]})
         data = TrainingData.load(ROOT / Path(refs["examples"]["path"]).parent, refs["examples"]["sha256"],
             ROOT / refs["normalizer"]["path"], refs["normalizer"]["sha256"],
-            split_sha256=refs["split"]["sha256"])
+            split_sha256=refs["split"]["sha256"], **data_options)
         state["phase_seconds"]["load"] = time.monotonic() - phase
         if len(data) != parameters["training_rows"]:
             raise ValueError("Loaded training rows differ from the frozen population")
+        if (expanded and np.unique(np.abs(data.inputs["scalars"][:, 1]) * 2).tolist()
+                != parameters["training_komi_halfpoints"]):
+            raise ValueError("Loaded training komi differs from the declared population")
         batches = (len(data) + parameters["batch_size"] - 1) // parameters["batch_size"]
-        state.update(training_rows=len(data), row_keys_sha256=json_hash(list(data.row_keys)),
-                     batches_per_epoch=batches, planned_updates=batches * parameters["epochs"],
-                     planned_examples=len(data) * parameters["epochs"])
+        state.update(training_rows=len(data), row_keys_sha256=json_hash(list(data.row_keys)))
+        if expanded:
+            state.update(planned_updates=parameters["updates"],
+                         planned_examples=parameters["updates"] * parameters["batch_size"])
+        else:
+            state.update(batches_per_epoch=batches, planned_updates=batches * parameters["epochs"],
+                         planned_examples=len(data) * parameters["epochs"])
         phase = time.monotonic()
         seed_all(config["seed"])
         model = PopulationModel(model_config)
@@ -208,72 +348,83 @@ def run_training(config_path, config_pin, provenance_path, provenance_pin, outpu
         state["phase_seconds"]["initialize"] = time.monotonic() - phase
         (output / "checkpoints").mkdir()
 
-        def checkpoint(epoch):
+        def checkpoint(marker):
             state["status"] = "checkpointing"
             persist()
             phase = time.monotonic()
-            progress = {key: state[key] for key in ("next_step", "epoch", "batch_in_epoch",
-                        "completed_updates", "presented_examples", "row_keys_sha256", "initial_tensor_sha256")}
+            cursor_keys = ("data_epoch", "row_in_epoch", "sampler") if expanded else ("epoch", "batch_in_epoch")
+            progress = {key: state[key] for key in ("next_step", *cursor_keys, "completed_updates",
+                        "presented_examples", "row_keys_sha256", "initial_tensor_sha256")}
             ref = save_checkpoint(output / "checkpoints", model, optimizer, step=state["next_step"],
                 progress=progress, config_sha256=state["config_sha256"], provenance_sha256=provenance_pin)
             ref = {"path": str(Path(ref["path"]).resolve().relative_to(output)), "sha256": ref["sha256"],
-                   "epoch": epoch, "step": state["next_step"]}
+                   "step": state["next_step"]}
+            if not expanded:
+                ref["epoch"] = marker
             state["checkpoints"].append(ref)
             state["phase_seconds"]["checkpoint"] += time.monotonic() - phase
             persist()
             return ref
 
         checkpoint(0)
-        save_json(output / "training_epochs.json", {"scope": "training_minibatches", "epochs": []})
-        for epoch in range(parameters["epochs"]):
-            aggregate = {"epoch": epoch + 1, "updates": 0, "presented_examples": 0,
-                         "policy_count": 0, "value_count": 0, "clock_missing_count": 0}
-            policy_sum = value_sum = 0.0
-            order = sha256()
-            for batch in range(batches):
-                step = epoch * batches + batch
-                phase = time.monotonic()
-                indices = data.indices(step, parameters["batch_size"], config["seed"])
-                inputs, labels = data.batch(step, parameters["batch_size"], config["seed"], device=device)
-                state.update(status="training", attempted_updates=step + 1,
-                             attempted_examples=state["attempted_examples"] + len(indices),
-                             uncertain_updates=1, uncertain_examples=len(indices))
+        update_metrics = None
+        if expanded:
+            update_metrics = _expanded_updates(data, model, optimizer, config, state, output,
+                                               device, persist, checkpoint)
+        else:
+            save_json(output / "training_epochs.json", {"scope": "training_minibatches", "epochs": []})
+            for epoch in range(parameters["epochs"]):
+                aggregate = {"epoch": epoch + 1, "updates": 0, "presented_examples": 0,
+                             "policy_count": 0, "value_count": 0, "clock_missing_count": 0}
+                policy_sum = value_sum = 0.0
+                order = sha256()
+                for batch in range(batches):
+                    step = epoch * batches + batch
+                    phase = time.monotonic()
+                    indices = data.indices(step, parameters["batch_size"], config["seed"])
+                    inputs, labels = data.batch(step, parameters["batch_size"], config["seed"], device=device)
+                    state.update(status="training", attempted_updates=step + 1,
+                                 attempted_examples=state["attempted_examples"] + len(indices),
+                                 uncertain_updates=1, uncertain_examples=len(indices))
+                    persist()
+                    metrics = train_step(model, optimizer, inputs, labels, clock_dropout=parameters["clock_dropout"])
+                    if device.type == "cuda":
+                        torch.cuda.synchronize(device)
+                    if (metrics["examples"] != len(indices) or any(not math.isfinite(metrics[key])
+                            for key in ("loss", "policy_loss", "value_loss"))):
+                        raise ValueError("A training update returned invalid counts or nonfinite losses")
+                    state["phase_seconds"]["train"] += time.monotonic() - phase
+                    state.update(completed_updates=step + 1, next_step=step + 1,
+                                 presented_examples=state["presented_examples"] + metrics["examples"],
+                                 epoch=(step + 1) // batches, batch_in_epoch=(step + 1) % batches,
+                                 uncertain_updates=0, uncertain_examples=0, last_loss=metrics)
+                    aggregate["updates"] += 1
+                    aggregate["presented_examples"] += metrics["examples"]
+                    for name in ("policy_count", "value_count", "clock_missing_count"):
+                        aggregate[name] += metrics[name]
+                    policy_sum += metrics["policy_loss"] * metrics["policy_count"]
+                    value_sum += metrics["value_loss"] * metrics["value_count"]
+                    for index in indices:
+                        order.update(json_bytes(data.row_keys[index]))
+                    persist()
+                aggregate.update(next_step=state["next_step"], order_sha256=order.hexdigest(),
+                                 policy_loss=policy_sum / aggregate["policy_count"] if aggregate["policy_count"] else None,
+                                 value_loss=value_sum / aggregate["value_count"] if aggregate["value_count"] else None)
+                state["epoch_metrics"].append(aggregate)
+                save_json(output / "training_epochs.json", {"scope": "training_minibatches",
+                          "epochs": state["epoch_metrics"]}, replace=True)
                 persist()
-                metrics = train_step(model, optimizer, inputs, labels, clock_dropout=parameters["clock_dropout"])
-                if device.type == "cuda":
-                    torch.cuda.synchronize(device)
-                if (metrics["examples"] != len(indices) or any(not math.isfinite(metrics[key])
-                        for key in ("loss", "policy_loss", "value_loss"))):
-                    raise ValueError("A training update returned invalid counts or nonfinite losses")
-                state["phase_seconds"]["train"] += time.monotonic() - phase
-                state.update(completed_updates=step + 1, next_step=step + 1,
-                             presented_examples=state["presented_examples"] + metrics["examples"],
-                             epoch=(step + 1) // batches, batch_in_epoch=(step + 1) % batches,
-                             uncertain_updates=0, uncertain_examples=0, last_loss=metrics)
-                aggregate["updates"] += 1
-                aggregate["presented_examples"] += metrics["examples"]
-                for name in ("policy_count", "value_count", "clock_missing_count"):
-                    aggregate[name] += metrics[name]
-                policy_sum += metrics["policy_loss"] * metrics["policy_count"]
-                value_sum += metrics["value_loss"] * metrics["value_count"]
-                for index in indices:
-                    order.update(json_bytes(data.row_keys[index]))
-                persist()
-            aggregate.update(next_step=state["next_step"], order_sha256=order.hexdigest(),
-                             policy_loss=policy_sum / aggregate["policy_count"] if aggregate["policy_count"] else None,
-                             value_loss=value_sum / aggregate["value_count"] if aggregate["value_count"] else None)
-            state["epoch_metrics"].append(aggregate)
-            save_json(output / "training_epochs.json", {"scope": "training_minibatches",
-                      "epochs": state["epoch_metrics"]}, replace=True)
-            persist()
-            if epoch + 1 in parameters["save_epochs"]:
-                checkpoint(epoch + 1)
+                if epoch + 1 in parameters["save_epochs"]:
+                    checkpoint(epoch + 1)
         if provenance["source"] != _source_identity():
             raise ValueError("Worker source changed during training")
         state.update(status="completed", final_checkpoint=state["checkpoints"][-1],
-                     checkpoint_selection="fixed_final_epoch", scope="training_minibatches")
+                     checkpoint_selection="fixed_final_update" if expanded else "fixed_final_epoch",
+                     scope="training_minibatches")
         persist()
-        result = dict(state, version="baseline_training_v1")
+        result = dict(state, version=EXPANDED_RECIPE if expanded else "baseline_training_v1")
+        if expanded:
+            result["update_metrics"] = update_metrics
         save_json(output / "training_summary.json", result)
         return result
     except BaseException as error:

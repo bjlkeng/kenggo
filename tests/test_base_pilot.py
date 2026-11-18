@@ -42,7 +42,7 @@ class BasePilotTests(unittest.TestCase):
             self.assertEqual(metrics[0]["job/status"], "failed")
             self.assertEqual(metrics[0]["job/gpu_seconds"], snapshot["charged_gpu_seconds"])
 
-    def stage(self, root, *, status="completed", training=True, fail_shutdown=False, evaluation=False):
+    def stage(self, root, *, status="completed", training=True, fail_shutdown=False, evaluation=False, updates=None):
         config = copy.deepcopy(CONFIG)
         config["purpose"] = "baseline-training" if training else "baseline-evaluation" if evaluation else "baseline-matches"
         ledger = BudgetLedger.create(root / "ledger.json", budget_id="fixture", gpu_seconds=10)
@@ -58,6 +58,9 @@ class BasePilotTests(unittest.TestCase):
                 summary = {"status": status, "checkpoints": [{"path": str(Path(ref["path"]).relative_to(output)),
                            "sha256": ref["sha256"], "step": 1, "epoch": 1}],
                            "epoch_metrics": [{"epoch": 1, "policy_loss": 1.0, "value_count": 2}]}
+                if updates is not None:
+                    summary.pop("epoch_metrics")
+                    summary["update_metrics"] = updates
             elif evaluation:
                 metrics = {"overall": {"metrics": {"nll": {"estimate": {"status": "finite", "value": .25},
                            "uncertainty": {"status": "inconclusive", "interval95": None}}}}}
@@ -87,6 +90,15 @@ class BasePilotTests(unittest.TestCase):
                 ledger, module="kenggo.baseline_training" if training else "kenggo.baseline_evaluation" if evaluation
                 else "kenggo.baseline_matches", register=training)
         return result, ledger.snapshot()
+
+    def test_expanded_update_metrics_do_not_make_final_cost_logging_go_backwards(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.stage(root, updates=[{"next_step": 6, "policy_loss": 2.0},
+                                      {"next_step": 256, "policy_loss": 1.0}])
+            records = [json.loads(line) for line in (root / "stage/metrics.jsonl").read_text().splitlines()]
+            self.assertEqual([r["step"] for r in records], [6, 256, 256])
+            self.assertEqual(records[-1]["metrics"]["job/status"], "completed")
 
     def test_evaluation_metrics_and_support_status_reach_the_tracking_sink(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -21,7 +21,8 @@ from kenggo.encoding import INPUT_KEYS
 from kenggo.examples import load_dataset_profile
 from kenggo.go import PASS, move_category
 from kenggo.katago_human import HumanProfile, HumanSL, ReferenceBudget
-from kenggo.learned_agent import LearnedArtifacts, LearnedPolicy
+from kenggo.learned_agent import (EXPANDED_RECIPE, KOMI_INFERENCE_CONTRACT,
+                                 LearnedArtifacts, LearnedPolicy)
 from kenggo.learner import ModelConfig
 from kenggo.recorded_data import CommonInputs, MOVE_BINS, TIME_BINS, prepare_common_set
 from kenggo.recorded_statistics import (Prediction, evaluate, prediction_from_logits,
@@ -31,6 +32,8 @@ from kenggo.tracking import validate_config
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = "baseline_evaluation_v1"
+RAW_COMMON_INPUT_MODE = "raw_komi_comparison_v1"
+MAX_RAW_COMMON_ROWS = 12_000
 DEVELOPMENT_ROLES = {"population_development", "validation_development"}
 SAMPLES = 32
 CATEGORIES = ("pass", "capture", "save_atari", "give_atari", "self_atari", "other")
@@ -61,7 +64,13 @@ def _validate(config, provenance, provenance_pin, fixture_only):
             or provenance.get("source") != _source_identity()):
         raise ValueError("Evaluation requires matching pinned configuration, provenance and source")
     refs, params = config["inputs"], config["parameters"]
+    mode = params.get("common_input_mode", "normalized_v1")
+    if mode not in ("normalized_v1", RAW_COMMON_INPUT_MODE):
+        raise ValueError("Unknown common input normalization contract")
+    raw_inputs = mode == RAW_COMMON_INPUT_MODE
     required = {"data", "canonical", "split", "examples", "normalizer", "rules"}
+    if raw_inputs and config["arm"] != "human-reference":
+        required.update(("training_examples", "training_normalizer"))
     if not fixture_only:
         required.add("profile")
     if not required <= refs.keys():
@@ -81,16 +90,23 @@ def _validate(config, provenance, provenance_pin, fixture_only):
     specs = params.get("common_sets")
     if not isinstance(specs, list) or not specs:
         raise ValueError("Evaluation needs explicit frozen common sets")
-    ids, roles = set(), set()
+    ids, roles, sources = set(), set(), set()
     for spec in specs:
         if (not isinstance(spec, dict)
                 or set(spec) != {"id", "role", "source_ids", "aggregate_ranks", "manifest_input"}
                 or not isinstance(spec["id"], str)
                 or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,95}", spec["id"]) is None
-                or spec["id"] in ids or spec["role"] in roles
+                or spec["id"] in ids or not raw_inputs and spec["role"] in roles
                 or spec["role"] not in DEVELOPMENT_ROLES | ({"train"} if fixture_only else set())
                 or spec["manifest_input"] not in refs):
             raise ValueError("Common sets must have unique identifiers and separate development roles")
+        if raw_inputs:
+            selected = spec["source_ids"]
+            if (not isinstance(selected, list) or not selected
+                    or any(not isinstance(source, str) or not source for source in selected)
+                    or len(set(selected)) != len(selected) or sources.intersection(selected)):
+                raise ValueError("Raw common sets require nonempty, unique, nonoverlapping whole-game sources")
+            sources.update(selected)
         ids.add(spec["id"])
         roles.add(spec["role"])
 
@@ -104,13 +120,19 @@ def _common_sets(config, *, fixture_only):
         _path(refs["examples"]).parent, refs["examples"]["sha256"],
         _path(refs["normalizer"]), refs["normalizer"]["sha256"], profile)
     result = []
+    raw_inputs = config["parameters"].get("common_input_mode") == RAW_COMMON_INPUT_MODE
     for spec in config["parameters"]["common_sets"]:
         ref = refs[spec["manifest_input"]]
         expected = read_json(_path(ref), ref["sha256"])
+        if raw_inputs and len(expected["rows"]) > MAX_RAW_COMMON_ROWS:
+            raise ValueError("Raw common set exceeds the frozen 12,000-row evaluation bound")
         common = prepare_common_set(inputs, role=spec["role"], source_ids=spec["source_ids"],
-                                   aggregate_ranks=spec["aggregate_ranks"], fixture_only=fixture_only)
+                                   aggregate_ranks=spec["aggregate_ranks"], fixture_only=fixture_only,
+                                   raw_inputs=raw_inputs, komi_study=raw_inputs)
         if common.sha256 != ref["sha256"] or common.manifest != expected:
             raise ValueError("Prepared common set differs from its frozen manifest")
+        if raw_inputs and len(common) > MAX_RAW_COMMON_ROWS:
+            raise ValueError("Raw common set exceeds the frozen 12,000-row evaluation bound")
         result.append((spec, common))
     return result
 
@@ -120,15 +142,18 @@ def _learned_artifacts(config):
     if not isinstance(raw, dict) or set(raw) != {field.name for field in fields(LearnedArtifacts)}:
         raise ValueError("A complete independently pinned learned artifact bundle is required")
     artifacts = LearnedArtifacts(**{**raw, "model_config": ModelConfig(**raw["model_config"])})
+    raw_inputs = config["parameters"].get("common_input_mode") == RAW_COMMON_INPUT_MODE
+    normalizer_name = "training_normalizer" if raw_inputs else "normalizer"
+    examples_name = "training_examples" if raw_inputs else "examples"
     for name, path, pin in (
             ("checkpoint", artifacts.checkpoint_manifest, artifacts.checkpoint_sha256),
             ("training_config", artifacts.config_path, artifacts.config_sha256),
-            ("normalizer", artifacts.normalizer_path, artifacts.normalizer_sha256)):
+            (normalizer_name, artifacts.normalizer_path, artifacts.normalizer_sha256)):
         if (name not in refs or _path(refs[name]) != (ROOT / path).resolve()
                 or refs[name]["sha256"] != pin):
             raise ValueError("Learned artifacts disagree with evaluation input pins")
     if (refs.get("training_provenance", {}).get("sha256") != artifacts.provenance_sha256
-            or refs["examples"]["sha256"] != artifacts.examples_sha256
+            or refs[examples_name]["sha256"] != artifacts.examples_sha256
             or artifacts.model_config.rank_conditioned != (config["arm"] == "conditioned")):
         raise ValueError("Learned provenance, examples or conditioning differs from the declared arm")
     training_config = read_json(_path(refs["training_config"]), artifacts.config_sha256)
@@ -136,9 +161,12 @@ def _learned_artifacts(config):
     if (training_provenance.get("version") != "experiment_provenance_v1"
             or training_provenance.get("inputs") != training_config.get("inputs")):
         raise ValueError("Training provenance differs from the pinned training inputs")
+    if raw_inputs and (training_config["parameters"].get("recipe") != EXPANDED_RECIPE
+            or training_config["parameters"].get("inference_contract") != KOMI_INFERENCE_CONTRACT):
+        raise ValueError("Raw komi comparison evaluation requires an explicitly compatible new checkpoint")
     return LearnedArtifacts(**{**raw, "checkpoint_manifest": str(_path(refs["checkpoint"])),
         "config_path": str(_path(refs["training_config"])),
-        "normalizer_path": str(_path(refs["normalizer"])), "model_config": artifacts.model_config})
+        "normalizer_path": str(_path(refs[normalizer_name])), "model_config": artifacts.model_config})
 
 
 def rows_for_common(common):
@@ -147,7 +175,8 @@ def rows_for_common(common):
             for position in common.positions()]
 
 
-def normalized_batch(positions, *, unknown_ranks=False):
+def input_batch(positions, *, unknown_ranks=False):
+    """Stack the common set's declared raw or normalized inputs without changing it."""
     inputs = {key: torch.from_numpy(np.stack([position.observation.inputs[key]
                                              for position in positions])) for key in INPUT_KEYS}
     if unknown_ranks:
@@ -242,7 +271,7 @@ def _category_group(rows, observations, ranks):
 
 
 def _sampling_report(rows, predictions, *, seed, variant, ranks, games):
-    sides, observations = defaultdict(list), {}
+    diagnostics, observations = {}, {}
     for row, prediction in zip(rows, predictions):
         actions = sample_actions(prediction, seed=seed, variant=variant)
         counts = np.bincount(actions, minlength=PASS + 1)
@@ -252,11 +281,23 @@ def _sampling_report(rows, predictions, *, seed, variant, ranks, games):
             "model": {category: sum(categories[action] == category for action in actions) / SAMPLES
                       for category in CATEGORIES},
             "recorded": {category: float(categories[row["action"]] == category) for category in CATEGORIES}}
-        sides[(row["source_rank_mover"], row["source_url"], row["mover"])].append({
+        diagnostics[row["row_key"]] = {
             "unique_legal_actions": len(set(actions)),
             "pairwise_disagreement": 1 - int(np.sum(counts * (counts - 1))) / (SAMPLES * (SAMPLES - 1)),
             "raw_pass_mass": math.exp(prediction.log_policy[PASS]),
-            "sampled_pass_fraction": actions.count(PASS) / SAMPLES})
+            "sampled_pass_fraction": actions.count(PASS) / SAMPLES}
+    report = _sampling_summary(rows, observations, diagnostics, ranks)
+    if all("komi_halfpoints" in row for row in rows):
+        report["by_komi"] = {str(komi): _sampling_summary(
+            [row for row in rows if row["komi_halfpoints"] == komi], observations, diagnostics, ranks)
+            for komi in sorted({row["komi_halfpoints"] for row in rows})}
+    return report
+
+
+def _sampling_summary(rows, observations, diagnostics, ranks):
+    sides = defaultdict(list)
+    for row in rows:
+        sides[(row["source_rank_mover"], row["source_url"], row["mover"])].append(diagnostics[row["row_key"]])
     by_rank = {}
     for rank in ranks:
         selected = [values for key, values in sides.items() if key[0] == rank]
@@ -325,8 +366,9 @@ class _Progress:
         self.write()
 
 
-def _learned_predictions(client, positions, inputs, normalizer_pin):
-    logits, values = client.predict_batch(inputs, normalizer_sha256=normalizer_pin)
+def _learned_predictions(client, positions, inputs, normalizer_pin, *, raw_inputs=False):
+    logits, values = (client.predict_raw_batch(inputs) if raw_inputs else
+                      client.predict_batch(inputs, normalizer_sha256=normalizer_pin))
     if (not isinstance(logits, torch.Tensor) or not isinstance(values, torch.Tensor)
             or logits.device.type != "cpu" or values.device.type != "cpu"
             or logits.shape != (len(positions), PASS + 1) or values.shape != (len(positions),)
@@ -344,6 +386,7 @@ def _evaluate_set(config, spec, common, variant, client, progress):
     chunks = directory / "chunks"
     chunks.mkdir()
     positions, rows, manifest = list(common.positions()), rows_for_common(common), common.manifest
+    raw_inputs = config["parameters"].get("common_input_mode") == RAW_COMMON_INPUT_MODE
     predictions, timings = [], []
     human = config["arm"] == "human-reference"
     batch_size = 1 if human else config["parameters"].get("batch_size", 32)
@@ -357,7 +400,7 @@ def _evaluate_set(config, spec, common, variant, client, progress):
         progress.state["sets"][key]["attempted_rows"] += len(batch)
         progress.state["analysis_queries_attempted" if human else "learned_batches_attempted"] += 1
         progress.write()
-        inputs = None if human else normalized_batch(batch, unknown_ranks=variant == "unknown_ranks")
+        inputs = None if human else input_batch(batch, unknown_ranks=variant == "unknown_ranks")
         started = time.monotonic()
         if human:
             position = batch[0]
@@ -370,7 +413,9 @@ def _evaluate_set(config, spec, common, variant, client, progress):
                          native.value, position.observation.inputs["legal"])]
             progress.state["native_cost"] = client.cost()
         else:
-            predicted = _learned_predictions(client, batch, inputs, config["inputs"]["normalizer"]["sha256"])
+            normalizer_name = "training_normalizer" if raw_inputs else "normalizer"
+            predicted = _learned_predictions(client, batch, inputs,
+                config["inputs"][normalizer_name]["sha256"], raw_inputs=raw_inputs)
         timing = {"offset": offset, "rows": len(batch), "seconds": time.monotonic() - started,
                   "unit": "reference_query" if human else "learned_batch",
                   "network_calls": None if human else 1}
@@ -384,10 +429,16 @@ def _evaluate_set(config, spec, common, variant, client, progress):
     if [prediction.row_key for prediction in predictions] != [row["row_key"] for row in rows]:
         raise ValueError("Predictions must cover the frozen rows in their original order")
     metrics = evaluate(rows, predictions, aggregate_ranks=spec["aggregate_ranks"])
+    if raw_inputs:
+        metrics["by_komi"] = {str(komi): evaluate(
+            [row for row in rows if row["komi_halfpoints"] == komi],
+            [prediction for row, prediction in zip(rows, predictions) if row["komi_halfpoints"] == komi],
+            aggregate_ranks=spec["aggregate_ranks"])
+            for komi in sorted({row["komi_halfpoints"] for row in rows})}
     artifacts = {}
     for name, value in (("metrics.json", metrics), ("timing.json", {
             "unit": "reference_query" if human else "learned_batch", "measurements": timings,
-            "scope": "Human queries include history validation and trace persistence; learned batches include prediction and output validation. Prepared input construction and prediction persistence are excluded.",
+            "scope": "Human queries include history validation and trace persistence; learned batches include prediction, model-owned normalization when raw, and output validation. Prepared input construction and prediction persistence are excluded.",
             "per_position_latency_measured": human}), ("sampling.json", _sampling_report(
                 rows, predictions, seed=config["seed"], variant=variant, ranks=spec["aggregate_ranks"],
                 games={position.observation.row_key: position.observation.game for position in positions}))):
@@ -399,6 +450,13 @@ def _evaluate_set(config, spec, common, variant, client, progress):
         "arm": config["arm"], "variant": variant, "rows": len(rows), "common_set_sha256": common.sha256,
         "coverage": manifest["coverage"], "artifacts": artifacts, "promotion": "not_promoted",
         "scope": "Exploratory recorded-position evaluation; no rank calibration or complete-game qualification"}
+    if raw_inputs:
+        komi = sorted({row["komi_halfpoints"] for row in rows})
+        training_komi = None if human else list(client.training_komi_halfpoints)
+        summary.update(common_input_mode=RAW_COMMON_INPUT_MODE, komi_halfpoints=komi,
+            training_komi_halfpoints=training_komi,
+            out_of_training_support_komi_halfpoints=([] if human else
+                [value for value in komi if value not in training_komi]))
     path = directory / "summary.json"
     progress.state["sets"][key].update(status="completed", summary=progress.ref(path, save_json(path, summary)))
     progress.write()
@@ -428,6 +486,9 @@ def run_evaluation(config_path, config_pin, provenance_path, provenance_pin, out
                 os.fsync(stream.fileno())
         human = config["arm"] == "human-reference"
         if human:
+            if any(position.observation.game.komi_halfpoints != 13
+                   for _, common in common_sets for position in common.positions()):
+                raise ValueError("The pinned HumanSL reference supports only 6.5-point komi")
             refs, params = config["inputs"], config["parameters"]
             profile = HumanProfile.load(_path(refs["human_profile"]), refs["human_profile"]["sha256"])
             paths = params["human_paths"]
