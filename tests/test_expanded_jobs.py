@@ -55,6 +55,22 @@ class SelectionTests(unittest.TestCase):
                            sort_keys=True, separators=(",", ":")).encode()).hexdigest())
             self.assertEqual(expected["rank_choices"][rank]["chosen_source_ids"], ordered[:2])
 
+    def test_review_selection_expands_whole_games_only_with_explicit_opt_in(self):
+        candidates = [candidate(f"game-{index}") for index in range(40)]
+        selected = self.select(candidates, review=True)
+        self.assertEqual(selected, self.select(candidates[::-1], review=True))
+        for rank in ("15k", "14k"):
+            self.assertEqual(len(selected["rank_choices"][rank]["chosen_source_ids"]), 10)
+        self.assertGreater(selected["selected_games"], self.select(candidates)["selected_games"])
+        changed = copy.deepcopy(candidates)
+        for row in changed:
+            row.update(value_actions=0, prediction_nll=1, winner="B")
+        self.assertEqual(selected, self.select(changed, review=True))
+        with self.assertRaises(ValueError):
+            self.select(candidates, selection=jobs.REVIEW_SELECTION)
+        with self.assertRaises(ValueError):
+            self.select(candidates, review=True, selection=dict(jobs.REVIEW_SELECTION, max_rows_per_set=50001))
+
     def test_shared_games_are_unioned_and_all_rank_shortfalls_retained(self):
         result = self.select([candidate("one"), candidate("two")])
         self.assertEqual(result["spec"]["source_ids"], ["one", "two"])
@@ -232,6 +248,19 @@ class ExpandedJobTests(unittest.TestCase):
                     value = report["overall"]["metrics"]["value_mse"]
                     self.assertEqual(value["status"], "unavailable")
                     self.assertEqual(value["estimate"], {"status": "undefined", "value": None})
+
+    def test_review_analysis_keeps_full_reports_and_a_named_rank_subset(self):
+        config, output = self.analysis()
+        config["purpose"] = "expanded-review-analysis"
+        with self.synthetic_inputs():
+            result = jobs.analyze(config, output)
+        for reports in result["comparisons"].values():
+            for item in reports.values():
+                report = json.loads(Path(item["report"]["path"]).read_text())
+                self.assertEqual(report["aggregate_ranks"], RANKS)
+                self.assertEqual(report["review_scope"]["aggregate_ranks"], RANKS[3:])
+                self.assertEqual(report["expected_outputs"], report["review_scope"]["expected_outputs"])
+                self.assertEqual(report["review_scope"]["excluded_rows"], 0)
 
     def test_missing_arm_or_stratum_is_rejected_before_comparing(self):
         config, output = self.analysis()

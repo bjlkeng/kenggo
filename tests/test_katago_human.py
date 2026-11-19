@@ -398,9 +398,12 @@ class HumanTests(unittest.TestCase):
 
     def test_finite_budgets_and_cumulative_request_response_trace_limits(self):
         for kwargs in ({"queries": -1}, {"queries": True}, {"wall_seconds": float("inf")},
-                       {"cpu_seconds": 0}, {"request_bytes": 0}, {"trace_bytes": 4095}):
+                       {"cpu_seconds": 0}, {"request_bytes": 0}, {"trace_bytes": 4095},
+                       {"trace_bytes": 2 * 1024**3 + 1}, {"response_bytes": 1024**3 + 1}):
             with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
                 ReferenceBudget(**{"queries": 1, "cpu_seconds": 2, "wall_seconds": 3, **kwargs})
+        self.assertEqual(ReferenceBudget(59182, 86400, 86400, trace_bytes=2 * 1024**3).trace_bytes,
+                         2 * 1024**3)
         client = self.client(budget=ReferenceBudget(10, 2, 3, request_bytes=1))
         with self.assertRaisesRegex(ReferenceBudgetExceeded, "request_bytes"):
             client.predict(Game.new(), "5k")

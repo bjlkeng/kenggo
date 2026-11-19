@@ -38,9 +38,29 @@ def metrics(delta=False):
             "by_clock": {"10-20": group}}
 
 
-def fixture(root):
-    run = root / "expanded-synthetic"
-    run.mkdir()
+def review_metrics(delta=False):
+    def report(ranks, rows, value):
+        result = copy.deepcopy(metrics(delta))
+        result.update(aggregate_ranks=ranks, expected_outputs=rows)
+        group = result["overall"]
+        group["counts"] = {"moves": rows}
+        group["metrics"]["nll"]["estimate"]["value"] = value
+        for item in group["metrics"].values():
+            item["aggregate_ranks"] = ranks
+        group["value_calibration"]["model"] = {"status": "available", "bins": [
+            {"lower": -1, "upper": 1, "raw_count": rows,
+             "mean_prediction": {"value": .125 if rows == 1 else .875}, "mean_result": {"value": 1}}]}
+        result["by_rank"] = {rank: dict(copy.deepcopy(group), counts={"moves": int(rank in {"14k", "5k"})})
+                             for rank in ranks}
+        return result
+    result = report(review.ALL_RANKS, 2, -.04 if delta else 2.1)
+    result["review_scope"] = report(review.REVIEW_RANKS, 1, -.08 if delta else 1.25) | {"excluded_rows": 1}
+    return result
+
+
+def fixture(root, *, name="expanded-synthetic"):
+    run = root / name
+    run.mkdir(parents=True)
     plan_ref = ref(root / "plan.json", {"purpose": "expanded-pilot", "seed": 20261118,
                                        "parameters": {"scope": "synthetic fixture"}})
     stages, common, predicted = {}, {}, {}
@@ -170,6 +190,59 @@ class ExpandedReviewTests(unittest.TestCase):
         self.root = Path(temporary.name)
         self.run, self.main = fixture(self.root)
 
+    def rerun_fixture(self):
+        original_plan = json.loads(Path(self.main["plan"]["path"]).read_text())
+        original_plan["parameters"]["output"] = str(self.run)
+        self.main["plan"] = ref(Path(self.main["plan"]["path"]), original_plan)
+        previous_path, previous, _ = self.completion_fixture()
+        run, main = fixture(self.root / "new-evaluation", name="review-synthetic")
+        main.update(schema=review.RERUN_SCHEMA, previous_result={"path": str(previous_path), "sha256": file_hash(previous_path)},
+            training_decision=previous["training_decision"],
+            reused_training={arm: copy.deepcopy(previous["stages"][arm]) for arm in review.ARMS},
+            stages={name: stage for name, stage in main["stages"].items() if name in review.RERUN_STAGES})
+        plan = {"purpose": "expanded-review", "seed": 20261118,
+            "parameters": {"review_ranks": review.REVIEW_RANKS},
+            "inputs": {"previous_result": main["previous_result"], "original_plan": previous["plan"],
+                       "training_decision": main["training_decision"]}}
+        main["plan"] = ref(run.parent / "plan.json", plan)
+        old_entries = copy.deepcopy(previous["costs"]["ledger"]["state"]["entries"])
+        new_entries = [entry for entry in main["costs"]["ledger"]["state"]["entries"]
+                       if entry["run_id"] in {run.name + "-" + name for name in review.RERUN_STAGES}]
+        main["costs"]["ledger"]["state"]["entries"] = old_entries + new_entries
+        main["costs"].update(cpu_seconds=12., elapsed_seconds=20.)
+        preparation = main["stages"]["preparation"]
+        prepared = json.loads(Path(preparation["summary"]["path"]).read_text())
+        common = {}
+        for item in prepared["common_sets"]:
+            item["spec"]["aggregate_ranks"] = review.ALL_RANKS
+            item["coverage"] = {"by": {"source_rank_mover": [
+                {"source_rank_mover": rank, "moves": int(rank in {"14k", "5k"})} for rank in review.ALL_RANKS]}}
+            manifest_path = Path(item["manifest"]["path"])
+            manifest = json.loads(manifest_path.read_text())
+            manifest.update(aggregate_ranks=review.ALL_RANKS, coverage=item["coverage"])
+            item["manifest"] = ref(manifest_path, manifest)
+            common[item["spec"]["id"]] = item
+        prepared["selection"] = ref(run / "preparation/worker/selection.json",
+            {"review_ranks": review.REVIEW_RANKS, "sets": [item["spec"] for item in common.values()]})
+        preparation["summary"] = ref(Path(preparation["summary"]["path"]), prepared)
+        for name, stage in main["stages"].items():
+            summary_path = Path(stage["summary"]["path"])
+            summary = json.loads(summary_path.read_text())
+            if name.startswith("evaluation-"):
+                for report in summary["reports"]:
+                    report["common_set_sha256"] = common[report["set"]]["manifest"]["sha256"]
+                    artifact = report["artifacts"]["metrics.json"]
+                    path = Path(stage["directory"]) / "worker" / artifact["path"]
+                    artifact["sha256"] = ref(path, review_metrics())["sha256"]
+            elif name == "analysis":
+                for comparisons in summary["comparisons"].values():
+                    for item in comparisons.values():
+                        report = review_metrics(delta=True)
+                        item.update(report=ref(Path(item["report"]["path"]), report), overall=report["overall"])
+            stage["summary"] = ref(summary_path, summary)
+        ref(run / "summary.json", main)
+        return run, main, previous
+
     def completion_fixture(self, *, partial_reference=True):
         completion = copy.deepcopy(self.main)
         for arm in review.ARMS:
@@ -235,6 +308,255 @@ class ExpandedReviewTests(unittest.TestCase):
         path = self.run / "completion.json"
         ref(path, completion)
         return path, completion, original
+
+    def test_rerun_retains_scopes_games_and_historical_training_without_recharging_it(self):
+        from kenggo.expanded_review import STAGES, VERSION
+        self.assertEqual((review.RERUN_STAGES, review.RERUN_SCHEMA), (STAGES, VERSION))
+        run, main, previous = self.rerun_fixture()
+        previous_bytes = Path(main["previous_result"]["path"]).read_bytes()
+        result = review.collect(run)
+        self.assertTrue(result["review_rerun"])
+        self.assertTrue(result["matched_training"])
+        self.assertEqual(result["default_scope"], "review_scope")
+        self.assertEqual([stage["name"] for stage in result["stages"]], list(STAGES))
+        self.assertEqual(len(result["training"]), 4)
+        self.assertEqual(result["probes"], {})
+        self.assertEqual(len(result["games"]), 24)
+        self.assertEqual(result["costs"]["run_gpu_seconds"], 0)
+        self.assertEqual(result["costs"]["cpu_seconds"], 12)
+        self.assertEqual(result["historical_costs"]["cpu_seconds"], 60)
+        self.assertEqual(result["historical_costs"]["gpu_seconds_by_stage"][review.ARMS[0]], 5000)
+        self.assertEqual(result["costs"]["prior_gpu_seconds"], previous["costs"]["ledger"]["charged_gpu_seconds"])
+        self.assertEqual(result["training_decision"]["updates"], 8)
+        for common in result["common_sets"].values():
+            self.assertEqual(common["review_scope"]["expected_outputs"], 1)
+            self.assertEqual(common["review_scope"]["excluded_rows"], 1)
+        for reports in result["evaluations"].values():
+            for report in reports.values():
+                self.assertEqual(report["metrics"]["aggregate_ranks"], review.ALL_RANKS)
+                self.assertEqual(report["metrics"]["review_scope"]["aggregate_ranks"], review.REVIEW_RANKS)
+                self.assertEqual(report["metrics"]["expected_outputs"], 2)
+        self.assertNotIn('"row_key"', json.dumps(result))
+        self.assertEqual(Path(main["previous_result"]["path"]).read_bytes(), previous_bytes)
+        self.check_page_controls(result)
+
+    def test_rerun_recovers_complete_reference_sets_after_worker_or_tracking_failure(self):
+        run, main, _ = self.rerun_fixture()
+        human = main["stages"].pop(review.REFERENCE_STAGE)
+        worker = run / review.REFERENCE_STAGE / "worker"
+        prepared = json.loads(Path(main["stages"]["preparation"]["summary"]["path"]).read_text())
+        common = {item["spec"]["id"]: item for item in prepared["common_sets"] if item["spec"]["komi_halfpoints"] == 13}
+        config = {"purpose": "baseline-evaluation", "arm": "human-reference", "inputs": {}, "parameters": {"common_sets": []}}
+        for identity, item in common.items():
+            key = "common_" + identity
+            config["inputs"][key] = item["manifest"]
+            config["parameters"]["common_sets"].append(item["spec"] | {"manifest_input": key})
+        config_ref = ref(worker.parent / "config.json", config)
+        provenance_ref = ref(worker.parent / "provenance.json", {"inputs": config["inputs"]})
+        pins = {"config.json": config_ref, "provenance.json": provenance_ref}
+        sets = {}
+        reports = json.loads(Path(human["summary"]["path"]).read_text())["reports"]
+        for report in reports:
+            identity = report["set"]
+            report.update(role=common[identity]["spec"]["role"], arm="human-reference")
+            saved = ref(worker / identity / "ordinary/summary.json", report)
+            sets[identity + "/ordinary"] = {"status": "completed", "completed_rows": 2, "expected_rows": 2,
+                "common_set_sha256": common[identity]["manifest"]["sha256"],
+                "summary": {"path": str(Path(saved["path"]).relative_to(worker)), "sha256": saved["sha256"]}}
+        progress = {"version": "baseline_evaluation_v1", "status": "completed", "arm": "human-reference",
+            "config_sha256": config_ref["sha256"], "provenance_sha256": provenance_ref["sha256"], "sets": sets}
+        main.update(status="incomplete", reason="Late reference or tracking failure",
+            failed_stage={"name": review.REFERENCE_STAGE, "directory": str(worker.parent), "artifacts": pins})
+        for artifact, job_status in (("progress.json", "failed"), ("summary.json", "completed"), ("failure.json", "failed")):
+            with self.subTest(artifact=artifact):
+                for key in list(pins):
+                    if key.startswith("worker/"):
+                        del pins[key]
+                pins["worker/" + artifact] = ref(worker / artifact, progress)
+                pins["worker/job.json"] = ref(worker / "job.json", {"schema": "bounded_pilot_job_v1",
+                    "status": job_status, "run_id": run.name + "-" + review.REFERENCE_STAGE,
+                    "command": ["python", "--config-sha256", config_ref["sha256"],
+                                "--provenance-sha256", provenance_ref["sha256"]]})
+                path = run / "failure.json"
+                ref(path, main)
+                data = review.collect(path)
+                self.assertEqual(sum("human-reference" in reports for reports in data["evaluations"].values()), 2)
+                self.assertEqual(next(stage["status"] for stage in data["stages"] if stage["name"] == review.REFERENCE_STAGE), "failed")
+                self.assertEqual(data["partial_reference"]["job_status"], job_status)
+        state = next(iter(sets.values()))
+        state.update(status="running", completed_rows=1)
+        del state["summary"]
+        pins["worker/failure.json"] = ref(worker / "failure.json", progress)
+        ref(path, main)
+        data = review.collect(path)
+        self.assertEqual(sum("human-reference" in reports for reports in data["evaluations"].values()), 1)
+        (worker / "failure.json").write_text("{}")
+        with self.assertRaisesRegex(ValueError, "expected hash"):
+            review.collect(path)
+
+    def test_full_size_statistics_fit_after_compaction_without_losing_estimates(self):
+        from kenggo.recorded_statistics import evaluate, paired_report
+        from test_recorded_statistics import row, prediction
+        run, _, _ = self.rerun_fixture()
+        data = review.collect(run)
+        rows = []
+        for game in range(142):
+            for ply in (0, 1, 60, 61, 180, 181):
+                accounts = [f"{2 * game:064x}", f"{2 * game + 1:064x}"]
+                if ply % 2:
+                    accounts.reverse()
+                rows.append(row(f"https://synthetic.invalid/{game:064x}", *accounts,
+                    rank=review.ALL_RANKS[game % 16], mover="W" if ply % 2 else "B", ply=ply))
+        predictions = [prediction(item, 1 + index % 3) for index, item in enumerate(rows)]
+        report = evaluate(rows, predictions, aggregate_ranks=review.ALL_RANKS)
+        selected = [(item, output) for item, output in zip(rows, predictions) if item["source_rank_mover"] in review.REVIEW_RANKS]
+        scoped_rows, scoped_predictions = map(list, zip(*selected))
+        report["review_scope"] = evaluate(scoped_rows, scoped_predictions, aggregate_ranks=review.REVIEW_RANKS)
+        paired = paired_report(rows, predictions, predictions, aggregate_ranks=review.ALL_RANKS)
+        paired["review_scope"] = paired_report(scoped_rows, scoped_predictions, scoped_predictions, aggregate_ranks=review.REVIEW_RANKS)
+        original = json.dumps(report, sort_keys=True)
+        compact, compact_paired = review._display_details(report), review._display_details(paired)
+        self.assertEqual(json.dumps(report, sort_keys=True), original)
+        for scope in (report, report["review_scope"]):
+            for name, metric in scope["overall"]["metrics"].items():
+                displayed = (compact if scope is report else compact["review_scope"])["overall"]["metrics"][name]
+                for key in ("estimate", "counts", "status"):
+                    self.assertEqual(displayed[key], metric[key])
+                self.assertEqual(displayed["uncertainty"]["interval95"], metric["uncertainty"]["interval95"])
+        for identity, reports in data["evaluations"].items():
+            for item in reports.values():
+                item["metrics"] = compact
+            data["paired"][identity] = {name: compact_paired for name in data["paired"][identity]}
+        page = review.render(data)
+        self.assertLess(len(page.encode()), review.MAX_PAGE_BYTES)
+        self.assertNotIn('"game_influences"', page)
+        self.assertEqual(len(data["full_reports"]), 70)
+        for reference in data["full_reports"]:
+            self.assertEqual(file_hash(reference["path"]), reference["sha256"])
+
+    def test_rerun_rejects_changed_reuse_predecessor_scope_and_historical_charges(self):
+        run, main, _ = self.rerun_fixture()
+        changes = []
+        changed = copy.deepcopy(main)
+        changed["reused_training"][review.ARMS[0]]["job"]["costs"]["cpu_seconds"] = 0
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        del changed["reused_training"][review.ARMS[1]]
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["previous_result"]["sha256"] = "b" * 64
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["training_decision"]["sha256"] = "b" * 64
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["costs"]["ledger"]["state"]["entries"][0]["cpu_seconds"] = 0
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["costs"]["ledger"]["state"]["entries"][-1]["gpu_seconds"] = 1
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["matched_training"] = False
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        del changed["stages"][review.REFERENCE_STAGE]
+        changes.append(changed)
+        changed = copy.deepcopy(main)
+        changed["stages"][review.ARMS[0]] = changed["reused_training"][review.ARMS[0]]
+        changes.append(changed)
+        for index, changed in enumerate(changes):
+            ref(run / "summary.json", changed)
+            with self.subTest(change=index), self.assertRaises(ValueError):
+                review.collect(run)
+        changed = copy.deepcopy(main)
+        plan = json.loads(Path(changed["plan"]["path"]).read_text())
+        plan["parameters"]["review_ranks"] = review.ALL_RANKS
+        changed["plan"] = ref(Path(changed["plan"]["path"]), plan)
+        ref(run / "summary.json", changed)
+        with self.assertRaisesRegex(ValueError, "rank scope"):
+            review.collect(run)
+
+    def test_rerun_rejects_wrong_metric_and_paired_scope_ranks_or_counts(self):
+        run, main, _ = self.rerun_fixture()
+        for name in ("evaluation-" + review.ARMS[0], "analysis"):
+            original = main["stages"][name]
+            summary_path = Path(original["summary"]["path"])
+            saved_summary = json.loads(summary_path.read_text())
+            for field in ("aggregate_ranks", "expected_outputs", "excluded_rows", "overall", "by_rank", "missing"):
+                changed = copy.deepcopy(main)
+                stage, summary = changed["stages"][name], copy.deepcopy(saved_summary)
+                if name == "analysis":
+                    item = next(iter(summary["comparisons"][review.SETS[0]].values()))
+                    path = Path(item["report"]["path"])
+                else:
+                    item = summary["reports"][0]["artifacts"]["metrics.json"]
+                    path = Path(stage["directory"]) / "worker" / item["path"]
+                value = review_metrics(delta=name == "analysis")
+                scoped = value["review_scope"]
+                if field == "aggregate_ranks":
+                    scoped[field] = review.ALL_RANKS
+                elif field in {"expected_outputs", "excluded_rows"}:
+                    scoped[field] += 1
+                elif field == "overall":
+                    scoped[field]["metrics"]["nll"]["aggregate_ranks"] = review.ALL_RANKS
+                elif field == "by_rank":
+                    scoped[field]["5k"]["counts"]["moves"] = 2
+                else:
+                    del value["review_scope"]
+                pin = ref(path, value)
+                if name == "analysis":
+                    item["report"] = pin
+                else:
+                    item["sha256"] = pin["sha256"]
+                stage["summary"] = ref(summary_path, summary)
+                ref(run / "summary.json", changed)
+                with self.subTest(stage=name, field=field), self.assertRaisesRegex(ValueError, "review"):
+                    review.collect(run)
+            if name != "analysis":
+                artifact = saved_summary["reports"][0]["artifacts"]["metrics.json"]
+                ref(Path(original["directory"]) / "worker" / artifact["path"], review_metrics())
+                ref(summary_path, saved_summary)
+
+    def test_rerun_fails_when_rank_coverage_or_prediction_binding_changes(self):
+        run, main, _ = self.rerun_fixture()
+        changed = copy.deepcopy(main)
+        stage = changed["stages"]["preparation"]
+        summary_path = Path(stage["summary"]["path"])
+        original_summary = json.loads(summary_path.read_text())
+        summary = copy.deepcopy(original_summary)
+        item = summary["common_sets"][0]
+        item["coverage"]["by"]["source_rank_mover"][0]["moves"] = 10
+        stage["summary"] = ref(summary_path, summary)
+        ref(run / "summary.json", changed)
+        with self.assertRaisesRegex(ValueError, "rank coverage"):
+            review.collect(run)
+        ref(summary_path, original_summary)
+        changed = copy.deepcopy(main)
+        stage = changed["stages"]["analysis"]
+        config_path = Path(stage["config"]["path"])
+        config = json.loads(config_path.read_text())
+        key = config["parameters"]["common_sets"][0]["prediction_inputs"][review.ARMS[0]]
+        config["inputs"][key] = copy.deepcopy(config["inputs"][key])
+        config["inputs"][key]["path"] = str(run / "wrong-predictions.npz")
+        stage["config"] = ref(config_path, config)
+        stage["provenance"] = ref(Path(stage["provenance"]["path"]), {"inputs": config["inputs"]})
+        summary = json.loads(Path(stage["summary"]["path"]).read_text())
+        summary.update(config_file_sha256=stage["config"]["sha256"], provenance_sha256=stage["provenance"]["sha256"])
+        stage["summary"] = ref(Path(stage["summary"]["path"]), summary)
+        ref(run / "summary.json", changed)
+        with self.assertRaisesRegex(ValueError, "different saved predictions"):
+            review.collect(run)
+
+    def test_rerun_failure_before_training_reuse_is_explicit(self):
+        run, main, _ = self.rerun_fixture()
+        main.update(status="incomplete", reason="Saved-model validation failed", stages={}, reused_training={}, matched_training=False)
+        path = run / "failure.json"
+        ref(path, main)
+        result = review.collect(path)
+        self.assertEqual((result["status"], result["training"], result["games"]), ("incomplete", {}, []))
+        self.assertEqual(len(result["stages"]), 9)
+        self.assertTrue(all(stage["status"] == "unavailable" for stage in result["stages"]))
+        self.assertFalse(result["matched_training"])
 
     def test_completed_remaining_checks_preserve_incomplete_reference_and_cumulative_costs(self):
         path, completion, original = self.completion_fixture()
@@ -522,9 +844,10 @@ elements['game-cohort'].value='all';elements['game-arm'].value='all';elements['b
 const document={getElementById:id=>{assert.ok(elements[id],id);return elements[id];},createElement:tag=>new Element(tag),createElementNS:(ns,tag)=>new Element(tag),body:new Element('body')};
 const localStorage={data:new Map(),getItem(key){return this.data.get(key)??null;},setItem(key,value){this.data.set(key,value);}};
 let downloads=0;URL.createObjectURL=()=>{downloads++;return 'blob:synthetic';};URL.revokeObjectURL=()=>{};
-DATA.evaluations[DATA.sets[0]]['human-reference'].metrics.overall.metrics.nll.estimate={status:'positive_infinity',value:null};
-Object.values(DATA.paired[DATA.sets[0]])[0].overall.metrics.nll.estimate={status:'negative_infinity',value:null};
-DATA.evaluations[DATA.sets[0]]['combined-unconditioned'].metrics.overall.metrics.nll.estimate={status:'undefined',value:null};
+const selected=report=>DATA.review_rerun?report.review_scope:report;
+selected(DATA.evaluations[DATA.sets[0]]['human-reference'].metrics).overall.metrics.nll.estimate={status:'positive_infinity',value:null};
+selected(Object.values(DATA.paired[DATA.sets[0]])[0]).overall.metrics.nll.estimate={status:'negative_infinity',value:null};
+selected(DATA.evaluations[DATA.sets[0]]['combined-unconditioned'].metrics).overall.metrics.nll.estimate={status:'undefined',value:null};
 elements['expanded-data'].textContent=JSON.stringify(DATA);
 SCRIPT
 const textOf=node=>[node.textContent,...node.children.map(textOf)].join(' ');
@@ -547,7 +870,36 @@ assert.ok(textOf(elements['paired-table']).includes('−∞'));
 const trainingText=textOf(elements['training-table']),probeText=textOf(elements['probe-table']);
 assert.ok(trainingText.includes('1.389 h'));
 assert.ok(!trainingText.includes('0.028 h'));
-assert.ok(probeText.includes('0.028 h'));
+if(DATA.review_rerun){
+ assert.equal(elements['scope-select'].value,'review_scope');
+ assert.equal(elements['scope-select'].children.length,2);
+ assert.ok(elements['set-context'].textContent.includes('12k–1d'));
+ assert.ok(elements['set-context'].textContent.includes('1 included positions; 1 weaker-rank positions excluded'));
+ assert.ok(textOf(elements['metric-cards']).includes('1.25'));
+ assert.ok(!textOf(elements['metric-cards']).includes('2.1'));
+ assert.ok(textOf(elements['paired-table']).includes('-0.08'));
+ assert.ok(textOf(elements['calibration']).includes('0.125'));
+ assert.ok(textOf(elements['all-results']).includes('1.25'));
+ assert.ok(trainingText.includes('Historical GPU allocation charge'));
+ assert.ok(trainingText.includes('Historical CPU charge'));
+ assert.equal(probeText.trim(),'');
+ assert.ok(textOf(elements['cost-cards']).includes('New production CPU'));
+ assert.ok(textOf(elements['training-context']).includes('not spent again'));
+ assert.ok(textOf(elements['review-steps']).includes('kenggo-ydo.14'));
+ assert.ok(textOf(elements['review-steps']).includes('kenggo-ydo.6'));
+ elements['scope-select'].value='all_ranks';elements['scope-select'].listeners.change();
+ assert.ok(elements['set-context'].textContent.includes('all 16 ranks (diagnostic)'));
+ assert.ok(textOf(elements['metric-cards']).includes('2.1'));
+ assert.ok(!textOf(elements['metric-cards']).includes('1.25'));
+ assert.ok(textOf(elements['paired-table']).includes('-0.04'));
+ assert.ok(textOf(elements['calibration']).includes('0.875'));
+ assert.ok(textOf(elements['all-results']).includes('2.1'));
+ elements['breakdown-select'].value='by_rank';elements['breakdown-select'].listeners.change();
+ assert.ok(textOf(elements['metric-table']).includes('14k'));
+ elements['scope-select'].value='review_scope';elements['scope-select'].listeners.change();
+ assert.ok(!textOf(elements['metric-table']).includes('14k'));
+ elements['breakdown-select'].value='overall';elements['breakdown-select'].listeners.change();
+}else assert.ok(probeText.includes('0.028 h'));
 assert.equal(elements['set-select'].children.length,4);
 assert.equal(elements['game-select'].children.length,24);
 elements['game-arm'].value='conditioned';elements['game-arm'].listeners.change();assert.equal(elements['game-select'].children.length,8);

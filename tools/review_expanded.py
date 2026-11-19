@@ -20,10 +20,15 @@ SETS = tuple(f"{role}_komi{komi}" for role in ROLES for komi in (13, 1))
 STAGES = ("preparation", *("probe-" + arm for arm in ARMS), *ARMS,
           *("evaluation-" + arm for arm in ARMS), "evaluation-human-reference",
           "matches-baseline", "matches-combined", "analysis")
-MAX_JSON_BYTES = 32 * 1024**2
-MAX_PAGE_BYTES = 32 * 1024**2
+MAX_JSON_BYTES = 128 * 1024**2
+MAX_PAGE_BYTES = 64 * 1024**2
 FINISH_STAGES = {"analysis", "matches-baseline", "matches-combined"}
 REFERENCE_STAGE = "evaluation-human-reference"
+RERUN_SCHEMA = "expanded_e2_review_rerun_v1"
+RERUN_STAGES = ("preparation", *("evaluation-" + arm for arm in ARMS), "analysis",
+                "matches-baseline", "matches-combined", REFERENCE_STAGE)
+ALL_RANKS = [f"{rank}k" for rank in range(15, 0, -1)] + ["1d"]
+REVIEW_RANKS = ALL_RANKS[3:]
 
 
 def _path(reference, *, base=ROOT, owner=None):
@@ -169,6 +174,8 @@ def _costs(main, run):
             "reservations": ledger.get("state", {}).get("reservations", {}), "entries": current,
             "gpu_seconds_by_stage": {entry["run_id"][len(run.name) + 1:]: entry["gpu_seconds"]
                                      for entry in current},
+            "cpu_seconds_by_stage": {entry["run_id"][len(run.name) + 1:]: entry["cpu_seconds"]
+                                     for entry in current},
             "scope": "Cumulative GPU includes earlier pilots. This run includes failed jobs, device ownership waits, and tracking charges. "
                 + ("CPU includes both supervisors' ten-second closing reserves and the pinned completion preparation and verifier charge."
                    if main.get("completion_status") else "CPU includes the supervisor's retained ten-second closing reserve.")}
@@ -217,16 +224,84 @@ def _completion(main, run):
     return original, plan
 
 
-def _failed_stage(failure, run, reason, stage_status, summaries):
+def _rerun(main, plan, run):
+    inputs = plan.get("inputs", {})
+    if (main.get("previous_result") != inputs.get("previous_result")
+            or main.get("training_decision") != inputs.get("training_decision")
+            or plan.get("parameters", {}).get("review_ranks") != REVIEW_RANKS):
+        raise ValueError("Review rerun changed its pinned predecessor, training decision or rank scope")
+    original_plan = _json(inputs.get("original_plan"))
+    old_run = (ROOT / original_plan["parameters"]["output"]).resolve()
+    if (old_run == run or original_plan.get("purpose") != "expanded-pilot"
+            or original_plan.get("seed") != plan.get("seed")
+            or _path(main.get("previous_result"), owner=old_run) != old_run / "completion.json"
+            or _path(main.get("training_decision"), owner=old_run) != old_run / "frozen-training.json"):
+        raise ValueError("Review rerun must preserve the original run and fixed training decision")
+    previous = _json(main["previous_result"], owner=old_run)
+    if (previous.get("schema") != "expanded_e2_pilot_v1" or previous.get("status") != "incomplete"
+            or previous.get("completion_status") != "completed" or previous.get("promotion") != "not_promoted"
+            or previous.get("matched_training") is not True or previous.get("plan") != inputs.get("original_plan")
+            or previous.get("training_decision") != main["training_decision"]):
+        raise ValueError("Review rerun requires the pinned original completion and matched training")
+    reused = main.get("reused_training")
+    if (not isinstance(reused, dict) or set(reused) not in (set(), set(ARMS))
+            or main["status"] == "completed" and set(reused) != set(ARMS)
+            or main.get("stages") and set(reused) != set(ARMS)
+            or any(stage != previous.get("stages", {}).get(arm) for arm, stage in reused.items())):
+        raise ValueError("Reused training must exactly match all four pinned original stages")
+    old_entries = previous.get("costs", {}).get("ledger", {}).get("state", {}).get("entries")
+    entries = main.get("costs", {}).get("ledger", {}).get("state", {}).get("entries")
+    if (not isinstance(old_entries, list) or not isinstance(entries, list)
+            or entries[:len(old_entries)] != old_entries
+            or any(entry.get("gpu_seconds") != 0 for entry in entries[len(old_entries):])):
+        raise ValueError("Review rerun cannot replace historical charges or allocate new GPU time")
+    return previous, old_run
+
+
+def _review_counts(manifest, item):
+    coverage = manifest.get("coverage", {})
+    cells = coverage.get("by", {}).get("source_rank_mover", [])
+    if (manifest.get("aggregate_ranks") != ALL_RANKS or item["spec"].get("aggregate_ranks") != ALL_RANKS
+            or coverage != item.get("coverage") or len(cells) != len(ALL_RANKS)
+            or {cell.get("source_rank_mover") for cell in cells} != set(ALL_RANKS)
+            or any(type(cell.get("moves")) is not int or cell["moves"] < 0 for cell in cells)
+            or sum(cell["moves"] for cell in cells) != item["rows"]):
+        raise ValueError("Review scope needs complete pinned rank coverage and row counts")
+    by_rank = {cell["source_rank_mover"]: cell["moves"] for cell in cells}
+    rows = sum(by_rank[rank] for rank in REVIEW_RANKS)
+    return {"aggregate_ranks": REVIEW_RANKS, "expected_outputs": rows,
+            "excluded_rows": item["rows"] - rows, "rows_by_rank": by_rank}
+
+
+def _review_report(report, common, kind):
+    scope = common["review_scope"]
+    for value, ranks, rows in ((report, ALL_RANKS, common["rows"]),
+                              (report.get("review_scope"), REVIEW_RANKS, scope["expected_outputs"])):
+        if (not isinstance(value, dict) or value.get("kind") != kind
+                or value.get("aggregate_ranks") != ranks
+                or type(value.get("expected_outputs")) is not int or value["expected_outputs"] != rows
+                or value.get("overall", {}).get("counts", {}).get("moves") != rows
+                or set(value.get("by_rank", {})) != set(ranks)
+                or any(value["by_rank"][rank].get("counts", {}).get("moves") != scope["rows_by_rank"][rank]
+                       for rank in ranks)
+                or any(value.get("overall", {}).get("metrics", {}).get(name, {}).get("aggregate_ranks") != ranks
+                       for name in ("nll", "top1", "value_mse"))):
+            raise ValueError("Metric report differs from the pinned review rank scope or row counts")
+    if (type(report["review_scope"].get("excluded_rows")) is not int
+            or report["review_scope"]["excluded_rows"] != scope["excluded_rows"]):
+        raise ValueError("Metric report differs from the pinned review excluded rows")
+
+
+def _failed_stage(failure, run, reason, stage_status, summaries, stage_names=STAGES):
     if failure is None:
         return None
     name = failure.get("name")
     directory = (ROOT / failure["directory"]).resolve()
-    if name not in STAGES or directory != run / name:
+    if name not in stage_names or directory != run / name:
         raise ValueError("Failed stage leaves the expected run directory")
     checked = {}
     allowed = {"config.json", "provenance.json", "worker/job.json", "worker/summary.json", "worker/training_summary.json",
-               "worker/failure.json", "worker/training_failure.json"}
+               "worker/failure.json", "worker/progress.json", "worker/training_failure.json"}
     for relative, reference in failure.get("artifacts", {}).items():
         if relative not in allowed or _path(reference, owner=directory) != directory / relative:
             raise ValueError("Unexpected failed-stage artifact")
@@ -239,9 +314,12 @@ def _failed_stage(failure, run, reason, stage_status, summaries):
     return {"name": name, "artifacts": checked, "pins": failure["artifacts"]}
 
 
-def _partial_reference(reference, failure, common_sets, run):
+def _partial_reference(reference, failure, common_sets, run, *, rerun=False):
     worker = run / REFERENCE_STAGE / "worker"
-    if _path(reference, owner=worker) != worker / "progress.json" or failure is None:
+    allowed = {worker / "progress.json"}
+    if rerun:
+        allowed |= {worker / "summary.json", worker / "failure.json"}
+    if _path(reference, owner=worker) not in allowed or failure is None or failure["name"] != REFERENCE_STAGE:
         raise ValueError("Partial reference progress must belong to the original failed worker")
     checked, pins = failure["artifacts"], failure["pins"]
     if not {"config.json", "provenance.json", "worker/job.json"} <= checked.keys():
@@ -249,7 +327,8 @@ def _partial_reference(reference, failure, common_sets, run):
     config, provenance, job = (checked[name] for name in ("config.json", "provenance.json", "worker/job.json"))
     if (config.get("purpose") != "baseline-evaluation" or config.get("arm") != "human-reference"
             or provenance.get("inputs") != config.get("inputs")
-            or job.get("schema") != "bounded_pilot_job_v1" or job.get("status") != "failed"
+            or job.get("schema") != "bounded_pilot_job_v1"
+            or job.get("status") not in ({"failed", "completed"} if rerun else {"failed"})
             or job.get("run_id") != run.name + "-" + REFERENCE_STAGE):
         raise ValueError("Partial reference does not match its original failed evaluation job")
     command = job.get("command", [])
@@ -293,9 +372,19 @@ def _partial_reference(reference, failure, common_sets, run):
             raise ValueError("An unfinished reference set cannot supply a completed report")
         observations.append({"set": identity, "status": state["status"], "completed_rows": state["completed_rows"],
                              "expected_rows": state["expected_rows"], "report_available": completed})
-    return reports, {"reference": reference, "job_status": "failed", "job_reason": job.get("reason"),
+    return reports, {"reference": reference, "job_status": job["status"], "job_reason": job.get("reason"),
         "progress_status": progress["status"], "sets": observations,
-        "scope": "Last saved worker observations, not final native shutdown counts. Only complete pinned set reports are shown; the original reference job remains failed and was not restarted."}
+        "scope": "Last saved worker observations, not final native shutdown counts. Only complete pinned set reports are shown; the reference stage remains failed and was not restarted."}
+
+
+def _display_details(value):
+    """Keep estimates and support summaries; link the full weighting audit separately."""
+    omitted = {"side_weights", "incident_account_weights", "mover_contribution_weights", "game_influences", "by_komi"}
+    if isinstance(value, dict):
+        return {key: _display_details(item) for key, item in value.items() if key not in omitted}
+    if isinstance(value, list):
+        return [_display_details(item) for item in value]
+    return value
 
 
 def collect(source, *, input_sha256=None):
@@ -306,31 +395,38 @@ def collect(source, *, input_sha256=None):
     run, pin = path.parent, input_sha256 or file_hash(path)
     main = _json({"path": str(path), "sha256": pin}, owner=run)
     status = _status(main, "Expanded run")
-    if (main.get("schema") != "expanded_e2_pilot_v1"
+    rerun = main.get("schema") == RERUN_SCHEMA
+    stage_names = RERUN_STAGES if rerun else STAGES
+    if (main.get("schema") not in {"expanded_e2_pilot_v1", RERUN_SCHEMA}
             or path.name == "summary.json" and status != "completed"
             or path.name == "failure.json" and status not in {"incomplete", "failed"}
+            or rerun and path.name == "completion.json"
             or main.get("promotion") != "not_promoted"):
         raise ValueError("The selected output is not an explicit expanded comparison result")
     plan = _json(main["plan"])
-    if plan.get("purpose") != "expanded-pilot" or plan.get("seed") != 20261118:
+    if plan.get("purpose") != ("expanded-review" if rerun else "expanded-pilot") or plan.get("seed") != 20261118:
         raise ValueError("Saved plan does not describe the expanded E2 comparison")
     stages = main.get("stages")
-    if not isinstance(stages, dict) or set(stages) - set(STAGES):
+    if not isinstance(stages, dict) or set(stages) - set(stage_names):
         raise ValueError("Unexpected expanded stage names")
-    if status == "completed" and set(stages) != set(STAGES):
+    if status == "completed" and set(stages) != set(stage_names):
         raise ValueError("Completed expanded output is missing a required stage")
+    previous, old_run = _rerun(main, plan, run) if rerun else (None, None)
     original, completion_plan = _completion(main, run) if path.name == "completion.json" else (None, None)
     if original is None and any(key in main for key in ("completion_status", "completion_plan", "partial_reference_progress")):
         raise ValueError("Remaining-check evidence requires an explicit completion.json")
     finish_completed = main.get("completion_status") == "completed"
     summaries, configs, evidence, stage_status = {}, {}, [], []
-    for name in STAGES:
+    stages = dict(main.get("reused_training", {}), **stages) if rerun else stages
+    for name in ((*ARMS, *stage_names) if rerun else stage_names):
+        historical = rerun and name in ARMS
         if name not in stages:
-            stage_status.append({"name": name, "status": "unavailable", "reason": "No completed pinned stage"})
+            if not historical:
+                stage_status.append({"name": name, "status": "unavailable", "reason": "No completed pinned stage"})
             continue
         stage = stages[name]
         directory = (ROOT / stage["directory"]).resolve()
-        if directory != run / name:
+        if directory != (old_run if historical else run) / name:
             raise ValueError("Stage directory differs from its declared name")
         config = _json(stage["config"], owner=directory)
         provenance = _json(stage["provenance"], owner=directory)
@@ -344,15 +440,20 @@ def collect(source, *, input_sha256=None):
         if ((status == "completed" or finish_completed) and stage_state != "completed"
                 and not (name.startswith("matches-") and stage_state == "incomplete")):
             raise ValueError("Completed pipeline contains an unfinished required stage")
+        if historical and (stage_state != "completed" or stage.get("job", {}).get("status") != "completed"
+                or config.get("inputs", {}).get("training_decision") != main["training_decision"]):
+            raise ValueError("Reused training is incomplete or changed its fixed training decision")
         summaries[name], configs[name] = summary, config
-        stage_status.append({"name": name, "status": stage_state, "reason": summary.get("reason"),
-                             "job": stage.get("job", {}), "wandb_url": stage.get("wandb_url")})
+        if not historical:
+            stage_status.append({"name": name, "status": stage_state, "reason": summary.get("reason"),
+                                 "job": stage.get("job", {}), "wandb_url": stage.get("wandb_url")})
         evidence.append({"label": name, "summary": stage["summary"], "config": stage["config"],
-                         "provenance": stage["provenance"], "wandb_url": stage.get("wandb_url")})
+                         "provenance": stage["provenance"], "wandb_url": stage.get("wandb_url"),
+                         "historical": historical})
     original_reason = original.get("reason") if original is not None else main.get("reason")
     completion_reason = main.get("completion_reason", main.get("reason")) if original is not None else None
-    failure = _failed_stage(main.get("failed_stage"), run, original_reason, stage_status, summaries)
-    completion_failure = _failed_stage(main.get("completion_failed_stage"), run, completion_reason, stage_status, summaries)
+    failure = _failed_stage(main.get("failed_stage"), run, original_reason, stage_status, summaries, stage_names)
+    completion_failure = _failed_stage(main.get("completion_failed_stage"), run, completion_reason, stage_status, summaries, stage_names)
     common_sets, selection = {}, None
     if "preparation" in summaries:
         prepared = summaries["preparation"]
@@ -372,11 +473,19 @@ def collect(source, *, input_sha256=None):
                 raise ValueError("Frozen common set differs from its preparation summary")
             common_sets[spec["id"]] = {"spec": spec, "rows": item["rows"], "coverage": item["coverage"],
                                       "manifest": item["manifest"]}
+            if rerun:
+                common_sets[spec["id"]]["review_scope"] = _review_counts(manifest, item)
+        if rerun and set(common_sets) != set(SETS):
+            raise ValueError("Review preparation must retain all four declared common sets")
     partial_reference = None
-    if main.get("partial_reference_progress") is not None:
-        reports, partial_reference = _partial_reference(main["partial_reference_progress"], failure, common_sets, run)
+    progress_ref = main.get("partial_reference_progress")
+    if rerun and failure is not None and failure["name"] == REFERENCE_STAGE:
+        progress_ref = next((failure["pins"][key] for key in
+            ("worker/progress.json", "worker/summary.json", "worker/failure.json") if key in failure["pins"]), None)
+    if progress_ref is not None:
+        reports, partial_reference = _partial_reference(progress_ref, failure, common_sets, run, rerun=rerun)
         summaries[REFERENCE_STAGE] = {"status": "failed", "reports": reports}
-    evaluations, predictions = {identity: {} for identity in SETS}, {}
+    evaluations, predictions, full_reports = {identity: {} for identity in SETS}, {}, []
     for arm in (*ARMS, "human-reference"):
         name = "evaluation-" + arm
         if name not in summaries:
@@ -393,8 +502,13 @@ def collect(source, *, input_sha256=None):
             artifacts, output = report["artifacts"], {}
             for kind in ("metrics", "sampling", "timing"):
                 output[kind] = _json(artifacts[kind + ".json"], base=worker, owner=worker)
+                full_reports.append({"label": f"{identity} / {arm} / {kind}",
+                    "path": str(_path(artifacts[kind + ".json"], base=worker, owner=worker)),
+                    "sha256": artifacts[kind + ".json"]["sha256"]})
             if output["metrics"].get("expected_outputs") != report["rows"]:
                 raise ValueError("Metric row count differs from the evaluated common set")
+            if rerun:
+                _review_report(output["metrics"], common_sets[identity], "single_model")
             ref = artifacts["predictions.npz"]
             predicted = _path(ref, base=worker, owner=worker)
             if predicted.suffix != ".npz" or file_hash(predicted) != ref["sha256"]:
@@ -404,6 +518,10 @@ def collect(source, *, input_sha256=None):
             evaluations[identity][arm] = output | {"rows": report["rows"], "coverage": report.get("coverage"),
                 "out_of_training_support_komi_halfpoints": report.get("out_of_training_support_komi_halfpoints", []),
                 "prediction": predictions[identity, arm]}
+        if rerun and summaries[name]["status"] == "completed":
+            expected = {identity for identity in SETS if arm != "human-reference" or identity.endswith("komi13")}
+            if {identity for identity in SETS if arm in evaluations[identity]} != expected:
+                raise ValueError("Completed review evaluation lacks a declared common-set report")
     paired = {}
     if "analysis" in summaries:
         for identity, comparisons in summaries["analysis"]["comparisons"].items():
@@ -414,7 +532,18 @@ def collect(source, *, input_sha256=None):
                 report = _json(item["report"], owner=run / "analysis")
                 if report.get("kind") != "candidate_minus_control" or report.get("overall") != item["overall"]:
                     raise ValueError("Paired analysis summary differs from its saved report")
+                if rerun:
+                    _review_report(report, common_sets[identity], "candidate_minus_control")
                 paired[identity][contrast] = report
+                full_reports.append({"label": f"{identity} / {contrast}",
+                    "path": str(_path(item["report"], owner=run / "analysis")), "sha256": item["report"]["sha256"]})
+        if rerun:
+            contrasts = {ARMS[first] + "_minus_" + ARMS[second] for first, second in ((0, 1), (2, 3), (2, 0), (3, 1))}
+            specs = configs["analysis"]["parameters"]["common_sets"]
+            if (set(paired) != set(SETS) or any(set(items) != contrasts for items in paired.values())
+                    or len(specs) != len(SETS) or {spec["id"] for spec in specs} != set(SETS)
+                    or any(set(spec["prediction_inputs"]) != set(ARMS) for spec in specs)):
+                raise ValueError("Review analysis must retain all declared contrasts and prediction inputs")
         for spec in configs["analysis"]["parameters"]["common_sets"]:
             for arm, input_name in spec["prediction_inputs"].items():
                 reference = configs["analysis"]["inputs"][input_name]
@@ -438,12 +567,15 @@ def collect(source, *, input_sha256=None):
             matched = matched and [block["order_sha256"] for block in left.get("update_metrics", [])] == [
                 block["order_sha256"] for block in right.get("update_metrics", [])]
     if ((status == "completed" and main.get("matched_training") is not True)
-            or (status == "completed" or original is not None) and not matched):
+            or (status == "completed" or original is not None or rerun and training) and not matched):
         raise ValueError("Completed comparison lacks matched training evidence")
     if original is not None and any(configs[arm].get("inputs", {}).get("training_decision") != main["training_decision"]
                                     for arm in ARMS):
         raise ValueError("Completion changed the original training decision")
-    decision = _json(main["training_decision"], owner=run) if main.get("training_decision") else None
+    decision = _json(main["training_decision"], owner=old_run if rerun else run) if main.get("training_decision") else None
+    if rerun and matched and (main.get("matched_training") is not True
+            or any(item["completed_updates"] != decision.get("updates") for item in training.values())):
+        raise ValueError("Review training differs from its pinned fixed update decision")
     panels, games = {}, []
     for cohort in ("baseline", "combined"):
         name = "matches-" + cohort
@@ -451,9 +583,12 @@ def collect(source, *, input_sha256=None):
             panel_games, replay = _games(summaries[name], run / name / "worker", cohort)
             games.extend(panel_games)
             panels[cohort] = {"summary": summaries[name], "replay_status": replay}
-    return {"schema": "expanded_e2_review_v1", "bundle_id": pin, "input": {"path": str(path), "sha256": pin},
+    data = {"schema": "expanded_e2_review_v1", "bundle_id": pin, "input": {"path": str(path), "sha256": pin},
         "input_pin_scope": "Caller supplied" if input_sha256 else "Observed during export; downstream references checked against their saved pins",
         "status": status, "reason": original_reason, "plan": main["plan"], "plan_parameters": plan["parameters"],
+        "review_rerun": rerun, "default_scope": "review_scope" if rerun else "all_ranks",
+        "previous_result": main.get("previous_result"),
+        "historical_costs": _costs(previous, old_run) if rerun else None,
         "completion_status": main.get("completion_status"), "completion_reason": completion_reason,
         "completion_plan": main.get("completion_plan"), "completion_parameters": completion_plan.get("parameters") if completion_plan else None,
         "original_failure": main.get("original_failure"), "partial_reference": partial_reference,
@@ -461,9 +596,12 @@ def collect(source, *, input_sha256=None):
         "evaluations": evaluations, "paired": paired, "training": training, "probes": probes,
         "training_decision": decision, "matched_training": matched, "costs": _costs(main, run),
         "stages": stage_status, "failure": failure, "completion_failure": completion_failure,
-        "panels": panels, "games": games, "evidence": evidence,
+        "panels": panels, "games": games, "evidence": evidence, "full_reports": full_reports,
         "promotion": "not_promoted", "feedback_recorded": False,
-        "limitations": ["One training seed. This experiment cannot promote an opponent profile or claim a human rank.",
+        "limitations": (["The 12k–1d review scope was chosen from metadata before new predictions. All 16 ranks remain in diagnostics; the 15k–13k ranks have sparse games or accounts, so more runtime cannot supply missing support.",
+            "This evaluation reuses the original four models. Historical training charges remain in the cumulative ledger and are not new rerun CPU or GPU spending.",
+            "Unknown pass judgments and unresolved endings can reflect genuine referee limits. Larger execution budgets do not change referee search, cleanup or acceptance thresholds."] if rerun else []) +
+            ["One training seed. This experiment cannot promote an opponent profile or claim a human rank.",
             "The addition changes both the source population and its komi mix; it does not isolate a komi effect.",
             "6.5-only models on 0.5-komi positions are outside their training support.",
             "Human SL is evaluated at 6.5 komi only, with its documented history and era/time defaults; training overlap is unknown.",
@@ -471,6 +609,7 @@ def collect(source, *, input_sha256=None):
             "The two raw-play panels schedule 24 games in total against two weak policies. Repeated Human SL controls are not independent extra strength evidence.",
             "Display boards reconstruct pinned moves with capture handling only. Saved worker replay verification is separate; this export performs no legality, scoring, or referee checks.",
             "No inference runs here. Raw datasets and checkpoint contents are not opened. Confirmation and final targets remain sealed."]}
+    return _display_details(data) if rerun else data
 
 
 def render(data):
@@ -481,7 +620,7 @@ def render(data):
         raise ValueError("The review template needs exactly one data marker")
     page = template.replace("__EXPANDED_DATA_JSON__", encoded)
     if len(page.encode()) > MAX_PAGE_BYTES:
-        raise ValueError("Review page exceeds its 32 MiB allowance")
+        raise ValueError("Review page exceeds its 64 MiB allowance")
     return page
 
 

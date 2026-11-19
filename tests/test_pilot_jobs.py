@@ -1,4 +1,5 @@
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -6,11 +7,31 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from kenggo import pilot_jobs
 from kenggo.pilot_jobs import JobLimits, run_job
 from kenggo.resource_ledger import BudgetLedger
 
 
 class PilotJobTests(unittest.TestCase):
+    def test_idle_job_does_not_rescan_every_output_file_on_each_process_poll(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            with patch.object(pilot_jobs, "_output_bytes", wraps=pilot_jobs._output_bytes) as scans, \
+                 patch.object(pilot_jobs, "_usage", wraps=pilot_jobs._usage) as process_checks:
+                result, _ = self.run_fixture(Path(temporary), "import time; time.sleep(.3)")
+            self.assertEqual(result["status"], "completed")
+            self.assertLessEqual(scans.call_count, math.ceil(result["costs"]["wall_seconds"]) + 2)
+            self.assertGreater(process_checks.call_count, scans.call_count)
+
+    def test_output_growth_stops_a_live_job_between_periodic_scans(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            result, ledger = self.run_fixture(Path(temporary),
+                "import time; print('x' * 50000, flush=True); time.sleep(30)",
+                limits=JobLimits(3, 3, 10000, 1))
+            self.assertEqual(result["reason"], "output_budget")
+            self.assertLess(result["costs"]["wall_seconds"], 2)
+            self.assertGreater(result["observed_output_bytes"], 10000)
+            self.assertFalse(ledger["state"]["reservations"])
+
     def test_atomic_progress_replacement_during_output_scan_does_not_kill_the_job(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

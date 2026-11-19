@@ -13,6 +13,9 @@ import time
 from kenggo.checkpoints import save_json
 
 
+OUTPUT_SCAN_SECONDS = 1.0
+
+
 @dataclass(frozen=True)
 class JobLimits:
     wall_seconds: float
@@ -109,6 +112,7 @@ def run_job(command, output, *, cwd, limits, ledger, run_id, arm_shares, device=
     known_pids = set()
     reason, error = None, None
     output_bytes = 0
+    next_output_scan = started
     try:
         with (output / "stdout.log").open("xb") as stdout, (output / "stderr.log").open("xb") as stderr:
             process = subprocess.Popen(command, cwd=cwd, env=environment, stdin=subprocess.DEVNULL,
@@ -130,7 +134,10 @@ def run_job(command, output, *, cwd, limits, ledger, run_id, arm_shares, device=
                     if process.returncode != 0:
                         reason = "process_exit"
                     break
-                output_bytes = _output_bytes(output)
+                now = time.monotonic()
+                if now >= next_output_scan:
+                    output_bytes = _output_bytes(output)
+                    next_output_scan = now + OUTPUT_SCAN_SECONDS
                 if time.monotonic() - started >= limits.wall_seconds:
                     reason = "wall_budget"
                 elif time.process_time() - cpu_started + observed_cpu >= limits.cpu_seconds:
@@ -171,10 +178,10 @@ def run_job(command, output, *, cwd, limits, ledger, run_id, arm_shares, device=
         reaped_cpu = 0 if usage is None else usage.ru_utime + usage.ru_stime
         shutdown_charge = ((time.monotonic() - shutdown_started + 0.02) * len(os.sched_getaffinity(0))
                            if process is not None and len(known_pids) > 1 and reason else 0)
+        output_bytes = _output_bytes(output)
         parent_cpu = time.process_time() - cpu_started
         child_cpu = max(observed_cpu, reaped_cpu) + shutdown_charge
         costs = {"wall_seconds": time.monotonic() - started, "cpu_seconds": parent_cpu + child_cpu}
-        output_bytes = _output_bytes(output)
         if reason is None:
             if costs["cpu_seconds"] > limits.cpu_seconds:
                 reason = "cpu_budget"
@@ -193,7 +200,8 @@ def run_job(command, output, *, cwd, limits, ledger, run_id, arm_shares, device=
                       parent_cpu_seconds=parent_cpu, child_cpu_seconds=child_cpu,
                       observed_output_bytes=output_bytes, conservative_shutdown_cpu_seconds=shutdown_charge,
                       cpu_scope="parent and reaped child; retained sampled descendants with conservative forced shutdown charge",
-                      sampling_seconds=0.02, ledger_reservation_retained=False)
+                      sampling_seconds=0.02, output_sampling_seconds=OUTPUT_SCAN_SECONDS,
+                      ledger_reservation_retained=False)
         save_json(output / "job.json", record, replace=True)
     if error is not None:
         raise error

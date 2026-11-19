@@ -6,7 +6,8 @@ from pathlib import Path
 import re
 
 from kenggo.base_pilot import ROOT, _common_inputs, _ref
-from kenggo.baseline_evaluation import load_predictions, rows_for_common
+from kenggo.baseline_evaluation import (WEEK_REVIEW_RANKS, load_predictions,
+                                       rank_scope, rows_for_common)
 from kenggo.canonical_data import digest, encoded
 from kenggo.checkpoints import file_hash, json_hash, read_json, save_json
 from kenggo.data_splits import read_membership
@@ -21,6 +22,7 @@ SEED = 20261118
 ROLES = ("population_development", "validation_development")
 KOMI = (13, 1)
 SELECTION = {"games_per_rank": 2, "max_games_per_set": 32, "max_rows_per_set": 12000}
+REVIEW_SELECTION = {"games_per_rank": 10, "max_games_per_set": 160, "max_rows_per_set": 50000}
 ARMS = ("baseline-conditioned", "baseline-unconditioned", "combined-conditioned", "combined-unconditioned")
 CONTRASTS = ((ARMS[0], ARMS[1]), (ARMS[2], ARMS[3]), (ARMS[2], ARMS[0]), (ARMS[3], ARMS[1]))
 
@@ -31,12 +33,13 @@ def _configuration(config, purpose):
         raise ValueError("Expanded jobs require their declared purpose and frozen seed")
 
 
-def select_games(candidates, *, role, komi_halfpoints, seed=SEED, selection=None):
+def select_games(candidates, *, role, komi_halfpoints, seed=SEED, selection=None, review=False):
     """Choose complete games from membership and input metadata alone."""
-    selection = dict(SELECTION if selection is None else selection)
-    if (role not in ROLES or type(komi_halfpoints) is not int or komi_halfpoints not in KOMI
+    ceiling = REVIEW_SELECTION if review else SELECTION
+    selection = dict(ceiling if selection is None else selection)
+    if (type(review) is not bool or role not in ROLES or type(komi_halfpoints) is not int or komi_halfpoints not in KOMI
             or type(seed) is not int or seed != SEED or set(selection) != set(SELECTION)
-            or any(type(value) is not int or not 0 < value <= SELECTION[key]
+            or any(type(value) is not int or not 0 < value <= ceiling[key]
                    for key, value in selection.items())):
         raise ValueError("Selection must fit the frozen development roles, seed and whole-game limits")
     candidates = list(candidates)
@@ -108,19 +111,22 @@ def _development_candidates(inputs):
 
 
 def prepare(config, output):
-    _configuration(config, "expanded-preparation")
+    review = config["purpose"] == "expanded-review-preparation"
+    _configuration(config, "expanded-review-preparation" if review else "expanded-preparation")
     selection = config["parameters"].get("selection")
-    if (selection != SELECTION or any(type(value) is not int for value in selection.values())):
-        raise ValueError("Preparation requires the frozen two-game, 32-game, 12,000-row selection")
+    if (selection != (REVIEW_SELECTION if review else SELECTION)
+            or any(type(value) is not int for value in selection.values())):
+        raise ValueError("Preparation requires its frozen complete-game selection")
     output, inputs = Path(output), _common_inputs(config["inputs"])
     candidates = _development_candidates(inputs)
     chosen = [select_games(candidates, role=role, komi_halfpoints=komi,
-                           seed=config["seed"], selection=selection) for role in ROLES for komi in KOMI]
+                           seed=config["seed"], selection=selection, review=review) for role in ROLES for komi in KOMI]
     selection_path = output / "selection.json"
     save_json(selection_path, {"schema": "expanded_selection_v1", "seed": config["seed"],
         "limits": selection, "ranks": list(RANKS), "sets": chosen,
         "ordering": "SHA256 of canonical JSON [seed, role, komi_halfpoints, rank, source_url]",
-        "target_or_prediction_selection": False})
+        "target_or_prediction_selection": False,
+        **({"review_ranks": WEEK_REVIEW_RANKS} if review else {})})
     result = []
     for selected in chosen:
         spec = selected["spec"]
@@ -150,6 +156,7 @@ def prepare(config, output):
 
 
 def _analysis_specs(config):
+    ceiling = REVIEW_SELECTION if config["purpose"] == "expanded-review-analysis" else SELECTION
     specs, refs = config["parameters"].get("common_sets"), config["inputs"]
     if not isinstance(specs, list) or len(specs) != len(ROLES) * len(KOMI):
         raise ValueError("Analysis requires all four frozen development sets")
@@ -173,8 +180,8 @@ def _analysis_specs(config):
         if (manifest.get("version") != RAW_VERSION or manifest.get("role") != spec["role"]
                 or manifest.get("aggregate_ranks") != RANKS
                 or set(manifest.get("source_ids", [])) != set(spec["source_ids"])
-                or not 0 < len(rows) <= SELECTION["max_rows_per_set"]
-                or len(spec["source_ids"]) > SELECTION["max_games_per_set"]
+                or not 0 < len(rows) <= ceiling["max_rows_per_set"]
+                or len(spec["source_ids"]) > ceiling["max_games_per_set"]
                 or len(komi) != 1 or not komi <= set(KOMI)):
             raise ValueError("Analysis manifest differs from the frozen role, rank, komi or row scope")
         stratum = spec["role"], next(iter(komi))
@@ -190,7 +197,8 @@ def _analysis_specs(config):
 
 
 def analyze(config, output):
-    _configuration(config, "expanded-analysis")
+    review = config["purpose"] == "expanded-review-analysis"
+    _configuration(config, "expanded-review-analysis" if review else "expanded-analysis")
     expected = _analysis_specs(config)
     inputs, result, output = _common_inputs(config["inputs"]), {}, Path(output)
     for spec, manifest in expected:
@@ -212,6 +220,12 @@ def analyze(config, output):
             name = candidate + "_minus_" + control
             report = paired_report(rows, predictions[candidate], predictions[control],
                                    aggregate_ranks=spec["aggregate_ranks"])
+            if review:
+                scoped_rows, candidate_predictions = rank_scope(rows, predictions[candidate])
+                _, control_predictions = rank_scope(rows, predictions[control])
+                report["review_scope"] = paired_report(scoped_rows, candidate_predictions,
+                    control_predictions, aggregate_ranks=WEEK_REVIEW_RANKS)
+                report["review_scope"]["excluded_rows"] = len(rows) - len(scoped_rows)
             path = output / f"{spec['id']}-{name}.json"
             save_json(path, report)
             result[spec["id"]][name] = {"report": _ref(path), "overall": report["overall"]}
@@ -230,7 +244,8 @@ def local_worker(config_path, config_pin, provenance_path, provenance_pin, outpu
         config = read_json(config_path, config_pin)
         provenance = read_json(provenance_path, provenance_pin)
         validate_config(config)
-        if config["purpose"] not in ("expanded-preparation", "expanded-analysis"):
+        if config["purpose"] not in ("expanded-preparation", "expanded-analysis",
+                                      "expanded-review-preparation", "expanded-review-analysis"):
             raise ValueError("Unexpected expanded worker purpose")
         required = {"data", "canonical", "split", "examples", "normalizer", "profile", "rules", "cpu_environment"}
         if not required <= config["inputs"].keys() or any(
@@ -245,7 +260,7 @@ def local_worker(config_path, config_pin, provenance_path, provenance_pin, outpu
                 or not isinstance(provenance.get("environment"), dict)
                 or json_hash(provenance) != provenance_pin or provenance.get("source") != current["source"]):
             raise ValueError("Worker source or inputs differ from canonical pinned provenance")
-        result = (prepare if config["purpose"] == "expanded-preparation" else analyze)(config, output)
+        result = (prepare if config["purpose"].endswith("preparation") else analyze)(config, output)
         after, _ = capture_provenance(ROOT, config["inputs"])
         if after["source"] != current["source"]:
             raise ValueError("Worker source changed")

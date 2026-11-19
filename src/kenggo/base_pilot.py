@@ -153,7 +153,7 @@ def _worker_reports(config, directory, summary):
                     "median_seconds": seconds[math.ceil(len(seconds) * .5) - 1] if seconds else None,
                     "p95_seconds": seconds[math.ceil(len(seconds) * .95) - 1] if seconds else None,
                     "method": "nearest_rank", "scope": timing.get("scope")}}
-    elif config["purpose"] in {"baseline-analysis", "expanded-analysis"}:
+    elif config["purpose"] in {"baseline-analysis", "expanded-analysis", "expanded-review-analysis"}:
         for role, comparisons in summary["comparisons"].items():
             for name, comparison in comparisons.items():
                 result[role + "/" + name] = read(comparison["report"], repository_relative=True)
@@ -169,7 +169,8 @@ def _report_metrics(reports):
     result = {}
     omitted = {"side_weights", "lengths", "sgfs", "disagreements", "coverage", "joint_cells", "diagnostics",
                "aggregate_ranks", "missing_ranks", "reasons", "scope", "method", "uncertainty_method",
-               "weighting", "classifier", "categories", "model_distribution"}
+               "weighting", "classifier", "categories", "model_distribution", "game_influences",
+               "incident_account_weights", "mover_contribution_weights"}
 
     def visit(value, prefix):
         if isinstance(value, dict):

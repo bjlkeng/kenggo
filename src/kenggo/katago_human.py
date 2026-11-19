@@ -121,7 +121,8 @@ class ReferenceBudget:
         if (not _integer(self.queries, 0, 10_000_000)
                 or not _finite(self.cpu_seconds, 0.001, 86400)
                 or not _finite(self.wall_seconds, 0.001, 86400)
-                or any(not _integer(getattr(self, field), minimum, 1024**3)
+                or any(not _integer(getattr(self, field), minimum,
+                                    (2 if field == "trace_bytes" else 1) * 1024**3)
                        for field, minimum in (("request_bytes", 1), ("response_bytes", 1),
                                               ("stderr_bytes", 0), ("trace_bytes", 4096)))):
             raise ValueError("Invalid finite reference budget")

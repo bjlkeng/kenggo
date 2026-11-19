@@ -278,11 +278,45 @@ class ExpandedEvaluationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "nonoverlapping"):
                 self.run_config(config)
             with patch.object(worker, "MAX_RAW_COMMON_ROWS", 2):
-                with self.assertRaisesRegex(ValueError, "12,000-row"):
+                with self.assertRaisesRegex(ValueError, "2-row"):
                     self.run_config(self.config(learned))
         with patch.object(worker, "HumanSL", side_effect=AssertionError("Native reference started")):
             with self.assertRaisesRegex(ValueError, "6.5-point komi"):
                 self.run_config(self.config())
+
+    def test_review_scope_is_additional_and_cannot_hide_missing_outputs(self):
+        learned = artifacts(self.root / "review-model", self.control, training_komi=[13])
+        config = self.config(learned)
+        config["parameters"]["evaluation_scope"] = worker.WEEK_REVIEW_SCOPE
+        with patch.object(worker, "MAX_RAW_COMMON_ROWS", 2), patch.object(worker, "MAX_REVIEW_ROWS", 4):
+            output, result = self.run_config(config)
+        for report in result["reports"]:
+            metrics = json.loads((output / report["artifacts"]["metrics.json"]["path"]).read_text())
+            self.assertEqual(metrics["expected_outputs"], report["rows"])
+            self.assertEqual(metrics["aggregate_ranks"], RANKS)
+            self.assertEqual(metrics["review_scope"]["aggregate_ranks"], worker.WEEK_REVIEW_RANKS)
+            self.assertEqual(metrics["review_scope"]["expected_outputs"], report["rows"])
+            self.assertEqual(metrics["review_scope"]["excluded_rows"], 0)
+        with patch.object(worker, "MAX_REVIEW_ROWS", 2), \
+                patch.object(worker.LearnedPolicy, "load", side_effect=AssertionError("No inference")):
+            with self.assertRaisesRegex(ValueError, "2-row"):
+                self.run_config(config)
+        predict = worker._learned_predictions
+        with patch.object(worker, "_learned_predictions", side_effect=lambda *args, **kwargs:
+                          predict(*args, **kwargs)[:-1]), \
+                patch.object(worker, "rank_scope", side_effect=AssertionError("Do not filter failed output")):
+            with self.assertRaisesRegex(ValueError, "original order"):
+                self.run_config(config)
+
+    def test_rank_scope_excludes_reporting_rows_without_changing_full_row_order(self):
+        rows = [{"row_key": "weak", "source_rank_mover": "13k"},
+                {"row_key": "included", "source_rank_mover": "12k"}]
+        from kenggo.recorded_statistics import Prediction
+        predictions = [Prediction(row["row_key"], (0.,) + (-float("inf"),) * 361, 0.) for row in rows]
+        selected, outputs = worker.rank_scope(rows, predictions)
+        self.assertEqual(selected, [rows[1]])
+        self.assertEqual(outputs, [predictions[1]])
+        self.assertEqual([row["row_key"] for row in rows], ["weak", "included"])
 
 
 if __name__ == "__main__":

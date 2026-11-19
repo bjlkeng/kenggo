@@ -1,0 +1,325 @@
+{
+  "arm": "shared",
+  "base_url": "https://api.wandb.ai",
+  "budget_id": "e0-sl-pilot-v1",
+  "comparison": "E2-expanded-review-v1",
+  "entity": "bjlkeng",
+  "inputs": {
+    "comparison_protocol": {
+      "path": "plan/e2_review_rerun_v1.md",
+      "sha256": "e247c20b02b41212b01a362bcccda19919b2d725de1f56ca70b50ba7dfd9c6c7"
+    },
+    "data": {
+      "path": "manifests/e2_komi_study_v1.json",
+      "sha256": "cabea6a5894fb853bb29cb6805529efaa054ed2c010643467356d6bf99c69edc"
+    },
+    "human_config": {
+      "path": "configs/katago_human_v1.cfg",
+      "sha256": "458d11b4559397e29c2e91503bbfafdcb9f15fe79a8edb11a71ad6d07ce76ecb"
+    },
+    "human_engine": {
+      "path": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+      "sha256": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308"
+    },
+    "human_main_model": {
+      "path": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+      "sha256": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4"
+    },
+    "human_model": {
+      "path": ".cache/katago-human/b18c384nbt-humanv0.bin.gz",
+      "sha256": "637746e44f0efe00ad1245a50aa9bbf0716efe364c43965ead97bd6835d84ab5"
+    },
+    "human_profile": {
+      "path": "manifests/katago_human_profile_v1.json",
+      "sha256": "f78423b5ba58485a7ffeee38bb7b39fcb7c797083f69c1389112ed1e04863d5b"
+    },
+    "original_plan": {
+      "path": "configs/e2_expanded_plan_v1.json",
+      "sha256": "f9a10543c81077dab8d02ab587c7d182709f77833641d91d74231b9b38e1b6eb"
+    },
+    "previous_result": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/completion.json",
+      "sha256": "52cfd822c7ef71ac94da4fe8324d135f2380b5358d39781ae8ad37fd74475bea"
+    },
+    "referee_config": {
+      "path": "configs/katago_referee_v1.cfg",
+      "sha256": "b32ea66000fd5ab90e7a649ab17380472228c4ccee0ccd14433070cc5602d251"
+    },
+    "referee_engine": {
+      "path": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+      "sha256": "c0ed553a775fd9af585717ff00ddeb5007bf15d283caf148d237e0ab24f6f308"
+    },
+    "referee_model": {
+      "path": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+      "sha256": "3d8a24697ba25fe4da39af4c2b6bd405907b0ad8295322f5a550fa2d8fe4a2f4"
+    },
+    "referee_native": {
+      "path": ".cache/katago-reference/katago-reference",
+      "sha256": "ba02d03b424d0c2429e4df61e17954a72d6072a8043ce0c20a70bb9acbd0bce7"
+    },
+    "referee_profile": {
+      "path": "manifests/e1_katago_referee_profile_v2.json",
+      "sha256": "2831d93dfbba8713a7e3fb00a1318bd4024ae9defd8032e39737f807ee4a1be4"
+    },
+    "rules": {
+      "path": "plan/e2_komi_study_v1.md",
+      "sha256": "50bf9416cf8405cbf51159b27a22564abb69400eecd9a07f102e1c3408e649d8"
+    },
+    "split": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/splits/manifest.json",
+      "sha256": "adcf769f1cf81c7c2a990fba5428ad577852e47e5414de40fcd12619881c82a9"
+    },
+    "training_decision": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/frozen-training.json",
+      "sha256": "63467ba9c10dda6dd0e27b671dbead56179cec1163785ae94083cac9a5ee58f6"
+    }
+  },
+  "parameters": {
+    "architecture": {
+      "blocks": 8,
+      "channels": 128
+    },
+    "datasets": {
+      "baseline": {
+        "inputs": {
+          "canonical": {
+            "path": "runs/e2-rank-expansion-2026-11-15/dataset/canonical.parquet",
+            "sha256": "7e3bc947053bde06f67c8e7706f043a405160b1be1a634f1d174833694a1ea27"
+          },
+          "cpu_environment": {
+            "path": "uv.lock",
+            "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+          },
+          "cuda_environment": {
+            "path": "environments/cuda/requirements.lock",
+            "sha256": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+          },
+          "data": {
+            "path": "manifests/e2_rank_collection_v1.json",
+            "sha256": "fad0e8fb87a7a18d6eea6c87c950866fe654070aa2e428df31ee1ceb02419234"
+          },
+          "examples": {
+            "path": "runs/e2-rank-expansion-2026-11-15/dataset/examples/manifest.json",
+            "sha256": "791187f75dbf26d1d4459db18c1a1d26d860a6ed669594fb2bb4e7fcd7eb9b21"
+          },
+          "normalizer": {
+            "path": "runs/e2-rank-expansion-2026-11-15/dataset/normalizer.json",
+            "sha256": "f65746f94831e9684af467380c73aaf681bb5983551d6c4ca3800c78c0605e6e"
+          },
+          "profile": {
+            "path": "runs/e2-rank-expansion-2026-11-15/dataset/profile.json",
+            "sha256": "51b7e9d038e0c3b87147cb8294bb2e8aa7d7f5a5a9c4e79f94065ebda501cee7"
+          },
+          "rules": {
+            "path": "plan/e2_komi_study_v1.md",
+            "sha256": "50bf9416cf8405cbf51159b27a22564abb69400eecd9a07f102e1c3408e649d8"
+          },
+          "split": {
+            "path": "runs/e2-rank-expansion-2026-11-15/dataset/splits/manifest.json",
+            "sha256": "e6c699255242c3c59bb3cc224ac07085ccb747dbc61e80211b35193c7446cef0"
+          }
+        },
+        "training_komi_halfpoints": [
+          13
+        ],
+        "training_rows": 1000000
+      },
+      "combined": {
+        "inputs": {
+          "canonical": {
+            "path": "runs/e2-komi-expansion-2026-11-16/dataset/canonical.parquet",
+            "sha256": "49d0c6fc5a725bc9e452052b4af505fbffd065d949b148d63baa672fe44e2ccb"
+          },
+          "cpu_environment": {
+            "path": "uv.lock",
+            "sha256": "967ee006a36704a3fc1f7df278127b46016be5e7e707b5efa2a01cef213e28f1"
+          },
+          "cuda_environment": {
+            "path": "environments/cuda/requirements.lock",
+            "sha256": "1bed946da2e98f08abe964b26f3953b5c0054b7c108fbd33531011ddeca8959e"
+          },
+          "data": {
+            "path": "manifests/e2_komi_study_v1.json",
+            "sha256": "cabea6a5894fb853bb29cb6805529efaa054ed2c010643467356d6bf99c69edc"
+          },
+          "examples": {
+            "path": "runs/e2-komi-expansion-2026-11-16/dataset/examples/manifest.json",
+            "sha256": "913ed187583778dd5f653992516f637dd6a55935ee136af347da32c0f54a4723"
+          },
+          "normalizer": {
+            "path": "runs/e2-komi-expansion-2026-11-16/dataset/normalizer.json",
+            "sha256": "d37b62b401c6df8c4a8d75a9b581f44052a310c0d7e8af9f773bc2eb800d6754"
+          },
+          "profile": {
+            "path": "runs/e2-komi-expansion-2026-11-16/dataset/profile.json",
+            "sha256": "243dd14047e0021429d8c073ab6f89fc969e199dee09dbadd81b9a9118c34e81"
+          },
+          "rules": {
+            "path": "plan/e2_komi_study_v1.md",
+            "sha256": "50bf9416cf8405cbf51159b27a22564abb69400eecd9a07f102e1c3408e649d8"
+          },
+          "split": {
+            "path": "runs/e2-komi-expansion-2026-11-16/dataset/splits/manifest.json",
+            "sha256": "adcf769f1cf81c7c2a990fba5428ad577852e47e5414de40fcd12619881c82a9"
+          }
+        },
+        "training_komi_halfpoints": [
+          1,
+          13
+        ],
+        "training_rows": 2000000
+      }
+    },
+    "expected_sets": {
+      "population_development_komi1": {
+        "games": 142,
+        "rows": 31784
+      },
+      "population_development_komi13": {
+        "games": 136,
+        "rows": 31233
+      },
+      "validation_development_komi1": {
+        "games": 134,
+        "rows": 29484
+      },
+      "validation_development_komi13": {
+        "games": 127,
+        "rows": 27949
+      }
+    },
+    "human_paths": {
+      "engine": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+      "human_model": ".cache/katago-human/b18c384nbt-humanv0.bin.gz",
+      "main_model": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+      "runtime_root": ".cache/katago-referee/squashfs-root"
+    },
+    "job_limits": {
+      "analysis": {
+        "cpu_seconds": 21600,
+        "output_bytes": 2147483648,
+        "shutdown_seconds": 10,
+        "wall_seconds": 21600
+      },
+      "human_evaluation": {
+        "cpu_seconds": 129600,
+        "output_bytes": 8589934592,
+        "shutdown_seconds": 10,
+        "wall_seconds": 129600
+      },
+      "learned_evaluation": {
+        "cpu_seconds": 21600,
+        "output_bytes": 4294967296,
+        "shutdown_seconds": 10,
+        "wall_seconds": 21600
+      },
+      "matches": {
+        "cpu_seconds": 46800,
+        "output_bytes": 2147483648,
+        "shutdown_seconds": 10,
+        "wall_seconds": 46800
+      },
+      "preparation": {
+        "cpu_seconds": 21600,
+        "output_bytes": 2147483648,
+        "shutdown_seconds": 10,
+        "wall_seconds": 21600
+      }
+    },
+    "ledger": "runs/e2-sl-budget-2026-11-14/resources.json",
+    "limits": {
+      "cpu_seconds": 518400,
+      "output_bytes": 34359738368,
+      "publication_seconds": 3600,
+      "wall_seconds": 604800
+    },
+    "match_parameters": {
+      "adjudication": "exact_first_empirical_v2",
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed": 20261118,
+      "conditioning_rank": "5k",
+      "device": "cpu",
+      "human_budget": {
+        "cpu_seconds": 3600,
+        "queries": 801,
+        "request_bytes": 16777216,
+        "response_bytes": 16777216,
+        "stderr_bytes": 1048576,
+        "trace_bytes": 33554432,
+        "wall_seconds": 3600
+      },
+      "human_paths": {
+        "config": "configs/katago_human_v1.cfg",
+        "engine": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+        "human_model": ".cache/katago-human/b18c384nbt-humanv0.bin.gz",
+        "main_model": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+        "runtime_root": ".cache/katago-referee/squashfs-root"
+      },
+      "match_limits": {
+        "action_limit": 800,
+        "empirical_cpu_seconds": 120,
+        "empirical_wall_seconds": 180,
+        "exact_cpu_seconds": 2,
+        "exact_wall_seconds": 10,
+        "game_seconds": 3600,
+        "reply_grace_actions": 1,
+        "response_seconds": 60,
+        "shutdown_seconds": 0.25
+      },
+      "opponent_policies": [
+        "uniform",
+        "capture_first"
+      ],
+      "pairs_per_profile": 1,
+      "referee_paths": {
+        "config": "configs/katago_referee_v1.cfg",
+        "engine": ".cache/katago-referee/squashfs-root/usr/bin/katago",
+        "model": ".cache/katago-referee/kata1-b10c128-s1141046784-d204142634.txt.gz",
+        "native": ".cache/katago-reference/katago-reference",
+        "runtime_root": ".cache/katago-referee/squashfs-root"
+      },
+      "runner_budget": {
+        "cpu_seconds": 43200,
+        "output_bytes": 1073741824,
+        "wall_seconds": 43200
+      }
+    },
+    "output": "runs/e2-review-rerun-2026-11-19",
+    "prior_ledger_sha256": "297f3e9f55c890afdbe72fb1b92353d8d16cf681837abb10f51413fe47b41339",
+    "publication_bytes": 536870912,
+    "publication_cpu_seconds": 1800,
+    "reference_budget": {
+      "cpu_seconds": 86400,
+      "queries": 59182,
+      "request_bytes": 536870912,
+      "response_bytes": 1073741824,
+      "stderr_bytes": 1048576,
+      "trace_bytes": 2147483648,
+      "wall_seconds": 86400
+    },
+    "review_ranks": [
+      "12k",
+      "11k",
+      "10k",
+      "9k",
+      "8k",
+      "7k",
+      "6k",
+      "5k",
+      "4k",
+      "3k",
+      "2k",
+      "1k",
+      "1d"
+    ],
+    "selection": {
+      "games_per_rank": 10,
+      "max_games_per_set": 160,
+      "max_rows_per_set": 50000
+    }
+  },
+  "project": "kenggo",
+  "purpose": "expanded-review",
+  "seed": 20261118,
+  "version": "experiment_config_v1"
+}

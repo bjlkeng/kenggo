@@ -35,6 +35,10 @@ RECIPE = {"pairs_per_profile": 1, "conditioning_rank": "5k",
           "bootstrap_resamples": 10000}
 RUNNER_CAP = ExperimentBudget(3600, 4800, 512 * 1024**2)
 LIMITS = MatchLimits(game_seconds=900)
+WEEK_REVIEW_RECIPE = "week_review_matches_v1"
+WEEK_REVIEW_RUNNER_CAP = ExperimentBudget(43200, 43200, 1024**3)
+WEEK_REVIEW_LIMITS = MatchLimits(game_seconds=3600)
+WEEK_REVIEW_WORKER_SECONDS = 46800
 OUTPUTS = ("matches", "schedule.json", "progress.json", "evidence_authorization.json",
            "scores.json", "summary.json", "failure.json")
 SCOPE = ("Exploratory raw play against two unranked weak opponents, with one color pair per "
@@ -64,7 +68,8 @@ def _bind(refs, name, path, pin):
 def _validate(config, provenance, provenance_pin, fixture_only):
     validate_config(config)
     parameters, refs = config["parameters"], config["inputs"]
-    expanded = parameters.get("recipe") == "expanded_e2_matches_v1"
+    week_review = parameters.get("recipe") == WEEK_REVIEW_RECIPE
+    expanded = parameters.get("recipe") == "expanded_e2_matches_v1" or week_review
     seed = 20261118 if expanded else SEED
     recipe = dict(RECIPE, bootstrap_seed=seed)
     required = set(RECIPE) | {"learned_artifacts", "human_paths", "human_budget", "referee_paths",
@@ -78,11 +83,13 @@ def _validate(config, provenance, provenance_pin, fixture_only):
             or type(parameters["bootstrap_resamples"]) is not int):
         raise ValueError("Raw matches require the frozen three-candidate CPU pilot recipe")
     limits, budget = MatchLimits(**parameters["match_limits"]), ExperimentBudget(**parameters["runner_budget"])
+    limit_cap = WEEK_REVIEW_LIMITS if week_review else LIMITS
+    runner_cap = WEEK_REVIEW_RUNNER_CAP if week_review else RUNNER_CAP
     if (set(parameters["match_limits"]) != set(asdict(LIMITS))
             or set(parameters["runner_budget"]) != set(asdict(RUNNER_CAP))
-            or any(getattr(limits, key) > value for key, value in asdict(LIMITS).items())
+            or any(getattr(limits, key) > value for key, value in asdict(limit_cap).items())
             or limits.shutdown_seconds != LIMITS.shutdown_seconds
-            or any(getattr(budget, key) > value for key, value in asdict(RUNNER_CAP).items())
+            or any(getattr(budget, key) > value for key, value in asdict(runner_cap).items())
             or not fixture_only and any(getattr(limits, key) != getattr(LIMITS, key) for key in
                 ("exact_wall_seconds", "exact_cpu_seconds", "empirical_wall_seconds", "empirical_cpu_seconds"))):
         raise ValueError("Match and runner limits must fit the frozen pilot allowances")
@@ -449,7 +456,10 @@ def run_matches(config_path, config_pin, provenance_path, provenance_pin, output
             raise ValueError("Worker source changed during matches or replay")
         if runner_error is not None:
             raise runner_error
-        if costs()["cpu_seconds"] > 4200 or costs()["wall_seconds"] > 5400:
+        week_review = config["parameters"].get("recipe") == WEEK_REVIEW_RECIPE
+        cpu_limit = WEEK_REVIEW_WORKER_SECONDS if week_review else 4200
+        wall_limit = WEEK_REVIEW_WORKER_SECONDS if week_review else 5400
+        if costs()["cpu_seconds"] > cpu_limit or costs()["wall_seconds"] > wall_limit:
             raise RuntimeError("The match pilot exceeded its outer CPU or wall allowance")
         return finish("completed" if len(replayed) == len(schedule["slots"]) else "incomplete")
     except BaseException as error:

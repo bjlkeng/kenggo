@@ -268,6 +268,103 @@ class BaselineMatchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.validate(config)
 
+    def expanded_training(self, recipe="week_review_matches_v1", komi=(13,)):
+        self.config["seed"] = 20261118
+        self.config["parameters"].update(recipe=recipe, bootstrap_seed=20261118)
+        for arm in pilot.ARMS[:2]:
+            training = json.loads(Path(self.refs[arm + "_config"]["path"]).read_text())
+            training["seed"] = 20261118
+            training["parameters"].update(recipe="expanded_e2_training_v1",
+                inference_contract="komi_comparison_v1", training_komi_halfpoints=list(komi))
+            self.save_ref(arm + "_config", training)
+            self.save_ref(arm + "_provenance", {
+                "version": "experiment_provenance_v1", "inputs": training["inputs"]})
+            self.artifacts[arm]["config_sha256"] = self.refs[arm + "_config"]["sha256"]
+            self.artifacts[arm]["provenance_sha256"] = self.refs[arm + "_provenance"]["sha256"]
+
+    def test_week_review_allows_longer_execution_with_the_original_slots_and_judgments(self):
+        for komi in ((13,), (1, 13)):
+            with self.subTest(komi=komi):
+                self.expanded_training("expanded_e2_matches_v1", komi)
+                self.config["parameters"].update(match_limits=asdict(pilot.LIMITS),
+                    runner_budget=asdict(pilot.RUNNER_CAP))
+                original = self.components()[0]
+                self.config["parameters"].update(recipe="week_review_matches_v1",
+                    match_limits=asdict(MatchLimits(game_seconds=3600)),
+                    runner_budget=asdict(ExperimentBudget(43200, 43200, 1024**3)))
+                schedule, _, _, budget = self.components()
+                self.assertEqual(schedule["slots"], original["slots"])
+                self.assertEqual(schedule["arm_profiles"], original["arm_profiles"])
+                self.assertEqual(schedule["profiles"], original["profiles"])
+                self.assertEqual(schedule["referee_profile"], original["referee_profile"])
+                self.assertEqual(schedule["seed"], 20261118)
+                self.assertEqual(len(schedule["slots"]), 12)
+                self.assertEqual(schedule["limits"], asdict(MatchLimits(game_seconds=3600)))
+                self.assertEqual(budget, ExperimentBudget(43200, 43200, 1024**3))
+
+    def test_old_recipes_cannot_use_week_review_execution_allowances(self):
+        for recipe in (None, "expanded_e2_matches_v1"):
+            if recipe is not None:
+                self.expanded_training(recipe)
+            for key, field, value in (("runner_budget", "cpu_seconds", 43200),
+                                      ("runner_budget", "wall_seconds", 43200),
+                                      ("runner_budget", "output_bytes", 1024**3),
+                                      ("match_limits", "game_seconds", 3600)):
+                config = copy.deepcopy(self.config)
+                config["parameters"][key][field] = value
+                with self.subTest(recipe=recipe, field=field), self.assertRaisesRegex(ValueError, "allowances"):
+                    self.validate(config)
+
+    def test_week_review_keeps_finite_caps_and_the_referee_contract(self):
+        self.expanded_training()
+        for key, field, value in (("runner_budget", "cpu_seconds", 43201),
+                                  ("runner_budget", "wall_seconds", 43201),
+                                  ("runner_budget", "output_bytes", 1024**3 + 1),
+                                  ("match_limits", "shutdown_seconds", .2)):
+            config = copy.deepcopy(self.config)
+            config["parameters"][key][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "allowances"):
+                self.validate(config)
+        config = copy.deepcopy(self.config)
+        config["parameters"]["match_limits"] = asdict(MatchLimits(game_seconds=3600,
+                                                                  empirical_cpu_seconds=119))
+        provenance = self.provenance(config)
+        with self.assertRaisesRegex(ValueError, "allowances"):
+            pilot._validate(config, provenance, json_hash(provenance), False)
+
+    def test_replay_cost_uses_the_recipe_worker_allowance(self):
+        original_time, original_read = pilot.time, pilot.read_records
+        for recipe, field, seconds, succeeds in (
+                ("expanded_e2_matches_v1", "cpu", 4201, False),
+                ("expanded_e2_matches_v1", "wall", 5401, False),
+                ("week_review_matches_v1", "cpu", 43200, True),
+                ("week_review_matches_v1", "wall", 43200, True),
+                ("week_review_matches_v1", "cpu", 46801, False),
+                ("week_review_matches_v1", "wall", 46801, False)):
+            with self.subTest(recipe=recipe, field=field, seconds=seconds):
+                self.expanded_training(recipe)
+                self.config["parameters"]["runner_budget"] = asdict(ExperimentBudget(1, .1, 1024**2))
+                offset = {"cpu": 0, "wall": 0}
+
+                def replay(*args, **kwargs):
+                    result = original_read(*args, **kwargs)
+                    offset[field] = seconds
+                    return result
+
+                clock = SimpleNamespace(monotonic=lambda: original_time.monotonic() + offset["wall"])
+                with patch.object(pilot, "time", clock), \
+                     patch.object(pilot, "_cpu_usage", side_effect=lambda: offset["cpu"]), \
+                     patch.object(pilot, "read_records", side_effect=replay), \
+                     patch.object(pilot.RefereeFactory, "__call__", side_effect=AssertionError("No game should start")):
+                    kwargs = {"output_name": f"{recipe}-{field}-{seconds}"}
+                    if succeeds:
+                        result, _ = self.invoke(**kwargs)
+                        self.assertEqual(result["status"], "incomplete")
+                        self.assertTrue(result["replay_completed"])
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, "outer CPU or wall allowance"):
+                            self.invoke(**kwargs)
+
     def test_artifact_bundles_cannot_disagree_with_input_pins(self):
         for key in ("checkpoint_sha256", "config_sha256", "provenance_sha256", "examples_sha256", "normalizer_sha256"):
             config = copy.deepcopy(self.config)

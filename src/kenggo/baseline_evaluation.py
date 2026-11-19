@@ -21,6 +21,7 @@ from kenggo.encoding import INPUT_KEYS
 from kenggo.examples import load_dataset_profile
 from kenggo.go import PASS, move_category
 from kenggo.katago_human import HumanProfile, HumanSL, ReferenceBudget
+from kenggo.kgs_source import RANKS
 from kenggo.learned_agent import (EXPANDED_RECIPE, KOMI_INFERENCE_CONTRACT,
                                  LearnedArtifacts, LearnedPolicy)
 from kenggo.learner import ModelConfig
@@ -34,6 +35,9 @@ ROOT = Path(__file__).resolve().parents[2]
 VERSION = "baseline_evaluation_v1"
 RAW_COMMON_INPUT_MODE = "raw_komi_comparison_v1"
 MAX_RAW_COMMON_ROWS = 12_000
+WEEK_REVIEW_SCOPE = "week_review_v1"
+WEEK_REVIEW_RANKS = RANKS[3:]
+MAX_REVIEW_ROWS = 50_000
 DEVELOPMENT_ROLES = {"population_development", "validation_development"}
 SAMPLES = 32
 CATEGORIES = ("pass", "capture", "save_atari", "give_atari", "self_atari", "other")
@@ -68,6 +72,10 @@ def _validate(config, provenance, provenance_pin, fixture_only):
     if mode not in ("normalized_v1", RAW_COMMON_INPUT_MODE):
         raise ValueError("Unknown common input normalization contract")
     raw_inputs = mode == RAW_COMMON_INPUT_MODE
+    scope = params.get("evaluation_scope")
+    if scope is not None and (scope != WEEK_REVIEW_SCOPE or not raw_inputs
+                              or config["seed"] != 20261118):
+        raise ValueError("The wider evaluation requires the explicit week-review contract")
     required = {"data", "canonical", "split", "examples", "normalizer", "rules"}
     if raw_inputs and config["arm"] != "human-reference":
         required.update(("training_examples", "training_normalizer"))
@@ -121,18 +129,20 @@ def _common_sets(config, *, fixture_only):
         _path(refs["normalizer"]), refs["normalizer"]["sha256"], profile)
     result = []
     raw_inputs = config["parameters"].get("common_input_mode") == RAW_COMMON_INPUT_MODE
+    maximum = (MAX_REVIEW_ROWS if config["parameters"].get("evaluation_scope") == WEEK_REVIEW_SCOPE
+               else MAX_RAW_COMMON_ROWS)
     for spec in config["parameters"]["common_sets"]:
         ref = refs[spec["manifest_input"]]
         expected = read_json(_path(ref), ref["sha256"])
-        if raw_inputs and len(expected["rows"]) > MAX_RAW_COMMON_ROWS:
-            raise ValueError("Raw common set exceeds the frozen 12,000-row evaluation bound")
+        if raw_inputs and len(expected["rows"]) > maximum:
+            raise ValueError(f"Raw common set exceeds its frozen {maximum:,}-row evaluation bound")
         common = prepare_common_set(inputs, role=spec["role"], source_ids=spec["source_ids"],
                                    aggregate_ranks=spec["aggregate_ranks"], fixture_only=fixture_only,
                                    raw_inputs=raw_inputs, komi_study=raw_inputs)
         if common.sha256 != ref["sha256"] or common.manifest != expected:
             raise ValueError("Prepared common set differs from its frozen manifest")
-        if raw_inputs and len(common) > MAX_RAW_COMMON_ROWS:
-            raise ValueError("Raw common set exceeds the frozen 12,000-row evaluation bound")
+        if raw_inputs and len(common) > maximum:
+            raise ValueError(f"Raw common set exceeds its frozen {maximum:,}-row evaluation bound")
         result.append((spec, common))
     return result
 
@@ -173,6 +183,13 @@ def rows_for_common(common):
     return [{**dict(position.metadata), **dict(position.targets),
              "legal": position.observation.inputs["legal"].tolist()}
             for position in common.positions()]
+
+
+def rank_scope(rows, predictions):
+    """Select the predeclared review ranks after full output validation."""
+    selected = [row for row in rows if row["source_rank_mover"] in WEEK_REVIEW_RANKS]
+    keys = {row["row_key"] for row in selected}
+    return selected, [prediction for prediction in predictions if prediction.row_key in keys]
 
 
 def input_batch(positions, *, unknown_ranks=False):
@@ -429,6 +446,10 @@ def _evaluate_set(config, spec, common, variant, client, progress):
     if [prediction.row_key for prediction in predictions] != [row["row_key"] for row in rows]:
         raise ValueError("Predictions must cover the frozen rows in their original order")
     metrics = evaluate(rows, predictions, aggregate_ranks=spec["aggregate_ranks"])
+    if config["parameters"].get("evaluation_scope") == WEEK_REVIEW_SCOPE:
+        scoped_rows, scoped_predictions = rank_scope(rows, predictions)
+        metrics["review_scope"] = evaluate(scoped_rows, scoped_predictions, aggregate_ranks=WEEK_REVIEW_RANKS)
+        metrics["review_scope"]["excluded_rows"] = len(rows) - len(scoped_rows)
     if raw_inputs:
         metrics["by_komi"] = {str(komi): evaluate(
             [row for row in rows if row["komi_halfpoints"] == komi],

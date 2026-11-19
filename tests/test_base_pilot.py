@@ -120,14 +120,18 @@ class BasePilotTests(unittest.TestCase):
             paired = root / "paired.json"
             save_json(paired, {"overall": {"metrics": {"nll": {
                 "estimate": {"status": "positive_infinity", "value": None},
-                "uncertainty": {"status": "inconclusive"}}}}})
+                "uncertainty": {"status": "inconclusive", "game_influences": {"game": .5},
+                    "incident_account_weights": {"account": .5}, "mover_contribution_weights": {"account": .5}}}}}})
             summary = {"comparisons": {"validation": {"conditioned_minus_control": {"report": _ref(paired)}}}}
-            config = {"purpose": "baseline-analysis"}
-            reports = _worker_reports(config, root, summary)
-            metrics = _report_metrics(reports)
             prefix = "reports/validation/conditioned_minus_control/overall/metrics/nll/"
-            self.assertEqual(metrics[prefix + "estimate/status"], "positive_infinity")
-            self.assertNotIn(prefix + "estimate/value", metrics)
+            for purpose in ("baseline-analysis", "expanded-analysis", "expanded-review-analysis"):
+                config = {"purpose": purpose}
+                reports = _worker_reports(config, root, summary)
+                metrics = _report_metrics(reports)
+                self.assertEqual(metrics[prefix + "estimate/status"], "positive_infinity")
+                self.assertNotIn(prefix + "estimate/value", metrics)
+                self.assertIn("game_influences", reports["validation/conditioned_minus_control"]["overall"]["metrics"]["nll"]["uncertainty"])
+                self.assertFalse(any("account_weights" in key or "game_influences" in key or "contribution_weights" in key for key in metrics))
             pin = save_json(root / "scores.json", {"arms": {"conditioned": {"counts": {"U": 4, "W": 0}}}})
             matches = _worker_reports({"purpose": "baseline-matches"}, root,
                 {"scores_sha256": pin, "behavior": {"conditioned": {"flags": {"unresolved": {"adverse": 4}}}}})

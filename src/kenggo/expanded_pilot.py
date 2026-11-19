@@ -202,7 +202,7 @@ class Session:
                             device=device, register=register)
         except BaseException:
             artifacts = ("config.json", "provenance.json", "worker/job.json", "worker/summary.json",
-                         "worker/failure.json", "worker/training_summary.json", "worker/training_failure.json")
+                         "worker/failure.json", "worker/progress.json", "worker/training_summary.json", "worker/training_failure.json")
             self.failed_stage = {"name": name, "directory": str(directory), "artifacts": {
                 filename: _ref(directory / filename) for filename in artifacts
                 if (directory / filename).is_file()}}
