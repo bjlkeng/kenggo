@@ -156,6 +156,7 @@ def fixture(root):
         "stages": stages, "matched_training": True,
         "training_decision": ref(run / "frozen-training.json", {"updates": 8, "probe_weights_reused": False}),
         "costs": {"elapsed_seconds": 40., "cpu_seconds": 30., "output_bytes": 10000,
+            "launch_utc": "2026-11-18T14:11:48.993557Z", "deadline_utc": "2026-11-19T14:11:48.993557Z",
             "ledger": {"charged_gpu_seconds": charged, "remaining_gpu_seconds": 86400 - charged,
                        "budget_breached": False, "state": {"entries": entries, "reservations": {}}}}}
     ref(run / "summary.json", main)
@@ -168,6 +169,204 @@ class ExpandedReviewTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         self.run, self.main = fixture(self.root)
+
+    def completion_fixture(self, *, partial_reference=True):
+        completion = copy.deepcopy(self.main)
+        for arm in review.ARMS:
+            stage = completion["stages"][arm]
+            config = json.loads(Path(stage["config"]["path"]).read_text())
+            config["inputs"]["training_decision"] = completion["training_decision"]
+            stage["config"] = ref(Path(stage["config"]["path"]), config)
+            stage["provenance"] = ref(Path(stage["provenance"]["path"]), {"inputs": config["inputs"]})
+            summary = json.loads(Path(stage["summary"]["path"]).read_text())
+            summary.update(config_file_sha256=stage["config"]["sha256"], provenance_sha256=stage["provenance"]["sha256"])
+            stage["summary"] = ref(Path(stage["summary"]["path"]), summary)
+        human = completion["stages"].pop(review.REFERENCE_STAGE)
+        worker = self.run / review.REFERENCE_STAGE / "worker"
+        preparation = json.loads(Path(completion["stages"]["preparation"]["summary"]["path"]).read_text())
+        common = {item["spec"]["id"]: item for item in preparation["common_sets"] if item["spec"]["komi_halfpoints"] == 13}
+        config = {"purpose": "baseline-evaluation", "arm": "human-reference", "inputs": {}, "parameters": {"common_sets": []}}
+        for identity, item in common.items():
+            key = "common_" + identity
+            config["inputs"][key] = item["manifest"]
+            config["parameters"]["common_sets"].append(item["spec"] | {"manifest_input": key})
+        config_ref = ref(worker.parent / "config.json", config)
+        provenance_ref = ref(worker.parent / "provenance.json", {"inputs": config["inputs"]})
+        job_ref = ref(worker / "job.json", {"schema": "bounded_pilot_job_v1", "status": "failed", "reason": "cpu_budget",
+            "run_id": self.run.name + "-" + review.REFERENCE_STAGE,
+            "command": ["python", "-m", "kenggo.baseline_evaluation", config_ref["path"], provenance_ref["path"], str(worker),
+                        "--config-sha256", config_ref["sha256"], "--provenance-sha256", provenance_ref["sha256"]]})
+        failed_stage = {"name": review.REFERENCE_STAGE, "directory": str(worker.parent),
+            "artifacts": {"config.json": config_ref, "provenance.json": provenance_ref, "worker/job.json": job_ref}}
+        reports = json.loads(Path(human["summary"]["path"]).read_text())["reports"]
+        sets = {}
+        for index, report in enumerate(reports):
+            identity = report["set"]
+            state = {"status": "completed" if index == 0 else "running", "completed_rows": 2 if index == 0 else 1,
+                     "expected_rows": 2, "common_set_sha256": common[identity]["manifest"]["sha256"]}
+            if index == 0:
+                report.update(role=common[identity]["spec"]["role"], arm="human-reference")
+                summary_ref = ref(worker / identity / "ordinary" / "summary.json", report)
+                state["summary"] = {"path": str(Path(summary_ref["path"]).relative_to(worker)), "sha256": summary_ref["sha256"]}
+            sets[identity + "/ordinary"] = state
+        progress_ref = ref(worker / "progress.json", {"version": "baseline_evaluation_v1", "status": "running",
+            "arm": "human-reference", "config_sha256": config_ref["sha256"], "provenance_sha256": provenance_ref["sha256"], "sets": sets})
+        original = copy.deepcopy(completion)
+        original.update(status="incomplete", reason="Human reference reached its CPU cap", failed_stage=failed_stage,
+            stages={name: stage for name, stage in completion["stages"].items() if name not in review.FINISH_STAGES})
+        original.pop("training_decision")
+        old_entries = [entry for entry in original["costs"]["ledger"]["state"]["entries"]
+                       if entry["run_id"] not in {self.run.name + "-" + name for name in review.FINISH_STAGES}]
+        original["costs"]["ledger"]["state"]["entries"] = old_entries
+        original_ref = ref(self.run / "failure.json", original)
+        finish_plan = {"version": "experiment_config_v1", "purpose": "expanded-finish",
+                       "inputs": {"original_failure": original_ref}, "parameters": {"scope": "remaining checks only"}}
+        completion.update(status="incomplete", completion_status="completed", completion_reason=None,
+            reason=original["reason"], failed_stage=failed_stage, original_failure=original_ref)
+        if partial_reference:
+            completion["partial_reference_progress"] = finish_plan["inputs"]["partial_reference_progress"] = progress_ref
+        completion["completion_plan"] = ref(self.root / "completion-plan.json", finish_plan)
+        new_entries = [entry for entry in completion["costs"]["ledger"]["state"]["entries"]
+                       if entry["run_id"] in {self.run.name + "-" + name for name in review.FINISH_STAGES}]
+        completion["costs"]["ledger"]["state"]["entries"] = old_entries + [
+            {"run_id": self.run.name + "-first-verification", "gpu_seconds": 0., "cpu_seconds": 10., "wall_seconds": 12.}
+        ] + new_entries
+        completion["costs"].update(cpu_seconds=60., elapsed_seconds=80.)
+        path = self.run / "completion.json"
+        ref(path, completion)
+        return path, completion, original
+
+    def test_completed_remaining_checks_preserve_incomplete_reference_and_cumulative_costs(self):
+        path, completion, original = self.completion_fixture()
+        original_bytes = (self.run / "failure.json").read_bytes()
+        result = review.collect(path)
+        self.assertEqual((result["status"], result["completion_status"]), ("incomplete", "completed"))
+        self.assertEqual(result["reason"], original["reason"])
+        self.assertEqual(len(result["games"]), 24)
+        self.assertEqual(sum(len(contrasts) for contrasts in result["paired"].values()), 16)
+        self.assertIn("human-reference", result["evaluations"][review.SETS[0]])
+        self.assertNotIn("human-reference", result["evaluations"][review.SETS[2]])
+        self.assertEqual(result["partial_reference"]["job_status"], "failed")
+        self.assertEqual([item["report_available"] for item in result["partial_reference"]["sets"]], [True, False])
+        reference_stage = next(stage for stage in result["stages"] if stage["name"] == review.REFERENCE_STAGE)
+        self.assertEqual(reference_stage["status"], "failed")
+        self.assertEqual(result["costs"]["cumulative_gpu_seconds"], original["costs"]["ledger"]["charged_gpu_seconds"])
+        self.assertEqual((result["costs"]["cpu_seconds"], result["costs"]["elapsed_seconds"]), (60., 80.))
+        self.assertEqual((self.run / "failure.json").read_bytes(), original_bytes)
+        finish_plan = json.loads(Path(completion["completion_plan"]["path"]).read_text())
+        del finish_plan["inputs"]["partial_reference_progress"]
+        del completion["partial_reference_progress"]
+        completion["completion_plan"] = ref(Path(completion["completion_plan"]["path"]), finish_plan)
+        ref(path, completion)
+        without = review.collect(path)
+        self.assertIsNone(without["partial_reference"])
+        self.assertTrue(all("human-reference" not in reports for reports in without["evaluations"].values()))
+
+    def test_completion_rejects_changed_predecessor_stage_failure_plan_or_ledger(self):
+        path, completion, _ = self.completion_fixture()
+        changes = []
+        changed = copy.deepcopy(completion)
+        changed["original_failure"]["sha256"] = "b" * 64
+        changes.append(changed)
+        changed = copy.deepcopy(completion)
+        changed["stages"][review.ARMS[0]]["job"]["costs"]["cpu_seconds"] = 0
+        changes.append(changed)
+        changed = copy.deepcopy(completion)
+        changed["failed_stage"]["artifacts"].pop("worker/job.json")
+        changes.append(changed)
+        changed = copy.deepcopy(completion)
+        changed["costs"]["ledger"]["state"]["entries"][0]["wall_seconds"] = 0
+        changes.append(changed)
+        changed = copy.deepcopy(completion)
+        changed["costs"]["cpu_seconds"] = 0
+        changes.append(changed)
+        changed = copy.deepcopy(completion)
+        changed["reason"] = "The original failure disappeared"
+        changes.append(changed)
+        for key in ("launch_utc", "deadline_utc"):
+            changed = copy.deepcopy(completion)
+            changed["costs"][key] = "2026-11-20T14:11:48.993557Z"
+            changes.append(changed)
+        for index, changed in enumerate(changes):
+            with self.subTest(change=index):
+                ref(path, changed)
+                with self.assertRaises(ValueError):
+                    review.collect(path)
+        finish_plan = json.loads(Path(completion["completion_plan"]["path"]).read_text())
+        finish_plan["inputs"]["original_failure"]["sha256"] = "b" * 64
+        completion["completion_plan"] = ref(Path(completion["completion_plan"]["path"]), finish_plan)
+        ref(path, completion)
+        with self.assertRaisesRegex(ValueError, "bind the predecessor"):
+            review.collect(path)
+
+    def test_completed_remaining_checks_require_all_three_new_stages(self):
+        path, completion, _ = self.completion_fixture()
+        for name in review.FINISH_STAGES:
+            changed = copy.deepcopy(completion)
+            del changed["stages"][name]
+            ref(path, changed)
+            with self.subTest(stage=name), self.assertRaisesRegex(ValueError, "analysis and both match panels"):
+                review.collect(path)
+        changed = copy.deepcopy(completion)
+        changed["completion_status"] = "missing"
+        ref(path, changed)
+        with self.assertRaisesRegex(ValueError, "cannot complete"):
+            review.collect(path)
+        changed = copy.deepcopy(completion)
+        stage = changed["stages"]["matches-combined"]
+        summary_path = Path(stage["summary"]["path"])
+        summary = json.loads(summary_path.read_text())
+        summary["status"] = "failed"
+        stage["summary"] = ref(summary_path, summary)
+        ref(path, changed)
+        with self.assertRaisesRegex(ValueError, "unfinished required stage"):
+            review.collect(path)
+
+    def test_partial_reference_requires_completed_full_sets_and_consistent_progress_pins(self):
+        path, completion, _ = self.completion_fixture()
+        progress_path = Path(completion["partial_reference_progress"]["path"])
+        progress = json.loads(progress_path.read_text())
+        finish_plan = json.loads(Path(completion["completion_plan"]["path"]).read_text())
+        changes = []
+        changed = copy.deepcopy(progress)
+        changed["sets"][review.SETS[0] + "/ordinary"]["completed_rows"] = 1
+        changes.append(changed)
+        changed = copy.deepcopy(progress)
+        changed["sets"][review.SETS[2] + "/ordinary"]["summary"] = changed["sets"][review.SETS[0] + "/ordinary"]["summary"]
+        changes.append(changed)
+        changed = copy.deepcopy(progress)
+        changed["config_sha256"] = "b" * 64
+        changes.append(changed)
+        changed = copy.deepcopy(progress)
+        changed["sets"][review.SETS[0] + "/ordinary"]["summary"]["sha256"] = "b" * 64
+        changes.append(changed)
+        for index, changed in enumerate(changes):
+            tested = copy.deepcopy(completion)
+            tested["partial_reference_progress"] = ref(progress_path, changed)
+            plan = copy.deepcopy(finish_plan)
+            plan["inputs"]["partial_reference_progress"] = tested["partial_reference_progress"]
+            tested["completion_plan"] = ref(Path(tested["completion_plan"]["path"]), plan)
+            ref(path, tested)
+            with self.subTest(change=index), self.assertRaises(ValueError):
+                review.collect(path)
+
+    def test_remaining_check_failure_keeps_both_failures_and_missing_panel_unavailable(self):
+        path, completion, original = self.completion_fixture()
+        name = "matches-combined"
+        del completion["stages"][name]
+        artifact = ref(self.run / name / "worker" / "failure.json", {"status": "failed", "reason": "synthetic finishing cap"})
+        completion.update(completion_status="failed", completion_reason="Remaining match panel reached its cap",
+            completion_failed_stage={"name": name, "directory": str(self.run / name),
+                                     "artifacts": {"worker/failure.json": artifact}})
+        ref(path, completion)
+        result = review.collect(path)
+        self.assertEqual(result["reason"], original["reason"])
+        self.assertEqual(result["completion_reason"], completion["completion_reason"])
+        self.assertEqual(result["completion_failure"]["name"], name)
+        self.assertEqual(result["failure"]["name"], review.REFERENCE_STAGE)
+        self.assertNotIn("combined", result["panels"])
+        self.assertEqual(len(result["games"]), 12)
+        self.assertEqual(sum(stage["status"] == "failed" for stage in result["stages"]), 2)
 
     def test_completed_results_retain_all_arms_sets_slots_costs_and_display_frames(self):
         prepared = json.loads(Path(self.main["stages"]["preparation"]["summary"]["path"]).read_text())
@@ -286,13 +485,21 @@ class ExpandedReviewTests(unittest.TestCase):
             review.export(self.run, output)
 
     def test_page_script_selectors_replay_notes_and_downloads_without_a_browser(self):
+        self.check_page_controls(review.collect(self.run))
+
+    def test_completion_page_keeps_reference_failure_visible_and_controls_working(self):
+        path, completion, _ = self.completion_fixture()
+        completion.update(completion_status="failed", completion_reason="Synthetic publication failure")
+        ref(path, completion)
+        self.check_page_controls(review.collect(path))
+
+    def check_page_controls(self, data):
         node = shutil.which("node")
         if node is None:
             candidates = sorted((Path.home() / ".nvm/versions/node").glob("*/bin/node"))
             node = str(candidates[-1]) if candidates else None
         if node is None:
             self.skipTest("A local Node runtime is unavailable; browser QA remains separate")
-        data = review.collect(self.run)
         page = review.render(data)
         script = page.split('<script id="expanded-script">', 1)[1].split("</script>", 1)[0]
         ids = re.findall(r'\bid="([^"]+)"', page.split('<script id="expanded-data"', 1)[0])
@@ -321,6 +528,17 @@ DATA.evaluations[DATA.sets[0]]['combined-unconditioned'].metrics.overall.metrics
 elements['expanded-data'].textContent=JSON.stringify(DATA);
 SCRIPT
 const textOf=node=>[node.textContent,...node.children.map(textOf)].join(' ');
+if(DATA.completion_status){
+ assert.ok(elements['run-status'].textContent.includes('Experiment incomplete'));
+ assert.ok(elements['run-status'].textContent.includes('remaining checks failed'));
+ assert.equal(elements['completion-readout'].hidden,false);
+ assert.ok(elements['completion-readout'].textContent.includes(DATA.completion_reason));
+ assert.ok(textOf(elements['failure-readout']).includes(DATA.reason));
+ assert.ok(textOf(elements['failure-readout']).includes(DATA.completion_reason));
+ assert.ok(textOf(elements['reference-progress']).includes('Last saved worker observations'));
+ assert.ok(textOf(elements['reference-progress']).includes('Unavailable'));
+ assert.ok(!DATA.evaluations[DATA.sets[2]]['human-reference']);
+}
 assert.ok(textOf(elements['metric-cards']).includes('+∞'));
 assert.ok(textOf(elements['metric-cards']).includes('Undefined'));
 assert.ok(textOf(elements['metric-table']).includes('+∞'));

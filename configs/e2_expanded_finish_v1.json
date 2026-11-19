@@ -1,0 +1,66 @@
+{
+  "arm": "shared",
+  "base_url": "https://api.wandb.ai",
+  "budget_id": "e0-sl-pilot-v1",
+  "comparison": "E2-expanded-data-rank-v1",
+  "entity": "bjlkeng",
+  "inputs": {
+    "completion_protocol": {
+      "path": "plan/e2_expanded_finish_v1.md",
+      "sha256": "caf299ccae285939f7c6b870b8d4866da14f780387dc9319e63f5590830e85ba"
+    },
+    "data": {
+      "path": "manifests/e2_komi_study_v1.json",
+      "sha256": "cabea6a5894fb853bb29cb6805529efaa054ed2c010643467356d6bf99c69edc"
+    },
+    "original_failure": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/failure.json",
+      "sha256": "ad63ccf9a4db1cfb38658bef6959a9cf15bed4bbed7893928f9d0b6c8cff1d44"
+    },
+    "original_plan": {
+      "path": "configs/e2_expanded_plan_v1.json",
+      "sha256": "f9a10543c81077dab8d02ab587c7d182709f77833641d91d74231b9b38e1b6eb"
+    },
+    "original_session": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/session.json",
+      "sha256": "868f2e3f9229440374cd552d89dde0e1be95bca7ce36986691af7c161a62d684"
+    },
+    "partial_reference_progress": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/evaluation-human-reference/worker/progress.json",
+      "sha256": "f20cc372f43d2f3543d4e619299c6f1b2450a9ba0eecec19fd8dc65c7cb25fe8"
+    },
+    "rules": {
+      "path": "plan/e2_komi_study_v1.md",
+      "sha256": "50bf9416cf8405cbf51159b27a22564abb69400eecd9a07f102e1c3408e649d8"
+    },
+    "split": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/splits/manifest.json",
+      "sha256": "adcf769f1cf81c7c2a990fba5428ad577852e47e5414de40fcd12619881c82a9"
+    },
+    "training_decision": {
+      "path": "runs/e2-expanded-pilot-2026-11-18/frozen-training.json",
+      "sha256": "63467ba9c10dda6dd0e27b671dbead56179cec1163785ae94083cac9a5ee58f6"
+    },
+    "verification_handoff": {
+      "path": "runs/e2-expanded-review-2026-11-18/handoff.json",
+      "sha256": "675a5ba99f893dcef7e1164cd0e50a75cddbe9c32e4a23a0d3531ef3ea316884"
+    }
+  },
+  "parameters": {
+    "deadline_utc": "2026-11-19T14:11:48.993557+00:00",
+    "jobs": [
+      "analysis",
+      "matches-baseline",
+      "matches-combined"
+    ],
+    "ledger": "runs/e2-sl-budget-2026-11-14/resources.json",
+    "ledger_sha256": "49fe4663d3ac8ff8c51fbdbeb4a40a69b72a483c8d6fc7e8310169f1ce1e6336",
+    "output": "runs/e2-expanded-pilot-2026-11-18",
+    "preparation_cpu_reserve_seconds": 120,
+    "verification_directory": "runs/e2-expanded-review-2026-11-18"
+  },
+  "project": "kenggo",
+  "purpose": "expanded-finish",
+  "seed": 20261118,
+  "version": "experiment_config_v1"
+}

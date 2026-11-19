@@ -22,6 +22,8 @@ STAGES = ("preparation", *("probe-" + arm for arm in ARMS), *ARMS,
           "matches-baseline", "matches-combined", "analysis")
 MAX_JSON_BYTES = 32 * 1024**2
 MAX_PAGE_BYTES = 32 * 1024**2
+FINISH_STAGES = {"analysis", "matches-baseline", "matches-combined"}
+REFERENCE_STAGE = "evaluation-human-reference"
 
 
 def _path(reference, *, base=ROOT, owner=None):
@@ -167,14 +169,140 @@ def _costs(main, run):
             "reservations": ledger.get("state", {}).get("reservations", {}), "entries": current,
             "gpu_seconds_by_stage": {entry["run_id"][len(run.name) + 1:]: entry["gpu_seconds"]
                                      for entry in current},
-            "scope": "Cumulative GPU includes earlier pilots. This run includes failed jobs, device ownership waits, and tracking charges. CPU includes the supervisor's retained ten-second closing reserve."}
+            "scope": "Cumulative GPU includes earlier pilots. This run includes failed jobs, device ownership waits, and tracking charges. "
+                + ("CPU includes both supervisors' ten-second closing reserves and the pinned completion preparation and verifier charge."
+                   if main.get("completion_status") else "CPU includes the supervisor's retained ten-second closing reserve.")}
+
+
+def _completion(main, run):
+    if main.get("status") != "incomplete" or main.get("completion_status") not in {"completed", "failed"}:
+        raise ValueError("Remaining-check completion cannot complete the original experiment")
+    original_ref = main.get("original_failure")
+    if _path(original_ref, owner=run) != run / "failure.json":
+        raise ValueError("Completion must bind the original failure in this run")
+    original = _json(original_ref, owner=run)
+    if (original.get("schema") != "expanded_e2_pilot_v1" or original.get("status") != "incomplete"
+            or original.get("promotion") != "not_promoted"
+            or original.get("failed_stage", {}).get("name") != REFERENCE_STAGE
+            or set(original.get("stages", {})) != set(STAGES) - FINISH_STAGES - {REFERENCE_STAGE}
+            or main.get("plan") != original.get("plan")
+            or main.get("reason") != original.get("reason")
+            or main.get("failed_stage") != original.get("failed_stage")
+            or any(main["stages"].get(name) != stage for name, stage in original["stages"].items())
+            or set(main["stages"]) - set(original["stages"]) - FINISH_STAGES):
+        raise ValueError("Completion changed the immutable original failure or stages")
+    plan = _json(main.get("completion_plan"))
+    if (plan.get("version") != "experiment_config_v1" or plan.get("purpose") != "expanded-finish"
+            or plan.get("inputs", {}).get("original_failure") != original_ref
+            or plan.get("inputs", {}).get("partial_reference_progress") != main.get("partial_reference_progress")):
+        raise ValueError("Completion plan does not bind the predecessor and optional reference progress")
+    if main["completion_status"] == "completed" and not FINISH_STAGES <= main["stages"].keys():
+        raise ValueError("Completed remaining checks require analysis and both match panels")
+    if main.get("completion_failed_stage") is not None and (
+            main["completion_status"] != "failed" or main["completion_failed_stage"].get("name") not in FINISH_STAGES):
+        raise ValueError("Unexpected failure in the remaining-check phase")
+    original_costs, costs = original.get("costs", {}), main.get("costs", {})
+    old_entries = original_costs.get("ledger", {}).get("state", {}).get("entries", [])
+    entries = costs.get("ledger", {}).get("state", {}).get("entries", [])
+    if (entries[:len(old_entries)] != old_entries
+            or any(type(original_costs.get(key)) is not str or costs.get(key) != original_costs[key]
+                   for key in ("launch_utc", "deadline_utc"))
+            or costs.get("ledger", {}).get("charged_gpu_seconds")
+                != original_costs.get("ledger", {}).get("charged_gpu_seconds")
+            or any(type(costs.get(key)) not in (int, float) or not math.isfinite(costs[key])
+                   or costs[key] < original_costs.get(key, 0) for key in ("cpu_seconds", "elapsed_seconds"))):
+        raise ValueError("Completion cannot replace earlier resource charges or reset totals")
+    if _path(main.get("training_decision"), owner=run) != run / "frozen-training.json":
+        raise ValueError("Completion must retain the original fixed training decision")
+    return original, plan
+
+
+def _failed_stage(failure, run, reason, stage_status, summaries):
+    if failure is None:
+        return None
+    name = failure.get("name")
+    directory = (ROOT / failure["directory"]).resolve()
+    if name not in STAGES or directory != run / name:
+        raise ValueError("Failed stage leaves the expected run directory")
+    checked = {}
+    allowed = {"config.json", "provenance.json", "worker/job.json", "worker/summary.json", "worker/training_summary.json",
+               "worker/failure.json", "worker/training_failure.json"}
+    for relative, reference in failure.get("artifacts", {}).items():
+        if relative not in allowed or _path(reference, owner=directory) != directory / relative:
+            raise ValueError("Unexpected failed-stage artifact")
+        checked[relative] = _json(reference, owner=directory)
+    failed_status = next(item for item in stage_status if item["name"] == name)
+    failed_status.update(status="failed", reason=reason)
+    if name.startswith("matches-") and "worker/summary.json" in checked:
+        _status(checked["worker/summary.json"], "Failed match worker")
+        summaries[name] = checked["worker/summary.json"]
+    return {"name": name, "artifacts": checked, "pins": failure["artifacts"]}
+
+
+def _partial_reference(reference, failure, common_sets, run):
+    worker = run / REFERENCE_STAGE / "worker"
+    if _path(reference, owner=worker) != worker / "progress.json" or failure is None:
+        raise ValueError("Partial reference progress must belong to the original failed worker")
+    checked, pins = failure["artifacts"], failure["pins"]
+    if not {"config.json", "provenance.json", "worker/job.json"} <= checked.keys():
+        raise ValueError("Partial reference requires the pinned original config, provenance and failed job")
+    config, provenance, job = (checked[name] for name in ("config.json", "provenance.json", "worker/job.json"))
+    if (config.get("purpose") != "baseline-evaluation" or config.get("arm") != "human-reference"
+            or provenance.get("inputs") != config.get("inputs")
+            or job.get("schema") != "bounded_pilot_job_v1" or job.get("status") != "failed"
+            or job.get("run_id") != run.name + "-" + REFERENCE_STAGE):
+        raise ValueError("Partial reference does not match its original failed evaluation job")
+    command = job.get("command", [])
+    for flag, artifact in (("--config-sha256", "config.json"), ("--provenance-sha256", "provenance.json")):
+        if (not isinstance(command, list) or command.count(flag) != 1
+                or command.index(flag) + 1 >= len(command) or command[command.index(flag) + 1] != pins[artifact]["sha256"]):
+            raise ValueError("Original reference job used different config or provenance pins")
+    progress = _json(reference, owner=worker)
+    if (progress.get("version") != "baseline_evaluation_v1" or progress.get("arm") != "human-reference"
+            or progress.get("config_sha256") != pins["config.json"]["sha256"]
+            or progress.get("provenance_sha256") != pins["provenance.json"]["sha256"]
+            or progress.get("status") not in {"preparing", "running", "failed", "completed"}
+            or not isinstance(progress.get("sets"), dict)):
+        raise ValueError("Reference progress differs from the pinned original worker")
+    specs = {spec["id"]: spec for spec in config.get("parameters", {}).get("common_sets", [])}
+    reports, observations = [], []
+    for key, state in progress["sets"].items():
+        identity = key.removesuffix("/ordinary")
+        spec, common = specs.get(identity), common_sets.get(identity)
+        if (key != identity + "/ordinary" or spec is None or common is None
+                or common["spec"]["komi_halfpoints"] != 13 or spec.get("role") != common["spec"]["role"]
+                or config["inputs"].get(spec.get("manifest_input")) != common["manifest"]
+                or type(state.get("expected_rows")) is not int or state["expected_rows"] != common["rows"]
+                or type(state.get("completed_rows")) is not int or not 0 <= state["completed_rows"] <= state["expected_rows"]
+                or state.get("common_set_sha256") != common["manifest"]["sha256"]
+                or state.get("status") not in {"preparing", "running", "failed", "completed"}):
+            raise ValueError("Saved reference progress differs from its frozen whole set")
+        completed = state["status"] == "completed"
+        if completed:
+            summary_ref = state.get("summary")
+            if (state["completed_rows"] != state["expected_rows"] or not isinstance(summary_ref, dict)
+                    or Path(summary_ref.get("path", "")).is_absolute()
+                    or _path(summary_ref, base=worker, owner=worker) != worker / identity / "ordinary" / "summary.json"):
+                raise ValueError("Only a fully completed reference set can supply a report")
+            report = _json(summary_ref, base=worker, owner=worker)
+            if (report.get("set") != identity or report.get("role") != spec["role"]
+                    or report.get("arm") != "human-reference" or report.get("rows") != state["expected_rows"]):
+                raise ValueError("Completed reference summary differs from its saved progress")
+            reports.append(report)
+        elif "summary" in state:
+            raise ValueError("An unfinished reference set cannot supply a completed report")
+        observations.append({"set": identity, "status": state["status"], "completed_rows": state["completed_rows"],
+                             "expected_rows": state["expected_rows"], "report_available": completed})
+    return reports, {"reference": reference, "job_status": "failed", "job_reason": job.get("reason"),
+        "progress_status": progress["status"], "sets": observations,
+        "scope": "Last saved worker observations, not final native shutdown counts. Only complete pinned set reports are shown; the original reference job remains failed and was not restarted."}
 
 
 def collect(source, *, input_sha256=None):
     source = Path(source).resolve()
     path = source / "summary.json" if source.is_dir() else source
-    if path.name not in {"summary.json", "failure.json"}:
-        raise ValueError("Supply a completed run directory or its explicit failure.json")
+    if path.name not in {"summary.json", "failure.json", "completion.json"}:
+        raise ValueError("Supply a completed run directory, failure.json or completion.json")
     run, pin = path.parent, input_sha256 or file_hash(path)
     main = _json({"path": str(path), "sha256": pin}, owner=run)
     status = _status(main, "Expanded run")
@@ -191,6 +319,10 @@ def collect(source, *, input_sha256=None):
         raise ValueError("Unexpected expanded stage names")
     if status == "completed" and set(stages) != set(STAGES):
         raise ValueError("Completed expanded output is missing a required stage")
+    original, completion_plan = _completion(main, run) if path.name == "completion.json" else (None, None)
+    if original is None and any(key in main for key in ("completion_status", "completion_plan", "partial_reference_progress")):
+        raise ValueError("Remaining-check evidence requires an explicit completion.json")
+    finish_completed = main.get("completion_status") == "completed"
     summaries, configs, evidence, stage_status = {}, {}, [], []
     for name in STAGES:
         if name not in stages:
@@ -209,32 +341,18 @@ def collect(source, *, input_sha256=None):
         if (summary.get("config_file_sha256", stage["config"]["sha256"]) != stage["config"]["sha256"]
                 or summary.get("provenance_sha256", stage["provenance"]["sha256"]) != stage["provenance"]["sha256"]):
             raise ValueError("Saved worker summary belongs to different stage inputs")
-        if status == "completed" and stage_state != "completed" and not name.startswith("matches-"):
+        if ((status == "completed" or finish_completed) and stage_state != "completed"
+                and not (name.startswith("matches-") and stage_state == "incomplete")):
             raise ValueError("Completed pipeline contains an unfinished required stage")
         summaries[name], configs[name] = summary, config
         stage_status.append({"name": name, "status": stage_state, "reason": summary.get("reason"),
                              "job": stage.get("job", {}), "wandb_url": stage.get("wandb_url")})
         evidence.append({"label": name, "summary": stage["summary"], "config": stage["config"],
                          "provenance": stage["provenance"], "wandb_url": stage.get("wandb_url")})
-    failure = main.get("failed_stage")
-    if failure is not None:
-        name = failure.get("name")
-        directory = (ROOT / failure["directory"]).resolve()
-        if name not in STAGES or directory != run / name:
-            raise ValueError("Failed stage leaves the expected run directory")
-        checked = {}
-        allowed = {"config.json", "provenance.json", "worker/job.json", "worker/summary.json", "worker/training_summary.json",
-                   "worker/failure.json", "worker/training_failure.json"}
-        for relative, reference in failure.get("artifacts", {}).items():
-            if relative not in allowed or _path(reference, owner=directory) != directory / relative:
-                raise ValueError("Unexpected failed-stage artifact")
-            checked[relative] = _json(reference, owner=directory)
-        failure = {"name": name, "artifacts": checked, "pins": failure["artifacts"]}
-        failed_status = next(item for item in stage_status if item["name"] == name)
-        failed_status.update(status="failed", reason=main.get("reason"))
-        if name.startswith("matches-") and "worker/summary.json" in checked:
-            _status(checked["worker/summary.json"], "Failed match worker")
-            summaries[name] = checked["worker/summary.json"]
+    original_reason = original.get("reason") if original is not None else main.get("reason")
+    completion_reason = main.get("completion_reason", main.get("reason")) if original is not None else None
+    failure = _failed_stage(main.get("failed_stage"), run, original_reason, stage_status, summaries)
+    completion_failure = _failed_stage(main.get("completion_failed_stage"), run, completion_reason, stage_status, summaries)
     common_sets, selection = {}, None
     if "preparation" in summaries:
         prepared = summaries["preparation"]
@@ -254,6 +372,10 @@ def collect(source, *, input_sha256=None):
                 raise ValueError("Frozen common set differs from its preparation summary")
             common_sets[spec["id"]] = {"spec": spec, "rows": item["rows"], "coverage": item["coverage"],
                                       "manifest": item["manifest"]}
+    partial_reference = None
+    if main.get("partial_reference_progress") is not None:
+        reports, partial_reference = _partial_reference(main["partial_reference_progress"], failure, common_sets, run)
+        summaries[REFERENCE_STAGE] = {"status": "failed", "reports": reports}
     evaluations, predictions = {identity: {} for identity in SETS}, {}
     for arm in (*ARMS, "human-reference"):
         name = "evaluation-" + arm
@@ -315,8 +437,12 @@ def collect(source, *, input_sha256=None):
             matched = matched and left.get("row_keys_sha256") == right.get("row_keys_sha256") and bool(left.get("update_metrics"))
             matched = matched and [block["order_sha256"] for block in left.get("update_metrics", [])] == [
                 block["order_sha256"] for block in right.get("update_metrics", [])]
-    if status == "completed" and (not matched or main.get("matched_training") is not True):
+    if ((status == "completed" and main.get("matched_training") is not True)
+            or (status == "completed" or original is not None) and not matched):
         raise ValueError("Completed comparison lacks matched training evidence")
+    if original is not None and any(configs[arm].get("inputs", {}).get("training_decision") != main["training_decision"]
+                                    for arm in ARMS):
+        raise ValueError("Completion changed the original training decision")
     decision = _json(main["training_decision"], owner=run) if main.get("training_decision") else None
     panels, games = {}, []
     for cohort in ("baseline", "combined"):
@@ -327,11 +453,15 @@ def collect(source, *, input_sha256=None):
             panels[cohort] = {"summary": summaries[name], "replay_status": replay}
     return {"schema": "expanded_e2_review_v1", "bundle_id": pin, "input": {"path": str(path), "sha256": pin},
         "input_pin_scope": "Caller supplied" if input_sha256 else "Observed during export; downstream references checked against their saved pins",
-        "status": status, "reason": main.get("reason"), "plan": main["plan"], "plan_parameters": plan["parameters"],
+        "status": status, "reason": original_reason, "plan": main["plan"], "plan_parameters": plan["parameters"],
+        "completion_status": main.get("completion_status"), "completion_reason": completion_reason,
+        "completion_plan": main.get("completion_plan"), "completion_parameters": completion_plan.get("parameters") if completion_plan else None,
+        "original_failure": main.get("original_failure"), "partial_reference": partial_reference,
         "arms": list(ARMS), "sets": list(SETS), "common_sets": common_sets, "selection": selection,
         "evaluations": evaluations, "paired": paired, "training": training, "probes": probes,
         "training_decision": decision, "matched_training": matched, "costs": _costs(main, run),
-        "stages": stage_status, "failure": failure, "panels": panels, "games": games, "evidence": evidence,
+        "stages": stage_status, "failure": failure, "completion_failure": completion_failure,
+        "panels": panels, "games": games, "evidence": evidence,
         "promotion": "not_promoted", "feedback_recorded": False,
         "limitations": ["One training seed. This experiment cannot promote an opponent profile or claim a human rank.",
             "The addition changes both the source population and its komi mix; it does not isolate a komi effect.",
@@ -368,7 +498,8 @@ def export(source, output, *, input_sha256=None):
         stream.write(page)
     manifest = {"schema": "expanded_e2_review_export_v1", "html": str(output.resolve()),
         "html_sha256": file_hash(output), "source": data["input"], "template_sha256": file_hash(TEMPLATE),
-        "collector_sha256": file_hash(Path(__file__)), "status": data["status"], "games": len(data["games"]),
+        "collector_sha256": file_hash(Path(__file__)), "status": data["status"], "completion_status": data["completion_status"],
+        "games": len(data["games"]),
         "cpu_seconds": time.process_time() - cpu, "wall_seconds": time.monotonic() - started,
         "gpu_seconds": 0, "raw_dataset_reads": 0, "checkpoint_reads": 0, "inference_calls": 0}
     with manifest_path.open("x") as stream:
@@ -379,7 +510,7 @@ def export(source, output, *, input_sha256=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", type=Path, help="Completed run directory or explicit failure.json")
+    parser.add_argument("source", type=Path, help="Completed run directory, failure.json or completion.json")
     parser.add_argument("output", type=Path, help="Unused HTML output path")
     parser.add_argument("--input-sha256")
     args = parser.parse_args()

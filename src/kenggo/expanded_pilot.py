@@ -133,37 +133,53 @@ def matched_training(summaries, *, expected_updates=None):
 
 
 class Session:
-    def __init__(self, output, plan, ledger):
+    def __init__(self, output, plan, ledger, *, origin=None, phase="main", extra_output_dirs=()):
         self.output, self.plan, self.ledger = output, plan, ledger
         self.started, self.cpu_started = time.monotonic(), time.process_time()
         self.tree_cpu_started = _usage(os.getpid())[0]
         self.stage_parent_cpu = self.stage_wall = 0.0
         self.closed = False
         self.limits = plan["parameters"]["limits"]
-        self.utc = datetime.now(timezone.utc)
-        self.deadline = self.utc + timedelta(seconds=self.limits["wall_seconds"])
-        self.initial = ledger.snapshot()
+        now = datetime.now(timezone.utc)
+        if phase not in {"main", "completion"} or (origin is None) != (phase == "main"):
+            raise ValueError("A completion phase requires the original production session")
+        current = ledger.snapshot()
+        self.phase_old_ids = {entry["run_id"] for entry in current["state"]["entries"]}
+        self.utc = now if origin is None else datetime.fromisoformat(origin["launch_utc"])
+        self.deadline = (self.utc + timedelta(seconds=self.limits["wall_seconds"]) if origin is None
+                         else datetime.fromisoformat(origin["deadline_utc"]))
+        if (origin is not None and origin["limits"] != self.limits
+                or self.utc.tzinfo is None or self.deadline.tzinfo is None or self.utc > now
+                or self.deadline - self.utc != timedelta(seconds=self.limits["wall_seconds"])):
+            raise ValueError("The original production limits and deadline must remain unchanged")
+        self.elapsed_before = (now - self.utc).total_seconds()
+        self.initial = current if origin is None else origin["ledger_before"]
         self.old_ids = {x["run_id"] for x in self.initial["state"]["entries"]}
-        self.root_id = output.name + "-supervisor"
+        self.root_id = output.name + ("-supervisor" if phase == "main" else "-completion-supervisor")
+        self.progress_path = output / ("progress.json" if phase == "main" else "completion-progress.json")
+        self.extra_output_dirs = tuple(Path(path) for path in extra_output_dirs)
         ledger.reserve(self.root_id, estimate_gpu_seconds=0, shutdown_gpu_seconds=0,
                        metadata={"purpose": "expanded_supervisor", "launch_utc": self.utc.isoformat(),
+                                 "phase": phase, "phase_launch_utc": now.isoformat(),
                                  "final_write_cpu_reserve_seconds": 10})
         self.stages = {}
         self.failed_stage = None
 
     def _unreported_cpu(self, new_entries):
         own = time.process_time() - self.cpu_started - self.stage_parent_cpu
-        tree = _usage(os.getpid())[0] - self.tree_cpu_started - sum(x["cpu_seconds"] for x in new_entries)
+        phase_entries = [entry for entry in new_entries if entry["run_id"] not in self.phase_old_ids]
+        tree = _usage(os.getpid())[0] - self.tree_cpu_started - sum(x["cpu_seconds"] for x in phase_entries)
         return max(0, own, tree)
 
     def snapshot(self):
         state = self.ledger.snapshot()
         new = [x for x in state["state"]["entries"] if x["run_id"] not in self.old_ids]
         return {"launch_utc": self.utc.isoformat(), "deadline_utc": self.deadline.isoformat(),
-                "elapsed_seconds": time.monotonic() - self.started,
+                "elapsed_seconds": self.elapsed_before + time.monotonic() - self.started,
                 "cpu_seconds": sum(x["cpu_seconds"] for x in new)
                     + (0 if self.closed else self._unreported_cpu(new) + 10),
-                "output_bytes": _output_bytes(self.output), "ledger": state}
+                "output_bytes": _output_bytes(self.output)
+                    + sum(_output_bytes(path) for path in self.extra_output_dirs), "ledger": state}
 
     def stage(self, name, config, kind, *, module, device=None, register=False):
         state = self.snapshot()
@@ -179,7 +195,7 @@ class Session:
         if state["ledger"]["budget_breached"]:
             raise RuntimeError("Existing ledger breach blocks further jobs")
         directory = self.output / name
-        save_json(self.output / "progress.json", {"status": "running", "active_stage": name,
+        save_json(self.progress_path, {"status": "running", "active_stage": name,
             "stages": self.stages, "costs": state}, replace=True)
         try:
             result = _stage(self.output, name, config, limits, self.ledger, module=module,
@@ -205,7 +221,7 @@ class Session:
                     self.stage_parent_cpu += job["parent_cpu_seconds"]
                     self.stage_wall += job["costs"]["wall_seconds"]
         self.stages[name] = result[0]
-        save_json(self.output / "progress.json", {"status": "running", "last_stage": name,
+        save_json(self.progress_path, {"status": "running", "last_stage": name,
             "stages": self.stages, "costs": self.snapshot()}, replace=True)
         return result
 

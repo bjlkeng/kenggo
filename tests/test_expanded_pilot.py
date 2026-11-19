@@ -1,5 +1,5 @@
 import copy
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import tempfile
@@ -131,6 +131,57 @@ class ExpandedPilotTests(unittest.TestCase):
                 self.assertEqual(session.snapshot()["cpu_seconds"], 37)
                 session.close("completed", None)
                 self.assertEqual(session.snapshot()["cpu_seconds"], 37)
+
+    def test_completion_preserves_the_original_clock_and_counts_only_new_cpu_once(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)
+            ledger = BudgetLedger.create(output / "ledger.json", budget_id="fixture", gpu_seconds=86400)
+            initial = ledger.snapshot()
+            ledger.reserve("old-worker", estimate_gpu_seconds=0, shutdown_gpu_seconds=0, metadata={})
+            ledger.record("old-worker", allocations=[], outcome="completed", arm_shares={"shared": 1},
+                          cpu_seconds=20, wall_seconds=20)
+            old_entries = ledger.snapshot()["state"]["entries"]
+            started = datetime.now(timezone.utc) - timedelta(hours=12)
+            origin = {"launch_utc": started.isoformat(), "deadline_utc": (started + timedelta(days=1)).isoformat(),
+                      "limits": self.plan()["parameters"]["limits"], "ledger_before": initial}
+            save_json(output / "progress.json", {"immutable": True})
+            with patch("kenggo.expanded_pilot.time.process_time", return_value=10), \
+                    patch("kenggo.expanded_pilot._usage", return_value=(100, 0, set())) as tree:
+                session = Session(output, self.plan(), ledger, origin=origin, phase="completion")
+                tree.return_value = (107, 0, set())
+                state = session.snapshot()
+                self.assertGreaterEqual(state["elapsed_seconds"], 12 * 3600)
+                self.assertEqual(state["deadline_utc"], origin["deadline_utc"])
+                self.assertEqual(state["cpu_seconds"], 37)
+                with patch("kenggo.expanded_pilot._stage", return_value=({}, {"status": "completed"})):
+                    session.stage("analysis", {}, "analysis", module="fixture")
+                session.close("completed", None)
+            self.assertEqual(ledger.snapshot()["state"]["entries"][:1], old_entries)
+            self.assertEqual(json.loads((output / "progress.json").read_text()), {"immutable": True})
+            self.assertTrue((output / "completion-progress.json").exists())
+            self.assertEqual(session.snapshot()["cpu_seconds"], 37)
+
+    def test_completion_cannot_restore_spent_cpu_or_extend_the_original_limit(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)
+            ledger = BudgetLedger.create(output / "ledger.json", budget_id="fixture", gpu_seconds=86400)
+            initial = ledger.snapshot()
+            ledger.reserve("spent", estimate_gpu_seconds=0, shutdown_gpu_seconds=0, metadata={})
+            ledger.record("spent", allocations=[], outcome="failed", arm_shares={"shared": 1},
+                          cpu_seconds=115190, wall_seconds=20, reason="spent CPU")
+            started = datetime.now(timezone.utc) - timedelta(hours=12)
+            origin = {"launch_utc": started.isoformat(), "deadline_utc": (started + timedelta(days=1)).isoformat(),
+                      "limits": self.plan()["parameters"]["limits"], "ledger_before": initial}
+            changed = copy.deepcopy(origin)
+            changed["deadline_utc"] = (started + timedelta(days=2)).isoformat()
+            with self.assertRaisesRegex(ValueError, "deadline must remain unchanged"):
+                Session(output, self.plan(), ledger, origin=changed, phase="completion")
+            session = Session(output, self.plan(), ledger, origin=origin, phase="completion")
+            with patch("kenggo.expanded_pilot._stage") as launch:
+                with self.assertRaisesRegex(RuntimeError, "Remaining production"):
+                    session.stage("analysis", {}, "analysis", module="fixture")
+                launch.assert_not_called()
+            session.close("failed", "spent CPU")
 
     def test_four_arm_wiring_preserves_training_fits_and_reference_scope(self):
         plan = self.plan()
