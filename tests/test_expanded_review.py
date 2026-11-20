@@ -795,16 +795,18 @@ class ExpandedReviewTests(unittest.TestCase):
         self.assertIn("\\u003c/script>", page)
         payload = page.split('<script id="expanded-data" type="application/json">', 1)[1].split("</script>", 1)[0]
         self.assertEqual(json.loads(payload)["reason"], data["reason"])
-        self.assertEqual(page.count("<script "), 2)
+        self.assertEqual(page.count("<script "), 4)
+        self.assertIn('id="learning-review"', page)
+        self.assertIn('id="learning-data"', page)
         self.assertNotIn("__EXPANDED_DATA_JSON__", page)
         self.assertIn("connect-src 'none'", page)
         self.assertNotIn("innerHTML", page)
         output = self.root / "review.html"
-        manifest = review.export(self.run, output)
+        manifest = review.export(self.run, output, history=None)
         self.assertEqual(manifest["html_sha256"], file_hash(output))
         self.assertEqual((manifest["raw_dataset_reads"], manifest["checkpoint_reads"], manifest["inference_calls"]), (0, 0, 0))
         with self.assertRaisesRegex(ValueError, "unused"):
-            review.export(self.run, output)
+            review.export(self.run, output, history=None)
 
     def test_page_script_selectors_replay_notes_and_downloads_without_a_browser(self):
         self.check_page_controls(review.collect(self.run))

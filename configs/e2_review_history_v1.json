@@ -1,0 +1,54 @@
+{
+  "schema": "e2_review_history_v1",
+  "runs": [
+    {
+      "id": "base-2026-11-14",
+      "title": "14 Nov \u00b7 small baseline pilot",
+      "short": "14 Nov",
+      "bundle_id": "920d776794c77e2b6b95faaf266f4c020a9ab84e0c7ff6650683d5da57210c03",
+      "source": {
+        "path": "runs/e2-manual-review-2026-11-14/review-final.html",
+        "sha256": "89636a1b36062a2a8f756adfcd6a19854cc591e437a4734a3a02944d0e697a84",
+        "bytes": 4162253
+      },
+      "description": "Two models trained on 22,916 moves from 106 games, for 20 epochs (458,320 move presentations). Compared rank input on versus off with the same small board network.",
+      "notes": [
+        "One training seed. Only a few rank groups have development data; intervals are inconclusive.",
+        "Human SL is an external reference with different history/context and unknown training overlap."
+      ]
+    },
+    {
+      "id": "expanded-2026-11-18",
+      "title": "18\u201319 Nov \u00b7 expanded training",
+      "short": "18 Nov",
+      "bundle_id": "52cfd822c7ef71ac94da4fe8324d135f2380b5358d39781ae8ad37fd74475bea",
+      "source": {
+        "bytes": 20823352,
+        "path": "runs/e2-expanded-completion-review-2026-11-19/review.html",
+        "sha256": "9fc7f2616095138bc806db122a049bce41dc8a095b1bc41bb96ffeb5ad37a7f0"
+      },
+      "description": "Four models: rank on/off with 1 million 6.5-komi training moves, or 2 million moves including 0.5 komi. Each trained for 31,250 updates and 4 million move presentations.",
+      "notes": [
+        "One new seed and larger training sets than the small pilot; the development sample also changed. Cross-run differences do not isolate one cause.",
+        "The original Human SL job hit its CPU cap. The saved completion review retains partial reference evidence, 20 of 24 game slots, missing ranks and inconclusive overall intervals."
+      ]
+    },
+    {
+      "id": "rerun-2026-11-19",
+      "title": "19\u201320 Nov \u00b7 wider evaluation rerun",
+      "short": "19 Nov",
+      "bundle_id": "441bfe36a849192afc96f052360dac1a78d3fc931b03cc093e6a3c3567c7732e",
+      "source": {
+        "path": "runs/e2-week-owner-review-2026-11-20/worker/review.html",
+        "sha256": "6ea6c35b8c48eeba2d89965898b96ba4e2b0d8669aba6038b17409fcd6bf462c",
+        "bytes": 29444823
+      },
+      "description": "Reused the exact four expanded models without more training. Evaluated a wider frozen sample: 539 games and 120,450 positions, with complete 6.5-komi Human SL reports and all 24 game slots.",
+      "notes": [
+        "Default comparison uses 12k\u20131d, chosen before prediction. Full 15k\u20131d diagnostics retain missing or weak support.",
+        "Every learned game had a premature-pass flag. Adding rank input worsened outcome error on unseen-account 0.5-komi positions. E2 readiness remains open.",
+        "The eight failed verifier rank-input checks were false positives. A separate saved-evidence assessment passed; the original failed attempt remains recorded."
+      ]
+    }
+  ]
+}

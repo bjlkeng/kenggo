@@ -10,6 +10,7 @@ import time
 from sgfmill.boards import Board
 
 from kenggo.checkpoints import file_hash, read_json
+from kenggo.learning_review import DEFAULT_HISTORY, build, insert, source_pins
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -612,33 +613,36 @@ def collect(source, *, input_sha256=None):
     return _display_details(data) if rerun else data
 
 
-def render(data):
+def render(data, *, learning=None):
     encoded = json.dumps(data, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
     encoded = encoded.replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
     template = TEMPLATE.read_text()
     if template.count("__EXPANDED_DATA_JSON__") != 1:
         raise ValueError("The review template needs exactly one data marker")
-    page = template.replace("__EXPANDED_DATA_JSON__", encoded)
+    page = insert(template.replace("__EXPANDED_DATA_JSON__", encoded),
+                  build(data) if learning is None else learning)
     if len(page.encode()) > MAX_PAGE_BYTES:
         raise ValueError("Review page exceeds its 64 MiB allowance")
     return page
 
 
-def export(source, output, *, input_sha256=None):
+def export(source, output, *, input_sha256=None, history=DEFAULT_HISTORY):
     started, cpu = time.monotonic(), time.process_time()
     output = Path(output)
     manifest_path = output.with_suffix(".manifest.json")
     if output.exists() or output.is_symlink() or manifest_path.exists() or manifest_path.is_symlink():
         raise ValueError("Review output and manifest paths must be unused")
     data = collect(source, input_sha256=input_sha256)
-    page = render(data)
+    learning = build(data, history)
+    page = render(data, learning=learning)
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x") as stream:
         stream.write(page)
     manifest = {"schema": "expanded_e2_review_export_v1", "html": str(output.resolve()),
         "html_sha256": file_hash(output), "source": data["input"], "template_sha256": file_hash(TEMPLATE),
         "collector_sha256": file_hash(Path(__file__)), "status": data["status"], "completion_status": data["completion_status"],
-        "games": len(data["games"]),
+        "games": len(data["games"]), "learning_review_code": source_pins(),
+        "history_catalog": learning["catalog"], "history_sources": learning["history_sources"],
         "cpu_seconds": time.process_time() - cpu, "wall_seconds": time.monotonic() - started,
         "gpu_seconds": 0, "raw_dataset_reads": 0, "checkpoint_reads": 0, "inference_calls": 0}
     with manifest_path.open("x") as stream:
@@ -652,5 +656,6 @@ if __name__ == "__main__":
     parser.add_argument("source", type=Path, help="Completed run directory, failure.json or completion.json")
     parser.add_argument("output", type=Path, help="Unused HTML output path")
     parser.add_argument("--input-sha256")
+    parser.add_argument("--history", type=Path, default=DEFAULT_HISTORY)
     args = parser.parse_args()
-    print(json.dumps(export(args.source, args.output, input_sha256=args.input_sha256), indent=2))
+    print(json.dumps(export(args.source, args.output, input_sha256=args.input_sha256, history=args.history), indent=2))

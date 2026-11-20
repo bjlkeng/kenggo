@@ -1,0 +1,100 @@
+<section id="learning-review" aria-labelledby="lr-title">
+<style>
+#learning-review{max-width:1152px;margin:20px auto;padding:24px;background:#fff;border:1px solid #d6dfdc;border-radius:12px;color:#182c32;font:15px/1.5 system-ui,sans-serif;box-sizing:border-box}
+#learning-review *{box-sizing:border-box}#learning-review h2{margin:0 0 12px;font-size:24px}#learning-review h3{margin:20px 0 8px;font-size:19px}#learning-review p{margin:8px 0 12px}#learning-review .lr-muted{color:#52676d}#learning-review .lr-note{padding:12px;border-left:4px solid #248178;background:#f3f7f5}#learning-review .lr-controls{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0}#learning-review label{display:block;flex:1;min-width:180px;font-weight:600}#learning-review select{display:block;width:100%;padding:9px;margin-top:5px;border:1px solid #b9cac5;border-radius:6px;background:white;color:inherit;font:inherit}#learning-review .lr-table{overflow:auto;max-width:100%;margin:14px 0}#learning-review table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}#learning-review th,#learning-review td{padding:10px;border-bottom:1px solid #d6dfdc;vertical-align:top}#learning-review th{background:#f3f7f5}#learning-review .lr-charts{display:grid;grid-template-columns:1fr 1fr;gap:20px}#learning-review .lr-chart-box{min-width:0}#learning-review svg{display:block;width:100%}#learning-review svg text{fill:#182c32;font:12px system-ui,sans-serif}#learning-review details{margin:14px 0}#learning-review summary{cursor:pointer;font-weight:600;color:#185e57}#learning-review .lr-records{max-height:280px;overflow:auto}#learning-review .lr-run{margin:14px 0;padding:14px;background:#f3f7f5;border-radius:8px}#lr-history-table table{min-width:880px}#lr-split-metrics table{min-width:560px}#lr-support table,#lr-points table{min-width:650px}#learning-review code{overflow-wrap:anywhere}#learning-review :focus-visible{outline:3px solid #278a7f;outline-offset:3px}
+@media(max-width:700px){#learning-review{margin:15px;padding:16px}#learning-review .lr-charts{grid-template-columns:1fr}#learning-review .lr-controls{display:block}#learning-review label{margin:12px 0}#learning-review th,#learning-review td{padding:8px}}
+</style>
+<h2 id="lr-title">Learning curves and previous runs</h2>
+<p>Policy loss (NLL) measures error on the recorded human move. Value loss (MSE) measures error predicting the eventual winner. Lower is better for both; move agreement is better when higher.</p>
+<div class="lr-controls"><label>Run<select id="lr-run"></select></label><label>Model<select id="lr-model"></select></label><label>Validation data<select id="lr-set"></select></label></div>
+<label>Rank scope<select id="lr-scope"><option value="default">Each run’s review scope</option><option value="reported">Each run’s original full scope</option></select></label>
+<p id="lr-description" class="lr-note"></p><p id="lr-training-facts"></p>
+<div class="lr-charts"><div class="lr-chart-box"><h3>Training and validation move loss</h3><svg id="lr-policy-chart" role="img" aria-label="Training NLL curve and final validation NLL"></svg></div><div class="lr-chart-box"><h3>Training and validation outcome loss</h3><svg id="lr-value-chart" role="img" aria-label="Training outcome MSE curve and final validation MSE"></svg></div></div>
+<p id="lr-curve-note" class="lr-note"></p>
+<div id="lr-split-metrics"></div>
+<p class="lr-muted">Training points average the batches seen while weights were changing, with training-time dropout. Validation uses the fixed final model and equal rank, game-side and position weighting. Training and validation use different data and averaging; their gap alone does not measure overfitting. Value losses exclude masked outcomes. No full-training-set evaluation or training move-agreement metric was saved.</p>
+<details><summary>Saved training points and exact validation support</summary><div id="lr-points" class="lr-records"></div><div id="lr-support"></div></details>
+<h3>Overall metrics across runs</h3>
+<p class="lr-note">These are each run’s own development results. Samples, rank coverage and training amounts changed. This is a history of results, not a matched estimate of improvement across runs. Evaluation reruns can reuse trained models; each run’s notes identify that reuse. Use the paired comparisons in the original review below for differences on the same positions.</p>
+<div class="lr-controls"><label>Comparison metric<select id="lr-history-metric"><option value="nll">Move loss · lower is better</option><option value="top1">Move agreement · higher is better</option><option value="value_mse">Outcome loss · lower is better</option></select></label></div>
+<p id="lr-history-context"></p><svg id="lr-history-chart" role="img" aria-label="Historical overall metrics on each run's own validation sample"></svg><div id="lr-history-table"></div><div id="lr-run-notes"></div>
+<details><summary>Saved sources and measurement definitions</summary><p>Training losses are the saved, count-weighted means for each update block or epoch. Validation metrics retain their original masks, rank lists and uncertainty. Missing or unsupported estimates stay unavailable; zero-probability NLL stays infinite. No inference or training runs to build this page.</p><pre id="lr-sources" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto"></pre></details>
+</section>
+<script id="learning-data" type="application/json">__LEARNING_DATA_JSON__</script>
+<script id="learning-script">
+"use strict";
+(() => {
+  const data = JSON.parse(document.getElementById("learning-data").textContent);
+  const $ = id => document.getElementById(id);
+  const finite = n => typeof n === "number" && Number.isFinite(n);
+  const number = (n, digits = 4) => finite(n) ? n.toLocaleString("en-US", {maximumFractionDigits:digits}) : "Not recorded";
+  const el = (tag, text, attrs = {}) => { const n = document.createElement(tag); if (text != null) n.textContent = text; for (const [k,v] of Object.entries(attrs)) n.setAttribute(k,v); return n; };
+  const add = (node, ...children) => { node.append(...children); return node; };
+  const svg = (tag, attrs, text) => { const n = document.createElementNS("http://www.w3.org/2000/svg",tag); for (const [k,v] of Object.entries(attrs)) n.setAttribute(k,String(v)); if (text != null) n.textContent=text; return n; };
+  const labels = {conditioned:"Rank on",unconditioned:"Rank off",conditioned_unknown_ranks:"Rank on, ranks hidden", "baseline-conditioned":"6.5-only · rank on","baseline-unconditioned":"6.5-only · rank off","combined-conditioned":"Combined · rank on","combined-unconditioned":"Combined · rank off","human-reference":"Human SL reference"};
+  const modelLabel = id => labels[id] ?? id;
+  const setLabel = id => (id.startsWith("validation_") ? "Unseen accounts" : "Population development") + " · " + (id.endsWith("komi1") ? "0.5" : "6.5") + " komi";
+  function table(headers, rows) { return add(el("div", null, {class:"lr-table"}), add(el("table"),add(el("thead"),add(el("tr"),...headers.map(h=>el("th",h,{scope:"col"})))),add(el("tbody"),...rows.map(row=>add(el("tr"),...row.map(x=>el("td",String(x)))))))); }
+  function options(id, entries, preferred) { $(id).replaceChildren(...entries.map(([value,label])=>el("option",label,{value}))); if (entries.some(([v])=>v===preferred)) $(id).value=preferred; }
+  function value(m) { if (m?.status!=="available") return null; const e=m.estimate; return e?.status==="finite" && finite(e.value) ? e.value : e?.status==="positive_infinity" ? Infinity : e?.status==="negative_infinity" ? -Infinity : null; }
+  function show(m,key) { const v=value(m); return v===Infinity ? "+∞" : v===-Infinity ? "−∞" : finite(v) ? key==="top1" ? number(v*100,2)+"%" : number(v) : "Unavailable"+(m?.missing_ranks?.length ? " · missing "+m.missing_ranks.join(", ") : ""); }
+  function interval(m,key) { const u=m?.uncertainty; return u?.status==="available" && u.interval95?.length===2 ? "["+u.interval95.map(v=>key==="top1"?number(v*100,2)+"%":number(v)).join(", ")+"]" : (u?.status ?? "unavailable")+(u?.reasons?.length?": "+u.reasons.join(", ").replaceAll("_"," "):""); }
+  const current = data.runs.find(r=>r.current) ?? data.runs.at(-1);
+  const selectedRun = () => data.runs.find(r=>r.id===$("lr-run").value);
+  const scopeKey = run => $("lr-scope").value==="reported" ? "reported" : run.default_scope;
+  const report = (run, arm) => run.evaluations[$("lr-set").value]?.[arm]?.[scopeKey(run)];
+  const rankLabel = r => r?.ranks?.length ? r.ranks.join(", ") : "Rank list not recorded";
+  function lineChart(id, points, key, validation, finalStep) {
+    const node=$(id), width=Math.max(250,node.parentElement.clientWidth), height=260, left=48, right=20, top=20, bottom=48;
+    node.setAttribute("viewBox",`0 0 ${width} ${height}`); node.style.height=height+"px"; node.replaceChildren();
+    const ys=points.map(p=>p[key]).filter(finite), v=value(validation), xmax=Math.max(1,finalStep??0,...points.map(p=>p.step)), ymax=Math.max(1,...ys,finite(v)?v:0)*1.08;
+    const x=n=>left+n/xmax*(width-left-right), y=n=>height-bottom-n/ymax*(height-top-bottom);
+    for (let i=0;i<=4;i++) { const n=ymax*i/4; node.append(svg("line",{x1:left,x2:width-right,y1:y(n),y2:y(n),stroke:"#e0e7e3"}),svg("text",{x:left-6,y:y(n)+4,"text-anchor":"end"},number(n,2))); }
+    let segment=[];
+    const flush=()=>{if(segment.length)node.append(svg("polyline",{points:segment.join(" "),fill:"none",stroke:"#185e57","stroke-width":1.6}));segment=[];};
+    for (const p of points) { if (finite(p[key])) segment.push(`${x(p.step)},${y(p[key])}`); else flush(); } flush();
+    if (finite(v) && finite(finalStep)) node.append(add(svg("circle",{cx:x(finalStep),cy:y(v),r:5,fill:"#9c3d80"}),svg("title",{},"Final validation: "+show(validation,key))));
+    node.append(svg("text",{x:left,y:height-23},"0"),svg("text",{x:width-right,y:height-23,"text-anchor":"end"},number(xmax,0)+" updates"),svg("text",{x:left,y:height-4,fill:"#185e57"},"Green: train · purple: validation"));
+    if (!ys.length) node.append(svg("text",{x:left,y:top+20},"Training curve not recorded"));
+  }
+  function learning() {
+    const run=selectedRun(), arm=$("lr-model").value, training=run.training[arm], r=report(run,arm), m=r?.metrics??{}, points=training?.points??[];
+    $("lr-description").textContent=run.title+". "+run.description;
+    $("lr-training-facts").textContent=training ? `${finite(training.rows)?number(training.rows,0)+" training moves; ":"Training size: see run description. "}${number(training.updates,0)} updates; ${number(training.presentations,0)} move presentations. ${points.length} saved ${training.window} averages.` : arm==="human-reference" ? "Human SL is an external reference; its training curves are unavailable." : "No training record was included for this model variant.";
+    $("lr-curve-note").textContent="Validation was measured only at the final checkpoint. No intermediate validation curve was recorded. Training move agreement was not recorded. "+(r?"Selected validation ranks: "+rankLabel(r)+".":"This validation set or rank scope was not recorded for this model.");
+    lineChart("lr-policy-chart",points,"nll",m.nll,training?.updates);
+    lineChart("lr-value-chart",points,"value_mse",m.value_mse,training?.updates);
+    const last=points.at(-1), window=last?`Last training ${training.window} · ${number(last.updates,0)} updates / ${number(last.examples,0)} presentations`:"Training · no saved window";
+    $("lr-split-metrics").replaceChildren(table(["Measurement","Move loss (NLL)","Move agreement","Outcome loss (MSE)"],[[window,number(last?.nll),"Not recorded",number(last?.value_mse)],["Final validation · "+setLabel($("lr-set").value),show(m.nll,"nll"),show(m.top1,"top1"),show(m.value_mse,"value_mse")]]));
+    $("lr-points").replaceChildren(table(["End update","Window updates","Move labels","Value labels","NLL","MSE"],points.map(p=>[number(p.step,0),number(p.updates,0),number(p.policy_count,0),number(p.value_count,0),number(p.nll),number(p.value_mse)])));
+    $("lr-support").replaceChildren(table(["Validation metric","Eligible moves","Masked moves","95% interval / support"],Object.entries(m).map(([k,v])=>[k,number(v.counts?.moves,0),number(v.masked_moves,0),interval(v,k)])));
+  }
+  function history() {
+    const key=$("lr-history-metric").value, rows=[];
+    for(const run of data.runs) for(const arm of [...new Set([...Object.keys(run.training),...Object.values(run.evaluations).flatMap(Object.keys)])]) {
+      const r=report(run,arm); rows.push({run,arm,r,m:r?.metrics?.[key]});
+    }
+    $("lr-history-context").textContent=setLabel($("lr-set").value)+". "+(data.runs.length===1 ? data.history_status : "Each row keeps that run’s own rank scope and sample. Missing estimates are not zero.")+($("lr-set").value.endsWith("komi1")?" The 6.5-only models are outside training support at 0.5 komi; Human SL was not measured here.":"");
+    const node=$("lr-history-chart"), width=Math.max(250,node.parentElement.clientWidth), height=Math.max(60,rows.length*64+24), max=Math.max(1,...rows.map(row=>value(row.m)).filter(finite))*1.08;
+    node.replaceChildren();node.setAttribute("viewBox",`0 0 ${width} ${height}`);node.style.height=height+"px";
+    rows.forEach((row,i)=>{const y=22+i*64,v=value(row.m),label=row.run.short+" · "+modelLabel(row.arm);node.append(svg("text",{x:0,y},label));if(finite(v)){const length=v/max*(width-80);node.append(svg("rect",{x:0,y:y+8,width:Math.max(0,length),height:22,rx:3,fill:row.run.current?"#185e57":"#71948d"}),svg("text",{x:length+8,y:y+24},show(row.m,key)));}else node.append(svg("text",{x:0,y:y+25},v===Infinity?"+∞ · outside finite scale":"Unavailable · see table"));});
+    $("lr-history-table").replaceChildren(table(["Run / model","Rank scope","Moves / games","NLL","Agreement","Outcome MSE","Selected metric interval / support"],rows.map(({run,arm,r,m})=>[run.title+" / "+modelLabel(arm),rankLabel(r),number(r?.metrics?.nll?.counts?.moves,0)+" / "+number(r?.metrics?.nll?.counts?.games,0),show(r?.metrics?.nll,"nll"),show(r?.metrics?.top1,"top1"),show(r?.metrics?.value_mse,"value_mse"),interval(m,key)])));
+  }
+  function chooseRun() {
+    const run=selectedRun(), arms=[...new Set([...Object.keys(run.training),...Object.values(run.evaluations).flatMap(Object.keys)])];
+    options("lr-model",arms.map(id=>[id,modelLabel(id)]),arms.includes("combined-conditioned")?"combined-conditioned":arms[0]);
+    options("lr-set",Object.keys(run.evaluations).map(id=>[id,setLabel(id)]),$("lr-set").value||"validation_development_komi13");learning();history();
+  }
+  options("lr-run",data.runs.map(run=>[run.id,run.title+(run.current?" · this review":"")]),current.id);
+  for(const run of data.runs) $("lr-run-notes").append(add(el("div",null,{class:"lr-run"}),el("strong",run.title),el("p",run.description),add(el("ul"),...run.notes.map(note=>el("li",note)))));
+  $("lr-sources").textContent=JSON.stringify({catalog:data.catalog,sources:data.runs.map(run=>({run:run.title,source:run.source,bundle_id:run.bundle_id}))},null,2);
+  $("lr-run").addEventListener("change",chooseRun);$("lr-model").addEventListener("change",learning);$("lr-set").addEventListener("change",()=>{learning();history();});$("lr-scope").addEventListener("change",()=>{learning();history();});$("lr-history-metric").addEventListener("change",history);
+  let resize;window.addEventListener("resize",()=>{clearTimeout(resize);resize=setTimeout(()=>{learning();history();},100);});chooseRun();
+  if(data.original_page_url) document.addEventListener("DOMContentLoaded",()=>{
+    for(const link of document.querySelectorAll("a[href]")) {
+      const href=link.getAttribute("href");
+      if(href && !href.startsWith("#") && !/^[a-z][a-z0-9+.-]*:/i.test(href)) link.href=new URL(href,data.original_page_url).href;
+    }
+  });
+})();
+</script>

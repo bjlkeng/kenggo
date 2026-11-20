@@ -90,6 +90,8 @@ Record the review scope, reviewer/model, pass count, final verdict, and validati
 
 When the owner needs to manually review something, provide a single-page HTML/JS interface when applicable so the evidence is easy to inspect. Show the relevant results and the checks or decisions needed, and link directly to the generated page. Prefer a self-contained page that opens locally without a server. Record accepted feedback in the owning bead; the page does not replace independent Codex review or acceptance checks.
 
+Every experiment review HTML must include learning curves, separate training and validation losses/metrics, and overall metrics from earlier relevant runs. Give each run a concise description of its purpose, data, training amount, changes and limitations. Use saved measurements; label unrecorded metrics and missing validation checkpoints explicitly, and say when no training occurred or a section is not applicable. Before future training, plan checkpoint-level training and validation logging within the approved budget. Keep the data split, rank scope, masks and averaging visible. Do not present results from different samples as a matched gain, or an evaluation rerun as new training. Use the shared [learning-review component](src/kenggo/learning_review.py) for model reviews and follow [the export instructions](docs/review_pages.md). Preserve sealed earlier pages; publish a new version when adding presentation features.
+
 ## Validation and completion
 
 Follow [the workspace setup](docs/workspace.md) for the pinned Linux CPU environment. From the repository root, the current checks are:

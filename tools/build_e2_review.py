@@ -7,6 +7,7 @@ import time
 
 from kenggo.checkpoints import file_hash, read_json
 from kenggo.go import Game
+from kenggo.learning_review import DEFAULT_HISTORY, build, insert, source_pins
 
 ROOT = Path.cwd().resolve()
 
@@ -57,6 +58,7 @@ def collect(run):
                 ('epoch_metrics', 'completed_updates', 'presented_examples', 'initial_tensor_sha256',
                  'row_keys_sha256', 'phase_seconds', 'peak_cuda_allocated_bytes', 'checkpoint_selection')}
                 | {'costs': stages[arm]['job']['costs']}
+                | {key: summaries[arm].get(key) for key in ('training_rows', 'final_checkpoint', 'status')}
                 for arm in ('conditioned', 'unconditioned')}
     ledger = main['ledger']
     if ledger['state']['reservations']:
@@ -136,6 +138,7 @@ def main():
     parser.add_argument('template', type=Path)
     parser.add_argument('decision', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--history', type=Path, default=DEFAULT_HISTORY)
     args = parser.parse_args()
     started, cpu = time.monotonic(), time.process_time()
     data = collect(args.run)
@@ -146,7 +149,8 @@ def main():
     template = args.template.read_text()
     if template.count('__PILOT_DATA_JSON__') != 1:
         raise ValueError('The template must have exactly one data marker')
-    output = template.replace('__PILOT_DATA_JSON__', encoded)
+    learning = build(data, args.history)
+    output = insert(template.replace('__PILOT_DATA_JSON__', encoded), learning)
     if len(output.encode()) > 32 * 1024**2:
         raise ValueError('Review page exceeds its 32 MiB allowance')
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -155,6 +159,8 @@ def main():
     details = {'schema': 'e2_review_export_v1', 'html': str(args.output), 'html_sha256': file_hash(args.output),
                'template_sha256': file_hash(args.template), 'collector_sha256': file_hash(Path(__file__)),
                'pilot_summary_sha256': data['bundle_id'], 'decision_sha256': file_hash(args.decision),
+               'learning_review_code': source_pins(), 'history_catalog': learning['catalog'],
+               'history_sources': learning['history_sources'],
                'games': len(data['games']), 'cpu_seconds': time.process_time() - cpu,
                'wall_seconds': time.monotonic() - started, 'gpu_seconds': 0}
     with args.output.with_suffix('.manifest.json').open('x') as stream:

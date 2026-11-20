@@ -1,0 +1,156 @@
+{
+  "schema": "e2_learning_review_v1",
+  "bead": "kenggo-ydo.15",
+  "review_base": "7cc14872861592fe69644cc744bf4df91b8d588c",
+  "purpose": "Show saved learning curves, training/validation metrics and clearly scoped run history. No new experiment.",
+  "owner_page": {
+    "path": "runs/e2-learning-review-2026-11-20/review.html",
+    "sha256": "b2f6d3f3e4d3ffa2c32b5f5568d01628c2dd0d14bb098bbdc28b80c817387a63",
+    "bytes": 30328457
+  },
+  "catalog": {
+    "path": "configs/e2_review_history_v1.json",
+    "sha256": "b3b04a1b9f4f26d25edeac3d5642345e641fd80fb8fd3ee8d3df71e321e2b64f",
+    "bytes": 3029
+  },
+  "original_source": {
+    "path": "runs/e2-week-owner-review-2026-11-20/worker/review.html",
+    "sha256": "6ea6c35b8c48eeba2d89965898b96ba4e2b0d8669aba6038b17409fcd6bf462c",
+    "bytes": 29444823
+  },
+  "history_sources": [
+    {
+      "path": "runs/e2-manual-review-2026-11-14/review-final.html",
+      "sha256": "89636a1b36062a2a8f756adfcd6a19854cc591e437a4734a3a02944d0e697a84",
+      "bytes": 4162253
+    },
+    {
+      "bytes": 20823352,
+      "path": "runs/e2-expanded-completion-review-2026-11-19/review.html",
+      "sha256": "9fc7f2616095138bc806db122a049bce41dc8a095b1bc41bb96ffeb5ad37a7f0"
+    }
+  ],
+  "code": [
+    {
+      "path": "src/kenggo/learning_review.py",
+      "sha256": "26601ec77298692cddaa4878ced6cbe1f8fca957b095563b96f7e9d1146fc8df"
+    },
+    {
+      "path": "tools/learning_review.html",
+      "sha256": "ca9463e1daa87fb05197f85efe8fc0958525b19ac564527a9b81a930bc3442b4"
+    },
+    {
+      "path": "tools/review_learning.py",
+      "sha256": "85b579685b568e7af09df2107fa27b1031d338528e51219e135ae1c92e55daf3"
+    },
+    {
+      "path": "tools/check_learning_review.cjs",
+      "sha256": "0dcbb7f78867d91a76438e689378c2ab5a3efc44460b84f91b36088e301d8fbc",
+      "bytes": 6844
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "runs/e2-learning-review-2026-11-20/review.html",
+      "sha256": "b2f6d3f3e4d3ffa2c32b5f5568d01628c2dd0d14bb098bbdc28b80c817387a63",
+      "bytes": 30328457
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/review.manifest.json",
+      "sha256": "ad9d3a22e2bc5c65ece223f00645117ab6a64e3bc4cb0387bbf41aeeaf937852",
+      "bytes": 2147
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/evidence-checks.json",
+      "sha256": "98120770b3a5bd76198cfc1e4f418ba8ab66ee521e26556f74c88262af073eec",
+      "bytes": 692
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/curves.html",
+      "sha256": "6be612b5486ed2e8248c7fd734120216eacd4c122e89f7c15c35edd74012affb",
+      "bytes": 117027
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/browser-checks.json",
+      "sha256": "1b58fbe7f3a8ee0ca304db30c8b72cc0ff6e5be91f544f39c0b400d2330b306e",
+      "bytes": 121922
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/inline-checks.json",
+      "sha256": "73e421d73ef6e6275975fa326334da686cf7a3bf0a5cbe773a83b841b7213f30",
+      "bytes": 795
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/learning-1000.png",
+      "sha256": "faf0f098690a80e697f53cdf6fbcdcc6fcbd793c7f3781e199f0f45ee4c56575",
+      "bytes": 566023
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/learning-390.png",
+      "sha256": "f123d8751a1c7ba178a2f3c1578a0b6665d9ad3897eba296244882f20e863d08",
+      "bytes": 487897
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/curves-728.png",
+      "sha256": "2edb53d5d7ea455adbc161f9883b336217a623b0956df7fbe89b181a65c0a45c",
+      "bytes": 47425
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/browser/curves-390.png",
+      "sha256": "f07193cd51c962842a3755a475ab13ffcaf3fd681eeaf9c32a91bd12f9eeec28",
+      "bytes": 49348
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/validation/full-attempt1.log",
+      "sha256": "1f71a0b73730972b6196d2ff17b7536575885be4d6f1352063c8ee5b308c05db",
+      "bytes": 21793
+    },
+    {
+      "path": "runs/e2-learning-review-2026-11-20/validation/audit-recheck.log",
+      "sha256": "54d0c5aefdffb909cf65ac4f017e107e23468e089f78d77c790cf78147cd3393",
+      "bytes": 98
+    }
+  ],
+  "checks": {
+    "saved_measurements": 6985,
+    "offline_browser": 919,
+    "inline_model_width_cases": 8,
+    "focused_python_tests": 36,
+    "broad_attempt": {
+      "tests": 660,
+      "setup_errors": 12,
+      "skips": 8,
+      "resolved_by": "Staged intended new source files; all 14 tests in the affected cached-coverage audit module passed."
+    }
+  },
+  "limitations": [
+    "Training loss is a batch/epoch average while weights change; validation is a fixed final-checkpoint, rank/game-side weighted estimate.",
+    "No intermediate validation checkpoints, full-training-set evaluation or training move agreement were recorded.",
+    "Historical development samples and rank scopes differ. No paired cross-run gain is calculated.",
+    "The evaluation rerun exactly reuses the four expanded training models and curves.",
+    "Native replay and model metrics were not recomputed; existing pinned evidence is preserved."
+  ],
+  "training_points": {
+    "base-2026-11-14": {
+      "conditioned": 20,
+      "unconditioned": 20
+    },
+    "expanded-2026-11-18": {
+      "baseline-conditioned": 626,
+      "baseline-unconditioned": 626,
+      "combined-conditioned": 626,
+      "combined-unconditioned": 626
+    },
+    "rerun-2026-11-19": {
+      "baseline-conditioned": 626,
+      "baseline-unconditioned": 626,
+      "combined-conditioned": 626,
+      "combined-unconditioned": 626
+    }
+  },
+  "training_runs": 0,
+  "inference_calls": 0,
+  "protected_target_reads": 0,
+  "E2_readiness": "open",
+  "owner_feedback_recorded": false
+}
