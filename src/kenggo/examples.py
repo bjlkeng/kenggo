@@ -25,6 +25,7 @@ VERSION = "supervised_examples_v1"
 KOMI_STUDY_VERSION = "supervised_komi_study_examples_v1"
 PROFILE_VERSION = "population_example_profile_v1"
 KOMI_STUDY_PROFILE_VERSION = "komi_study_example_profile_v1"
+GROWTH_PROFILE_VERSION = "data_growth_example_profile_v1"
 CANONICAL_SHA256 = "b3ec35e3ff97338f440e431e15e4ede8060158489903159108dede6f73ae1db0"
 SPLIT_SHA256 = "db064735e9a5f58525b67e1d3bc541be71c526cf98bbe9c178a3d59d38696a3d"
 PREFIXES = {"validation_prefix", "test_prefix"}
@@ -88,22 +89,30 @@ class DatasetProfile:
     cpu_seconds: int
     wall_seconds: int
     version: str = PROFILE_VERSION
+    canonical_bytes: int | None = None
 
     def __post_init__(self):
-        if self.version not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION):
+        if self.version not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION, GROWTH_PROFILE_VERSION):
             raise ValueError("Unsupported dataset profile version")
+        if self.version == GROWTH_PROFILE_VERSION:
+            if type(self.canonical_bytes) is not int or not 0 < self.canonical_bytes <= 4 * 1024**3:
+                raise ValueError("Growth profiles require a bounded canonical byte allowance")
+        elif self.canonical_bytes is not None:
+            raise ValueError("Historical dataset profiles cannot change their canonical allowance")
 
     @property
     def komi_study(self):
-        return self.version == KOMI_STUDY_PROFILE_VERSION
+        return self.version in (KOMI_STUDY_PROFILE_VERSION, GROWTH_PROFILE_VERSION)
 
 
 def load_dataset_profile(path, expected_sha256):
     value = read_pinned_json(path, expected_sha256)
     hashes = {"canonical_sha256", "split_sha256", "population_inputs_sha256", "sealed_source_ids_sha256"}
     limits = {"max_records", "max_examples_per_role", "cpu_seconds", "wall_seconds"}
+    if value.get("version") == GROWTH_PROFILE_VERSION:
+        limits.add("canonical_bytes")
     if (set(value) != {"version", "limits"} | hashes
-            or value["version"] not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION)
+            or value["version"] not in (PROFILE_VERSION, KOMI_STUDY_PROFILE_VERSION, GROWTH_PROFILE_VERSION)
             or set(value["limits"]) != limits
             or any(not isinstance(value[k], str) or re.fullmatch(r"[0-9a-f]{64}", value[k]) is None for k in hashes)
             or any(type(value["limits"][k]) is not int or value["limits"][k] <= 0 for k in limits)):
@@ -209,7 +218,9 @@ def _load_corpus(canonical_path, canonical_sha256, split_dir, split_sha256, *, f
     if not fixture_only and (canonical_sha256, split_sha256) != expected:
         raise ValueError("Unreviewed production source; revise the source policy before admission")
     canonical_path = Path(canonical_path)
-    if (canonical_path.stat().st_size > (128 if komi_study else 64) * 1024**2
+    canonical_limit = (profile.canonical_bytes if profile is not None and profile.version == GROWTH_PROFILE_VERSION
+                       else (128 if komi_study else 64) * 1024**2)
+    if (canonical_path.stat().st_size > canonical_limit
             or file_hash(canonical_path) != canonical_sha256):
         raise ValueError("Canonical file differs from its independent pin")
     manifest, partitions = read_membership(split_dir, split_sha256)

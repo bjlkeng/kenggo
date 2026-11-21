@@ -82,6 +82,13 @@ def source(item):
 
 
 class RecordedDataTests(unittest.TestCase):
+    def test_old_profile_serialization_stays_stable_when_growth_adds_a_byte_limit(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            inputs = bundle(Path(temporary), [record("a")], production_profile=True)
+            common = prepare_common_set(inputs, role="train", source_ids=[source(record("a"))],
+                                        aggregate_ranks=("5k",), fixture_only=False)
+            self.assertNotIn("canonical_bytes", common.manifest["inputs"]["dataset_profile"])
+
     def test_shared_arrays_masks_rank_dropout_keys_and_full_history_match(self):
         with tempfile.TemporaryDirectory() as temporary:
             train = record("train", moves=";B[aa];W[bb];B[]")

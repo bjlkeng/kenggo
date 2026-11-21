@@ -24,6 +24,7 @@ from kenggo.katago_human import HumanProfile, HumanSL, ReferenceBudget
 from kenggo.kgs_source import RANKS
 from kenggo.learned_agent import (EXPANDED_RECIPE, KOMI_INFERENCE_CONTRACT,
                                  LearnedArtifacts, LearnedPolicy)
+from kenggo.continuation_data import RECIPE as CONTINUATION_RECIPE
 from kenggo.learner import ModelConfig
 from kenggo.recorded_data import CommonInputs, MOVE_BINS, TIME_BINS, prepare_common_set
 from kenggo.recorded_statistics import (Prediction, evaluate, prediction_from_logits,
@@ -171,7 +172,7 @@ def _learned_artifacts(config):
     if (training_provenance.get("version") != "experiment_provenance_v1"
             or training_provenance.get("inputs") != training_config.get("inputs")):
         raise ValueError("Training provenance differs from the pinned training inputs")
-    if raw_inputs and (training_config["parameters"].get("recipe") != EXPANDED_RECIPE
+    if raw_inputs and (training_config["parameters"].get("recipe") not in (EXPANDED_RECIPE, CONTINUATION_RECIPE)
             or training_config["parameters"].get("inference_contract") != KOMI_INFERENCE_CONTRACT):
         raise ValueError("Raw komi comparison evaluation requires an explicitly compatible new checkpoint")
     return LearnedArtifacts(**{**raw, "checkpoint_manifest": str(_path(refs["checkpoint"])),

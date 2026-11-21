@@ -48,3 +48,25 @@ learning curves/model metrics are not applicable. Do not borrow an earlier
 model's curve as if it came from that data run. Preserve old sealed artifacts
 and record the new page, inputs, code hashes and browser checks in the owning
 bead and reproducibility manifest.
+# Progressive training reviews
+
+The seven-day data-growth runner writes a new `review.html` beside its final
+`summary.json`. It uses the shared learning-review component and retains each
+data tier's online training losses, fixed training-monitor measurements,
+stopping-validation measurements, selected checkpoint and fixed development
+comparisons. Stopping samples differ between tiers; fixed comparisons do not.
+
+To publish another presentation version without changing an earlier page:
+
+```python
+from kenggo.continuation_data import reference
+from kenggo.progressive_review import export
+
+export(reference("runs/e2-progressive-2026-11-21/summary.json"),
+       "runs/e2-progressive-2026-11-21/review-v2.html")
+```
+
+Use saved committed epoch measurements. A recovery checkpoint without completed
+validation is not a new curve point or a valid checkpoint-selection decision.
+Show partial attempts and budget stops explicitly. A data-only failure still
+gets a review page with unavailable training metrics and the earlier run history.

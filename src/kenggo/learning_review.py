@@ -39,6 +39,42 @@ def _finite(value):
     return type(value) in (int, float) and math.isfinite(value)
 
 
+def _checkpoint_metrics(report):
+    result, identities = [], {}
+    for record in report.get("validation_metrics", []):
+        step, epoch, lifetime = record.get("sampler_step"), record.get("round"), record.get("lifetime_updates")
+        if (type(step) is not int or step < 0 or type(epoch) is not int or epoch < 0
+                or type(lifetime) is not int or lifetime < step
+                or not result and (step != 0 or epoch != 0)
+                or result and (step <= result[-1]["step"] or epoch <= result[-1]["epoch"]
+                               or lifetime - step != result[0]["lifetime_updates"])
+                or step > report.get("completed_updates", step)):
+            raise ValueError("Checkpoint curves require epoch zero and increasing stage/lifetime cursors")
+        point = {"step": step, "epoch": epoch, "lifetime_updates": lifetime}
+        for name in ("training_monitor", "validation"):
+            values = record.get(name, {})
+            if any(not _finite(values.get(key)) for key in ("nll", "top1", "value_mse")):
+                raise ValueError("Checkpoint diagnostics require recorded finite NLL, agreement and value MSE")
+            if (not 0 <= values["top1"] <= 1 or values["nll"] < 0 or values["value_mse"] < 0
+                    or any(type(values.get(key)) is not int or values[key] < 1
+                           for key in ("rows", "policy_count", "value_count"))
+                    or values["policy_count"] > values["rows"] or values["value_count"] > values["rows"]
+                    or not isinstance(values.get("aggregate_ranks"), list) or not values["aggregate_ranks"]
+                    or not isinstance(values.get("diagnostic_sha256"), str)):
+                raise ValueError("Checkpoint diagnostics need valid counts, ranks and their frozen sample pin")
+            identity = (values["diagnostic_sha256"], tuple(values["aggregate_ranks"]), values["rows"],
+                        values["policy_count"], values["value_count"])
+            if identities.setdefault(name, identity) != identity:
+                raise ValueError("A checkpoint curve cannot change its diagnostic sample or masks")
+            point[name] = {key: deepcopy(values[key]) for key in (
+                "nll", "top1", "value_mse", "rows", "policy_count", "value_count", "aggregate_ranks",
+                "diagnostic_sha256", "excluded_rank_rows", "evaluated_rows", "weighting") if key in values}
+        point["new_raw_best"] = record.get("new_raw_best") is True
+        point["meaningful_improvement"] = record.get("meaningful_improvement") is True
+        result.append(point)
+    return result
+
+
 def _training(report):
     points = []
     blocks = report.get("update_metrics", report.get("epoch_metrics", []))
@@ -56,10 +92,25 @@ def _training(report):
             "examples": block.get("presented_examples"), "policy_count": block.get("policy_count"),
             "value_count": block.get("value_count"), "nll": block.get("policy_loss"),
             "value_mse": block.get("value_loss")})
+    checkpoints = _checkpoint_metrics(report)
+    selected = None
+    if checkpoints:
+        step = report.get("selected_sampler_step")
+        if step is None:
+            marked = [point for point in checkpoints if point["new_raw_best"]]
+            step = marked[-1]["step"] if marked else None
+        selected = next((point for point in checkpoints if point["step"] == step), None)
+        if (selected is None or type(step) is not int
+                or report.get("selected_round", selected["epoch"]) != selected["epoch"]
+                or report.get("selected_lifetime_updates", selected["lifetime_updates"]) != selected["lifetime_updates"]):
+            raise ValueError("The selected checkpoint must name a saved checkpoint measurement")
     return {"points": points, "updates": report.get("completed_updates"),
             "presentations": report.get("presented_examples"), "rows": report.get("training_rows"),
             "checkpoint": report.get("final_checkpoint"), "status": report.get("status"),
-            "window": "epoch" if "epoch_metrics" in report else "update block"}
+            "window": report.get("training_window", "epoch" if "epoch_metrics" in report else "update block"),
+            "checkpoints": checkpoints, "selected_step": selected["step"] if selected else report.get("completed_updates"),
+            "selected_round": selected["epoch"] if selected else None,
+            "selected_lifetime_updates": selected["lifetime_updates"] if selected else None}
 
 
 def _metric(metric):

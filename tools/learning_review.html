@@ -6,14 +6,14 @@
 </style>
 <h2 id="lr-title">Learning curves and previous runs</h2>
 <p>Policy loss (NLL) measures error on the recorded human move. Value loss (MSE) measures error predicting the eventual winner. Lower is better for both; move agreement is better when higher.</p>
-<div class="lr-controls"><label>Run<select id="lr-run"></select></label><label>Model<select id="lr-model"></select></label><label>Validation data<select id="lr-set"></select></label></div>
+<div class="lr-controls"><label>Run<select id="lr-run"></select></label><label>Model<select id="lr-model"></select></label><label><span id="lr-set-label">Validation data</span><select id="lr-set"></select></label></div>
 <label>Rank scope<select id="lr-scope"><option value="default">Each run’s review scope</option><option value="reported">Each run’s original full scope</option></select></label>
 <p id="lr-description" class="lr-note"></p><p id="lr-training-facts"></p>
-<div class="lr-charts"><div class="lr-chart-box"><h3>Training and validation move loss</h3><svg id="lr-policy-chart" role="img" aria-label="Training NLL curve and final validation NLL"></svg></div><div class="lr-chart-box"><h3>Training and validation outcome loss</h3><svg id="lr-value-chart" role="img" aria-label="Training outcome MSE curve and final validation MSE"></svg></div></div>
+<div class="lr-charts"><div class="lr-chart-box"><h3>Training and validation move loss</h3><svg id="lr-policy-chart" role="img" aria-label="Training and validation NLL measurements"></svg></div><div class="lr-chart-box"><h3>Training and validation outcome loss</h3><svg id="lr-value-chart" role="img" aria-label="Training and validation outcome MSE measurements"></svg></div><div id="lr-agreement-box" class="lr-chart-box" style="grid-column:1/-1" hidden><h3>Checkpoint move agreement</h3><svg id="lr-agreement-chart" role="img" aria-label="Training-monitor and stopping-validation agreement"></svg></div></div>
 <p id="lr-curve-note" class="lr-note"></p>
 <div id="lr-split-metrics"></div>
-<p class="lr-muted">Training points average the batches seen while weights were changing, with training-time dropout. Validation uses the fixed final model and equal rank, game-side and position weighting. Training and validation use different data and averaging; their gap alone does not measure overfitting. Value losses exclude masked outcomes. No full-training-set evaluation or training move-agreement metric was saved.</p>
-<details><summary>Saved training points and exact validation support</summary><div id="lr-points" class="lr-records"></div><div id="lr-support"></div></details>
+<p id="lr-definitions" class="lr-muted"></p>
+<details><summary>Saved training points and exact validation support</summary><div id="lr-points" class="lr-records"></div><div id="lr-checkpoints" class="lr-records"></div><div id="lr-support"></div></details>
 <h3>Overall metrics across runs</h3>
 <p class="lr-note">These are each run’s own development results. Samples, rank coverage and training amounts changed. This is a history of results, not a matched estimate of improvement across runs. Evaluation reruns can reuse trained models; each run’s notes identify that reuse. Use the paired comparisons in the original review below for differences on the same positions.</p>
 <div class="lr-controls"><label>Comparison metric<select id="lr-history-metric"><option value="nll">Move loss · lower is better</option><option value="top1">Move agreement · higher is better</option><option value="value_mse">Outcome loss · lower is better</option></select></label></div>
@@ -33,9 +33,9 @@
   const svg = (tag, attrs, text) => { const n = document.createElementNS("http://www.w3.org/2000/svg",tag); for (const [k,v] of Object.entries(attrs)) n.setAttribute(k,String(v)); if (text != null) n.textContent=text; return n; };
   const labels = {conditioned:"Rank on",unconditioned:"Rank off",conditioned_unknown_ranks:"Rank on, ranks hidden", "baseline-conditioned":"6.5-only · rank on","baseline-unconditioned":"6.5-only · rank off","combined-conditioned":"Combined · rank on","combined-unconditioned":"Combined · rank off","human-reference":"Human SL reference"};
   const modelLabel = id => labels[id] ?? id;
-  const setLabel = id => (id.startsWith("validation_") ? "Unseen accounts" : "Population development") + " · " + (id.endsWith("komi1") ? "0.5" : "6.5") + " komi";
+  const setLabel = id => !id ? "No comparison data" : (id.startsWith("validation_") ? "Unseen accounts" : "Population development") + " · " + (id.endsWith("komi1") ? "0.5" : "6.5") + " komi";
   function table(headers, rows) { return add(el("div", null, {class:"lr-table"}), add(el("table"),add(el("thead"),add(el("tr"),...headers.map(h=>el("th",h,{scope:"col"})))),add(el("tbody"),...rows.map(row=>add(el("tr"),...row.map(x=>el("td",String(x)))))))); }
-  function options(id, entries, preferred) { $(id).replaceChildren(...entries.map(([value,label])=>el("option",label,{value}))); if (entries.some(([v])=>v===preferred)) $(id).value=preferred; }
+  function options(id, entries, preferred) { $(id).disabled=!entries.length; $(id).replaceChildren(...(entries.length?entries.map(([value,label])=>el("option",label,{value})):[el("option","Not recorded",{value:""})])); if (entries.some(([v])=>v===preferred)) $(id).value=preferred; }
   function value(m) { if (m?.status!=="available") return null; const e=m.estimate; return e?.status==="finite" && finite(e.value) ? e.value : e?.status==="positive_infinity" ? Infinity : e?.status==="negative_infinity" ? -Infinity : null; }
   function show(m,key) { const v=value(m); return v===Infinity ? "+∞" : v===-Infinity ? "−∞" : finite(v) ? key==="top1" ? number(v*100,2)+"%" : number(v) : "Unavailable"+(m?.missing_ranks?.length ? " · missing "+m.missing_ranks.join(", ") : ""); }
   function interval(m,key) { const u=m?.uncertainty; return u?.status==="available" && u.interval95?.length===2 ? "["+u.interval95.map(v=>key==="top1"?number(v*100,2)+"%":number(v)).join(", ")+"]" : (u?.status ?? "unavailable")+(u?.reasons?.length?": "+u.reasons.join(", ").replaceAll("_"," "):""); }
@@ -44,30 +44,54 @@
   const scopeKey = run => $("lr-scope").value==="reported" ? "reported" : run.default_scope;
   const report = (run, arm) => run.evaluations[$("lr-set").value]?.[arm]?.[scopeKey(run)];
   const rankLabel = r => r?.ranks?.length ? r.ranks.join(", ") : "Rank list not recorded";
-  function lineChart(id, points, key, validation, finalStep) {
-    const node=$(id), width=Math.max(250,node.parentElement.clientWidth), height=260, left=48, right=20, top=20, bottom=48;
+  function lineChart(id, points, key, validation, finalStep, checkpoints=[], selectedStep=null) {
+    const node=$(id), width=Math.max(250,node.parentElement.clientWidth), height=checkpoints.length?320:260, left=48, right=20, top=20, bottom=checkpoints.length?105:48;
     node.setAttribute("viewBox",`0 0 ${width} ${height}`); node.style.height=height+"px"; node.replaceChildren();
-    const ys=points.map(p=>p[key]).filter(finite), v=value(validation), xmax=Math.max(1,finalStep??0,...points.map(p=>p.step)), ymax=Math.max(1,...ys,finite(v)?v:0)*1.08;
+    const ys=points.map(p=>p[key]).filter(finite), v=value(validation), diagnosticValues=checkpoints.flatMap(p=>[p.training_monitor[key],p.validation[key]]).filter(finite);
+    const xmax=Math.max(1,finalStep??0,...points.map(p=>p.step),...checkpoints.map(p=>p.step)), ymax=key==="top1"?1:Math.max(1,...ys,...diagnosticValues,finite(v)?v:0)*1.08;
     const x=n=>left+n/xmax*(width-left-right), y=n=>height-bottom-n/ymax*(height-top-bottom);
-    for (let i=0;i<=4;i++) { const n=ymax*i/4; node.append(svg("line",{x1:left,x2:width-right,y1:y(n),y2:y(n),stroke:"#e0e7e3"}),svg("text",{x:left-6,y:y(n)+4,"text-anchor":"end"},number(n,2))); }
-    let segment=[];
-    const flush=()=>{if(segment.length)node.append(svg("polyline",{points:segment.join(" "),fill:"none",stroke:"#185e57","stroke-width":1.6}));segment=[];};
-    for (const p of points) { if (finite(p[key])) segment.push(`${x(p.step)},${y(p[key])}`); else flush(); } flush();
-    if (finite(v) && finite(finalStep)) node.append(add(svg("circle",{cx:x(finalStep),cy:y(v),r:5,fill:"#9c3d80"}),svg("title",{},"Final validation: "+show(validation,key))));
-    node.append(svg("text",{x:left,y:height-23},"0"),svg("text",{x:width-right,y:height-23,"text-anchor":"end"},number(xmax,0)+" updates"),svg("text",{x:left,y:height-4,fill:"#185e57"},"Green: train · purple: validation"));
-    if (!ys.length) node.append(svg("text",{x:left,y:top+20},"Training curve not recorded"));
+    const display=n=>key==="top1"?number(n*100,1)+"%":number(n,2);
+    for (let i=0;i<=4;i++) { const n=ymax*i/4; node.append(svg("line",{x1:left,x2:width-right,y1:y(n),y2:y(n),stroke:"#e0e7e3"}),svg("text",{x:left-6,y:y(n)+4,"text-anchor":"end"},display(n))); }
+    function series(items, get, color, name) {
+      let segment=[];
+      const flush=()=>{if(segment.length)node.append(svg("polyline",{points:segment.join(" "),fill:"none",stroke:color,"stroke-width":1.6,"data-series":name}));segment=[];};
+      for (const p of items) { const value=get(p); if (finite(value)) segment.push(`${x(p.step)},${y(value)}`); else flush(); } flush();
+      if(items.length===1 && finite(get(items[0])))node.append(svg("rect",{x:x(items[0].step)-3,y:y(get(items[0]))-3,width:6,height:6,fill:color,"data-series":name}));
+    }
+    series(points,p=>p[key],"#185e57","online-training");
+    series(checkpoints,p=>p.training_monitor[key],"#2266aa","training-monitor");
+    series(checkpoints,p=>p.validation[key],"#9c3d80","stopping-validation");
+    const best=checkpoints.find(p=>p.step===selectedStep);
+    if(best && finite(best.validation[key]))node.append(add(svg("rect",{x:x(best.step)-5,y:y(best.validation[key])-5,width:10,height:10,fill:"none",stroke:"#182c32","stroke-width":2,"data-selected-step":best.step}),svg("title",{},`Selected checkpoint · round ${best.epoch} · ${best.step} stage updates`)));
+    if (finite(v) && finite(finalStep)) node.append(add(svg("circle",{cx:x(finalStep),cy:y(v),r:5,fill:checkpoints.length?"#b76119":"#9c3d80","data-assessment-step":finalStep}),svg("title",{},(checkpoints.length?"Fixed comparison at selected checkpoint: ":"Final validation: ")+show(validation,key))));
+    const axisY=height-bottom+25;
+    node.append(svg("text",{x:left,y:axisY},"0"),svg("text",{x:width-right,y:axisY,"text-anchor":"end"},number(xmax,0)+(checkpoints.length?" stage updates":" updates")));
+    if(checkpoints.length){
+      ["Green: learning batches","Blue: fixed training sample","Purple: stopping validation","Orange dot: fixed comparison","Outlined square: selected checkpoint"].forEach((text,i)=>node.append(svg("text",{x:8,y:axisY+17+i*14},text)));
+    }else node.append(svg("text",{x:left,y:height-4,fill:"#185e57"},"Green: train · purple: validation"));
+    if (!ys.length && !checkpoints.length) node.append(svg("text",{x:left,y:top+20},"Training curve not recorded"));
   }
   function learning() {
-    const run=selectedRun(), arm=$("lr-model").value, training=run.training[arm], r=report(run,arm), m=r?.metrics??{}, points=training?.points??[];
+    const run=selectedRun(), arm=$("lr-model").value, training=run.training[arm], r=report(run,arm), m=r?.metrics??{}, points=training?.points??[], checkpoints=training?.checkpoints??[], progressive=checkpoints.length>0;
+    const selected=checkpoints.find(p=>p.step===training?.selected_step), diagnostic=selected??checkpoints.at(-1), assessmentStep=progressive?training.selected_step:training?.updates;
     $("lr-description").textContent=run.title+". "+run.description;
-    $("lr-training-facts").textContent=training ? `${finite(training.rows)?number(training.rows,0)+" training moves; ":"Training size: see run description. "}${number(training.updates,0)} updates; ${number(training.presentations,0)} move presentations. ${points.length} saved ${training.window} averages.` : arm==="human-reference" ? "Human SL is an external reference; its training curves are unavailable." : "No training record was included for this model variant.";
-    $("lr-curve-note").textContent="Validation was measured only at the final checkpoint. No intermediate validation curve was recorded. Training move agreement was not recorded. "+(r?"Selected validation ranks: "+rankLabel(r)+".":"This validation set or rank scope was not recorded for this model.");
-    lineChart("lr-policy-chart",points,"nll",m.nll,training?.updates);
-    lineChart("lr-value-chart",points,"value_mse",m.value_mse,training?.updates);
+    $("lr-training-facts").textContent=training ? `${finite(training.rows)?number(training.rows,0)+" training moves; ":"Training size: see run description. "}${number(training.updates,0)} ${progressive?"stage ":""}updates; ${number(training.presentations,0)} move presentations. ${points.length} saved ${training.window} averages.`+(progressive?` Selected round ${number(training.selected_round,0)} at ${number(training.selected_step,0)} stage updates (${number(training.selected_lifetime_updates,0)} lifetime updates).`:"")+(training.status?` Training status: ${training.status.replaceAll("_"," ")}.`:"") : arm==="human-reference" ? "Human SL is an external reference; its training curves are unavailable." : "No training record was included for this model variant.";
+    $("lr-set-label").textContent=progressive?"Fixed comparison data":"Validation data";
+    $("lr-curve-note").textContent=progressive?`${checkpoints.length} checkpoint measurements include epoch zero. The purple curve uses the separate sample that controls stopping and checkpoint selection. The orange dot uses the selected model on the fixed comparison data. Changing the comparison selector does not change the stopping curve. Stopping ranks: ${diagnostic.validation.aggregate_ranks.join(", ")}.` : "Validation was measured only at the final checkpoint. No intermediate validation curve was recorded. Training move agreement was not recorded. "+(r?"Selected validation ranks: "+rankLabel(r)+".":"This validation set or rank scope was not recorded for this model.");
+    if(!training && !r){$("lr-training-facts").textContent="No training or comparison record is available for this selection.";$("lr-curve-note").textContent="No model measurements were saved for this selection. Missing results are shown as unavailable; no zero values are inferred.";}
+    $("lr-definitions").textContent=progressive?"Online losses average learning batches while weights change, with clock dropout. The blue training-monitor and purple stopping-validation curves use fixed checkpoints, dropout disabled, and equal rank/game-side/position weighting. The training monitor is a fixed subset, not the full training population. Its move agreement is recorded. All value metrics exclude masked outcomes. Epoch zero inherits the parent model's earlier training; the horizontal axis counts updates in this data stage.":"Training points average the batches seen while weights were changing, with training-time dropout. Validation uses the fixed final model and equal rank, game-side and position weighting. Training and validation use different data and averaging; their gap alone does not measure overfitting. Value losses exclude masked outcomes. No full-training-set evaluation or training move-agreement metric was saved.";
+    lineChart("lr-policy-chart",points,"nll",m.nll,assessmentStep,checkpoints,training?.selected_step);
+    lineChart("lr-value-chart",points,"value_mse",m.value_mse,assessmentStep,checkpoints,training?.selected_step);
+    $("lr-agreement-box").hidden=!progressive;
+    if(progressive)lineChart("lr-agreement-chart",[],"top1",m.top1,assessmentStep,checkpoints,training.selected_step);
     const last=points.at(-1), window=last?`Last training ${training.window} · ${number(last.updates,0)} updates / ${number(last.examples,0)} presentations`:"Training · no saved window";
-    $("lr-split-metrics").replaceChildren(table(["Measurement","Move loss (NLL)","Move agreement","Outcome loss (MSE)"],[[window,number(last?.nll),"Not recorded",number(last?.value_mse)],["Final validation · "+setLabel($("lr-set").value),show(m.nll,"nll"),show(m.top1,"top1"),show(m.value_mse,"value_mse")]]));
+    const splitRows=[[window,number(last?.nll),"Not recorded",number(last?.value_mse)],[(progressive?"Selected model · fixed comparison · ":"Final validation · ")+setLabel($("lr-set").value),show(m.nll,"nll"),show(m.top1,"top1"),show(m.value_mse,"value_mse")]];
+    if(diagnostic)for(const [name,label] of [["training_monitor","Selected model · training monitor"],["validation","Selected model · stopping validation"]]){const d=diagnostic[name];splitRows.push([label,number(d.nll),number(d.top1*100,2)+"%",number(d.value_mse)]);}
+    $("lr-split-metrics").replaceChildren(table(["Measurement","Move loss (NLL)","Move agreement","Outcome loss (MSE)"],splitRows));
     $("lr-points").replaceChildren(table(["End update","Window updates","Move labels","Value labels","NLL","MSE"],points.map(p=>[number(p.step,0),number(p.updates,0),number(p.policy_count,0),number(p.value_count,0),number(p.nll),number(p.value_mse)])));
-    $("lr-support").replaceChildren(table(["Validation metric","Eligible moves","Masked moves","95% interval / support"],Object.entries(m).map(([k,v])=>[k,number(v.counts?.moves,0),number(v.masked_moves,0),interval(v,k)])));
+    const checkpointRows=checkpoints.flatMap(p=>[["training_monitor","Training monitor"],["validation","Stopping validation"]].map(([key,label])=>{const d=p[key];return [`${p.epoch}${p.step===training.selected_step?" · selected":""}`,number(p.step,0),label,number(d.policy_count,0),number(d.value_count,0),number(d.nll),number(d.top1*100,2)+"%",number(d.value_mse)];}));
+    $("lr-checkpoints").replaceChildren(...(progressive?[el("h3","Saved checkpoint measurements"),table(["Round","Stage update","Sample","Move labels","Value labels","NLL","Agreement","MSE"],checkpointRows)]:[]));
+    $("lr-support").replaceChildren(table([progressive?"Fixed comparison metric":"Validation metric","Eligible moves","Masked moves","95% interval / support"],Object.entries(m).map(([k,v])=>[k,number(v.counts?.moves,0),number(v.masked_moves,0),interval(v,k)])));
   }
   function history() {
     const key=$("lr-history-metric").value, rows=[];
@@ -83,7 +107,8 @@
   function chooseRun() {
     const run=selectedRun(), arms=[...new Set([...Object.keys(run.training),...Object.values(run.evaluations).flatMap(Object.keys)])];
     options("lr-model",arms.map(id=>[id,modelLabel(id)]),arms.includes("combined-conditioned")?"combined-conditioned":arms[0]);
-    options("lr-set",Object.keys(run.evaluations).map(id=>[id,setLabel(id)]),$("lr-set").value||"validation_development_komi13");learning();history();
+    const sets=Object.keys(run.evaluations), available=sets.length?sets:[...new Set(data.runs.flatMap(item=>Object.keys(item.evaluations)))];
+    options("lr-set",available.map(id=>[id,setLabel(id)]),$("lr-set").value||"validation_development_komi13");learning();history();
   }
   options("lr-run",data.runs.map(run=>[run.id,run.title+(run.current?" · this review":"")]),current.id);
   for(const run of data.runs) $("lr-run-notes").append(add(el("div",null,{class:"lr-run"}),el("strong",run.title),el("p",run.description),add(el("ul"),...run.notes.map(note=>el("li",note)))));

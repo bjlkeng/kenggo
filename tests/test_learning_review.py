@@ -38,6 +38,26 @@ def saved(root, data):
     return {"path": str(path), "sha256": sha256(path.read_bytes()).hexdigest()}
 
 
+def continuation_fixture():
+    data = fixture()
+    training = data["training"]["conditioned"]
+    training["epoch_metrics"] = training.pop("update_metrics")
+    training["training_window"] = "matched interval"
+    training["validation_metrics"] = []
+    for index, step in enumerate((0, 4, 8)):
+        diagnostics = {}
+        for name, pin, loss in (("training_monitor", "a", 2.9-index*.2),
+                                ("validation", "b", (2.8, 2.5, 2.6)[index])):
+            diagnostics[name] = {"nll": loss, "top1": .3+index*.02, "value_mse": .7,
+                "rows": 12, "policy_count": 12, "value_count": 8, "aggregate_ranks": ["5k"],
+                "diagnostic_sha256": pin*64, "evaluated_rows": 14, "excluded_rank_rows": 2}
+        training["validation_metrics"].append({"round": index, "sampler_step": step,
+            "lifetime_updates": 31250+step, "new_raw_best": index < 2,
+            "meaningful_improvement": index < 2, **diagnostics})
+    training.update(selected_sampler_step=4, selected_lifetime_updates=31254, selected_round=1)
+    return data
+
+
 class LearningReviewTests(unittest.TestCase):
     def test_saved_training_and_validation_are_separate_with_no_fabricated_curve(self):
         data = fixture()
@@ -81,6 +101,75 @@ class LearningReviewTests(unittest.TestCase):
         t["epoch_metrics"][-1]["next_step"] = 4
         with self.assertRaisesRegex(ValueError, "increase"):
             review.normalize(data, {})
+
+    def test_checkpoint_curves_keep_epoch_zero_training_agreement_and_selected_earlier_point(self):
+        data = continuation_fixture()
+        original = deepcopy(data)
+        result = review.normalize(data, {})["training"]["conditioned"]
+        self.assertEqual(data, original)
+        self.assertEqual([point["step"] for point in result["checkpoints"]], [0, 4, 8])
+        self.assertEqual([point["lifetime_updates"] for point in result["checkpoints"]], [31250, 31254, 31258])
+        self.assertEqual(result["checkpoints"][1]["training_monitor"]["top1"], .32)
+        self.assertEqual(result["checkpoints"][1]["validation"]["nll"], 2.5)
+        self.assertEqual(result["checkpoints"][1]["validation"]["excluded_rank_rows"], 2)
+        self.assertEqual(result["selected_step"], 4)
+        self.assertEqual(result["selected_lifetime_updates"], 31254)
+        self.assertEqual(result["selected_round"], 1)
+        self.assertEqual(result["updates"], 8)
+        self.assertEqual(result["window"], "matched interval")
+        self.assertNotIn("top1", result["points"][1])
+
+    def test_selected_epoch_zero_and_recorded_best_markers_are_preserved(self):
+        data = continuation_fixture()
+        training = data["training"]["conditioned"]
+        training.update(selected_sampler_step=0, selected_lifetime_updates=31250, selected_round=0)
+        result = review.normalize(data, {})["training"]["conditioned"]
+        self.assertEqual((result["selected_step"], result["selected_round"]), (0, 0))
+        for key in ("selected_sampler_step", "selected_lifetime_updates", "selected_round"):
+            training.pop(key)
+        self.assertEqual(review.normalize(data, {})["training"]["conditioned"]["selected_step"], 4)
+
+    def test_old_runs_keep_absent_checkpoint_metrics_and_final_validation(self):
+        result = review.normalize(fixture(), {})["training"]["conditioned"]
+        self.assertEqual(result["checkpoints"], [])
+        self.assertEqual(result["selected_step"], 8)
+        self.assertIsNone(result["selected_round"])
+        self.assertIsNone(result["selected_lifetime_updates"])
+
+    def test_empty_and_partial_runs_preserve_absence_and_arbitrary_tier_arm_names(self):
+        for evaluations in ({}, {name: {} for name in ("population_development_komi13",
+                "population_development_komi1", "validation_development_komi13", "validation_development_komi1")}):
+            data = {"bundle_id": "failed-before-training", "training": {}, "evaluations": evaluations}
+            result = review.build(data)["runs"][0]
+            self.assertEqual(result["training"], {})
+            self.assertEqual(result["evaluations"], evaluations)
+            self.assertTrue(result["current"])
+            self.assertIn('id="learning-review"', review.insert("<main></main>", review.build(data)))
+        data = continuation_fixture()
+        data["training"]["tier1-candidate"] = data["training"].pop("conditioned")
+        data["evaluations"] = {}
+        result = review.build(data)["runs"][0]
+        self.assertEqual(set(result["training"]), {"tier1-candidate"})
+        self.assertEqual(len(result["training"]["tier1-candidate"]["checkpoints"]), 3)
+        self.assertEqual(result["evaluations"], {})
+
+    def test_checkpoint_curves_reject_changed_samples_missing_metrics_and_bad_cursors(self):
+        changes = (
+            lambda value: value["validation_metrics"][0].update(sampler_step=1),
+            lambda value: value["validation_metrics"][1].update(lifetime_updates=31255),
+            lambda value: value["validation_metrics"][2].update(sampler_step=4),
+            lambda value: value["validation_metrics"][1]["validation"].update(diagnostic_sha256="c"*64),
+            lambda value: value["validation_metrics"][1]["validation"].update(value_count=7),
+            lambda value: value["validation_metrics"][1]["training_monitor"].pop("top1"),
+            lambda value: value["validation_metrics"][1]["validation"].update(nll=float("nan")),
+            lambda value: value.update(selected_sampler_step=7),
+            lambda value: value.update(selected_lifetime_updates=31258),
+        )
+        for change in changes:
+            data = continuation_fixture()
+            change(data["training"]["conditioned"])
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                review.normalize(data, {})
 
     def test_catalog_reads_only_earlier_pinned_pages_and_keeps_each_scope(self):
         with tempfile.TemporaryDirectory() as temp:

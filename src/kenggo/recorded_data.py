@@ -268,7 +268,9 @@ def prepare_common_set(inputs, *, role, source_ids, aggregate_ranks, fixture_onl
         "encoding": ENCODING, "rules": KOMI_STUDY_RULES if komi_study else RULES, "model_history": 0,
         "inputs": {"canonical_sha256": inputs.canonical_sha256, "split_sha256": inputs.split_sha256,
                    "examples_sha256": inputs.examples_sha256, "normalizer_sha256": inputs.normalizer_sha256,
-                   "dataset_profile": asdict(inputs.profile) if inputs.profile else None,
+                   "dataset_profile": ({key: value for key, value in asdict(inputs.profile).items()
+                                        if key != "canonical_bytes" or value is not None}
+                                       if inputs.profile else None),
                    "population_inputs_sha256": split["provenance"].get("population_inputs_sha256"),
                    "sealed_source_ids_sha256": digest(sorted(sealed_sources(split))),
                    "split_plan_sha256": split["plan_sha256"]},
