@@ -1,0 +1,336 @@
+{
+  "schema": "e2_progressive_completion_manifest_v1",
+  "beads": [
+    "kenggo-ydo.16",
+    "kenggo-ydo.17",
+    "kenggo-ydo.18"
+  ],
+  "production_source_commit": "59d29abf57d8c03eec783a30222fa288403c8e7b",
+  "review_bases": {
+    "kenggo-ydo.16": "cbc76331ac80acf08a96ccc44edbdedca85ed36d",
+    "kenggo-ydo.17": "59d29abf57d8c03eec783a30222fa288403c8e7b",
+    "kenggo-ydo.18": "59d29abf57d8c03eec783a30222fa288403c8e7b"
+  },
+  "plan": {
+    "path": "plan/e2_progressive_training_v1.md",
+    "sha256": "ec39ab9e4839cec8b85f3104b90b655cd40da0e48ae80350560f56ab8d527511"
+  },
+  "config": {
+    "path": "configs/e2_progressive_training_v1.json",
+    "sha256": "373e6bd64c1b6ecf7f70150bda0911e1608ca9d56fd5d02028a47ba92e2bb30c"
+  },
+  "original_budget": {
+    "launch_utc": "2026-11-21T14:13:03.148730Z",
+    "deadline_utc": "2026-11-28T14:13:03.148730Z",
+    "wall_seconds": 604800,
+    "cpu_seconds": 604800,
+    "gpu_seconds": 604800,
+    "output_bytes": 171798691840,
+    "resets": 0
+  },
+  "scope": "One exploratory seed; supervised rank-conditioned A; no promotion, strength or human-rank claim. E2 and kenggo-ydo.6 remain open.",
+  "data": {
+    "parent": {
+      "path": "runs/e2-komi-expansion-2026-11-16/summary.json",
+      "sha256": "ced6525591ccb8086d46ba3912ce8c73a3a7388757979849b215c810bc55503a"
+    },
+    "grown": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-growth/worker/dataset/summary.json",
+      "sha256": "0c4a3f893f99e9153d2f12809366b027e8fe73ceb31c8c802b70c54cba0b623c"
+    },
+    "old_rows": 2000000,
+    "grown_rows": 3999997,
+    "grown_games": 18126,
+    "original_normalizer": {
+      "path": "runs/e2-komi-expansion-2026-11-16/dataset/normalizer.json",
+      "sha256": "d37b62b401c6df8c4a8d75a9b581f44052a310c0d7e8af9f773bc2eb800d6754"
+    },
+    "preparation": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-preparation-validation-recovery/worker/summary.json",
+      "sha256": "b02160f9606b7a453e5813bd1edf6ccff4c0add5e95a89c458e09e0995fde5ac"
+    },
+    "stopping": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-preparation-validation-recovery/worker/composite/composite/manifest.json",
+      "sha256": "115399f43d73f71dbb33c36c62d8a8ccec7c593f2cc35ad673a22a355e8988e7"
+    },
+    "selection": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-preparation-validation-recovery/worker/composite/composite/selection.json",
+      "sha256": "137b4592a29edbe03ca427aa5e3a42f09c6de0a7861cecf5525025772401d145"
+    },
+    "barred_supplemental_games": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-preparation-validation-recovery/worker/composite/composite/growth-exclusions.json",
+      "sha256": "7b16c6e5a1f139fcf3bf52357f7d668380caaadc7de451722509e8adec39f212"
+    },
+    "protected_targets": "Confirmation and final targets remained closed; no full fitting replay was repeated at completion."
+  },
+  "training": {
+    "matched_intervals": 6,
+    "new_updates_per_arm": 187500,
+    "new_presentations_per_arm": 24000000,
+    "parent_checkpoint": {
+      "config": {
+        "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/config.json",
+        "sha256": "d365ef62d2ff63936524d234c383a0738453c4b0d7f00a8080dbf74a9832618b"
+      },
+      "path": "/home/bojji/code/kenggo/runs/e2-expanded-pilot-2026-11-18/combined-conditioned/worker/checkpoints/step-0000031250-cc1adf0b0a144815b44d8942dbbb74e4/manifest.json",
+      "provenance": {
+        "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/provenance.json",
+        "sha256": "4d64cb60efb9b49b8fbe9a0a4698bf462bda8ac4f309ad4aa7b747116c8b9a93"
+      },
+      "sha256": "3628225fe169db537d100206e68513e977d49a7f33f09dd9e4d050ccb41d1631",
+      "step": 31250
+    },
+    "selected": {
+      "candidate": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/config.json",
+          "sha256": "fcc45e0568f9bb1323151c57663becf571bcc57f91156b085ba54d5a88c1e4f5"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/worker/checkpoints/step-0000125000-f42dadaca07f4c4c822b6fabd96b33d1/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/provenance.json",
+          "sha256": "aac0f3c5b130c584105823d6d69981027d48f413b57f324a5bf3332ffff5452b"
+        },
+        "sha256": "5cd424e0fe38ee36b01c6cb7ce42d1b532bc327cae533d6d9907d1a373a12b53",
+        "step": 125000
+      },
+      "control": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/config.json",
+          "sha256": "ef55d974d7ce0aae8c6410d5f849513c5bcb85acdd3e9c12c4ecc93dd5747cba"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/worker/checkpoints/step-0000062500-d635ee7d9f5d4ec7b4900d37065c0ad0/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/provenance.json",
+          "sha256": "963d2a88bc0dce89aafe05e03569c484caff690744792dacd6c0a6e8372428c2"
+        },
+        "sha256": "ca0a40658b4f2114bc519577b1fde28a9a8168b0b88a7fc82b1720bc6307c1ae",
+        "step": 62500
+      }
+    },
+    "selection_rule": "Lowest finite stopping-validation NLL, including epoch zero; pair patience is three intervals without >=0.002 improvement for both arms."
+  },
+  "production": {
+    "summary": {
+      "path": "runs/e2-progressive-validation-resume-2026-11-24/summary.json",
+      "sha256": "a5ed5e7dda47ea8f48fcb86a2351a38af844639032fc997bea8d90ec2c137a7b"
+    },
+    "manifest": {
+      "path": "runs/e2-progressive-validation-resume-2026-11-24/manifest.json",
+      "sha256": "c893cb6ef125042886591ec1346571830423b7c1a0c3054b1c5aa7c5c42fa9d5"
+    },
+    "continuation": {
+      "accounting": "Original allowance and all settled costs retained; new service descendants charged once.",
+      "composite_request": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-validation-resume-2026-11-24/composite-request.json",
+        "sha256": "150b9955fc7f57d315f3120a5af2caa56efe1bfaee1dece10132287550f3a1c9"
+      },
+      "growth_audit": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-resume-2026-11-24/audit-saved-growth.json",
+        "sha256": "b7848438f90edb0e63e7fd560cdd81a7dabf9746a7acd1439188cdbfa44a2b62"
+      },
+      "growth_receipt": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-resume-2026-11-24/growth-recovered.json",
+        "sha256": "3c5be2ecfa9124dbe7dab87019c1da57fa91b3d8a15a4c031752889aabdad989"
+      },
+      "manifest": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-validation-resume-2026-11-24/manifest.json",
+        "sha256": "c893cb6ef125042886591ec1346571830423b7c1a0c3054b1c5aa7c5c42fa9d5"
+      },
+      "preparation": {
+        "cpu_seconds_upper": 22029,
+        "elapsed_seconds": 1785.72373,
+        "end_utc": "2026-11-24T23:14:56.436998+00:00",
+        "host_logical_cpus": 12,
+        "method": "All host logical CPUs times elapsed preparation, plus 600 CPU seconds for earlier probing and launch. Upper charge, not measured CPU.",
+        "start_utc": "2026-11-24T22:45:10.713268+00:00"
+      },
+      "previous_failed_summary": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-resume-2026-11-24/summary.json",
+        "sha256": "9fc14d2a23758ef02a58b2356e56e1ff75561487b1813ebe0c503142d518706a"
+      },
+      "source_phase": {
+        "path": "/home/bojji/code/kenggo/runs/e2-validation-gap-2026-11-24/phase-summary.json",
+        "sha256": "e58f66c14cd678a1b86e502737a6725900628eeedbff07b61e20c7aa2da8c97f"
+      },
+      "source_summary": {
+        "path": "/home/bojji/code/kenggo/runs/e2-validation-gap-2026-11-24/production/worker/source-work/summary.json",
+        "sha256": "d049b5fc9a001971213e6fb6e62d961c7356581d5cadcb2cc27dd974d156b092"
+      }
+    },
+    "assessments": {
+      "candidate": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-assess-candidate/worker/summary.json",
+        "sha256": "68245fdb3d759b2a21cd3c529ec76cb5e9e35343df59e13e3823bf83d1304de4"
+      },
+      "control": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-assess-control/worker/summary.json",
+        "sha256": "4a9407c2c53c1070376cf47c0ee32fafc155de126b53386cc403b189618d5746"
+      },
+      "parent": {
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-assess-parent/worker/summary.json",
+        "sha256": "cfd0f39bb198b99c24619d96faf9fbb91b2518926b5e54e008301d63d657a2b6"
+      }
+    },
+    "comparison": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-comparison/worker/summary.json",
+      "sha256": "8e6ce5001817c32281028cf5c5f3e5f0bd265c3dc6626c0c7c0722dd62d97bab"
+    },
+    "decision": {
+      "allowed_regression": 0.02,
+      "continue_growth": false,
+      "minimum_useful_nll_gain": 0.02,
+      "reasons": [
+        "population_development_komi1: value_mse regression against parent",
+        "validation_development_komi13: value_mse regression against parent"
+      ],
+      "selection_data": "fixed development comparison; not final testing"
+    }
+  },
+  "verification": {
+    "original": {
+      "path": "runs/e2-progressive-validation-verification-2026-11-24/verification.json",
+      "sha256": "fd62bfe7e46f5fc72d3274f4b989c27f0b38df162adf13e615f10c6a12a51429"
+    },
+    "original_handoff": {
+      "path": "runs/e2-progressive-validation-verification-2026-11-24/handoff.json",
+      "sha256": "607188526066a4ff8722e38c0f16e03a74e7606cb0cad931c0495cf608eb0ccc"
+    },
+    "original_browser": {
+      "path": "runs/e2-progressive-validation-verification-2026-11-24/browser-evidence.json",
+      "sha256": "0a9c4029c97674165da368691d9c8f3f97e90518e6cfad2132d41015e40f91cc"
+    },
+    "correction": {
+      "path": "runs/e2-progressive-completion-2026-11-25/verification.json",
+      "sha256": "4bbb06da602bfec65b8c5b0449bf7301a6fc399d070a727c49cc215156bc8513"
+    },
+    "correction_hashes": {
+      "path": "runs/e2-progressive-completion-2026-11-25/verified-hashes.json",
+      "sha256": "b5df2970915e5075c7cf9d61acf01ad10bf411edb3399a78428843e62eb6ab27"
+    },
+    "regression_before": {
+      "path": "runs/e2-progressive-completion-2026-11-25/regression-before.log",
+      "sha256": "360ab5a16c313847c07e7ca2a6c898b8a52cf017fe3f62f2ab72154d141e26af"
+    },
+    "regression_after": {
+      "path": "runs/e2-progressive-completion-2026-11-25/regression-after.log",
+      "sha256": "eed25efd8119d2cb236a34e2a3d2ba354cd51be2919cfccfd75409ef9b3851b6"
+    },
+    "regression_test_count": 14,
+    "correction_timing": {
+      "path": "runs/e2-progressive-completion-2026-11-25/verification-time.txt",
+      "sha256": "ae5c0e7b8c3f0308d07a590a7218b6951ed4bd112b67fc6b918524297b38089d"
+    },
+    "page_browser": {
+      "path": "runs/e2-progressive-completion-2026-11-25/browser-evidence.json",
+      "sha256": "7e6601e95c4ae27bcc9b7c55db82059d656567176fa29659c80be4545b5a7de5"
+    },
+    "chart_browser": {
+      "path": "runs/e2-progressive-completion-2026-11-25/chart-browser.json",
+      "sha256": "c4b7d5c4cc735ade40b4ed6d9406f1492e68becab0c5e795898c5b251ad597ce"
+    },
+    "limitation": "Preserve original ten passed checks and failed check. New correction reruns the skipped composite preparation check and its fixed prerequisites only; no training, production inference, acquisition or 4M full audit retry.",
+    "archive_checks": {
+      "path": "runs/e2-progressive-completion-2026-11-25/archive-checks.json",
+      "sha256": "cda945135b0ea5ddffad1a93b98191a3023c7569d47c4a37abe05b06b3448acd"
+    },
+    "history_checks": {
+      "path": "runs/e2-progressive-completion-2026-11-25/history-checks.json",
+      "sha256": "52d50441cfd75a619185f04e131f9a94f013d9d85df3f9032b3c521fe40a88f3"
+    },
+    "repository_attempt": {
+      "path": "runs/e2-progressive-completion-2026-11-25/quality-checks.json",
+      "sha256": "88d8a17af9189a747ff1675a38a9d3c2c8669562d58bc33dabfc4b18b101669b"
+    },
+    "repository_resolution": {
+      "path": "runs/e2-progressive-completion-2026-11-25/quality-resolution.json",
+      "sha256": "3f52410d7f6c58c778a29f2b5570a9054dd667a733428146e1f713312309ef2c"
+    },
+    "tracking_index_checks": {
+      "path": "runs/e2-progressive-completion-2026-11-25/tracking-index-checks-v2.json",
+      "sha256": "5ddd9a25b8b25e6f83178571c9bb6b3bfa1730e15b57fc60366624ac96639e1d"
+    }
+  },
+  "publication": {
+    "report": "reports/e2_progressive_training_2026-11-25.md",
+    "page": {
+      "path": "runs/e2-progressive-completion-2026-11-25/review.html",
+      "sha256": "0b1ae71925db6f516e3162700bc8c0c849efe0cf248e72112e8fa79e87f704b0"
+    },
+    "charts": {
+      "path": "runs/e2-progressive-completion-2026-11-25/charts.html",
+      "sha256": "88ee6192e9fcdea484c3f231e8d3c57a53b676ff57381d113e5ced3b88ed4077"
+    },
+    "readout": {
+      "path": "runs/e2-progressive-completion-2026-11-25/readout.json",
+      "sha256": "139bb66071886a1f27c2f8c41cd1a71deae90bacf31ffd114d2afff50b616ad7"
+    },
+    "export": {
+      "path": "runs/e2-progressive-completion-2026-11-25/publication.json",
+      "sha256": "9252a2b6beed4ce3c175e2eda84a777986a707ca7e34d1b941be3100c69a64e9"
+    },
+    "history": "Original shared learning component retained with four runs; historical changed samples are not matched gains."
+  },
+  "recovery_source_archive": {
+    "path": "tools/e2_progressive_archive/sources.json",
+    "sha256": "59e28fba085f392530b5069ab831577587be21d96bc8b3ba58e77062bb94a93f"
+  },
+  "resource_charge": {
+    "path": "runs/e2-progressive-completion-2026-11-25/resource-charge.json",
+    "sha256": "c5467e375c07408835b054c4283c4a290f637f229b5d8a77631ac0ddb2b0dd04"
+  },
+  "all_workers_stopped": {
+    "path": "runs/e2-progressive-completion-2026-11-25/start.json",
+    "sha256": "158e471f26ab6291f2f54f4669b96680e16d207a135d8346da33abd22e904e8a"
+  },
+  "prelaunch_reviews": {
+    "combined": {
+      "path": "runs/e2-progressive-validation-resume-2026-11-24/review-approved.json",
+      "sha256": "330b3f7bfee4737ce29f329221ac4abfe5ce1e01501be9f19c84a676bd96ac4d"
+    },
+    "source": {
+      "path": "/home/bojji/code/kenggo/runs/e2-validation-gap-2026-11-24/review-approved.json",
+      "sha256": "9a1458735cca88dc0409a8f6459b884036a592776651fb1889b3ea776050fcf4"
+    },
+    "recovery": {
+      "path": "runs/e2-progressive-recovery-2026-11-21/review-approved.json",
+      "sha256": "b38f1c881617494f3d46dcb2c7fc5b1b61a555df8f2664fae2662e06b5c050a8"
+    }
+  },
+  "completion_review": {
+    "required_model": "gpt-6-astra",
+    "reasoning": "max",
+    "record": "The owning Beads records contain the fresh completion review scope, reviewer, pass count, findings and final verdict. The local completion handoff also records them.",
+    "local_handoff_path": "runs/e2-progressive-completion-2026-11-25/handoff.json"
+  },
+  "validation_commands": [
+    "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 .venv/bin/python runs/e2-progressive-completion-2026-11-25/test_reference_repair.py",
+    "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 timeout 300 .venv/bin/python runs/e2-progressive-completion-2026-11-25/verify_correction.py (already completed; preserves its output and refuses another run)",
+    "uv lock --check",
+    "uv sync --locked --check",
+    "uv run --locked python -m kenggo.smoke",
+    "uv run --locked python -m unittest discover -s tests -v",
+    "uv build --no-sources",
+    "git diff --check"
+  ],
+  "schedule": {
+    "scheduledTaskId": "scheduled-task:command:mcp:bca12c9c-6d81-4a44-bbe4-a9a5b67dd132:schedule-task:e2-progressive-resume-health-20261124-v1",
+    "enabled": false,
+    "nextRunAt": null
+  },
+  "history_catalog_update": {
+    "path": "configs/e2_review_history_v1.json",
+    "sha256": "705bdac28827c529816bf185b1718221dd055d5a7520cb4729d11822b2cbc07c",
+    "prior_snapshot": {
+      "path": "runs/e2-progressive-completion-2026-11-25/history-before.json",
+      "sha256": "b3b04a1b9f4f26d25edeac3d5642345e641fd80fb8fd3ee8d3df71e321e2b64f"
+    },
+    "timing": "Changed after all production and verification workers stopped and the correction passed. Original source pins refer to production commit 59d29abf57d8c03eec783a30222fa288403c8e7b."
+  },
+  "tracking_index": {
+    "path": "manifests/e2_progressive_tracking_v1.json",
+    "sha256": "79febfe455536fa1b7b63a351cc81b66bbb2e187f9a821b80bc0ed537b986aa7"
+  }
+}

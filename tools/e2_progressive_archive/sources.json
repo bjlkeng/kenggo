@@ -1,0 +1,251 @@
+{
+  "schema": "e2_progressive_source_archive_v1",
+  "description": "Exact local recovery and verification source snapshots. They are historical evidence, not new launchers. Datasets, checkpoints, credentials and run output are excluded.",
+  "production_commit": "59d29abf57d8c03eec783a30222fa288403c8e7b",
+  "source_manifest": {
+    "path": "runs/e2-progressive-validation-verification-2026-11-24/manifest.json",
+    "sha256": "bef826e4c665e10554ea34b712769a18c73a65c02bc90d1ed97c44bd93f21df8"
+  },
+  "files": [
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/baseline_probe.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/baseline_probe.py",
+      "sha256": "bd5ec641e21d1d64f0094178ec70a88438d46277702a29095b72999e9b65d911"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/browser.cjs",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/browser.cjs",
+      "sha256": "5c3da503bf8af93bd2147b0c5b32ae97895a2797b5c3182cca47e6370ad79000"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/browser_fixture_attempt3.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/browser_fixture_attempt3.py",
+      "sha256": "41fb033c64b5a040521337ea3cc15867ed81c0bbce66b5e7225b6fe8554cdfb0"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/common.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/common.py",
+      "sha256": "808bbf0893d2a401372f8053a5fa1df69ca8f321164326a2bf9c2f4c469bc24f"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/launch.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/launch.py",
+      "sha256": "d48a45d96a0842f7cd66d9a959afc362605a81cb1b864ca193a38582aaffd650"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/prepare_fixture.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/prepare_fixture.py",
+      "sha256": "83d745476533d41c062dc8444eae723d02444d260e3e37ff4a21b0cfb26ffaa0"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/service.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/service.py",
+      "sha256": "e880ed2b88b24d68ae518470fa049a1114726515a6d03519664312e320c2a8c6"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/test_verifier.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/test_verifier.py",
+      "sha256": "6afb369af9a9d9b95169d94b6bd3d0cae75f9102aa516471ac00db37160786f7"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-final-verification-2026-11-21/verify.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-final-verification-2026-11-21/verify.py",
+      "sha256": "a055e95fb3588fbe859c3524134199843df0d2373913bb279c065c2cfc76b0f2"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-recovery-2026-11-21/recovery.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-recovery-2026-11-21/recovery.py",
+      "sha256": "6b4ca08c0d21921046bd15cff7fdbe211a36954b140d761ef9bad7e47c79b433"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-recovery-2026-11-21/test_recovery.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-recovery-2026-11-21/test_recovery.py",
+      "sha256": "337fe6ef7d938026324ad566cc5349f8fb86a6f4b1bf8bab20d524ea11d042ad"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-2026-11-24/audit-saved-growth.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-2026-11-24/audit-saved-growth.py",
+      "sha256": "3f8d62a0b0a826688065892cd9ee8c6e445a1f99afb7e8b096bc71cbb62bcf3f"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-2026-11-24/exit_race_regression.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-2026-11-24/exit_race_regression.py",
+      "sha256": "569158daab8dae58c6fed18c614a1bb507cedd5655bb596a9e43cffb58705cde"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-2026-11-24/resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-2026-11-24/resume.py",
+      "sha256": "134c33404fb4812b41cbb1e1b8130f98fd8806422da1cbb34a05773869301247"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-2026-11-24/test_resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-2026-11-24/test_resume.py",
+      "sha256": "c29f76df97c4a6690c6ed985758a51c51774e56753b88ed8042e23ebe3175b41"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-verification-2026-11-24/browser.cjs",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-verification-2026-11-24/browser.cjs",
+      "sha256": "5c3da503bf8af93bd2147b0c5b32ae97895a2797b5c3182cca47e6370ad79000"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-verification-2026-11-24/checks.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-verification-2026-11-24/checks.py",
+      "sha256": "fa7a6447333303181a5af9d7fe954932e0b764804b40742644837c8c176f540e"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-verification-2026-11-24/test_verifier.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-verification-2026-11-24/test_verifier.py",
+      "sha256": "c730bb24912f20af96bab1b58cabe9649dbafd360eb53b95d4aec5f4cb1ec513"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-resume-verification-2026-11-24/verify_resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-resume-verification-2026-11-24/verify_resume.py",
+      "sha256": "0d7d639739aec51752148eec260bb94dcd2c0f79a6b6a558efecc9f419e8f234"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/composite-validation.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/composite-validation.py",
+      "sha256": "1536519b97088083449d809296502fd6c992877dd8f94042925fecf49980ef97"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/probe_original_execute.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/probe_original_execute.py",
+      "sha256": "5301ddff338f9214a103d12381dc98aed3a2fe826c117d03b26d9f110c0a646e"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/recovered_jobs.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/recovered_jobs.py",
+      "sha256": "3ab7da4328972394f3c9dc82ef608d248da2d08c347a7e50246483a810a17d1d"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/resume.py",
+      "sha256": "e6effde80fe3768ec57d1536e85da30d162e524cc869b9624a3e9c89b491027b"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/test_composite_validation.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/test_composite_validation.py",
+      "sha256": "f9920d1808bf26b4a53dd91ed1ac6b1ebce137119345599538735730613333bd"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/test_recovered_jobs.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/test_recovered_jobs.py",
+      "sha256": "21ba2e49f4ce74d5b13885ffa859b6cb10ddb46b0fdbe61978bddb54fa31b6ca"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-resume-2026-11-24/test_resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-resume-2026-11-24/test_resume.py",
+      "sha256": "7eca0d948abbfbbdb5ef04c47f73c80bd0e4d829e060d54c8fc0c5657a738577"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/browser.cjs",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/browser.cjs",
+      "sha256": "5c3da503bf8af93bd2147b0c5b32ae97895a2797b5c3182cca47e6370ad79000"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/checks.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/checks.py",
+      "sha256": "336a201045d1e80fc74e1e27af6c3c63ead56e047faa80db0069b7dd8d543039"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/composite_checks.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/composite_checks.py",
+      "sha256": "236fd3aff996e0d24ddff5d191ff652f30a8e58be69463d9b244a7a9b44b49c6"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/test_adapter.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/test_adapter.py",
+      "sha256": "f2c6a6e0b94952e1063d04102b6a0fc86ff78465c867b9611483dce46490cc04"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/test_composite_checks.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/test_composite_checks.py",
+      "sha256": "0e68215198af966397b3a0dc0980f22076843506f3c7a268e84ab67c152b1825"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/test_verifier.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/test_verifier.py",
+      "sha256": "acf9a1fadab25ec07aad1a45e4e21926e4f47c84ae51690a8d24948fd71d96fa"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-validation-verification-2026-11-24/verify_resume.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-validation-verification-2026-11-24/verify_resume.py",
+      "sha256": "354294ae997ba7ba00a079f8b422aa3ca7242552b535eebe5e2e10e908fa7f53"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/phase-runner.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/phase-runner.py",
+      "sha256": "45a91dd1bc0875fbd5fcc2fed73ffa8d9586498f7e09418f8cc2df82cfa18018"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/review-pass1-snapshot/phase-runner.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/review-pass1-snapshot/phase-runner.py",
+      "sha256": "fe5878bc93a1cd7e2cf60218d3ec321b3e04210e8a5c4d85ef62b984da0ec9b9"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/review-pass1-snapshot/source-helper.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/review-pass1-snapshot/source-helper.py",
+      "sha256": "f70f07674fab08709dac8ba7e7a57d48dc0777c0827f03ff9ef74433de252364"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/review-pass1-snapshot/test_phase_runner.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/review-pass1-snapshot/test_phase_runner.py",
+      "sha256": "8541f05aafd37791b07b9d82550e316cb94e0187b1880d3c04ad7cb34e4bf339"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/review-pass1-snapshot/test_source_helper.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/review-pass1-snapshot/test_source_helper.py",
+      "sha256": "feca292e3e277a373ac0fbcb63dfc84806dd2351ba0aea7cfc3dedf573777048"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/source-helper.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/source-helper.py",
+      "sha256": "dd3d4c107e3d6d048369a09260c55c6d790eaac7d1a26a673b4f8f26ccde2b22"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/test_phase_runner.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/test_phase_runner.py",
+      "sha256": "f23d9e317663f634f50ec28ca70bbef32f060663b8f7e6c0fd5bc6caf03671a3"
+    },
+    {
+      "runtime_path": "runs/e2-validation-gap-2026-11-24/test_source_helper.py",
+      "archived_path": "tools/e2_progressive_archive/e2-validation-gap-2026-11-24/test_source_helper.py",
+      "sha256": "69b516a7114cb239e55d9313d68da4d46acb48a01ef332a4aebe1a3ae72a89ba"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/composite_checks_v2.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/composite_checks_v2.py",
+      "sha256": "74ded9fbba88fa980407c29e14adbeae9cb8da5af9f4e1c2bbd9265220e3064e"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/test_reference_repair.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/test_reference_repair.py",
+      "sha256": "9345eb4af2c3bcecbf1d3f0f72d954c499e704afd7aaa96b3ffddfd781aec9cb"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/verify_correction.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/verify_correction.py",
+      "sha256": "61345217fd24f1894c28abe8299dc836c5298a9fcb1ad8859998ffdfc24b4da5"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/publish.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/publish.py",
+      "sha256": "0f4779abfd76d64ed1867784c448b1e5526c2ec71904897490ac36cd2e938451"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/make_chart.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/make_chart.py",
+      "sha256": "379681b4b8f175b3bd376fa1ffdbc5e13c133bffe60f430a99a564d6eea00764"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/quality_checks.py",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/quality_checks.py",
+      "sha256": "15919c5f9c06d89716dfdaad148b1aa40fe0f5dc8e9a5f74696db5782b706cda"
+    },
+    {
+      "runtime_path": "runs/e2-progressive-completion-2026-11-25/browser.cjs",
+      "archived_path": "tools/e2_progressive_archive/e2-progressive-completion-2026-11-25/browser.cjs",
+      "sha256": "5c3da503bf8af93bd2147b0c5b32ae97895a2797b5c3182cca47e6370ad79000"
+    }
+  ]
+}

@@ -1,0 +1,887 @@
+{
+  "schema": "e2_progressive_tracking_index_v1",
+  "beads": [
+    "kenggo-ydo.16",
+    "kenggo-ydo.17",
+    "kenggo-ydo.18"
+  ],
+  "purpose": "Saved W&B run identities and selected checkpoint artifact receipts. No network query or new upload at completion.",
+  "runs": [
+    {
+      "stage": "parent-2M",
+      "run": {
+        "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/run.json",
+        "sha256": "77bf814fa07ed0e37a11d4adf8b1b0b5cb8679b5787b5c96088315177b6d0760"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "0f99998a454740d38c7a2784c4a43a6e",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/0f99998a454740d38c7a2784c4a43a6e"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "d365ef62d2ff63936524d234c383a0738453c4b0d7f00a8080dbf74a9832618b",
+      "provenance_sha256": "4d64cb60efb9b49b8fbe9a0a4698bf462bda8ac4f309ad4aa7b747116c8b9a93",
+      "current_stage_status": null,
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000000000-e88115245ac145e7939b59c49e9e8a9c/manifest.json",
+          "sha256": "de405eeb5f8215f223dfc9977d8a1c51c1ed33774fdd1773d54a61b2e2f16607",
+          "step": 0,
+          "wandb": {
+            "digest": "b20320ad03c203002336ead13caa427d",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/0f99998a454740d38c7a2784c4a43a6e-step-0-9e9e8a9c:v0",
+            "synced": true
+          }
+        },
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000015625-980e201349854568b2b2e6633d0e3b28/manifest.json",
+          "sha256": "fc4db75513fa058129818ff7ee3e9751b66c150982f4f727500ef0b1f98a462a",
+          "step": 15625,
+          "wandb": {
+            "digest": "7bc44d06d50258a7997dc73f053e933c",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/0f99998a454740d38c7a2784c4a43a6e-step-15625-3d0e3b28:v0",
+            "synced": true
+          }
+        },
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000031250-cc1adf0b0a144815b44d8942dbbb74e4/manifest.json",
+          "sha256": "3628225fe169db537d100206e68513e977d49a7f33f09dd9e4d050ccb41d1631",
+          "step": 31250,
+          "wandb": {
+            "digest": "6b2401d69ffbbec2a658350407657cc5",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/0f99998a454740d38c7a2784c4a43a6e-step-31250-dbbb74e4:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier0-readiness",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier0-readiness/run.json",
+        "sha256": "1a3b25cba2f6d62d6e19963e5c9870cef0e5546ef863e5724723b5813715797b"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "69edc35bda924a228dcdf1ab45cc75c7",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/69edc35bda924a228dcdf1ab45cc75c7"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "35e9a64b56646da4df7db43b2f9441a60412009c84df8c1342feb2410dc0909c",
+      "provenance_sha256": "f282b991a327f91befdaae54f53ff89dd5a4545977830e4537ff8c1972c8ef1f",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-assess-candidate",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-assess-candidate/run.json",
+        "sha256": "d9401df1b1401013503f45dc1d6f8eea186ca852e6313067af4f58c15a31b0af"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "39fba2cdc2324460a453edee7041f752",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/39fba2cdc2324460a453edee7041f752"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "7a207a1f58c5a51e5c08cce5feddd630ad0d21c036a9fb8ca2708e7a7f2e2be7",
+      "provenance_sha256": "556b498eb5fe90e809f5d7c60de859e6df056594cb9da761e8028a73822e6a7f",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-assess-control",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-assess-control/run.json",
+        "sha256": "8c6d6691b9a99637bfe22a6ee01fb65469cc5572e9abfadc21a7deaae3aeff7f"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "5c4b6ee291f64b6589d98a202af65093",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/5c4b6ee291f64b6589d98a202af65093"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "ef5faafb6e5e6f32a87097fc2a2c4ba6c5384c167bf1ac1e0b7625be0f2e44a9",
+      "provenance_sha256": "16c5562d6e9636bfcb9c66fe0a579e9534da9067d28a350eaa55e5f20558cebd",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-assess-parent",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-assess-parent/run.json",
+        "sha256": "c17f017c75c542bc1794cd67a34d202f189978141699061a695004445af1be8d"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "8de45eacd09f446d9f5d94b83cf38a64",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/8de45eacd09f446d9f5d94b83cf38a64"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "0be14e075f89cbc2950dbc2dfb44eea7ea7207d0b5561e86779dc05e96aff8fc",
+      "provenance_sha256": "0dee6c59767986bfd3e3d621b78f0f2b64e8b6e2fc0cefa32e831ca4eb2428d4",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch00",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch00/run.json",
+        "sha256": "66b0fd56519e02aff82e0c4871d349c16c6ed59824c3b9891a2b5fc62a037345"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "ebfcb2a3ab1742689f120deaed14751f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/ebfcb2a3ab1742689f120deaed14751f"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "63d80a98e33ae04f559c5f350e867b66b95c1535888ac9dda7682ba0b42b79fa",
+      "provenance_sha256": "0f569cb978756c68eb3ce7cc5ff66135528e1f44a27a813832f2601c2f462618",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000031250-4933ae75d86d4df0a8a40bc499bd523e/manifest.json",
+          "sha256": "01b68102b6f93857f4b971c7356f4e43c623a3bf31f0e8295fa3ca5d55429481",
+          "step": 31250,
+          "wandb": {
+            "digest": "75e8c722cf12b7e0b538227c01978416",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/ebfcb2a3ab1742689f120deaed14751f-step-31250-99bd523e:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch01",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch01/run.json",
+        "sha256": "bef80e665f8b8af362fc17fdb86f6ef332f1cf9d1a208384a3a94ba1ff313e67"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "d41359f9ddcd4e2094e195b52340fd7e",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/d41359f9ddcd4e2094e195b52340fd7e"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "1639de3ee42b8b946aa4ffae70d54ccbb0d0df1ae14319e3b5743ea1ef76d076",
+      "provenance_sha256": "cfc0e12dbb7c8b4cd01213d3084a745f75eb6df340dcb9750ce3c2b5014509e9",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000062500-da2f806e9a084014a9a65afbd1ee13c2/manifest.json",
+          "sha256": "fda099f59b2f381c97ae558c2910cf3a39288e64438a49f9daa1b4b42613e3a7",
+          "step": 62500,
+          "wandb": {
+            "digest": "0cfe145ea10d774a96ba0ac3d77144ce",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/d41359f9ddcd4e2094e195b52340fd7e-step-62500-d1ee13c2:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch02",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch02/run.json",
+        "sha256": "b1d5fa2694cb1ba2f824ff13049143eff03400e67aa5095796cfde50cd6a7b50"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "2b00f60a8e6c4ffe8bf76a0644f9f704",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/2b00f60a8e6c4ffe8bf76a0644f9f704"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "f878adfce4d7b055711745fcfac7bc729dd66bef94f63d693f71fe1ed1d9a62c",
+      "provenance_sha256": "57352afefa8ff431fffa56e41d63f9514caaa08232a7c2827bb11616dbd4e203",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000093750-b312b80347cd45a7a5945f000fed582b/manifest.json",
+          "sha256": "d29a63ae47cee5bacaa04256f6811f076186b9c0a22fe46910995cc0c8d19094",
+          "step": 93750,
+          "wandb": {
+            "digest": "fc4a07a22565a6350ede7f00777b936f",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/2b00f60a8e6c4ffe8bf76a0644f9f704-step-93750-0fed582b:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch03",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/run.json",
+        "sha256": "27e7bac8a863b401af2078a8202230231e01b407fbc465ae6c6279486a4259a1"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "262a7ebf277c4af4b43c804ad896219b",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/262a7ebf277c4af4b43c804ad896219b"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "fcc45e0568f9bb1323151c57663becf571bcc57f91156b085ba54d5a88c1e4f5",
+      "provenance_sha256": "aac0f3c5b130c584105823d6d69981027d48f413b57f324a5bf3332ffff5452b",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-f42dadaca07f4c4c822b6fabd96b33d1/manifest.json",
+          "sha256": "5cd424e0fe38ee36b01c6cb7ce42d1b532bc327cae533d6d9907d1a373a12b53",
+          "step": 125000,
+          "wandb": {
+            "digest": "3c53a0f9eb3438205fa08835562a5f21",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/262a7ebf277c4af4b43c804ad896219b-step-125000-d96b33d1:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch04",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch04/run.json",
+        "sha256": "a8779edb03ab31df845390fd4528bea99ef448f7457f06e784cb53c9b5c2ca96"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "b35126e5daa941bc95f8e9f99f89ef78",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/b35126e5daa941bc95f8e9f99f89ef78"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "5c3c9f68f2b5a3effcac1b87e0c63c673ad4eacb14637a49f4d544e337346537",
+      "provenance_sha256": "ea35d8e168de78104acc55e36c8ea56cf53ddeccc9cedda14b8c1717c91bf45f",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156250-bdc9466cf61248c1aa52fb1410fb4759/manifest.json",
+          "sha256": "0de885995aa0437bd83fac6ed7cd478182ef87214f67d346b473715e16bef33d",
+          "step": 156250,
+          "wandb": {
+            "digest": "136078b570a8a97f9a5e80f538c4ba35",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/b35126e5daa941bc95f8e9f99f89ef78-step-156250-10fb4759:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch05",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch05/run.json",
+        "sha256": "bdd56d09888fd3b04b0e932810decad6f869351e2c489e659d4ea03b9b38d828"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "0bd8014d2a3f4533818fbe6839b05b4a",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/0bd8014d2a3f4533818fbe6839b05b4a"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "6ea51fec5d0f2766fa850fe41738ad0f9048b6c3e564795fc1934f2ccf386e03",
+      "provenance_sha256": "cebbf952a0a1e733e020acefc357635c2af737deb6542b67bfc0f57601035f54",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187500-5cd0d3c110344c1193cc5e5deb34d8be/manifest.json",
+          "sha256": "41f76b0f08530c28b7f02ee7389b5a820630d9eecbdb2ac3989df14d064bc9ba",
+          "step": 187500,
+          "wandb": {
+            "digest": "31f20b53cc56085dbe5d4ea2bbfed35c",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/0bd8014d2a3f4533818fbe6839b05b4a-step-187500-eb34d8be:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-candidate-epoch06",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch06/run.json",
+        "sha256": "1687dc5865113fe7867fe8afff7a2b957dcd20eca9d1423d75b57b925a98bbdf"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "73536c179f694bc1884e80efb420dd0f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/73536c179f694bc1884e80efb420dd0f"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "d4e95b9be0e4894cf6830bf6075ccb51b64978eb64693d385aa891382853b159",
+      "provenance_sha256": "5d824cb288b44d52c796f229fbaf315f50d532fc3e3e6c32a94c734012901e88",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000218750-1c9d241141d743de8ab7fa42d67c1da1/manifest.json",
+          "sha256": "f298930271461815f02b2ed6f08b299c01002aa5f0444afd9f5262e083c31a4f",
+          "step": 218750,
+          "wandb": {
+            "digest": "16ea1a315e3016833f59c6d054fabc88",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/73536c179f694bc1884e80efb420dd0f-step-218750-d67c1da1:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-comparison",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-comparison/run.json",
+        "sha256": "1fdb3993bdad63bd57b13a065516656b2c037fab4be764daa8f76c6b13b53b91"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "2fdd4aa23cbb45bfac4b7384861a20fd",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/2fdd4aa23cbb45bfac4b7384861a20fd"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "975f27becdb7ddfc529aa90faea3cecf4347bf7ef0804301e7c348ca296a1e55",
+      "provenance_sha256": "e4b0c4cafddb2f552c46b7a6a8484fc3a9308c4b7d8bc660c658502f99799c27",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch00",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch00/run.json",
+        "sha256": "1409a87f1dc387de20e11bbae98c336b720a98edd2fab4436e92bc2d63e80866"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "46acac7f944a42f6ad53ca611cf13dac",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/46acac7f944a42f6ad53ca611cf13dac"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "a31f618c336f90d42d595f7ee2b7e162ea34b85dec373f8e5d4528164a71226e",
+      "provenance_sha256": "f782ac5137e56e381bed1cdc0abc973795564ef91f1e7f8326e200b0772f7838",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000031250-08cb7248c01542dc8c89b774ab4638fc/manifest.json",
+          "sha256": "2cf036188d588cb2e6dca508987b34d3b270f4a5b8d97ea0e4307aa0457cc037",
+          "step": 31250,
+          "wandb": {
+            "digest": "0c2433b9b21e62930c0e3c2f3c3d8f01",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/46acac7f944a42f6ad53ca611cf13dac-step-31250-ab4638fc:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch01",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch01/run.json",
+        "sha256": "2584c2f58df1ba839cec36430808697c1e577c163e6b2853ab205b396818e888"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "38b820c5362d48b78379974150e4bed5",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/38b820c5362d48b78379974150e4bed5"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "ef55d974d7ce0aae8c6410d5f849513c5bcb85acdd3e9c12c4ecc93dd5747cba",
+      "provenance_sha256": "963d2a88bc0dce89aafe05e03569c484caff690744792dacd6c0a6e8372428c2",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000062500-d635ee7d9f5d4ec7b4900d37065c0ad0/manifest.json",
+          "sha256": "ca0a40658b4f2114bc519577b1fde28a9a8168b0b88a7fc82b1720bc6307c1ae",
+          "step": 62500,
+          "wandb": {
+            "digest": "61c4a02dfdf337c7527df80447c57384",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/38b820c5362d48b78379974150e4bed5-step-62500-065c0ad0:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch02",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch02/run.json",
+        "sha256": "67d75c9c67d6712d2cf3ffc21232b0e97635415a03431b8c2d051b94fd1738f0"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "47d2af9a6b814af29b2897531b3c8abc",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/47d2af9a6b814af29b2897531b3c8abc"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "2611049e4771fe2517335db4c63a7a33869ea6fd3ff507738adcaa7a67e92b25",
+      "provenance_sha256": "ade362ae79ff6d8b89b320daaec1becb3326fafce979618dd8c32f3ffb93a192",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000093750-677c2f2b0d3940248117ac9c613b94b2/manifest.json",
+          "sha256": "000908c4d9dc78376b2906f7f43e566a34357839285e70582835dccf22122e0e",
+          "step": 93750,
+          "wandb": {
+            "digest": "84ff055534d2cd32c6752d9ac030a4ac",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/47d2af9a6b814af29b2897531b3c8abc-step-93750-613b94b2:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch03",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch03/run.json",
+        "sha256": "aa65b083a7b32a619fb880a5540aa08ce7d88a6eb5ffabd543919edae456985b"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "5225a54c4c014ed8ae2de50750640b97",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/5225a54c4c014ed8ae2de50750640b97"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "0ce13844b1442725195464d60a95dc845c6746bb3d566e7860d0d304b5a3b05f",
+      "provenance_sha256": "62155a733f67ae74c4140113514c375f40fb0af3903d69430a137312565f146c",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-a4c8a921e1b34127b70082f1bb6db9bd/manifest.json",
+          "sha256": "d56a662632a6c120d3887618a567145bd6972a9a7c94dd06562449f596251a6d",
+          "step": 125000,
+          "wandb": {
+            "digest": "cd69ab3ce35b7fbef0f32ed1c436ecff",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/5225a54c4c014ed8ae2de50750640b97-step-125000-bb6db9bd:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch04",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch04/run.json",
+        "sha256": "ce653960636e20b3c110ebda4e2a6d26abf31ed88041f1bcfad6d400cdc130d5"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "1d47b4e33e4545c5ae74aad078d33066",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/1d47b4e33e4545c5ae74aad078d33066"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "97d0da7cab1a99ebba4b423ce0c5e79098a8e48f3ebcb431f5d5cdc2179d977a",
+      "provenance_sha256": "976ab91844bb017cde2b82d21ce5a8a8e56149755369435d25b6d94e4f86b511",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156250-d726137c16d14d57ac5f4323e3762b57/manifest.json",
+          "sha256": "c93377da8c45d73e942ff01829d76a4223a5cf23eed3b78f7637540e70d78045",
+          "step": 156250,
+          "wandb": {
+            "digest": "a154d13c081197e10cac97ed2f85fbc1",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/1d47b4e33e4545c5ae74aad078d33066-step-156250-e3762b57:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch05",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch05/run.json",
+        "sha256": "7b263209cd627b875c613b0ea0eade3a89a97c2546118adeb8296360261be5e7"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "8bdf4a9201974d1ea63426be1951a6ab",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/8bdf4a9201974d1ea63426be1951a6ab"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "b14a0bc2c0f95a70b9bd5c277a9eee4c69b7378dc2c1ed009447ce7609f0c4f6",
+      "provenance_sha256": "924d62a2c1f00cf0c063142f0594edf51f0594795f212b36185894683254b8c5",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187500-d81de61b9d984673a0b94af00fce4129/manifest.json",
+          "sha256": "aa769e9002101d119a2c32254cf48ea01805e6646c4a96a138f317b6b2de1f8d",
+          "step": 187500,
+          "wandb": {
+            "digest": "c1516d547b6832c9e3c06c6b595d9a9a",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/8bdf4a9201974d1ea63426be1951a6ab-step-187500-0fce4129:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-control-epoch06",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch06/run.json",
+        "sha256": "0409048df97911c6fee9669f98e646641d671dbeff55e7686236a626c11cd4b6"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "20224eda870248edaa0c5c42c03878c7",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/20224eda870248edaa0c5c42c03878c7"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "f4f1d7fc8716f1d9bc1f1d146dda6f990a1f6c4cb90f356c443ca6ad80e45352",
+      "provenance_sha256": "0d08c20a07a7d3cd269b0e1d56f98a513b3601d342615b47bc719b102f4654ca",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000218750-e6f7081c0c924e93932ae60c26028e75/manifest.json",
+          "sha256": "ed43d653ec7c0d60598c66838c7d2a31cba1ebb098ebeec11f9b3196e430ea9c",
+          "step": 218750,
+          "wandb": {
+            "digest": "75f8f260e7a8b34dc240e91b0d5b7498",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/20224eda870248edaa0c5c42c03878c7-step-218750-26028e75:v0",
+            "synced": true
+          }
+        }
+      ],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-growth",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-growth/run.json",
+        "sha256": "73efaebcdd091ccca3cb6d2156037b81a42b1d07c25e6869007baf1668115c9a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "52cd6d9e76634fdea3468ebfe539205b",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/52cd6d9e76634fdea3468ebfe539205b"
+      },
+      "recorded_status": "running",
+      "tracking_finished": false,
+      "config_sha256": "a81606d959328ea9b8c08d9ab464018e2cbc93c86eba3d6b43fab00ef929c3d4",
+      "provenance_sha256": "faa31a8e0f61c69db12347837ef2818b6fe89c5e2703b619e8e064f7b4ec37f4",
+      "current_stage_status": "completed",
+      "completion_basis": "validated_saved_artifacts_original_exit_unknown",
+      "checkpoints": [],
+      "interpretation": "Preserved interrupted tracking snapshot; running is stale, original exit unknown and ledger attempt partial."
+    },
+    {
+      "stage": "tier1-preparation",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-preparation/run.json",
+        "sha256": "237276ab94a3b42ab7aac789666c9199625894d0756e1e200fee2fd22cfdcb97"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "32c0a22a3e2c49dda10d477e62335a35",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/32c0a22a3e2c49dda10d477e62335a35"
+      },
+      "recorded_status": "failed",
+      "tracking_finished": true,
+      "config_sha256": "f083ac8b38cd2bbbb6c3ae760d71ea135143cec19d05fdec7acac7e5b6282eda",
+      "provenance_sha256": "b61ff2819c860d182b8594d687d911314a9696d0109cf93d3ee1dffe5706e83d",
+      "current_stage_status": null,
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-preparation-validation-recovery",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-preparation-validation-recovery/run.json",
+        "sha256": "25fc10ba2b782422024a5054e1759fd77d579e67d5207f45488962b2abf4df66"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "13dbafce90ca427391141ad51bffe56f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/13dbafce90ca427391141ad51bffe56f"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "fba6557f75cf8eb89cc70985007f10f1eb2d5d14994c5484a2aed52da3c8d2e0",
+      "provenance_sha256": "84498725e13f27a71bb2845d9ea46e95c4d103eb20816fa5fa3841dabf6e84cf",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "tier1-sources",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-sources/run.json",
+        "sha256": "6f0278938b624dd28fca6804d6d52d7e46bad24bae5778e44f4b38fb5964f715"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "809936befda64695ad5bd03dda0f8d29",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/809936befda64695ad5bd03dda0f8d29"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "f6dc1dd77727005e50f2b37ba05475a1c941833f48743448c220060856ee25af",
+      "provenance_sha256": "96a2e2db5bdacb90cde406bb69d1422cb621643569f96c54b589e08e64f4f042",
+      "current_stage_status": "completed",
+      "completion_basis": null,
+      "checkpoints": [],
+      "interpretation": "Saved tracking receipt; remote service was not queried during completion."
+    },
+    {
+      "stage": "validation-source-gap",
+      "run": {
+        "path": "runs/e2-validation-gap-2026-11-24/production/run.json",
+        "sha256": "35d4a4d43ab374da63a77461cf75c2117862eb57fa1dbcb324d5ed39f4c535cc"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "275d89f479a344bba5166c5ca6e2c344",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/275d89f479a344bba5166c5ca6e2c344"
+      },
+      "recorded_status": "completed",
+      "tracking_finished": true,
+      "config_sha256": "c258c8b2c8b8abad19fe3c1d3c771fdeb28b6f539dfcf3bad025a4e215fd0140",
+      "provenance_sha256": "270bab229da6e421b7eaa3341fc2e174389d551fec4443567aee0fcb85e50760",
+      "config": {
+        "path": "runs/e2-validation-gap-2026-11-24/production/config.json",
+        "sha256": "c258c8b2c8b8abad19fe3c1d3c771fdeb28b6f539dfcf3bad025a4e215fd0140"
+      },
+      "provenance": {
+        "path": "runs/e2-validation-gap-2026-11-24/production/provenance.json",
+        "sha256": "270bab229da6e421b7eaa3341fc2e174389d551fec4443567aee0fcb85e50760"
+      },
+      "current_stage_status": "completed",
+      "completion_basis": "Reviewed bounded validation-only source phase; no training or model queries.",
+      "checkpoints": [],
+      "interpretation": "Saved completed online source-experiment receipt; remote status was not queried during completion."
+    }
+  ],
+  "selected": {
+    "parent": {
+      "run_id": "0f99998a454740d38c7a2784c4a43a6e",
+      "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/0f99998a454740d38c7a2784c4a43a6e",
+      "run": {
+        "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/run.json",
+        "sha256": "77bf814fa07ed0e37a11d4adf8b1b0b5cb8679b5787b5c96088315177b6d0760"
+      },
+      "checkpoint": {
+        "config": {
+          "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/config.json",
+          "sha256": "d365ef62d2ff63936524d234c383a0738453c4b0d7f00a8080dbf74a9832618b"
+        },
+        "path": "/home/bojji/code/kenggo/runs/e2-expanded-pilot-2026-11-18/combined-conditioned/worker/checkpoints/step-0000031250-cc1adf0b0a144815b44d8942dbbb74e4/manifest.json",
+        "provenance": {
+          "path": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/provenance.json",
+          "sha256": "4d64cb60efb9b49b8fbe9a0a4698bf462bda8ac4f309ad4aa7b747116c8b9a93"
+        },
+        "sha256": "3628225fe169db537d100206e68513e977d49a7f33f09dd9e4d050ccb41d1631",
+        "step": 31250
+      },
+      "wandb_artifact": {
+        "digest": "6b2401d69ffbbec2a658350407657cc5",
+        "mode": "online",
+        "name": "bjlkeng/kenggo/0f99998a454740d38c7a2784c4a43a6e-step-31250-dbbb74e4:v0",
+        "synced": true
+      }
+    },
+    "candidate": {
+      "run_id": "262a7ebf277c4af4b43c804ad896219b",
+      "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/262a7ebf277c4af4b43c804ad896219b",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/run.json",
+        "sha256": "27e7bac8a863b401af2078a8202230231e01b407fbc465ae6c6279486a4259a1"
+      },
+      "checkpoint": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/config.json",
+          "sha256": "fcc45e0568f9bb1323151c57663becf571bcc57f91156b085ba54d5a88c1e4f5"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/worker/checkpoints/step-0000125000-f42dadaca07f4c4c822b6fabd96b33d1/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/provenance.json",
+          "sha256": "aac0f3c5b130c584105823d6d69981027d48f413b57f324a5bf3332ffff5452b"
+        },
+        "sha256": "5cd424e0fe38ee36b01c6cb7ce42d1b532bc327cae533d6d9907d1a373a12b53",
+        "step": 125000
+      },
+      "wandb_artifact": {
+        "digest": "3c53a0f9eb3438205fa08835562a5f21",
+        "mode": "online",
+        "name": "bjlkeng/kenggo/262a7ebf277c4af4b43c804ad896219b-step-125000-d96b33d1:v0",
+        "synced": true
+      }
+    },
+    "control": {
+      "run_id": "38b820c5362d48b78379974150e4bed5",
+      "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/38b820c5362d48b78379974150e4bed5",
+      "run": {
+        "path": "runs/e2-progressive-2026-11-21/tier1-control-epoch01/run.json",
+        "sha256": "2584c2f58df1ba839cec36430808697c1e577c163e6b2853ab205b396818e888"
+      },
+      "checkpoint": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/config.json",
+          "sha256": "ef55d974d7ce0aae8c6410d5f849513c5bcb85acdd3e9c12c4ecc93dd5747cba"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/worker/checkpoints/step-0000062500-d635ee7d9f5d4ec7b4900d37065c0ad0/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-control-epoch01/provenance.json",
+          "sha256": "963d2a88bc0dce89aafe05e03569c484caff690744792dacd6c0a6e8372428c2"
+        },
+        "sha256": "ca0a40658b4f2114bc519577b1fde28a9a8168b0b88a7fc82b1720bc6307c1ae",
+        "step": 62500
+      },
+      "wandb_artifact": {
+        "digest": "61c4a02dfdf337c7527df80447c57384",
+        "mode": "online",
+        "name": "bjlkeng/kenggo/38b820c5362d48b78379974150e4bed5-step-62500-065c0ad0:v0",
+        "synced": true
+      }
+    }
+  },
+  "limitations": [
+    "Original growth tracking status remains running in its sealed snapshot; actual process stopped, original exit unknown, recovered dataset verified separately.",
+    "The validation-source phase is an online W&B data run with no training. Root completion is local accounting and created no W&B run."
+  ],
+  "receipt_inventory": {
+    "study_patterns": [
+      "runs/e2-progressive-*/**/run.json",
+      "runs/e2-validation-gap-*/**/run.json"
+    ],
+    "included_prior_parent": "runs/e2-expanded-pilot-2026-11-18/combined-conditioned/run.json",
+    "study_receipts": 24,
+    "total_including_parent": 25,
+    "no_other_receipts_found_in_these_study_directories": true
+  }
+}

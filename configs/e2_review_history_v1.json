@@ -49,6 +49,23 @@
         "Every learned game had a premature-pass flag. Adding rank input worsened outcome error on unseen-account 0.5-komi positions. E2 readiness remains open.",
         "The eight failed verifier rank-input checks were false positives. A separate saved-evidence assessment passed; the original failed attempt remains recorded."
       ]
+    },
+    {
+      "id": "progressive-2026-11-25",
+      "title": "25 Nov \u00b7 more data with validation stopping",
+      "short": "25 Nov",
+      "bundle_id": "80609a4004fd30bc1ac1434b6f9057780ff4ed14fe1923e23591f7932ccd2ecf",
+      "source": {
+        "path": "runs/e2-progressive-completion-2026-11-25/review.html",
+        "sha256": "0b1ae71925db6f516e3162700bc8c0c849efe0cf248e72112e8fa79e87f704b0",
+        "bytes": 26773172
+      },
+      "description": "Continued the same 2M-data parent on either 2M or 4M moves (18,126 games in the larger set). Each arm completed six matched intervals, 187,500 new updates and 24 million presentations. A separate 52-game sample selected control interval 1 and candidate interval 3.",
+      "notes": [
+        "One training seed. The fixed comparison reuses 539 complete games; 111,591 of 120,450 positions are in the 12k\u20131d scope. Confirmation and final targets remain closed.",
+        "More data improved move prediction, but value-error regressions against the parent stopped further growth under the preset rule. No new game panel ran; premature passing and E2 readiness remain open.",
+        "The interrupted supervisor and missing validation group were repaired under the original allowance. Seven new games remain validation-only. Earlier failures and the corrected parent-path verifier error are preserved."
+      ]
     }
   ]
 }
