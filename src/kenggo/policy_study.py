@@ -61,6 +61,11 @@ class PolicyStudy(Study):
             value_metrics="diagnostic only; not optimized or used for selection")
         self.persist()
 
+    def config(self, *, purpose, arm, inputs, parameters):
+        base = self.plan["parameters"]["base_inputs"]
+        required = {key: base[key] for key in ("data", "split", "rules")}
+        return super().config(purpose=purpose, arm=arm, inputs=required | inputs, parameters=parameters)
+
 
 def rotation(trials, epoch):
     active = [trial for trial in trials if trial["status"] not in ("stopped", "failed")]
@@ -209,8 +214,10 @@ def train(study, preparation):
 def execute(study):
     plan, params = study.plan, study.plan["parameters"]
     base = params["base_inputs"]
-    stage, _ = study.stage("readiness", study.config(purpose="policy-readiness", arm="shared",
-        inputs=base, parameters={}), wall=600, cpu=300, output_bytes=256 * 1024**2, gpu=True)
+    stage = study.state["stages"].get("readiness")
+    if stage is None:
+        stage, _ = study.stage("readiness", study.config(purpose="policy-readiness", arm="shared",
+            inputs=base, parameters={}), wall=600, cpu=300, output_bytes=256 * 1024**2, gpu=True)
     require_completed(stage)
     stage, preparation = study.stage("preparation", study.config(purpose="policy-preparation", arm="shared",
         inputs={key: plan["inputs"][key] for key in PREPARATION_KEYS}, parameters={"base_inputs": base}),
@@ -260,6 +267,10 @@ def publish(study, status, reason):
 
 def run(plan_path, plan_pin, output):
     study = PolicyStudy(read_json(plan_path, plan_pin), reference(plan_path), output)
+    return run_study(study)
+
+
+def run_study(study):
     status, reason = "failed", "The study did not finish"
     try:
         reason = execute(study)

@@ -62,6 +62,8 @@ class Study:
     version = VERSION
     limit_description = "seven-day"
     job_module = "kenggo.progressive_jobs"
+    supervisor_id = "supervisor"
+    run_prefix = ""
     final_reserve = FINAL_RESERVE
     frozen_limits = {"wall_seconds": 604800, "gpu_seconds": 604800,
                      "cpu_seconds": 604800, "output_bytes": 160 * 1024**3,
@@ -93,7 +95,7 @@ class Study:
             "prior_costs": plan["inputs"]["prior_resources"], "promotion": False}
         save_json(self.output / "session.json", {key: self.state[key] for key in
                   ("schema", "plan", "launch_utc", "deadline_utc", "limits", "finalization_reserve", "prior_costs")})
-        self.ledger.reserve("supervisor", estimate_gpu_seconds=0, shutdown_gpu_seconds=0,
+        self.ledger.reserve(self.supervisor_id, estimate_gpu_seconds=0, shutdown_gpu_seconds=0,
                             metadata={"purpose": "progressive_supervisor", "cpu_reserve": 60})
         self.persist()
 
@@ -139,7 +141,7 @@ class Study:
         directory = self.output / name
         self.state["active_stage"] = name
         self.persist()
-        overhead_id = name + "-tracking"
+        overhead_id = self.run_prefix + name + "-tracking"
         self.ledger.reserve(overhead_id, estimate_gpu_seconds=0, shutdown_gpu_seconds=0,
                             metadata={"purpose": "configuration_and_tracking"})
         outcome, reason = "failed", "Stage did not finish"
@@ -157,7 +159,7 @@ class Study:
                            MKL_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1", UV_OFFLINE="1",
                            CUDA_VISIBLE_DEVICES="0" if gpu else "")
                 job = run_job(command, directory / "worker", cwd=ROOT,
-                    limits=JobLimits(wall, cpu, output_bytes), ledger=self.ledger, run_id=name,
+                    limits=JobLimits(wall, cpu, output_bytes), ledger=self.ledger, run_id=self.run_prefix + name,
                     arm_shares={config["arm"]: 1}, device="0" if gpu else None, environment=env,
                     metadata={"config_sha256": experiment.config_sha256})
                 summary_path = directory / "worker" / ("training_summary.json" if training else "summary.json")
@@ -208,7 +210,7 @@ class Study:
 
     def finish(self, status, reason):
         self.state.update(status=status, reason=reason, active_stage=None)
-        self.ledger.record("supervisor", allocations=[], outcome="completed" if status == "completed" else "partial",
+        self.ledger.record(self.supervisor_id, allocations=[], outcome="completed" if status == "completed" else "partial",
             arm_shares={"shared": 1}, cpu_seconds=max(0, time.process_time() - self.cpu_started - self.accounted_cpu) + 60,
             wall_seconds=0, reason=None if status == "completed" else reason)
         self.accounted_cpu = time.process_time() - self.cpu_started + 60

@@ -78,6 +78,27 @@ class FakeStudy:
 
 
 class PolicyStudyTests(unittest.TestCase):
+    def test_every_job_keeps_required_provenance_and_supplied_data_override(self):
+        from kenggo.tracking import capture_provenance
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
+            filename = root / "input.json"
+            filename.write_bytes(json_bytes({"fixture": True}))
+            ref = reference(filename)
+            study = policy.PolicyStudy.__new__(policy.PolicyStudy)
+            study.plan = json.loads(Path("configs/e2_policy_tuning_v1.json").read_text())
+            study.plan["parameters"]["base_inputs"] = {name: ref for name in ("data", "split", "rules")}
+            override = root / "grown.json"
+            override.write_bytes(json_bytes({"fixture": "grown"}))
+            for purpose in ("policy-preparation", "policy-comparison", "policy-publication", "continuation-training"):
+                supplied = {"specific_input": ref}
+                if purpose == "continuation-training":
+                    supplied["data"] = reference(override)
+                config = study.config(purpose=purpose, arm="shared", inputs=supplied, parameters={})
+                provenance, _ = capture_provenance(Path(__file__).resolve().parents[1], config["inputs"])
+                self.assertEqual(provenance["inputs"], config["inputs"])
+                self.assertEqual(config["inputs"]["data"], supplied.get("data", ref))
+
     def test_committed_selection_rejects_a_changed_selected_checkpoint(self):
         with tempfile.TemporaryDirectory() as root:
             study = FakeStudy(root, rounds=0)
