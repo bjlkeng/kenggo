@@ -21,6 +21,7 @@ from kenggo.encoding import INPUT_KEYS, array_schema
 from kenggo.examples import LABEL_SCHEMA
 from kenggo.kgs_source import RANKS
 from kenggo.learner import ModelConfig, PopulationModel
+from kenggo import policy_recipe
 from kenggo.recorded_statistics import evaluate, prediction_from_logits
 from kenggo.supervised import train_step
 from kenggo.tracking import validate_config
@@ -226,21 +227,26 @@ def _parameters(config, fixture_only):
     raw = config["parameters"]
     required = {"recipe", "stage_id", "round_updates", "model", "training_rows", "device",
                 "deadline_utc", "checkpoint_reserve_seconds"}
-    if not required <= raw.keys() or raw.keys() - required - set(DEFAULTS) - {"max_artifact_bytes"}:
+    policy = raw.get("recipe") == policy_recipe.RECIPE
+    defaults = DEFAULTS | policy_recipe.DEFAULTS if policy else DEFAULTS
+    if not required <= raw.keys() or raw.keys() - required - set(defaults) - {"max_artifact_bytes"}:
         raise ValueError("Unexpected continuation training parameters")
-    params = DEFAULTS | raw
+    params = defaults | raw
+    if policy:
+        policy_recipe.validate(params)
     model = ModelConfig(**params["model"])
     counts = ("round_updates", "training_rows", "batch_size", "recovery_updates", "patience",
               "max_rounds", "eval_batch_size")
-    if (params["recipe"] != RECIPE or not isinstance(params["stage_id"], str)
+    if (params["recipe"] not in (RECIPE, policy_recipe.RECIPE) or not isinstance(params["stage_id"], str)
             or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,95}", params["stage_id"]) is None
             or any(type(params[name]) is not int or params[name] < 1 for name in counts)
             or type(params["evaluate_only"]) is not bool or params["model"] != model.__dict__
             or params["target_round"] is not None and (type(params["target_round"]) is not int
                 or not 0 <= params["target_round"] <= 1000
                 or params["evaluate_only"] != (params["target_round"] == 0))
-            or params["learning_rate"] != 0.001 or params["clock_dropout"] != 0.1
-            or params["min_delta"] != 0.002 or params["patience"] != 3 or params["max_rounds"] != 1000
+            or not policy and (params["learning_rate"] != 0.001
+                or params["patience"] != 3 or params["max_rounds"] != 1000)
+            or params["clock_dropout"] != 0.1 or params["min_delta"] != 0.002
             or params["inference_contract"] != "komi_comparison_v1"
             or params["training_komi_halfpoints"] != [1, 13]
             or any(type(value) is not int for value in params["training_komi_halfpoints"])
@@ -281,9 +287,18 @@ def _parent_bundle(inputs):
             "config": inputs["parent_config"], "provenance": inputs["parent_provenance"]}
 
 
+def _policy_optimizer(model, params):
+    for parameter in model.value.parameters():
+        parameter.requires_grad_(False)
+    named = [(name, parameter) for name, parameter in model.named_parameters() if parameter.requires_grad]
+    return torch.optim.AdamW([{"params": [parameter for _, parameter in named],
+                               "param_names": [name for name, _ in named]}],
+                            lr=params["learning_rate"], weight_decay=params["weight_decay"])
+
+
 def _initial_progress(parent, parent_bundle, params, config, contract):
     progress = parent["progress"]
-    if (progress.get("version") == RECIPE and progress.get("stage_id") == params["stage_id"]
+    if (progress.get("version") == params["recipe"] and progress.get("stage_id") == params["stage_id"]
             and progress.get("arm") == config["arm"]):
         if progress.get("stage_contract_sha256") != contract:
             raise ValueError("A resumed stage changed data, diagnostics, sampler or learning settings")
@@ -305,7 +320,7 @@ def _initial_progress(parent, parent_bundle, params, config, contract):
     examples = progress.get("lifetime_examples", progress.get("presented_examples"))
     if type(lifetime) is not int or lifetime != parent["step"] or type(examples) is not int or examples < 0:
         raise ValueError("A parent checkpoint requires consistent lifetime update and presentation counts")
-    return {"version": RECIPE, "stage_id": params["stage_id"], "arm": config["arm"],
+    return {"version": params["recipe"], "stage_id": params["stage_id"], "arm": config["arm"],
             "stage_contract_sha256": contract, "parent_checkpoint": parent_bundle,
             "sampler_step": 0, "lifetime_updates": lifetime, "lifetime_examples": examples,
             "completed_rounds": 0, "initial_evaluation_complete": False,
@@ -365,6 +380,9 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
         metrics.update(round=round_index, sampler_step=progress["sampler_step"],
                        lifetime_updates=progress["lifetime_updates"],
                        meaningful_improvement=meaningful, new_raw_best=best)
+        if params["recipe"] == policy_recipe.RECIPE:
+            used, following = policy_recipe.update_schedule(progress, optimizer, params, score, initial=initial)
+            metrics.update(learning_rate_used=used, learning_rate_next=following, value_loss_weight=0.0)
         path = output / f"epoch-{round_index:04d}-metrics.json"
         save_json(path, metrics)
         progress["last_epoch_metrics"] = _reference(path)
@@ -388,12 +406,15 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
 
     def commit(metrics, *, initial=False):
         before, saved_count = deepcopy(progress), len(state["checkpoints"])
+        learning_rates = [group["lr"] for group in optimizer.param_groups]
         try:
             commit_epoch(metrics, initial=initial)
         except BaseException:
             if len(state["checkpoints"]) == saved_count:
                 progress.clear()
                 progress.update(before)
+                for group, rate in zip(optimizer.param_groups, learning_rates):
+                    group["lr"] = rate
             raise
 
     def finish(status, reason=None):
@@ -403,7 +424,9 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
             best_checkpoint=progress["best_checkpoint"] if progress else None,
             final_checkpoint=progress["best_checkpoint"] if progress else None,
             checkpoint_selection="minimum_epoch_validation_nll",
-            patience_exhausted=bool(progress and progress["stopping"]["bad_rounds"] >= params["patience"]))
+            patience_exhausted=bool(progress and (policy_recipe.stopped(progress, params)
+                if params["recipe"] == policy_recipe.RECIPE
+                else progress["stopping"]["bad_rounds"] >= params["patience"])))
         if progress:
             state.update(epoch_metrics=progress["epoch_metrics"], training_rows=params["training_rows"],
                          presented_examples=state["completed_updates"] * params["batch_size"])
@@ -416,6 +439,7 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
         config, provenance = read_json(config_path, config_pin), read_json(provenance_path, provenance_pin)
         validate_config(config)
         params, model_config = _parameters(config, fixture_only)
+        state["version"] = params["recipe"]
         if (config["purpose"] != "continuation-training" or provenance.get("version") != "experiment_provenance_v1"
                 or provenance.get("inputs") != config["inputs"] or json_hash(provenance) != provenance_pin
                 or provenance.get("source") != _source_identity()):
@@ -457,20 +481,42 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
             raise ValueError("Training and validation diagnostics cannot share games")
         del training_keys
         model = PopulationModel(model_config).to(device)
-        optimizer = torch.optim.Adam(model.parameters(), lr=params["learning_rate"], weight_decay=0)
         parent_bundle = _parent_bundle(config["inputs"])
         parent_config = read_json(_path(parent_bundle["config"]), parent_bundle["config"]["sha256"])
         parent_provenance = read_json(_path(parent_bundle["provenance"]), parent_bundle["provenance"]["sha256"])
         if (parent_config["parameters"]["model"] != params["model"]
                 or parent_provenance.get("inputs") != parent_config.get("inputs")):
             raise ValueError("The parent model and input provenance differ")
+        policy = params["recipe"] == policy_recipe.RECIPE
+        parent_policy = parent_config["parameters"].get("recipe") == policy_recipe.RECIPE
+        if parent_policy and not policy:
+            raise ValueError("Policy-only weights cannot silently resume a joint-loss experiment")
+        optimizer = (_policy_optimizer(model, params) if parent_policy
+                     else torch.optim.Adam(model.parameters(), lr=params["learning_rate"]))
         parent = load_checkpoint(parent_bundle["path"], parent_bundle["sha256"], model, optimizer,
             config_sha256=json_hash(parent_config), provenance_sha256=json_hash(parent_provenance))
         parent_bundle["step"] = parent["step"]
-        if any(group["lr"] != params["learning_rate"] or group.get("weight_decay", 0) != 0
-               for group in optimizer.param_groups):
+        resumed = (parent["progress"].get("version") == params["recipe"]
+            and parent["progress"].get("stage_id") == params["stage_id"]
+            and parent["progress"].get("arm") == config["arm"])
+        if policy:
+            if not resumed:
+                optimizer = _policy_optimizer(model, params)
+            expected_lr = (parent["progress"].get("policy_schedule") or {}).get("learning_rate", params["learning_rate"])
+            names = [name for name, parameter in model.named_parameters() if parameter.requires_grad]
+            if len(optimizer.param_groups) != 1 or any(
+                   group.get("param_names") != names
+                   or group["lr"] != (expected_lr if resumed else params["learning_rate"])
+                   or group["weight_decay"] != params["weight_decay"]
+                   or group["betas"] != (0.9, 0.999) or group["eps"] != 1e-8
+                   or group["amsgrad"] or group["maximize"] for group in optimizer.param_groups):
+                raise ValueError("Policy resume optimizer differs from its saved schedule")
+        elif any(group["lr"] != params["learning_rate"] or group.get("weight_decay", 0) != 0
+                 for group in optimizer.param_groups):
             raise ValueError("The parent optimizer differs from the frozen Adam recipe")
         progress = _initial_progress(parent, parent_bundle, params, config, _contract(config, params, data))
+        if policy:
+            policy_recipe.validate_schedule(progress, params)
         (output / "commits").mkdir()
         if progress["last_epoch_metrics"] is not None:
             ref = progress["last_epoch_metrics"]
@@ -514,7 +560,9 @@ def run(config_path, config_pin, provenance_path, provenance_pin, output, *, fix
                                         device=device, full_batch=True)
             state.update(status="training", attempted_updates=state["attempted_updates"] + 1, uncertain_updates=1)
             persist()
-            metrics = train_step(model, optimizer, inputs, labels, clock_dropout=params["clock_dropout"])
+            options = {"value_weight": 0.0} if policy else {}
+            metrics = train_step(model, optimizer, inputs, labels,
+                                 clock_dropout=params["clock_dropout"], **options)
             if device.type == "cuda":
                 torch.cuda.synchronize(device)
             if (metrics["examples"] != params["batch_size"]

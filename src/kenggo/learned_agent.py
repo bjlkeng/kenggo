@@ -12,6 +12,7 @@ import torch
 
 from kenggo.checkpoints import VERSION as CHECKPOINT_VERSION, file_hash, json_hash, read_json
 from kenggo.continuation_data import RECIPE as CONTINUATION_RECIPE, validate_lineage
+from kenggo.policy_recipe import RECIPE as POLICY_RECIPE
 from kenggo.encoding import Context, INPUT_KEYS, SCALARS, apply_normalizer, encode
 from kenggo.go import Game, PASS, RULES
 from kenggo.kgs_source import RANKS
@@ -61,7 +62,7 @@ def _normalizer(artifacts):
             or config["inputs"]["examples"]["sha256"] != artifacts.examples_sha256):
         raise ValueError("Inference model and inputs differ from the pinned training configuration")
     normalizer = read_json(artifacts.normalizer_path, artifacts.normalizer_sha256)
-    continuation = config["parameters"].get("recipe") == CONTINUATION_RECIPE
+    continuation = config["parameters"].get("recipe") in (CONTINUATION_RECIPE, POLICY_RECIPE)
     if continuation:
         _, fitted = validate_lineage(config["inputs"], fixture_only=normalizer["fixture_only"])
         if fitted != normalizer:
@@ -73,7 +74,7 @@ def _normalizer(artifacts):
     parameters = config["parameters"]
     training_komi = (13,)
     inference_komi = (13,)
-    if parameters.get("recipe") in (EXPANDED_RECIPE, CONTINUATION_RECIPE):
+    if parameters.get("recipe") in (EXPANDED_RECIPE, CONTINUATION_RECIPE, POLICY_RECIPE):
         values = parameters.get("training_komi_halfpoints")
         profile = config["inputs"].get("profile", {})
         if (parameters.get("inference_contract") != KOMI_INFERENCE_CONTRACT

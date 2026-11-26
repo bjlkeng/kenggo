@@ -122,8 +122,10 @@ def hide_clocks(inputs, probability):
     return result
 
 
-def supervised_loss(logits, value, labels, legal):
+def supervised_loss(logits, value, labels, legal, *, value_weight=1.0):
     """Legal human-action CE plus mean MSE over supported mover outcomes."""
+    if type(value_weight) not in (int, float) or not math.isfinite(value_weight) or value_weight < 0:
+        raise ValueError("Value weight must be finite and nonnegative")
     if (logits.ndim != 2 or logits.shape[1] != PASS + 1 or value.shape != logits.shape[:1]
             or legal.shape != logits.shape or legal.dtype != torch.bool or not legal.any(dim=1).all()
             or set(labels) != set(LABEL_SCHEMA)):
@@ -149,16 +151,19 @@ def supervised_loss(logits, value, labels, legal):
         raise ValueError("Valid losses require finite predictions and signed recorded outcomes")
     policy_loss = (F.cross_entropy(selected_logits, targets) if targets.numel()
                    else selected_logits[selected_legal].sum())
-    value_loss = F.mse_loss(value[value_valid], outcomes) if outcomes.numel() else value[value_valid].sum()
-    return {"loss": policy_loss + value_loss, "policy_loss": policy_loss, "value_loss": value_loss}
+    observed_value = value if value_weight else value.detach()
+    value_loss = (F.mse_loss(observed_value[value_valid], outcomes) if outcomes.numel()
+                  else observed_value[value_valid].sum())
+    loss = policy_loss + value_weight * value_loss if value_weight else policy_loss
+    return {"loss": loss, "policy_loss": policy_loss, "value_loss": value_loss}
 
 
-def train_step(model, optimizer, inputs, labels, *, clock_dropout=0.1):
+def train_step(model, optimizer, inputs, labels, *, clock_dropout=0.1, value_weight=1.0):
     inputs = hide_clocks(inputs, clock_dropout)
     model.train()
     optimizer.zero_grad(set_to_none=True)
     logits, value = model(inputs)
-    losses = supervised_loss(logits, value, labels, inputs["legal"])
+    losses = supervised_loss(logits, value, labels, inputs["legal"], value_weight=value_weight)
     losses["loss"].backward()
     optimizer.step()
     return {**{name: float(loss.detach()) for name, loss in losses.items()},

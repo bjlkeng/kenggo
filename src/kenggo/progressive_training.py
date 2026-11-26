@@ -59,14 +59,20 @@ def available_memory():
 
 
 class Study:
+    version = VERSION
+    limit_description = "seven-day"
+    job_module = "kenggo.progressive_jobs"
+    final_reserve = FINAL_RESERVE
+    frozen_limits = {"wall_seconds": 604800, "gpu_seconds": 604800,
+                     "cpu_seconds": 604800, "output_bytes": 160 * 1024**3,
+                     "publication_seconds": 21600}
+
     def __init__(self, plan, plan_ref, output):
         validate_config(plan)
         self.plan, self.output = plan, Path(output).resolve()
         self.limits = plan["parameters"]["limits"]
-        if (self.limits["wall_seconds"] != 604800 or self.limits["gpu_seconds"] != 604800
-                or self.limits["cpu_seconds"] != 604800 or self.limits["output_bytes"] != 160 * 1024**3
-                or self.limits["publication_seconds"] != 21600):
-            raise ValueError("The progressive study must use its frozen seven-day limits")
+        if self.limits != self.frozen_limits:
+            raise ValueError(f"The study must use its frozen {self.limit_description} limits")
         intended = plan["parameters"].get("output")
         if not isinstance(intended, str) or not intended or self.output != (ROOT / intended).resolve():
             raise ValueError("The study must use its pinned output; another directory cannot reset the allowance")
@@ -81,9 +87,9 @@ class Study:
         self.production_end = self.deadline - timedelta(seconds=self.limits["publication_seconds"])
         self.ledger = BudgetLedger.create(self.output / "resources.json", budget_id=plan["budget_id"],
                                           gpu_seconds=self.limits["gpu_seconds"])
-        self.state = {"schema": VERSION, "status": "running", "plan": plan_ref,
+        self.state = {"schema": self.version, "status": "running", "plan": plan_ref,
             "launch_utc": self.launch.isoformat(), "deadline_utc": self.deadline.isoformat(),
-            "limits": self.limits, "finalization_reserve": FINAL_RESERVE, "stages": {}, "tiers": [], "reason": None,
+            "limits": self.limits, "finalization_reserve": self.final_reserve, "stages": {}, "tiers": [], "reason": None,
             "prior_costs": plan["inputs"]["prior_resources"], "promotion": False}
         save_json(self.output / "session.json", {key: self.state[key] for key in
                   ("schema", "plan", "launch_utc", "deadline_utc", "limits", "finalization_reserve", "prior_costs")})
@@ -108,7 +114,7 @@ class Study:
         remaining = min((end - datetime.now(timezone.utc)).total_seconds(),
                         self.limits["wall_seconds"] - costs["elapsed_seconds"]
                         - (0 if final else self.limits["publication_seconds"]))
-        reserve = {name: 0 if final else value for name, value in FINAL_RESERVE.items()}
+        reserve = {name: 0 if final else value for name, value in self.final_reserve.items()}
         if (remaining < wall + 120
                 or self.limits["cpu_seconds"] - costs["cpu_seconds"] - reserve["cpu_seconds"] < cpu + 600
                 or self.limits["output_bytes"] - costs["output_bytes"] - reserve["output_bytes"] < output_bytes + 256 * 1024**2
@@ -141,7 +147,7 @@ class Study:
             provenance, patch = capture_provenance(ROOT, config["inputs"])
             with Experiment(directory, config, provenance, patch) as experiment:
                 training = config["purpose"] == "continuation-training"
-                module = "kenggo.continuation_training" if training else "kenggo.progressive_jobs"
+                module = "kenggo.continuation_training" if training else self.job_module
                 python = ROOT / (".cache/venvs/cuda/bin/python" if gpu else ".venv/bin/python")
                 command = [str(python), "-m", module, str(directory / "config.json"),
                     str(directory / "provenance.json"), str(directory / "worker"),
