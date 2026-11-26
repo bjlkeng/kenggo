@@ -1,0 +1,5105 @@
+{
+  "schema": "e2_policy_tuning_completion_v1",
+  "bead": "kenggo-ydo.19",
+  "status": "completed",
+  "review_base": "efb2f4a68cee33c1d3082fc0f027eec6c4594dbe",
+  "production_source": "76fc5801f7399a355d586ff30ec40f6465e23626",
+  "implementation_commits": [
+    "fcad1aa2fc07726e1e6ffa5add585fd859002b47",
+    "76fc5801f7399a355d586ff30ec40f6465e23626"
+  ],
+  "plan": {
+    "path": "/home/bojji/code/kenggo/configs/e2_policy_tuning_v1.json",
+    "sha256": "d78344cce0d576c4b0f4fb3c8aac56767efc2f7a02427e16b6f56514e87910f1"
+  },
+  "protocol": {
+    "path": "plan/e2_policy_tuning_v1.md",
+    "sha256": "39babb9129c0c74f6e7726744c7a5ae10e898b3bcc404ea48e39fb70d0454b31"
+  },
+  "recovery_protocol": {
+    "path": "plan/e2_policy_recovery_v1.md",
+    "sha256": "7ab58805a541f4891838a1842b5460ca8f3e03d6d31032a917509a45684eb6d8"
+  },
+  "recovery_request": {
+    "path": "runs/e2-policy-launch-2026-11-26/recovery-request-v2.json",
+    "sha256": "6ab3769d935f3a7e6cc5b1f5184577fe679292e6d83863d29e929960cb100de2"
+  },
+  "recovery_launcher": {
+    "path": "runs/e2-policy-launch-2026-11-26/launch-reviewed-recovery.py",
+    "sha256": "3377472eea6df4ab3e9b9c67e0a46980f59a61aabfc081acb0a5e66ec1de3a37"
+  },
+  "launch_utc": "2026-11-26T01:35:51.168611+00:00",
+  "deadline_utc": "2026-11-29T01:35:51.168611+00:00",
+  "final_production_summary": {
+    "path": "runs/e2-policy-recovery-2026-11-26/summary.json",
+    "sha256": "ae20da1c1018a7ce08d4598c47df6af11c7cbb755e8f753e84333554c0ad8459"
+  },
+  "publication_input": {
+    "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/review-input.json",
+    "sha256": "fa99d0867fdf76288c104f243e32c64f05d9573127063d04f20ebd538cec6e0a"
+  },
+  "sealed_review": {
+    "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/publication/worker/review.html",
+    "sha256": "6fe0ce18208a75bf7f44a0f84843f0d9f85f0c0dcd3888e4b31c326b36cf3318"
+  },
+  "review_manifest": {
+    "path": "runs/e2-policy-recovery-2026-11-26/publication/worker/review.json",
+    "sha256": "25c44d10c4ff856acbf5918f3d095c49b9e502ec56fa76e2bfcf05f85adcd02e"
+  },
+  "selection": {
+    "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/selection.json",
+    "sha256": "268874696db0731f803818420623112119c19a9048c1887217dce834a646e435"
+  },
+  "preparation": {
+    "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/preparation/worker/summary.json",
+    "sha256": "7e276a3104002717ace5117d28bffd0342c3f14a1c62079b4c9762adc9c41c8f"
+  },
+  "assessments": {
+    "lr-1e-3": {
+      "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/assessment-lr-1e-3/worker/summary.json",
+      "sha256": "30f1f749745781861fa0ff1368ba822ef9a58e0419dee46964baa22792127e87"
+    },
+    "lr-1e-4": {
+      "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/assessment-lr-1e-4/worker/summary.json",
+      "sha256": "75d87783933b3d1365ad2917fc8aa5fd428037f1b50aaeb487230211c6fd45cf"
+    },
+    "lr-3e-4": {
+      "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/assessment-lr-3e-4/worker/summary.json",
+      "sha256": "1aeb9b8c6b32643a20018c37726a1f4f0ea946a34dbf4f8ef0181288d90116fd"
+    },
+    "lr-3e-4-decay": {
+      "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/assessment-lr-3e-4-decay/worker/summary.json",
+      "sha256": "480398f95a45ef77eb986bcc742102d2411175322d8ae510f58c66d19a0c1595"
+    },
+    "parent": {
+      "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/assessment-parent/worker/summary.json",
+      "sha256": "389323653fffe3bd074e0cc9ed93c833638ade050e48f6fa40ef9c0cb4b3aea5"
+    }
+  },
+  "comparison": {
+    "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/comparison/worker/summary.json",
+    "sha256": "c8f320fa1f0722c86e0f4e36641278a045f4dcfffb1fb489b514ce8d4a12fd3c"
+  },
+  "parent_checkpoint": {
+    "config": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/config.json",
+      "sha256": "fcc45e0568f9bb1323151c57663becf571bcc57f91156b085ba54d5a88c1e4f5"
+    },
+    "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/worker/checkpoints/step-0000125000-f42dadaca07f4c4c822b6fabd96b33d1/manifest.json",
+    "provenance": {
+      "path": "/home/bojji/code/kenggo/runs/e2-progressive-2026-11-21/tier1-candidate-epoch03/provenance.json",
+      "sha256": "aac0f3c5b130c584105823d6d69981027d48f413b57f324a5bf3332ffff5452b"
+    },
+    "sha256": "5cd424e0fe38ee36b01c6cb7ce42d1b532bc327cae533d6d9907d1a373a12b53"
+  },
+  "selected_trial_id": "lr-1e-3",
+  "trials": [
+    {
+      "id": "lr-1e-3",
+      "parameters": {
+        "learning_rate": 0.001,
+        "weight_decay": 0.0
+      },
+      "status": "stopped",
+      "stop_reason": "validation_plateau",
+      "completed_rounds": 10,
+      "best_validation_nll": 2.2906861395248317,
+      "selected": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch04/config.json",
+          "sha256": "75a0f28d7b6269a0438e28e28349a1cdb43e8ab5a19f2d850b1b728ac5e68058"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch04/worker/checkpoints/step-0000156252-e85bdcfebc7b4be3a0a1c8e6b2503d59/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch04/provenance.json",
+          "sha256": "f1dfbceda5126b264183aff883f78df33d4ac15286b6d53b737e3e3cd211209f"
+        },
+        "sha256": "ee6af6fb19366ccd612f2815c730ad5154d715aaf91e7ebdac540e923ea80a69",
+        "step": 156252
+      },
+      "completed_updates": 78130,
+      "presented_examples": 10000640,
+      "selected_round": 4,
+      "selected_sampler_step": 31252,
+      "selected_lifetime_updates": 156252,
+      "uncertain_update_attempts": 0
+    },
+    {
+      "id": "lr-3e-4",
+      "parameters": {
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0
+      },
+      "status": "stopped",
+      "stop_reason": "validation_plateau",
+      "completed_rounds": 8,
+      "best_validation_nll": 2.318607298207021,
+      "selected": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch01/config.json",
+          "sha256": "9175d220eae5124db8ad8f0cefe9d4481172f1dfba63e6630a3486dc4edcb1bd"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch01/worker/checkpoints/step-0000132813-706ea0d8787745c8919305a5bb4afc3b/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch01/provenance.json",
+          "sha256": "d490ee3206b74e0806d36fa949295eb9b984f911c3145b68e64913d08efa37c2"
+        },
+        "sha256": "ca31d1743466fcfda8155871be557ca499183daf9f90457ff95b106f54b10b86",
+        "step": 132813
+      },
+      "completed_updates": 62504,
+      "presented_examples": 8000512,
+      "selected_round": 1,
+      "selected_sampler_step": 7813,
+      "selected_lifetime_updates": 132813,
+      "uncertain_update_attempts": 0
+    },
+    {
+      "id": "lr-1e-4",
+      "parameters": {
+        "learning_rate": 0.0001,
+        "weight_decay": 0.0
+      },
+      "status": "stopped",
+      "stop_reason": "validation_plateau",
+      "completed_rounds": 8,
+      "best_validation_nll": 2.3202332512140487,
+      "selected": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch01/config.json",
+          "sha256": "61c54a937143101f6090b0816dae1dcd4d932c68d1988ebe65e323fbd35d1b3e"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch01/worker/checkpoints/step-0000132813-25816314c8a04ac6bd85f72996c7e0d8/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch01/provenance.json",
+          "sha256": "2f625a025f4ed17145cfecb71fdd5324278ce40bde7fbaa8258e7e70d4c82feb"
+        },
+        "sha256": "f8111ef54e112bd98b7cefaca3b56084481ba8440b1beee96ddf3cf501a866b4",
+        "step": 132813
+      },
+      "completed_updates": 62504,
+      "presented_examples": 8000512,
+      "selected_round": 1,
+      "selected_sampler_step": 7813,
+      "selected_lifetime_updates": 132813,
+      "uncertain_update_attempts": 0
+    },
+    {
+      "id": "lr-3e-4-decay",
+      "parameters": {
+        "learning_rate": 0.0003,
+        "weight_decay": 0.0001
+      },
+      "status": "stopped",
+      "stop_reason": "validation_plateau",
+      "completed_rounds": 8,
+      "best_validation_nll": 2.3182430885525034,
+      "selected": {
+        "config": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch01/config.json",
+          "sha256": "3b6bd995ab7d263f9631a993d1da8ba13211571674ee43be79667fe8ef84e2c7"
+        },
+        "kind": "epoch",
+        "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch01/worker/checkpoints/step-0000132813-036c31e2fee14131a0b3b945eb85fcd5/manifest.json",
+        "provenance": {
+          "path": "/home/bojji/code/kenggo/runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch01/provenance.json",
+          "sha256": "06602dca42f690615914a0a991103de17b3264fbf72a6b5d5a23ef0a07c975fa"
+        },
+        "sha256": "e27c4c18bf8a61948c7f559549b9590db382d7aed04d876480cce530409e9a6f",
+        "step": 132813
+      },
+      "completed_updates": 62504,
+      "presented_examples": 8000512,
+      "selected_round": 1,
+      "selected_sampler_step": 7813,
+      "selected_lifetime_updates": 132813,
+      "uncertain_update_attempts": 0
+    }
+  ],
+  "fixed_metrics": {
+    "population_development_komi1": {
+      "lr-1e-3": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27558,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.314370803166803
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.209799509872557,
+                  2.4189420964610493
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.40528249850459597
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.39040994444939187,
+                  0.42015505255980007
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.2035806136927452
+              },
+              "counts": {
+                "accounts": 131,
+                "game_sides": 236,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 130,
+                "moves": 26292
+              },
+              "masked_moves": 1266,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.092191594319937,
+                  1.3149696330655534
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 4226
+      },
+      "lr-1e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27558,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3438732007994973
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.233637236045511,
+                  2.4541091655534837
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.40214573553787086
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3860516792472092,
+                  0.41823979182853255
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.3091496677386032
+              },
+              "counts": {
+                "accounts": 131,
+                "game_sides": 236,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 130,
+                "moves": 26292
+              },
+              "masked_moves": 1266,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.1439281222594964,
+                  1.47437121321771
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 4226
+      },
+      "lr-3e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27558,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3433929138860043
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2319197279271092,
+                  2.4548660998448995
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3999657703871795
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38273743961569956,
+                  0.41719410115865946
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.267576278680623
+              },
+              "counts": {
+                "accounts": 131,
+                "game_sides": 236,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 130,
+                "moves": 26292
+              },
+              "masked_moves": 1266,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.1056700476608974,
+                  1.4294825097003487
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 4226
+      },
+      "lr-3e-4-decay": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27558,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.342578569987825
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2327118978525786,
+                  2.4524452421230714
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3992027883033616
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3826617272624749,
+                  0.4157438493442483
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.2714661943632892
+              },
+              "counts": {
+                "accounts": 131,
+                "game_sides": 236,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 130,
+                "moves": 26292
+              },
+              "masked_moves": 1266,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.108439838566686,
+                  1.4344925501598924
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 4226
+      },
+      "parent": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27558,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3928607544020144
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.286371742139876,
+                  2.4993497666641527
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3960151412262258
+              },
+              "counts": {
+                "accounts": 138,
+                "game_sides": 248,
+                "games": 131,
+                "insufficient": false,
+                "mover_accounts": 137,
+                "moves": 27558
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38049837410981285,
+                  0.4115319083426387
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.3572776367131132
+              },
+              "counts": {
+                "accounts": 131,
+                "game_sides": 236,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 130,
+                "moves": 26292
+              },
+              "masked_moves": 1266,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.18113727820884,
+                  1.5334179952173863
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 4226
+      }
+    },
+    "population_development_komi13": {
+      "lr-1e-3": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 29119,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.321695932286462
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2456429580116875,
+                  2.3977489065612363
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.39856667490049236
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3825776767682395,
+                  0.4145556730327452
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.0910103686405277
+              },
+              "counts": {
+                "accounts": 156,
+                "game_sides": 244,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 154,
+                "moves": 28089
+              },
+              "masked_moves": 1030,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.9958395216400666,
+                  1.1861812156409888
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 2114
+      },
+      "lr-1e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 29119,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3439301330813627
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2670348013108046,
+                  2.4208254648519207
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.39790645042126804
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3823695034474256,
+                  0.4134433973951105
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.141553923293152
+              },
+              "counts": {
+                "accounts": 156,
+                "game_sides": 244,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 154,
+                "moves": 28089
+              },
+              "masked_moves": 1030,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.014860420590761,
+                  1.268247425995543
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 2114
+      },
+      "lr-3e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 29119,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3469250776898
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2704619516866704,
+                  2.4233882036929297
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3968271982034325
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38109758223119045,
+                  0.4125568141756745
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1266059336418655
+              },
+              "counts": {
+                "accounts": 156,
+                "game_sides": 244,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 154,
+                "moves": 28089
+              },
+              "masked_moves": 1030,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.9882903654436035,
+                  1.2649215018401274
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 2114
+      },
+      "lr-3e-4-decay": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 29119,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3478833376961994
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2712722927936624,
+                  2.4244943825987364
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.39619463143052575
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3807753908449976,
+                  0.41161387201605387
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1391382824807552
+              },
+              "counts": {
+                "accounts": 156,
+                "game_sides": 244,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 154,
+                "moves": 28089
+              },
+              "masked_moves": 1030,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.001870144537717,
+                  1.2764064204237935
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 2114
+      },
+      "parent": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 29119,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.38335015222682
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.3063086602222937,
+                  2.4603916442313465
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.39015792206481864
+              },
+              "counts": {
+                "accounts": 162,
+                "game_sides": 255,
+                "games": 130,
+                "insufficient": false,
+                "mover_accounts": 160,
+                "moves": 29119
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.37524703186134173,
+                  0.40506881226829555
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1716707597742448
+              },
+              "counts": {
+                "accounts": 156,
+                "game_sides": 244,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 154,
+                "moves": 28089
+              },
+              "masked_moves": 1030,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.045205188202131,
+                  1.2981363313463588
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 2114
+      }
+    },
+    "validation_development_komi1": {
+      "lr-1e-3": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27646,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3010465922649956
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2193685873543605,
+                  2.382724597175631
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.4052220826184852
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3919211563996338,
+                  0.41852300883733656
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1129319874273726
+              },
+              "counts": {
+                "accounts": 158,
+                "game_sides": 232,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 153,
+                "moves": 26387
+              },
+              "masked_moves": 1259,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.0120569591189108,
+                  1.2138070157358345
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 1838
+      },
+      "lr-1e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27646,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3409940887928262
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.264812942989809,
+                  2.4171752345958435
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.394772080555057
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3805788468126243,
+                  0.4089653142974897
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1528559946373478
+              },
+              "counts": {
+                "accounts": 158,
+                "game_sides": 232,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 153,
+                "moves": 26387
+              },
+              "masked_moves": 1259,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.0223956178210911,
+                  1.2833163714536044
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 1838
+      },
+      "lr-3e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27646,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3452004291788544
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2695266135001826,
+                  2.4208742448575262
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3936251750415791
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3800799443703976,
+                  0.40717040571276064
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1224711139094365
+              },
+              "counts": {
+                "accounts": 158,
+                "game_sides": 232,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 153,
+                "moves": 26387
+              },
+              "masked_moves": 1259,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.9994870897068407,
+                  1.2454551381120325
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 1838
+      },
+      "lr-3e-4-decay": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27646,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3430549301885755
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.267497090163216,
+                  2.418612770213935
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.39458988919749205
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38080928567660144,
+                  0.40837049271838266
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1222029093809391
+              },
+              "counts": {
+                "accounts": 158,
+                "game_sides": 232,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 153,
+                "moves": 26387
+              },
+              "masked_moves": 1259,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.999279111750801,
+                  1.2451267070110774
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 1838
+      },
+      "parent": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27646,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3789684069863855
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.3060911713967007,
+                  2.45184564257607
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.38624926070742754
+              },
+              "counts": {
+                "accounts": 167,
+                "game_sides": 252,
+                "games": 134,
+                "insufficient": false,
+                "mover_accounts": 162,
+                "moves": 27646
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.37309135068742866,
+                  0.39940717072742643
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.1864773906818589
+              },
+              "counts": {
+                "accounts": 158,
+                "game_sides": 232,
+                "games": 124,
+                "insufficient": false,
+                "mover_accounts": 153,
+                "moves": 26387
+              },
+              "masked_moves": 1259,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.034118965652184,
+                  1.3388358157115336
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 1838
+      }
+    },
+    "validation_development_komi13": {
+      "lr-1e-3": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27268,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.31069525769458
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2354401201896033,
+                  2.3859503951995564
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.40460859722436004
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3920317503108284,
+                  0.4171854441378917
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.169084189454447
+              },
+              "counts": {
+                "accounts": 157,
+                "game_sides": 234,
+                "games": 118,
+                "insufficient": false,
+                "mover_accounts": 155,
+                "moves": 26150
+              },
+              "masked_moves": 1118,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.0588916919682838,
+                  1.2792766869406103
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 681
+      },
+      "lr-1e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27268,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3458738304956515
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.26679886110817,
+                  2.4249487998831327
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.40067497301040983
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38818821016331334,
+                  0.4131617358575063
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.3657865080065574
+              },
+              "counts": {
+                "accounts": 157,
+                "game_sides": 234,
+                "games": 118,
+                "insufficient": false,
+                "mover_accounts": 155,
+                "moves": 26150
+              },
+              "masked_moves": 1118,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.2173892455246806,
+                  1.5141837704884342
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 681
+      },
+      "lr-3e-4": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27268,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3484607240181483
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.27003815542468,
+                  2.426883292611617
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.4019666819789461
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.38956609851011237,
+                  0.4143672654477798
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.306047233749483
+              },
+              "counts": {
+                "accounts": 157,
+                "game_sides": 234,
+                "games": 118,
+                "insufficient": false,
+                "mover_accounts": 155,
+                "moves": 26150
+              },
+              "masked_moves": 1118,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.1589229542083992,
+                  1.453171513290567
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 681
+      },
+      "lr-3e-4-decay": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27268,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3472721156448975
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.2692669506950187,
+                  2.425277280594776
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.40215050721001355
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3901213420909961,
+                  0.414179672329031
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.317867988882233
+              },
+              "counts": {
+                "accounts": 157,
+                "game_sides": 234,
+                "games": 118,
+                "insufficient": false,
+                "mover_accounts": 155,
+                "moves": 26150
+              },
+              "masked_moves": 1118,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.1686203429093798,
+                  1.4671156348550864
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 681
+      },
+      "parent": {
+        "aggregate_ranks": [
+          "12k",
+          "11k",
+          "10k",
+          "9k",
+          "8k",
+          "7k",
+          "6k",
+          "5k",
+          "4k",
+          "3k",
+          "2k",
+          "1k",
+          "1d"
+        ],
+        "expected_outputs": 27268,
+        "overall": {
+          "metrics": {
+            "nll": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 2.3947986761908586
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  2.3124213052027076,
+                  2.4771760471790096
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "top1": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 0.3930530702331468
+              },
+              "counts": {
+                "accounts": 161,
+                "game_sides": 248,
+                "games": 125,
+                "insufficient": false,
+                "mover_accounts": 159,
+                "moves": 27268
+              },
+              "masked_moves": 0,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  0.3799344173624907,
+                  0.4061717231038029
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            },
+            "value_mse": {
+              "status": "available",
+              "estimate": {
+                "status": "finite",
+                "value": 1.350465577677559
+              },
+              "counts": {
+                "accounts": 157,
+                "game_sides": 234,
+                "games": 118,
+                "insufficient": false,
+                "mover_accounts": 155,
+                "moves": 26150
+              },
+              "masked_moves": 1118,
+              "aggregate_ranks": [
+                "12k",
+                "11k",
+                "10k",
+                "9k",
+                "8k",
+                "7k",
+                "6k",
+                "5k",
+                "4k",
+                "3k",
+                "2k",
+                "1k",
+                "1d"
+              ],
+              "missing_ranks": [],
+              "uncertainty": {
+                "status": "available",
+                "interval95": [
+                  1.181605546430126,
+                  1.5193256089249918
+                ],
+                "method": "weighted_intercept_dyadic_cr0_v1",
+                "reasons": []
+              }
+            }
+          }
+        },
+        "excluded_rows": 681
+      }
+    }
+  },
+  "selected_paired_comparisons": {
+    "population_development_komi1": {
+      "kind": "candidate_minus_control",
+      "aggregate_ranks": [
+        "12k",
+        "11k",
+        "10k",
+        "9k",
+        "8k",
+        "7k",
+        "6k",
+        "5k",
+        "4k",
+        "3k",
+        "2k",
+        "1k",
+        "1d"
+      ],
+      "rows": 27558,
+      "excluded_rows": 4226,
+      "uncertainty_method": "weighted_intercept_dyadic_cr0_v1",
+      "metrics": {
+        "nll": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.07848995123521128
+          },
+          "counts": {
+            "accounts": 138,
+            "game_sides": 248,
+            "games": 131,
+            "insufficient": false,
+            "mover_accounts": 137,
+            "moves": 27558
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.09828275856195012,
+              -0.058697143908472436
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "top1": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": 0.009267357278370216
+          },
+          "counts": {
+            "accounts": 138,
+            "game_sides": 248,
+            "games": 131,
+            "insufficient": false,
+            "mover_accounts": 137,
+            "moves": 27558
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              0.0047483997565916794,
+              0.013786314800148754
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "value_mse": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.1536970230203678
+          },
+          "counts": {
+            "accounts": 131,
+            "game_sides": 236,
+            "games": 125,
+            "insufficient": false,
+            "mover_accounts": 130,
+            "moves": 26292
+          },
+          "masked_moves": 1266,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.28821261753936667,
+              -0.019181428501368947
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        }
+      }
+    },
+    "population_development_komi13": {
+      "kind": "candidate_minus_control",
+      "aggregate_ranks": [
+        "12k",
+        "11k",
+        "10k",
+        "9k",
+        "8k",
+        "7k",
+        "6k",
+        "5k",
+        "4k",
+        "3k",
+        "2k",
+        "1k",
+        "1d"
+      ],
+      "rows": 29119,
+      "excluded_rows": 2114,
+      "uncertainty_method": "weighted_intercept_dyadic_cr0_v1",
+      "metrics": {
+        "nll": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.061654219940358274
+          },
+          "counts": {
+            "accounts": 162,
+            "game_sides": 255,
+            "games": 130,
+            "insufficient": false,
+            "mover_accounts": 160,
+            "moves": 29119
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.07338426164566056,
+              -0.04992417823505598
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "top1": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": 0.008408752835673716
+          },
+          "counts": {
+            "accounts": 162,
+            "game_sides": 255,
+            "games": 130,
+            "insufficient": false,
+            "mover_accounts": 160,
+            "moves": 29119
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              0.004121011471665216,
+              0.012696494199682216
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "value_mse": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.08066039113371726
+          },
+          "counts": {
+            "accounts": 156,
+            "game_sides": 244,
+            "games": 124,
+            "insufficient": false,
+            "mover_accounts": 154,
+            "moves": 28089
+          },
+          "masked_moves": 1030,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.1601824564708344,
+              -0.001138325796600101
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        }
+      }
+    },
+    "validation_development_komi1": {
+      "kind": "candidate_minus_control",
+      "aggregate_ranks": [
+        "12k",
+        "11k",
+        "10k",
+        "9k",
+        "8k",
+        "7k",
+        "6k",
+        "5k",
+        "4k",
+        "3k",
+        "2k",
+        "1k",
+        "1d"
+      ],
+      "rows": 27646,
+      "excluded_rows": 1838,
+      "uncertainty_method": "weighted_intercept_dyadic_cr0_v1",
+      "metrics": {
+        "nll": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.07792181472138997
+          },
+          "counts": {
+            "accounts": 167,
+            "game_sides": 252,
+            "games": 134,
+            "insufficient": false,
+            "mover_accounts": 162,
+            "moves": 27646
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.09946727797709382,
+              -0.05637635146568613
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "top1": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": 0.018972821911057647
+          },
+          "counts": {
+            "accounts": 167,
+            "game_sides": 252,
+            "games": 134,
+            "insufficient": false,
+            "mover_accounts": 162,
+            "moves": 27646
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              0.012633742216712191,
+              0.0253119016054031
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "value_mse": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.07354540325448622
+          },
+          "counts": {
+            "accounts": 158,
+            "game_sides": 232,
+            "games": 124,
+            "insufficient": false,
+            "mover_accounts": 153,
+            "moves": 26387
+          },
+          "masked_moves": 1259,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.17942719118858602,
+              0.03233638467961358
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        }
+      }
+    },
+    "validation_development_komi13": {
+      "kind": "candidate_minus_control",
+      "aggregate_ranks": [
+        "12k",
+        "11k",
+        "10k",
+        "9k",
+        "8k",
+        "7k",
+        "6k",
+        "5k",
+        "4k",
+        "3k",
+        "2k",
+        "1k",
+        "1d"
+      ],
+      "rows": 27268,
+      "excluded_rows": 681,
+      "uncertainty_method": "weighted_intercept_dyadic_cr0_v1",
+      "metrics": {
+        "nll": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.08410341849627857
+          },
+          "counts": {
+            "accounts": 161,
+            "game_sides": 248,
+            "games": 125,
+            "insufficient": false,
+            "mover_accounts": 159,
+            "moves": 27268
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.10650981742670755,
+              -0.061697019565849595
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "top1": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": 0.011555526991213268
+          },
+          "counts": {
+            "accounts": 161,
+            "game_sides": 248,
+            "games": 125,
+            "insufficient": false,
+            "mover_accounts": 159,
+            "moves": 27268
+          },
+          "masked_moves": 0,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              0.004638551212724573,
+              0.018472502769701964
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        },
+        "value_mse": {
+          "status": "available",
+          "estimate": {
+            "status": "finite",
+            "value": -0.18138138822311167
+          },
+          "counts": {
+            "accounts": 157,
+            "game_sides": 234,
+            "games": 118,
+            "insufficient": false,
+            "mover_accounts": 155,
+            "moves": 26150
+          },
+          "masked_moves": 1118,
+          "aggregate_ranks": [
+            "12k",
+            "11k",
+            "10k",
+            "9k",
+            "8k",
+            "7k",
+            "6k",
+            "5k",
+            "4k",
+            "3k",
+            "2k",
+            "1k",
+            "1d"
+          ],
+          "missing_ranks": [],
+          "uncertainty": {
+            "status": "available",
+            "interval95": [
+              -0.29168383759342,
+              -0.07107893885280336
+            ],
+            "method": "weighted_intercept_dyadic_cr0_v1",
+            "reasons": []
+          }
+        }
+      }
+    }
+  },
+  "failed_attempts": [
+    {
+      "artifacts": {},
+      "directory": "/home/bojji/code/kenggo/runs/e2-policy-tuning-2026-11-26/preparation",
+      "name": "preparation",
+      "reason": "ValueError: Run provenance requires data, split and rules pins"
+    },
+    {
+      "artifacts": {},
+      "directory": "/home/bojji/code/kenggo/runs/e2-policy-tuning-2026-11-26/publication",
+      "name": "publication",
+      "reason": "ValueError: Run provenance requires data, split and rules pins"
+    }
+  ],
+  "production_costs": {
+    "cpu_seconds": 23783.545011288,
+    "elapsed_seconds": 55745.937989809085,
+    "output_bytes": 11475953575
+  },
+  "production_gpu_seconds": 53760.835993,
+  "production_ledger": {
+    "path": "runs/e2-policy-tuning-2026-11-26/resources.json",
+    "sha256": "fc9357722af562ed83e8eca33b1d8a5cba905ed88a3b67e6e5842184b2a69c9b"
+  },
+  "ledger_entries": 98,
+  "publication_cost_delta": {
+    "cpu_seconds": 8.688910398999724,
+    "elapsed_seconds": 11.434211920015514,
+    "output_bytes": 1847364
+  },
+  "limits": {
+    "cpu_seconds": 388800,
+    "gpu_seconds": 259200,
+    "output_bytes": 103079215104,
+    "publication_seconds": 21600,
+    "wall_seconds": 259200
+  },
+  "completion_accounting": {
+    "path": "runs/e2-policy-completion-2026-11-26/completion-accounting-v2.json",
+    "sha256": "6fa4881648fefc2df742af00228cdab5aaf6ad56ca521fcf8819d91fb01eba2a"
+  },
+  "evidence_checks": {
+    "path": "runs/e2-policy-completion-2026-11-26/verification.json",
+    "sha256": "96cd961a0dabf2e84f83f79be0a6d8de012a499bcc2ce6d897519d08a1bb75bf"
+  },
+  "stopped_before_completion": {
+    "path": "runs/e2-policy-completion-2026-11-26/stopped.json",
+    "sha256": "e07b6feacfdefe126c4a3e39ef615220dfd79c66ef06e48034d3ca1e35e3517d"
+  },
+  "browser_checks": {
+    "path": "runs/e2-policy-completion-2026-11-26/browser-evidence.json",
+    "sha256": "b1dc8dc40c421a58e1e07da1ea19025fb6ef02d1d9bb0339d7c473c7ab10f12d"
+  },
+  "compact_charts": {
+    "path": "runs/e2-policy-completion-2026-11-26/charts.html",
+    "sha256": "ce1b43fcb2891c0cd8388f0355f742d898ecdaefd76e237be7a5563ffc4cc74e"
+  },
+  "compact_chart_data": {
+    "path": "runs/e2-policy-completion-2026-11-26/chart-data.json",
+    "sha256": "5a31da08a8ae9488277e6752a0c16a8dcd6c3247db8a25a9d84351d538973e99"
+  },
+  "completion_helpers": [
+    {
+      "path": "runs/e2-policy-completion-2026-11-26/verify.py",
+      "sha256": "20ae295301dba256fd79b18b2a8d440bb793b3f4bde5034ec96f1a0c6cb6e153"
+    },
+    {
+      "path": "runs/e2-policy-completion-2026-11-26/browser.cjs",
+      "sha256": "1c102435e9310fd999aecfcf4fd1227b1766270ab9f7eb1fcd9c9f63ac056cee"
+    },
+    {
+      "path": "runs/e2-policy-completion-2026-11-26/make_charts.py",
+      "sha256": "7788c0902b9365ab948c9c00111bc36ac0bda81872ca1e3149aaca80e33bf034"
+    },
+    {
+      "path": "runs/e2-policy-completion-2026-11-26/quality_checks.py",
+      "sha256": "083db191659e8eca217fa9bb00876849cd142c64b68894731c5adbf6f9f6ae22"
+    },
+    {
+      "path": "runs/e2-policy-completion-2026-11-26/chart-check.cjs",
+      "sha256": "749587799b82d2d192e27480bb7308b7268df4e32535080fae47ccc058a4d7f5"
+    }
+  ],
+  "tracking_receipts": [
+    {
+      "stage": "assessment-lr-1e-3",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/assessment-lr-1e-3/run.json",
+        "sha256": "8ff278477f25500666848428e7c364074db51f689c3d539aafb456d90dc37ea5"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "2209530285b74c8186c4f22b4c511f16",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/2209530285b74c8186c4f22b4c511f16"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "assessment-lr-1e-4",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/assessment-lr-1e-4/run.json",
+        "sha256": "4592972dc479acd863f13b9aebe8069d8048447abdcd5f045103344cbd092ca4"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "740393b070b6436eb5645aaf353f41f3",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/740393b070b6436eb5645aaf353f41f3"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "assessment-lr-3e-4",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/assessment-lr-3e-4/run.json",
+        "sha256": "a8b48f0ce7ba2e85fdc6a173dd98172e1d8ff17c035d7bc635f0bd443883984e"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "b14bbcc122734e119c630009240c2ae2",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/b14bbcc122734e119c630009240c2ae2"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "assessment-lr-3e-4-decay",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/assessment-lr-3e-4-decay/run.json",
+        "sha256": "229c2799bb6028487030cb3a5c9ca816d6b144ed6836026dc2b1b29c83b48ffe"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "48936bac28964f208a73ec8ebcc64473",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/48936bac28964f208a73ec8ebcc64473"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "assessment-parent",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/assessment-parent/run.json",
+        "sha256": "6525f63139b1aed6c87d1e3fe9d76c891945341d544f1d75e73ad34ac8fc8612"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "9779b392f9c24f308868a70c1297b78e",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/9779b392f9c24f308868a70c1297b78e"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "comparison",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/comparison/run.json",
+        "sha256": "cf17fa3dd20b81e62cf577c776ff75e5eb93cb1de9e3c078d9ad00b93cd80a6d"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "09b61a57b0f14aa1b4b6a9fc6605e531",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/09b61a57b0f14aa1b4b6a9fc6605e531"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "lr-1e-3-epoch00",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch00/run.json",
+        "sha256": "6f7180814846ffb52d70835439f2036d4602bb79fb78b1187b2bb8011a9607e6"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "d5255d3d7f96428c9bdf54db9db9f115",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/d5255d3d7f96428c9bdf54db9db9f115"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-6cc0eacc556947b0a8a1139be57fc6ab/manifest.json",
+          "sha256": "2036ae8be2de767fb8878f8e3b1cd10d068969f91f7e1df46880fe734356897f",
+          "step": 125000,
+          "wandb": {
+            "digest": "ed5caf22a4d7f30773f5e80b85424c3e",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/d5255d3d7f96428c9bdf54db9db9f115-step-125000-e57fc6ab:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch01",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch01/run.json",
+        "sha256": "afd930ad74e8109e843e23d6385ff627e5148aad76f8baad64dbf0e652570f89"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "0a7fd52762eb474e960c3b91353649b9",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/0a7fd52762eb474e960c3b91353649b9"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000132813-4b0154f3630549f2b7ca6b24264933a1/manifest.json",
+          "sha256": "9f2cbded055f93aaa5d2038654ac8a27d59e38197a7a4dbb13f3f26efe71501d",
+          "step": 132813,
+          "wandb": {
+            "digest": "701ba0c4c9c85728657b91607c3ccfee",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/0a7fd52762eb474e960c3b91353649b9-step-132813-264933a1:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch02",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch02/run.json",
+        "sha256": "a8496d2e52950550892e63d1f4ca7e323875a248c0261c2eb499e71936b0db9b"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "cea5a703c5c941b3a6222b877991f068",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/cea5a703c5c941b3a6222b877991f068"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000140626-25569522899c421fb03c89493dde6ce2/manifest.json",
+          "sha256": "6d529b85916434e0c30465a8f6be2ea67d193e3ab2ae5dcbc8c81164192c8fe5",
+          "step": 140626,
+          "wandb": {
+            "digest": "3689a929b85cf7906327e4c5c8a30f2a",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/cea5a703c5c941b3a6222b877991f068-step-140626-3dde6ce2:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch03",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch03/run.json",
+        "sha256": "9d7ab758f7d41efb702a2ff87ea64f011b0611a2020684c83cca00539f1145fe"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "35aeb660c42e46f99380daee4de05d19",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/35aeb660c42e46f99380daee4de05d19"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000148439-e940401bab2b4c4b82fbf0d19bc267bb/manifest.json",
+          "sha256": "ede54a2e36d82996940d5c930c001474701b2cf7872364dda20b2a9393da2dac",
+          "step": 148439,
+          "wandb": {
+            "digest": "05f577d254f7a35382397ce20d5aa431",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/35aeb660c42e46f99380daee4de05d19-step-148439-9bc267bb:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch04",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch04/run.json",
+        "sha256": "f38ebc687a1ca02cf73c4bd81e24b498c8eff638c906944808503b641505b43a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "7f748d7e340341ed862ec4f2f6089272",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/7f748d7e340341ed862ec4f2f6089272"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156252-e85bdcfebc7b4be3a0a1c8e6b2503d59/manifest.json",
+          "sha256": "ee6af6fb19366ccd612f2815c730ad5154d715aaf91e7ebdac540e923ea80a69",
+          "step": 156252,
+          "wandb": {
+            "digest": "4efaffc16ace250fba13206b2a43ff91",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/7f748d7e340341ed862ec4f2f6089272-step-156252-b2503d59:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch05",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch05/run.json",
+        "sha256": "136596ef6fd630fcd72478435ce17644e63d9a355fc51a96cf2aefec4deb09df"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "1b9709ec072148b5aeceffdada0f40a7",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/1b9709ec072148b5aeceffdada0f40a7"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000164065-ca8f5fc3ec90498087f71fcdaee1e225/manifest.json",
+          "sha256": "40731df4446dee2ed114ebdefd5383179dba0224365cea0da3a1c99911746108",
+          "step": 164065,
+          "wandb": {
+            "digest": "9b313a40a901ba0c090c7ead81e8c7de",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/1b9709ec072148b5aeceffdada0f40a7-step-164065-aee1e225:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch06",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch06/run.json",
+        "sha256": "a13ffb9f7cb04666aae5bd7db2b942839b42abe8fae3a53083160da3eb946388"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "14f0e61c4edb40d8b8c95dc91136b1d2",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/14f0e61c4edb40d8b8c95dc91136b1d2"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000171878-bfdaf8392ae7449f93346d91557d2110/manifest.json",
+          "sha256": "fc4a237a2ca8f5e4dfce7effeb122b46a0a02d6f79910d6ac507cc27962b0df9",
+          "step": 171878,
+          "wandb": {
+            "digest": "b295b8c5bb03c8ac2afa93fa33405838",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/14f0e61c4edb40d8b8c95dc91136b1d2-step-171878-557d2110:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch07",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch07/run.json",
+        "sha256": "700de945dfbd228569caf4a990eff11a2cb807f218e515007aa1b24f89aca37a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "a5f7c9ca4b57416885e29f446ee49f89",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/a5f7c9ca4b57416885e29f446ee49f89"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000179691-01f7bc89b08f4e0280b4bdd75fa181e6/manifest.json",
+          "sha256": "2a3e44589ad309301c99058aeb34401b023b456a45e89fa3d4ba61114b9d9144",
+          "step": 179691,
+          "wandb": {
+            "digest": "8bad926fe65ad1365ac8eddc60c6aac1",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/a5f7c9ca4b57416885e29f446ee49f89-step-179691-5fa181e6:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch08",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch08/run.json",
+        "sha256": "b900be0b746ccd350fd9ed4b9626bc43256337554c6b3eda3567a3103561019a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "9b69159865f74f2e82316d735b235615",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/9b69159865f74f2e82316d735b235615"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187504-85f5f355551641a385326f6a51dde39b/manifest.json",
+          "sha256": "6c536511026531f930bc6df60ebcdb48ced28e15e4feda2d37e0358ddd2aca92",
+          "step": 187504,
+          "wandb": {
+            "digest": "3d841b85723e2c472d0bd6f7fb1d69cd",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/9b69159865f74f2e82316d735b235615-step-187504-51dde39b:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch09",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch09/run.json",
+        "sha256": "752217053e7ed0701bffc28038dd0d446f13aca06723e7b46658b87ac006b1c0"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "568f8c570e7248fcb55aaa4359b8326a",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/568f8c570e7248fcb55aaa4359b8326a"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000195317-bc9ba0cbb11f440cadbc498df455c782/manifest.json",
+          "sha256": "f2831ce8421f33e6918278e70e12773a5b2101d797ab152fd10297de81e45eb4",
+          "step": 195317,
+          "wandb": {
+            "digest": "78223a67049095d66eb9dc83c2cdab8c",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/568f8c570e7248fcb55aaa4359b8326a-step-195317-f455c782:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-3-epoch10",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-3-epoch10/run.json",
+        "sha256": "b0fe445cd969ae07e6fdd078d31c312a2093f2f3724f7eb38216bfe36e594e86"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "be78347cb1fe4236be0e4ed00aebef3f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/be78347cb1fe4236be0e4ed00aebef3f"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000203130-c572ddec12f44862996432a5ca8a7431/manifest.json",
+          "sha256": "e3ebf5ffb088541aa786f2294d74d2e4e20b4b5ec9d8dde462427d972090852c",
+          "step": 203130,
+          "wandb": {
+            "digest": "c28820c3112279b71a7a2ce42512a768",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/be78347cb1fe4236be0e4ed00aebef3f-step-203130-ca8a7431:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch00",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch00/run.json",
+        "sha256": "db87b1387670caba374b582b58991ef4e59d2b074ed9aa4afb45228c527f10dc"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "7db3e2ca1153452180a6f46890bb3923",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/7db3e2ca1153452180a6f46890bb3923"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-bc1b36c8de214f17a77091a46402f821/manifest.json",
+          "sha256": "1b7ce36cb8a4e61544998f3b6b0d88498b0b4f49969284d7c2fca8b9b0685493",
+          "step": 125000,
+          "wandb": {
+            "digest": "77cbb29d28132d006522e0ae938c57c3",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/7db3e2ca1153452180a6f46890bb3923-step-125000-6402f821:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch01",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch01/run.json",
+        "sha256": "2336f2bd5014e96a511f450bd5b074f31f46a952286383301b1f3a1e548a55d7"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "7d19621e8eae4c0f8a8d301ccc15afe4",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/7d19621e8eae4c0f8a8d301ccc15afe4"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000132813-25816314c8a04ac6bd85f72996c7e0d8/manifest.json",
+          "sha256": "f8111ef54e112bd98b7cefaca3b56084481ba8440b1beee96ddf3cf501a866b4",
+          "step": 132813,
+          "wandb": {
+            "digest": "d919bda5c39f1bcfe9c973454ff5b309",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/7d19621e8eae4c0f8a8d301ccc15afe4-step-132813-96c7e0d8:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch02",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch02/run.json",
+        "sha256": "a3783d360a606388727ea1416192ef661326fe92678368e9852d33add9d9c927"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "97e3075284934b43a642d11953a0f41f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/97e3075284934b43a642d11953a0f41f"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000140626-53362c23cccb4463bd622d579f8e720a/manifest.json",
+          "sha256": "34308768be65bf8c9a9b50199ff9bd31c6d49485223b6dfc581905b7e2b99a02",
+          "step": 140626,
+          "wandb": {
+            "digest": "cb20114b1f0106f46f209a6db446e935",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/97e3075284934b43a642d11953a0f41f-step-140626-9f8e720a:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch03",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch03/run.json",
+        "sha256": "72717b6cc4558cba63f5d1d304c3d6d311fdd3f2ddb3928ec7e2304bb1ed5697"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "537222f70db8478a9ba018a352e7ae2f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/537222f70db8478a9ba018a352e7ae2f"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000148439-27e7b164e43f4b6abb323447b67723bd/manifest.json",
+          "sha256": "5abd14d184321edb3a97050a7be3bc7e08d18ad6834ecad566a67328cc17fc6b",
+          "step": 148439,
+          "wandb": {
+            "digest": "31a7b8dcb9518dbdd0e71049539b4286",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/537222f70db8478a9ba018a352e7ae2f-step-148439-b67723bd:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch04",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch04/run.json",
+        "sha256": "0d2423de569ac80a1efc3847ba455fb64fb9267560413c1fe341099c8db083ab"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "e080de989c054c148e53232bf5b708f1",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/e080de989c054c148e53232bf5b708f1"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156252-d6f7ae83176c44909541335ff7b87160/manifest.json",
+          "sha256": "62ccf02eb248877249c384d66a89b397e1aa12359ffeeada0021586a5b84ce11",
+          "step": 156252,
+          "wandb": {
+            "digest": "e2323ede79c082a8b67c932ac151df29",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/e080de989c054c148e53232bf5b708f1-step-156252-f7b87160:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch05",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch05/run.json",
+        "sha256": "4331f18ca104f6a3ff7825734343a95198082ee62ad13924c013308f0e375d5a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "feb844b9e595429d9955b636e5ae73e5",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/feb844b9e595429d9955b636e5ae73e5"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000164065-eca67f2fa0c54a779bd75cc5bb4f98d8/manifest.json",
+          "sha256": "27be9f947caa00b59bfe71139e19a8cf38cf9d9e38fcc79be844e0c096eff5ad",
+          "step": 164065,
+          "wandb": {
+            "digest": "7382884d4cd46d94a8311659b781a8b0",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/feb844b9e595429d9955b636e5ae73e5-step-164065-bb4f98d8:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch06",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch06/run.json",
+        "sha256": "6a93c3bb2f7b7172348b219287bc7b6930f9239ec2ad90f219a72444b0caa681"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "e3defa2c8660463aa926ab4f1d92a66e",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/e3defa2c8660463aa926ab4f1d92a66e"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000171878-0883c46b8be64483b7da3ec8fe0b9f9a/manifest.json",
+          "sha256": "5bd2416445409ef67def4af8e4c84746ad8550341aa3c1540781d6c145095717",
+          "step": 171878,
+          "wandb": {
+            "digest": "25b3ae0927f07a1cc7f31ab695a6cd48",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/e3defa2c8660463aa926ab4f1d92a66e-step-171878-fe0b9f9a:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch07",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch07/run.json",
+        "sha256": "371dd58afc7a9f0c20532690a28be2771b7cf212beb8d1b664bb11cb162049c2"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "643b57f84cec4bb983f089cc2b3551b6",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/643b57f84cec4bb983f089cc2b3551b6"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000179691-a7d10a1b970c4f9c83552a2c938c8da9/manifest.json",
+          "sha256": "96da5f6b571cd17fd6a0f3fd9a724613e99868936478d08a6e279ec7eac72e28",
+          "step": 179691,
+          "wandb": {
+            "digest": "17dd1df0b51f485e544d202b87ec06ac",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/643b57f84cec4bb983f089cc2b3551b6-step-179691-938c8da9:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-1e-4-epoch08",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-1e-4-epoch08/run.json",
+        "sha256": "b459732e9409c7623195377b25e2c2256c2b2540fe575b19c81f0460efb1426d"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "6e687895026249558ec3f0c83ebfb0ac",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/6e687895026249558ec3f0c83ebfb0ac"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187504-ad7e1a58ac064a0e912c81874c18d242/manifest.json",
+          "sha256": "77b51ec96848a02a253d9ea9b69b4b72012bdb5a0f91c9fc11f949179c276cde",
+          "step": 187504,
+          "wandb": {
+            "digest": "16f1f15465dabcf5cb71bfc211aa4ca2",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/6e687895026249558ec3f0c83ebfb0ac-step-187504-4c18d242:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch00",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch00/run.json",
+        "sha256": "a7e55b3cc2a20ccc11fa68f6a618d774fa42867a24abebfb715e609560ec687c"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "695613e09c0f442cae9a4bd91e3da690",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/695613e09c0f442cae9a4bd91e3da690"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-d2d3638a14b441d8bdd46bdaac059fb4/manifest.json",
+          "sha256": "8adff4b2e71a33490258bdaa006986a6ac26f23fe4a3f5ece791c7706eae7440",
+          "step": 125000,
+          "wandb": {
+            "digest": "cd317d9e98bfb390d3f397767f508d7e",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/695613e09c0f442cae9a4bd91e3da690-step-125000-ac059fb4:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch01",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch01/run.json",
+        "sha256": "21ab695b59efb8e885cf15c02e38bf864bd83c3bd8cc749c8d9bca14117829fa"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "f2ee0f2e753540f184e1b134d1cbe6ca",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/f2ee0f2e753540f184e1b134d1cbe6ca"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000132813-036c31e2fee14131a0b3b945eb85fcd5/manifest.json",
+          "sha256": "e27c4c18bf8a61948c7f559549b9590db382d7aed04d876480cce530409e9a6f",
+          "step": 132813,
+          "wandb": {
+            "digest": "c2f3374665db846810f3c979de9a727c",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/f2ee0f2e753540f184e1b134d1cbe6ca-step-132813-eb85fcd5:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch02",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch02/run.json",
+        "sha256": "eb90c0768b214a9e1041bbeaf5e58e9409ee14d389d1e288a5313754ddebb4fd"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "6b05cb42e4014959917d2ec218fce2e8",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/6b05cb42e4014959917d2ec218fce2e8"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000140626-2f9ac35ea9db45c7b21769c72ae67bc7/manifest.json",
+          "sha256": "b4111cda604f750cec09a8f3f1c1a44bf66f0ba28c7fe3629e8556ade23ad123",
+          "step": 140626,
+          "wandb": {
+            "digest": "b2ac9afa0d4f6b492dbe65ecf673a38b",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/6b05cb42e4014959917d2ec218fce2e8-step-140626-2ae67bc7:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch03",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch03/run.json",
+        "sha256": "676008fcfef72a7f95bdb6b921654d8d990190a1324f6a32ac136c60fe8ae23f"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "5d7e370321c344c3a02d78d39f915b86",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/5d7e370321c344c3a02d78d39f915b86"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000148439-97c359f580e74ae2b4daed59207b8823/manifest.json",
+          "sha256": "c618505cd25b82f9d12e99a790b2a9535b6cc9d3811589781c19ef1cc5527bd6",
+          "step": 148439,
+          "wandb": {
+            "digest": "896be7ccb700143b44668a8b7c18db20",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/5d7e370321c344c3a02d78d39f915b86-step-148439-207b8823:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch04",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch04/run.json",
+        "sha256": "9b923d5087279f9b0d92c9bfbaea943fb95385de0812486d1dd26e15f54f76e2"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "17adcfa776554cdc93a30411b075798b",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/17adcfa776554cdc93a30411b075798b"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156252-0eefe71b7b5e474c8325d9f32847a044/manifest.json",
+          "sha256": "7a11305752a939ffbd691b30f65752c6451c0bd674947047820dda0417c3dbc0",
+          "step": 156252,
+          "wandb": {
+            "digest": "1309b2c270bd7a9b87e9adc66ebbaf3b",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/17adcfa776554cdc93a30411b075798b-step-156252-2847a044:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch05",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch05/run.json",
+        "sha256": "6864581184b22285a8ebf62456678077403d51d12b2ad1ae35b44a0c86065b07"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "5f1f84f6fcd548fbbfef646f54070b59",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/5f1f84f6fcd548fbbfef646f54070b59"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000164065-5e6325729c3040c1830c7f656a0ba127/manifest.json",
+          "sha256": "3f8d43606f4c09438a321fd3dd46095c6e45d82a508958ca72119f2f40e7c86a",
+          "step": 164065,
+          "wandb": {
+            "digest": "bbbb7ed6437c515428dfd6d1bdc9039f",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/5f1f84f6fcd548fbbfef646f54070b59-step-164065-6a0ba127:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch06",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch06/run.json",
+        "sha256": "f2b79b35c00e808cb8fbc23f93b03eca312b39dd31c1857b44ede0cd43a164ae"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "b0cbdf66050e47bf961d731012b2ed67",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/b0cbdf66050e47bf961d731012b2ed67"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000171878-8965f5c6aab94e1f930714d952e6f97c/manifest.json",
+          "sha256": "16b89dea216c8bb406acf736611dcefbba9c7498c336bea665dc6d3c3ba9f0ad",
+          "step": 171878,
+          "wandb": {
+            "digest": "97769a9446e751692979da9d8280b67e",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/b0cbdf66050e47bf961d731012b2ed67-step-171878-52e6f97c:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch07",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch07/run.json",
+        "sha256": "8e5a249ab2f946b6b4b85df226d6db29c8365a47973d230e3f1c8adffd2d9f45"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "188a699f50b84883b2174a984693b221",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/188a699f50b84883b2174a984693b221"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000179691-89044f2f470b488a9feee45b383115ef/manifest.json",
+          "sha256": "da481eda41487e705099a8e64fa30283d6895cd23f31964f70fda46f14f29fab",
+          "step": 179691,
+          "wandb": {
+            "digest": "ec4981c70944f4b83cfc0ff5f1b94deb",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/188a699f50b84883b2174a984693b221-step-179691-383115ef:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-decay-epoch08",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-decay-epoch08/run.json",
+        "sha256": "6f8cf9cab180c3d9a85d615c816b7b430ead10c1d549e31f77b1dae3de6ee4b1"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "c0d452dcbe1340b29a66aad424e9b255",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/c0d452dcbe1340b29a66aad424e9b255"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187504-a921156f888e4f93bab40b85158a0677/manifest.json",
+          "sha256": "ab41cc55a1f28b0437b1a992057ac00bf707beb41e9451e9def759583961826b",
+          "step": 187504,
+          "wandb": {
+            "digest": "faa1d45ba8fb6d401aa8283dffa9ef16",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/c0d452dcbe1340b29a66aad424e9b255-step-187504-158a0677:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch00",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch00/run.json",
+        "sha256": "2a2ba60262a80ed7b6fd082451f28428cbfebfa207f84a78fbeb771ba9df6eb7"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "52556477cafc499d8baf7536e2a44981",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/52556477cafc499d8baf7536e2a44981"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000125000-16c245a681c64f8aa391f41bb6dfd6d2/manifest.json",
+          "sha256": "dbac64c0b72b9a9c1bc7e13dc8d32e8f47282c378a21e2449faf7d39f4d65cee",
+          "step": 125000,
+          "wandb": {
+            "digest": "48b10cb05f802269ae9fcddf5bd1c1c8",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/52556477cafc499d8baf7536e2a44981-step-125000-b6dfd6d2:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch01",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch01/run.json",
+        "sha256": "705895c75a456695b3183090c226bde2d323b320834d62740ce2084570243bd9"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "967ce9e068ea47d799b96126654b6bad",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/967ce9e068ea47d799b96126654b6bad"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000132813-706ea0d8787745c8919305a5bb4afc3b/manifest.json",
+          "sha256": "ca31d1743466fcfda8155871be557ca499183daf9f90457ff95b106f54b10b86",
+          "step": 132813,
+          "wandb": {
+            "digest": "f47657d23498f970236208ef9f87f63d",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/967ce9e068ea47d799b96126654b6bad-step-132813-bb4afc3b:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch02",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch02/run.json",
+        "sha256": "9e81af2f9559785fc142f1d87f5c251aebd01ccc751f221b8290cb0e0b4b5782"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "2065687c78784f01a12d70ea1f13b5bd",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/2065687c78784f01a12d70ea1f13b5bd"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000140626-4600eb7f6ca944a7b3d89a3e0601bbc1/manifest.json",
+          "sha256": "da58ac748e088e960be78754b8ee75fca6538d0232f287fe18592ce07a1a6879",
+          "step": 140626,
+          "wandb": {
+            "digest": "4d37a38a48ede9fcbd6a037da903c3c9",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/2065687c78784f01a12d70ea1f13b5bd-step-140626-0601bbc1:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch03",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch03/run.json",
+        "sha256": "322400bc29eb4c02a2dc6ae4355294292daf304342b807cc218eaf9920a7309a"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "4fb43a84814c4242847152517b169b1f",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/4fb43a84814c4242847152517b169b1f"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000148439-e1db645949fe4962bc3bbe49f7fdad18/manifest.json",
+          "sha256": "61ec32ba71e1d49811c3281b8286c2afaef5afb61d2357b6442ca08d4fb16b6c",
+          "step": 148439,
+          "wandb": {
+            "digest": "113a73b03d2cf5c3c4665f39b2cf8af2",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/4fb43a84814c4242847152517b169b1f-step-148439-f7fdad18:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch04",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch04/run.json",
+        "sha256": "ec2da5ce809e9aac3f8368445aa5c7020eaae1f44091e4c57a0316617e63460f"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "59b95733bea242dfb7a933a8d47dbc05",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/59b95733bea242dfb7a933a8d47dbc05"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000156252-96ae8c2dddb64ed28905fcaeccfbdeb4/manifest.json",
+          "sha256": "64dc2d117085ec415d30a67ec08311092bb941f92e4be1f64a47dd7e533aaa2b",
+          "step": 156252,
+          "wandb": {
+            "digest": "bea3dfd40c7eae9fe410f49772c419b9",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/59b95733bea242dfb7a933a8d47dbc05-step-156252-ccfbdeb4:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch05",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch05/run.json",
+        "sha256": "ba58392ef73427a6f65c146a5cb65addb276ad26ac197c8f731acf7894bb8c58"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "b3b4443450184b08810a5460629448b7",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/b3b4443450184b08810a5460629448b7"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000164065-466c5f3df52a43a5b5fb09e3d10a0338/manifest.json",
+          "sha256": "f260f54557addffacb4842300fd7e821e93b3f0922f34350c16f644e27c06e49",
+          "step": 164065,
+          "wandb": {
+            "digest": "8a783e2e745a9187a7d1bba817bab896",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/b3b4443450184b08810a5460629448b7-step-164065-d10a0338:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch06",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch06/run.json",
+        "sha256": "3f2d0e79462be57d310972f8d839b6f42e7d9e87da8218b9c8074e5aff77ac53"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "eff7947dd7d64b108dd279a2f36d6d98",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/eff7947dd7d64b108dd279a2f36d6d98"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000171878-e9ca153363534c8f9eb55ce8b6d791be/manifest.json",
+          "sha256": "707da15a4ca5050372fe2b2aa4cf6d95ea8a14624bc051da67b8723f7775b93a",
+          "step": 171878,
+          "wandb": {
+            "digest": "dc783a1e0a56c2f5ee363c9ecbac33a4",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/eff7947dd7d64b108dd279a2f36d6d98-step-171878-b6d791be:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch07",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch07/run.json",
+        "sha256": "7d2352a71300082714bf3f9bdb94ce94ff2ea629e4f7b2a9dc5a68c21c7b8839"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "ed25e6d3c48949609c2706fefd2f92ef",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/ed25e6d3c48949609c2706fefd2f92ef"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000179691-9f269c1798174ed3a475160075adb768/manifest.json",
+          "sha256": "4d0ed222b90477e4be6cd05822d4cced7b514008a6aad5d07cad1360e0ceb1d6",
+          "step": 179691,
+          "wandb": {
+            "digest": "6b8e3b6a8bb033fce7554645a1253326",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/ed25e6d3c48949609c2706fefd2f92ef-step-179691-75adb768:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "lr-3e-4-epoch08",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/lr-3e-4-epoch08/run.json",
+        "sha256": "512f370d6ddba7a03e630eb97fac930f24e7e5ede51d5db8151cb0b3462bc4a7"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "fa96a5d5ed70498f93748ccb877bd648",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/fa96a5d5ed70498f93748ccb877bd648"
+      },
+      "checkpoints": [
+        {
+          "attempt": 1,
+          "path": "worker/checkpoints/step-0000187504-3b48486d339742c19fa0c5155c4680c3/manifest.json",
+          "sha256": "31954983f2a00ea82420f627d0345bc8bd7f8174e05df108ea1245ad91f54811",
+          "step": 187504,
+          "wandb": {
+            "digest": "1b7dc61f43f14575d9f7cd12d6d008c6",
+            "mode": "online",
+            "name": "bjlkeng/kenggo/fa96a5d5ed70498f93748ccb877bd648-step-187504-5c4680c3:v0",
+            "synced": true
+          }
+        }
+      ]
+    },
+    {
+      "stage": "preparation",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/preparation/run.json",
+        "sha256": "c836d6551b4070f0ea9231ab0f5a25dcda18fe3aa213a67333ebf920fc4081c8"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "00249042451e4ecdb0bdf223db8247e1",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/00249042451e4ecdb0bdf223db8247e1"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "publication",
+      "receipt": {
+        "path": "runs/e2-policy-recovery-2026-11-26/publication/run.json",
+        "sha256": "4c73f94329be906cf52d9f75e7cdeda4379e3302ae6f6609259caf19e9eacfda"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "add5ebff306b4854a18cf74d779bc275",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/add5ebff306b4854a18cf74d779bc275"
+      },
+      "checkpoints": []
+    },
+    {
+      "stage": "readiness",
+      "receipt": {
+        "path": "runs/e2-policy-tuning-2026-11-26/readiness/run.json",
+        "sha256": "4f3113fa32f1663891be191eba049cfb4419a1f033745fb9c9c6602cb07c0585"
+      },
+      "wandb": {
+        "entity": "bjlkeng",
+        "id": "a042bcf88da144a5bd4c34fc3eaab840",
+        "mode": "online",
+        "project": "kenggo",
+        "url": "https://forge.coreweave.com/wandb/bjlkeng/kenggo/runs/a042bcf88da144a5bd4c34fc3eaab840"
+      },
+      "checkpoints": []
+    }
+  ],
+  "limitations": [
+    "One exploratory seed; development selection and reused fixed assessment.",
+    "Selected checkpoints have unequal exposure. No equally trained joint-loss control.",
+    "Sparse rank/komi groups; stopping and fixed assessment may share accounts but not games.",
+    "Value metrics diagnostic only; no value veto or search qualification.",
+    "Full fitting audit reused by pinned lineage; no new full replay or inference during completion.",
+    "No owner feedback, promotion, playing-strength or human-rank claim. E2/.6 remain open."
+  ],
+  "checks": {
+    "status": "passed",
+    "repository": {
+      "path": "runs/e2-policy-completion-2026-11-26/quality-checks.json",
+      "sha256": "8a816706344e99f17e7d3cfd772746327cfb92d7663de50d7f395c4b0b3524aa"
+    },
+    "tests_total": 820,
+    "tests_passed": 812,
+    "tests_skipped": 8,
+    "skipped_scope": "Native-reference checks; no rules changes in this study.",
+    "selected_value_parameters": {
+      "path": "runs/e2-policy-completion-2026-11-26/value-parameters.json",
+      "sha256": "2f0d8680aba7a85c0f80cdb3cc03c6225cf099c419708b76abac969c964013d4"
+    },
+    "compact_chart_browser": {
+      "path": "runs/e2-policy-completion-2026-11-26/chart-check.json",
+      "sha256": "b76b54c7ed062b36fcbaec06102b77cfa2eb655201666c5daa8de9dd737d5d30"
+    },
+    "documents": {
+      "path": "runs/e2-policy-completion-2026-11-26/document-checks.json",
+      "sha256": "3f6d049a415c675d112d14be91c5e0f16bcc61da21f7217dd7dabf1153d1dcca"
+    },
+    "logs": [
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-lock.log",
+        "sha256": "6020030ce00ec253bb723de35a26dff2efd90dbb8117c975fb0dec15d48da45a"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-sync.log",
+        "sha256": "b2a6be273354a1570f3b09f06e97688e4d26b9ba77a113301d544fa980490880"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-smoke.log",
+        "sha256": "0ea8fdf637e4bfba6679e06c7a442960e52afeb9b442d601d8736239becdbbde"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-tests.log",
+        "sha256": "8345fb5a8bfd7d860e588ebc6f82c993b9e2572586a061912e4ba120745584af"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-build.log",
+        "sha256": "862647495ddd5f5bb891afb2f5affcc21d26316a56246ae53c53c1af5a453ec1"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/quality-diff.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "accounting_fix": {
+      "path": "runs/e2-policy-completion-2026-11-26/accounting-fix-checks.json",
+      "sha256": "f14681b6324983085387628bcbc3b4f5157e9abe54709d04facf64d526723611"
+    }
+  },
+  "independent_review": {
+    "status": "clean",
+    "model": "gpt-6-astra",
+    "reasoning": "max",
+    "scope": "All source changes since efb2f4a, completion report/manifest, saved evidence and actual sealed publication.",
+    "completed_passes": [
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/review-pass1.json",
+        "sha256": "4a359936e68865a77ca590b52685c180e1ceb0b838ca05d65357a9697ddf3f9d"
+      },
+      {
+        "path": "runs/e2-policy-completion-2026-11-26/review-pass2.json",
+        "sha256": "76ae70bd41f1aff3ef74aa7f079c6a351bd33c52a860786473720f2820bfe577"
+      }
+    ],
+    "pass_count": 2,
+    "final_verdict": "No significant findings after correcting the scope of conservative CPU accounting.",
+    "reviewed_diff_sha256": "bc37f911326c7aab283df5e83fae5b9a606d4df780a571da628efa4414f81605",
+    "post_review_changes": "Only this review verdict and reference were appended; production code, report, measurements and accounting are unchanged."
+  },
+  "total_cpu_upper_seconds": 239783.545011288,
+  "nonproduction_cpu_upper_charge_seconds": 216000
+}
